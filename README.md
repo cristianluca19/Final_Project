@@ -1,7 +1,7 @@
-# Henry App
+# Henry Talent
 
 
 
 ## Contributing
 
-Seguir buenas prácticas como las que se mencionan en la Wiki de este repo.
+Seguir [buenas prácticas de programación](https://gist.github.com/henry-labs/fde7766161fb098a8e4edc04cc4caa97)!

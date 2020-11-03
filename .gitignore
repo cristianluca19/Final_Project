@@ -128,3 +128,6 @@ build
 # *.svg
 # *.png
 # *.jpg
+
+# prefer yarn
+package-lock.json
