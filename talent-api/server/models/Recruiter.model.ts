@@ -5,9 +5,8 @@ export default (sequelize) => {
   class Recruiter extends Model {
     static associate(models) {
       // define associations here, e.g.
-      this.belongsToMany(models.Candidate, {
-        through: 'folder_candidates',
-      });
+          //ACA SE DEFINEN LAS ASOCIACIONES, HACERLO CUANDO ESTEN TODOS LOS MODELOS CREADOS
+
     }
   }
 
