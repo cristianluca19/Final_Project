@@ -2,25 +2,25 @@
 import { Model, DataTypes } from 'sequelize';
 
 export default (sequelize) => {
-  class CandidateFolder extends Model {
+  class Folder extends Model {
     static associate(models) {
       // define associations here, e.g.
       this.belongsToMany(models.Candidate, {
-        through: 'folderCandidates',
+        through: 'folder_candidates',
       });
     }
   }
 
-  CandidateFolder.init(
+  Folder.init(
     {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'candidateFolder',
+      modelName: 'folder',
     }
   );
 
-  return CandidateFolder;
+  return Folder;
 };
