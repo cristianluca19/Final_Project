@@ -1,13 +1,13 @@
 import express, { Application } from 'express';
-import path from 'path';
-import bodyParser from 'body-parser';
-import http from 'http';
 import os from 'os';
+import path from 'path';
+import http from 'http';
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import l from './logger';
 
+import l from './logger';
 import errorHandler from '../api/middlewares/error.handler';
-import * as OpenApiValidator from 'express-openapi-validator';
+import setUpOpenAPI from './openapi';
 
 const app = express();
 
@@ -15,31 +15,21 @@ export default class ExpressServer {
   private routes: (app: Application) => void;
   constructor() {
     const root = path.normalize(__dirname + '/../..');
+    const requestLimit = process.env.REQUEST_LIMIT || '100kb';
     app.set('appPath', root + 'client');
-    app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
+    app.use(bodyParser.json({ limit: requestLimit }));
     app.use(
       bodyParser.urlencoded({
         extended: true,
-        limit: process.env.REQUEST_LIMIT || '100kb',
+        limit: requestLimit,
       })
     );
-    app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
+    app.use(bodyParser.text({ limit: requestLimit }));
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(express.static(`${root}/public`));
+    // TODO: configure CORS?;
 
-    const apiSpec = path.join(__dirname, 'api.yml');
-    const validateResponses = !!(
-      process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
-      process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION.toLowerCase() === 'true'
-    );
-    app.use(process.env.OPENAPI_SPEC || '/spec', express.static(apiSpec));
-    app.use(
-      OpenApiValidator.middleware({
-        apiSpec,
-        validateResponses,
-        ignorePaths: /.*\/spec(\/|$)/,
-      })
-    );
+    setUpOpenAPI(app);
   }
 
   router(routes: (app: Application) => void): ExpressServer {
