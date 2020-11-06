@@ -19,6 +19,17 @@ npm run test
 
 ---
 
+Some useful commands:
+
+```bash
+yarn --dev
+nano .env
+npx sequelize-cli db:create
+npx sequelize-cli --help
+```
+
+---
+
 ## How do I modify the example API and make it my own?
 
 There are two key files:
@@ -72,7 +83,7 @@ npm run test:debug
 
 ## Try It
 * Open you're browser to [http://localhost:3000](http://localhost:3000)
-* Invoke the `/examples` endpoint 
+* Invoke the `/examples` endpoint
   ```shell
   curl http://localhost:3000/api/v1/examples
   ```
