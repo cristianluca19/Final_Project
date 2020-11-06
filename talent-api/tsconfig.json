@@ -3,10 +3,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    // "allowJs": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "outDir": "dist",
+    "strict": false,
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["typings.d.ts", "server/**/*.ts"],
