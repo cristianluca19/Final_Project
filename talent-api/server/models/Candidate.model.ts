@@ -16,24 +16,30 @@ export default (sequelize) => {
     {
       firstName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       lastName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       country: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+          isEmail: true
+        }
       },
       profilePicture: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        validate: {
+          isUrl: true
+        }
       },
       cohort: {
         type: DataTypes.STRING,
@@ -41,25 +47,31 @@ export default (sequelize) => {
       },
       miniBio: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       linkedin: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        validate: {
+          isUrl: true
+        }
       },
       github: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        validate: {
+          isUrl: true
+        }
       },
       visibility: {
         type: DataTypes.ENUM,
         values: ['unlisted', 'listed', 'private'],
-        allowNull: false
+        allowNull: true
       },
       status: {
         type: DataTypes.ENUM,
         values: ['employed', 'unemployed'],
-        allowNull: false
+        allowNull: true
       },
     },
     {
