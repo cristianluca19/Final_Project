@@ -16,11 +16,11 @@ export default (sequelize) => {
     Skill.init(
         {
             name: { type: DataTypes.STRING, allowNull: false },
-            type: { type: DataTypes.ENUM('hard', 'soft') }
+            type: { type: DataTypes.ENUM, values: ['hard', 'soft'], allowNull: false }
         },
         {
             sequelize,
-            modelName: 'skills'
+            modelName: 'skill'
         }
     )
     return Skill;
