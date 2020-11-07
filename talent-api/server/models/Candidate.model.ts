@@ -5,9 +5,10 @@ export default (sequelize) => {
   class Candidate extends Model {
     static associate(models) {
       // define associations here, e.g.
-      this.belongsToMany(models.Folder, {
-        through: 'folder_candidates',
-      });
+      // this.belongsToMany(models.Folder, {
+      //   through: 'folder_candidates',
+      // });
+      //RELATIONS GOES HERE
     }
   }
 
