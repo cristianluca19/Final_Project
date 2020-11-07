@@ -5,8 +5,7 @@ export default (sequelize) => {
   class Recruiter extends Model {
     static associate(models) {
       // define associations here, e.g.
-          //ACA SE DEFINEN LAS ASOCIACIONES, HACERLO CUANDO ESTEN TODOS LOS MODELOS CREADOS
-
+      this.hasMany(models.Folder)
     }
   }
 

@@ -23,4 +23,5 @@ export default (sequelize) => {
             modelName: 'skills'
         }
     )
+    return Skills
 }
