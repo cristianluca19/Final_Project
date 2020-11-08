@@ -5,7 +5,7 @@ import { url as DB_URL } from '../../db/config.cjs';
 
 import Candidate from './Candidate.model';
 import Folder from './Folder.model';
-import Skills from './Skills.model';
+import Skill from './Skill.model';
 
 interface DB {
   sequelize: any;
@@ -24,7 +24,7 @@ const sequelize = new Sequelize(DB_URL, {
 const db: DB = {
   Candidate: Candidate(sequelize),
   Folder: Folder(sequelize),
-  Skills: Skills(sequelize)
+  Skill: Skill(sequelize)
 };
 
 // ...and all associations
