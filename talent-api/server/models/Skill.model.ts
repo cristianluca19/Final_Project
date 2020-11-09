@@ -3,25 +3,26 @@ import sequelize from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
 
 export default (sequelize) => {
-    class Skills extends Model {
+    class Skill extends Model {
         static associate(models) {
             // define associations here, e.g.
             this.belongsToMany(models.Candidate, {
-                through: 'candidates_skills',
+                through: 'candidate_skills',
             });
         }
     }
 
 
-    Skills.init(
+    Skill.init(
         {
             name: { type: DataTypes.STRING, allowNull: false },
-            type: { type: DataTypes.ENUM('hard', 'soft') }
+            type: { type: DataTypes.ENUM, values: ['hard', 'soft'], allowNull: false }
         },
         {
             sequelize,
-            modelName: 'skills'
+            modelName: 'skill'
         }
     )
-    return Skills
+
+    return Skill;
 }
