@@ -8,6 +8,7 @@ export default (sequelize) => {
       this.belongsToMany(models.Candidate, {
         through: 'folder_candidates',
       });
+      this.belongsTo(models.Recruiter)
     }
   }
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Model, DataTypes  } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 export default (sequelize) => {
   class Candidate extends Model {
@@ -7,10 +7,10 @@ export default (sequelize) => {
       // define associations here, e.g.
       this.belongsToMany(models.Skills, {
         through: 'candidates_skills',
-    });
-    this.belongsToMany(models.Folder, {
-      through: 'folder_candidates',
-  });
+      });
+      this.belongsToMany(models.Folder, {
+        through: 'folder_candidates',
+      });
     }
   }
 
