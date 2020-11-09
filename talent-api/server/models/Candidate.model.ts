@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Model, DataTypes  } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 export default (sequelize) => {
   class Candidate extends Model {
     static associate(models) {
       // define associations here, e.g.
-      // this.belongsToMany(models.Folder, {
-      //   through: 'folder_candidates',
-      // });
-      //RELATIONS GOES HERE
+      this.belongsToMany(models.Skills, {
+        through: 'candidates_skills',
+      });
+      this.belongsToMany(models.Folder, {
+        through: 'folder_candidates',
+      });
     }
   }
 
