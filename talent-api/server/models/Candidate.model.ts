@@ -6,7 +6,7 @@ export default (sequelize) => {
     static associate(models) {
       // define associations here, e.g.
       this.belongsToMany(models.Skill, {
-        through: 'candidates_skills',
+        through: 'candidate_skills',
       });
       this.belongsToMany(models.Folder, {
         through: 'folder_candidates',
