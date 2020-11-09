@@ -9,6 +9,7 @@ export default (sequelize) => {
         through: 'folder_candidates',
       });
       this.belongsTo(models.Recruiter)
+      this.belongsTo(models.User)
     }
   }
 
