@@ -5,4 +5,4 @@ export default express
   .Router()
   .get('/', controller.all)
   .put('/visibility/:candidateId', controller.updateById)
-  .get('/candidate/:candidateId', controller.byId);
+  .get('/:candidateId', controller.byId);

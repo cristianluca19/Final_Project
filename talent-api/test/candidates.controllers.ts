@@ -40,7 +40,7 @@ describe('Candidates', () => {
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
       const response = await request(Server).get(
-        `/api/candidates/candidate/${candidate1.id}`
+        `/api/candidates/${candidate1.id}`
       );
       expect(response.body)
         .to.have.property('email')
@@ -55,7 +55,7 @@ describe('Candidates', () => {
       await db.Candidate.create({ email: 'mati1@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'martin1@gmail.com', cohort: '4' });
       const response = await request(Server).get(
-        `/api/candidates/candidate/${candidate1.id}`
+        `/api/candidates/${candidate1.id}`
       );
       expect(response.body).to.be.an('object');
     });
