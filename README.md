@@ -7,6 +7,7 @@
 - React-router-dom
 - @material-ui/core
 - @material-ui/icons
+- Prop-types
 
 ## Contributing
 
