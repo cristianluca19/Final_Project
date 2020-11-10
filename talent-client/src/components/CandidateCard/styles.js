@@ -28,7 +28,8 @@ export const useStyles = makeStyles((theme) => ({
       '&:hover': {
         backgroundColor: yellow["A500"],
         fontWeight:1000,
-      }
+      },
+      paddingBottom: "7px !important",
     },
     contactButton: {
       maxHeight: 20,

@@ -4,22 +4,21 @@ import { useStyles, theme } from './styles.js';
 // import axios from 'axios';
 
 // MUI Components
+import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { Container, IconButton } from '@material-ui/core/';
+import { IconButton } from '@material-ui/core/';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import Chip from '@material-ui/core/Chip';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../img/cvtest.png';
-import Box from '@material-ui/core/Box';
 
 function CandidateCard(props) {
 
@@ -82,14 +81,10 @@ function CandidateCard(props) {
                     {/*Top-right Icons*/}
                   </Grid>
                   <Grid item xs={1}>
-                    <IconButton name='GitHub' color="Secondary" edge='start' onClick={handleMoreInfo}>
-                      <GitHubIcon name='GitHub' fontSize='small' />
-                    </IconButton>
+                      <Link color="inherit" target="_blank" rel="noopener" href={github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
                   </Grid>
-                  <Grid style={{ "padding-right": "10px" }} item xs={1}>
-                    <IconButton name='LinkedIn' color="Secondary" edge='start' onClick={handleMoreInfo}>
-                      <LinkedInIcon name='LinkedIn' />
-                    </IconButton>
+                  <Grid style={{ "padding-right": "10px", "margin-bottom":"-2px" }} item xs={1}>
+                      <Link color="inherit" target="_blank" rel="noopener" href={linkedin}><LinkedInIcon name='LinkedIn' /></Link>
                   </Grid>
                   <Grid item xs={2}>
                     <IconButton color="Secondary" edge='end' onClick={handleFolderAdd}>
@@ -116,8 +111,11 @@ function CandidateCard(props) {
                   alignItems="center"
                   spacing={1}>
                   {skills.hard && skills.hard.map((techSkill, index) => (
-                    (index < skillLimit) && <Chip className={classes.chips} size="small" color='primary' label={techSkill} />
-
+                    (index < skillLimit) && 
+                      <Chip className={`${classes.chips} ${classes.chips.root}`} 
+                        size="small" 
+                        color='primary' 
+                        label={techSkill} />
                   ))}
                 </Grid>
               <Divider style={{"margin-top":"20px"}} variant="fullWidth" />
