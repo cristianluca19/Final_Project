@@ -13,6 +13,10 @@ interface DB {
   sequelize: any;
   Sequelize: any;
   Candidate: any;
+  Recruiter: any;
+  Skill: any;
+  Folder: any;
+  //User: any;
 }
 
 // Set up Sequelize connection

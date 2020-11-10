@@ -4,6 +4,11 @@ import db from '../../../models';
 
 export class Controller {
 
+  async all(req: Request, res: Response): Promise<void> {
+    // ExamplesService.all().then((r) => res.json(r));
+     console.log(await db.Candidate.findAll())
+  }
+
   async byId(req: Request, res: Response): Promise<void> {
     const { candidateId } = req.params
     const candidate = await db.Candidate.findByPk(candidateId)
