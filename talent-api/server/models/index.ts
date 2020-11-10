@@ -7,11 +7,17 @@ import Candidate from './Candidate.model';
 import Folder from './Folder.model';
 import Recruiter from './Recruiter.model';
 import Skill from './Skill.model';
+import User from './User.model';
 
 
 interface DB {
   sequelize: any;
   Sequelize: any;
+  Candidate: any;
+  Recruiter: any;
+  Skill: any;
+  Folder: any;
+  //User: any;
 }
 
 // Set up Sequelize connection
@@ -20,6 +26,7 @@ const sequelize = new Sequelize(DB_URL, {
     underscored: true,
   },
   // TODO: logging
+  logging: false,
 });
 
 // Create all models...
@@ -27,8 +34,8 @@ const db: DB = {
   Candidate: Candidate(sequelize),
   Folder: Folder(sequelize),
   Recruiter: Recruiter(sequelize),
-  Skill: Skill(sequelize)
-
+  Skill: Skill(sequelize),
+  User: User(sequelize)
 };
 
 // ...and all associations
