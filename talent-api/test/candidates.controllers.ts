@@ -9,26 +9,31 @@ describe('Candidates', () => {
     db.Candidate.destroy({ where: {} });
   });
 
-  it('should get all candidates', async () => {
-    await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-    await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-    const response = await request(Server)
-      .get('/api/candidates')
-    expect(response.body).to.have.lengthOf(2);
-    expect(response.body).to.be.an('array');
-    expect(response.body[0]).to.have.property('email').to.be.equal('leo@gmail.com');
+  describe('GET all candidates', () => {
+    it('should get all candidates', async () => {
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .get('/api/candidates')
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body).to.be.an('array');
+      expect(response.body[0]).to.have.property('email').to.be.equal('leo@gmail.com');
+
+    })
   });
 
-  it('should get a specific candidate', async () => {
-    await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-    await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-    await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
-    const response = await request(Server)
-      .get('/api/candidates/candidate')
-      .send({ email: 'martin@gmail.com' })
-    console.log(response.body)
-    expect(response.body).to.be.an('object');
-    expect(response.body).to.have.property('email').to.be.equal('martin@gmail.com');
+  describe('GET specific candidate', () => {
+    it('should get a specific candidate', async () => {
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .get('/api/candidates/candidate')
+        .send({ email: 'martin@gmail.com' })
+      expect(response.body).to.be.an('object');
+      expect(response.body).to.have.property('email').to.be.equal('martin@gmail.com');
+
+    });
   });
 
   // it('should get all candidates', async () => {
