@@ -16,11 +16,13 @@
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit"
   },
   "dependencies": {
+    "@types/node": "^14.14.7",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-openapi-validator": "^4.2.0",
+    "faker": "^5.1.0",
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "pino": "^6.7.0",
