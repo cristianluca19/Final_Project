@@ -13,13 +13,13 @@ describe('Candidates', () => {
     it('should get all candidates', async () => {
       await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-      const response = await request(Server)
-        .get('/api/candidates')
+      const response = await request(Server).get('/api/candidates');
       expect(response.body).to.have.lengthOf(2);
       expect(response.body).to.be.an('array');
-      expect(response.body[0]).to.have.property('email').to.be.equal('leo@gmail.com');
-
-    })
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo@gmail.com');
+    });
   });
 
   describe('GET specific candidate', () => {
@@ -29,10 +29,11 @@ describe('Candidates', () => {
       await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
       const response = await request(Server)
         .get('/api/candidates/candidate')
-        .send({ email: 'martin@gmail.com' })
+        .send({ email: 'martin@gmail.com' });
       expect(response.body).to.be.an('object');
-      expect(response.body).to.have.property('email').to.be.equal('martin@gmail.com');
-
+      expect(response.body)
+        .to.have.property('email')
+        .to.be.equal('martin@gmail.com');
     });
   });
 
@@ -47,5 +48,3 @@ describe('Candidates', () => {
   //       expect(response.body[1]).to.have.property('id').to.be.equal(2);
   // });
 });
-
-
