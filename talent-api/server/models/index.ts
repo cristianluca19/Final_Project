@@ -12,6 +12,7 @@ import Skill from './Skill.model';
 interface DB {
   sequelize: any;
   Sequelize: any;
+  Candidate: any;
 }
 
 // Set up Sequelize connection
@@ -20,6 +21,7 @@ const sequelize = new Sequelize(DB_URL, {
     underscored: true,
   },
   // TODO: logging
+  logging: false,
 });
 
 // Create all models...
