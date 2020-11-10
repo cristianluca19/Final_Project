@@ -1,6 +1,13 @@
 # Henry Talent
 
+*API PACKAGES*
 
+*CLIENT PACKAGES*
+- Typescript
+- React-router-dom
+- @material-ui/core
+- @material-ui/icons
+- Prop-types
 
 ## Contributing
 
