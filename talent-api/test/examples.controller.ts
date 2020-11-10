@@ -6,8 +6,8 @@ import db from '../server/models';
 
 describe('Candidates', () => {
 
-  beforeEach(function() {
-    db.Candidate.destroy({where:{}});
+  beforeEach(function () {
+    db.Candidate.destroy({ where: {} });
   });
 
   it('should get all candidates', async () => {
@@ -32,7 +32,6 @@ describe('Candidates', () => {
   // });
 
   //aca va el :id
-
   // it('should get all examples', () =>
   //   request(Server)
   //     .get('/api/v1/examples')
