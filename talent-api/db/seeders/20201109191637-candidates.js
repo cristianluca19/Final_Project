@@ -1,11 +1,10 @@
 'use strict'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const faker = require('faker');
-import * as enums from '../../server/models/enums';
+// import * as enums from '../../server/models/enums';
 
 function fill() {
   let candidates = [];
-  for (let candidate = 0; candidate <= 20; candidate++) {
+  for (let candidate = 1; candidate <= 20; candidate++) {
     candidates.push({
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
@@ -13,8 +12,11 @@ function fill() {
       email: faker.internet.email(),
       cohort: `${Math.floor(Math.random() * 7) + 1}`,
       mini_bio: faker.lorem.words(),
-      status: enums.STATUS.Unemployed,
-      visibility: enums.VISIBILITY.Listed,
+      profile_picture: faker.internet.avatar(),
+      linkedin: faker.internet.url(),
+      github: faker.internet.url(),
+      status: 'unemployed',
+      visibility: 'listed',
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     });
