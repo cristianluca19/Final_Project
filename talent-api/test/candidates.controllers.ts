@@ -42,7 +42,6 @@ describe('Candidates', () => {
       const response = await request(Server).get(
         `/api/candidates/candidate/${candidate1.id}`
       );
-      expect(response.body).to.be.an('object');
       expect(response.body)
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
