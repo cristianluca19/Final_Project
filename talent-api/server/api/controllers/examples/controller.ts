@@ -3,17 +3,15 @@ import { Request, Response } from 'express';
 import db from '../../../models';
 
 export class Controller {
-
   async all(req: Request, res: Response): Promise<void> {
     // ExamplesService.all().then((r) => res.json(r));
-     console.log(await db.Candidate.findAll())
   }
 
-  async byId(req: Request, res: Response): Promise<void> {
-    const { candidateId } = req.params
-    const candidate = await db.Candidate.findByPk(candidateId)
-    res.status(200).json(candidate);
-  }
+  // async byId(req: Request, res: Response): Promise<void> {
+  //   const { candidateId } = req.params
+  //   const candidate = await db.Candidate.findByPk(candidateId)
+  //   res.status(200).json(candidate);
+  // }
 
   // all(req: Request, res: Response): void {
   //   ExamplesService.all().then((r) => res.json(r));
