@@ -6,49 +6,36 @@ import db from '../server/models';
 
 describe('Examples', () => {
   it('should get all candidates', async () => {
-    await db.Candidate.create({ email: 'leo41@gmail.com', cohort: '4' });
-    request(Server)
+    await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
+    await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+    const response = await request(Server)
       .get('/candidate')
-      .then((resp) => {
-        console.log(resp.body)
-        expect(resp.body).to.be.an('array').of.length(12);
-      })
-  });
-
-  it('should get all candidates', async () => {
-    await db.Candidate.create({ email: 'leo1123@gmail.com', cohort: '4' });
-    await db.Candidate.create({ email: 'mati@gmail.com', cohort: '5' })
-    request(Server)
-      .get('/candidate')
-      .then((resp) => {
-        console.log(resp.body)
-        expect(resp.body).to.be.an('array');
-      })
+        console.log(response.body, "aaaa")
+        expect(response.body).to.have.lengthOf(2);
+        expect(response.body).to.be.an('array');
+        expect(response.body[1]).to.have.property('id').to.be.equal(2);
   });
 
   // it('should get all candidates', async () => {
-  //   await db.Candidate.create({ email: 'leo3@gmail.com', cohort: '4' })
-  //   await db.Candidate.create({ email: 'mati@gmail.com', cohort: '5' })
+  //   await db.Candidate.create({ email: 'leo1@gmail.com', cohort: '4' });
+  //   await db.Candidate.create({ email: 'mati2@gmail.com', cohort: '4' });
   //   const response = await request(Server)
   //     .get('/candidate')
-  //     console.log(response.body);
-  //     expect(response.body).to.be.an('array');
-  //     done()
+  //       console.log(response.body, "aaaa")
+  //       expect(response.body).to.have.lengthOf(2);
+  //       expect(response.body).to.be.an('array');
+  //       expect(response.body[1]).to.have.property('id').to.be.equal(2);
   // });
 
-  //-----ejemplo de internet // claro pero varios objetos como seria? por comas? o en array
-  // describe('Insert a country with error: ',()=>{
-  //   it('should receive an error', (done) => {
-  //   chai.request(url)
-  //   .post('/country')
-  //   .send({id:1, country: "Madrid", year: 2010, days: 10})
-  //   .end( function(err,res){
-  //   console.log(res.body)
-  //   expect(res).to.have.status(200);
-  //   done();
-  //   });
-  //   });
-  //  });
+  //aca va el :id
+
+  // it('should get all examples', () =>
+  //   request(Server)
+  //     .get('/api/v1/examples')
+  //     .expect('Content-Type', /json/)
+  //     .then((resp) => {
+  //       expect(resp.body).to.be.an('array').of.length(2);
+  //     }));
 
   // it('should add a new example', () =>
   //   request(Server)
