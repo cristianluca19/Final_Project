@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Model, DataTypes } from 'sequelize';
+import { VISIBILITY, STATUS } from './enums';
 
 export default (sequelize) => {
   class Candidate extends Model {
@@ -13,67 +14,66 @@ export default (sequelize) => {
       });
     }
   }
-
   Candidate.init(
     {
       firstName: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       lastName: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       country: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
-          isEmail: true
-        }
+          isEmail: true,
+        },
       },
       profilePicture: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          isUrl: true
-        }
+          isUrl: true,
+        },
       },
       cohort: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       miniBio: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       linkedin: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          isUrl: true
-        }
+          isUrl: true,
+        },
       },
       github: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          isUrl: true
-        }
+          isUrl: true,
+        },
       },
       visibility: {
         type: DataTypes.ENUM,
-        values: ['unlisted', 'listed', 'private'],
-        allowNull: true
+        values: [VISIBILITY.Unlisted, VISIBILITY.Listed, VISIBILITY.Private],
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM,
-        values: ['employed', 'unemployed'],
-        allowNull: true
+        values: [STATUS.Unemployed, STATUS.Employed],
+        allowNull: true,
       },
     },
     {

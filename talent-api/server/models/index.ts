@@ -7,6 +7,7 @@ import Candidate from './Candidate.model';
 import Folder from './Folder.model';
 import Recruiter from './Recruiter.model';
 import Skill from './Skill.model';
+import User from './User.model';
 
 
 interface DB {
@@ -27,8 +28,8 @@ const db: DB = {
   Candidate: Candidate(sequelize),
   Folder: Folder(sequelize),
   Recruiter: Recruiter(sequelize),
-  Skill: Skill(sequelize)
-
+  Skill: Skill(sequelize),
+  User: User(sequelize)
 };
 
 // ...and all associations
