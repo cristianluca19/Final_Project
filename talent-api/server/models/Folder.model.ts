@@ -8,21 +8,21 @@ export default (sequelize) => {
       this.belongsToMany(models.Candidate, {
         through: 'folder_candidates',
       });
-      this.belongsTo(models.Recruiter)
-      this.belongsTo(models.User)
+      this.belongsTo(models.Recruiter);
+      this.belongsTo(models.User);
     }
   }
 
   Folder.init(
     {
-      uuid: { 
+      uuid: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4
-       },
-      opened: { 
+        defaultValue: DataTypes.UUIDV4,
+      },
+      opened: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
-       },
+        defaultValue: false,
+      },
     },
     {
       sequelize,
