@@ -4,5 +4,5 @@ import controller from './controller';
 export default express
   .Router()
   .get('/', controller.all)
-  .get('/candidate', controller.byId)
-
+  .put('/visibility/:candidateId', controller.updateById)
+  .get('/candidate/:candidateId', controller.byId);
