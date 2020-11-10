@@ -7,7 +7,7 @@ export class Controller {
 
   async all(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll()
-    res.status(203).json(candidates);
+    res.status(200).json(candidates);
   }
 
 }
