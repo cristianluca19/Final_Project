@@ -27,4 +27,3 @@ export default (sequelize) => {
     return User;
 };  
 
-//INSERT INTO users(first_name, last_name, role, created_at, updated_at) VALUES ('sebastian', 'levin', "admin", NOW(), NOW());
