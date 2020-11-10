@@ -24,28 +24,16 @@ function CandidateCard(props) {
 
   const { firstName, lastName, location, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
 
-  const skillLimit = 8 // Limits the number of pills shown on the card.
+  const labelsMaxLimit = 8 
 
   const classes = useStyles();
 
   // HANDLERS //
   const handleFolderAdd = (event) => {
-
+    //pending functionality
   }
 
-  const handleMoreInfo = (event) => {
-    event.preventDefault();
-    let socialNetwork = event.target.name;
-    console.log(socialNetwork);
-    if (socialNetwork === undefined) {
-      return
-    } else if (socialNetwork === "GitHub") {
-      window.location.href = `${github}`
-    } else {
-      window.location.href = `${linkedin}`
-    }
-    return
-  }
+  //pending improvement to responsive Grids
 
   return (
       <Card className={classes.root}>
@@ -111,7 +99,7 @@ function CandidateCard(props) {
                   alignItems="center"
                   spacing={1}>
                   {skills.hard && skills.hard.map((techSkill, index) => (
-                    (index < skillLimit) && 
+                    (index < labelsMaxLimit) && 
                       <Chip className={`${classes.chips} ${classes.chips.root}`} 
                         size="small" 
                         color='primary' 
@@ -125,7 +113,7 @@ function CandidateCard(props) {
                 item xs={4} variant="body2"
                 color="textPrimary"
                 component="p">
-                {miniBio.substring(0, 240) + '...'}
+                {miniBio.substring(0, 240) + '...'} {/* Pending to check if 240 chars are OK with functionality... */}
               </Typography>
               </ThemeProvider>
             </CardContent>
@@ -135,7 +123,6 @@ function CandidateCard(props) {
   )
 };
 
-// Proptype checking for object USER that renders the card
 CandidateCard.propTypes = {
   user: PropTypes.exact({
     firstName: PropTypes.string,
