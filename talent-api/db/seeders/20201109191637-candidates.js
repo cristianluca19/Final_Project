@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 const faker = require('faker');
 // import * as enums from '../../server/models/enums';
 
 function fill() {
   let candidates = [];
-  for (let candidate = 1; candidate <= 20; candidate++) {
+  for (let candidate = 1; candidate <= 20; candidate++){
     candidates.push({
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),

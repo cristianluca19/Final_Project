@@ -14,7 +14,7 @@
     "lint:fix": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --quiet --fix",
     "test": "mocha -r ts-node/register test/**/*.ts --exit",
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit",
-    "seed":"sequelize-cli db:seed:all"
+    "seed": "sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@types/node": "^14.14.7",
