@@ -50,7 +50,7 @@ function CandidateCard(props) {
             item xs={8}
             container
             direction="column"
-            justify="space-between"
+            justify="space-evenly"
             alignItems="stretch">
             <CardContent>
               <ThemeProvider theme={theme}>
@@ -104,6 +104,7 @@ function CandidateCard(props) {
                   alignItems="center"
                   spacing={1}>
                     {/*skills.hard && skills.hard.map*/} 
+                    {/* Arreglar esto cuando este listo el endpoint con skills..*/} 
                   {['JavaScript', 'React', 'Redux', 'HTML', 'CSS', 'SQL', 'Node', 'PHP'].map((techSkill, index) => (
                     (index < labelsMaxLimit) && 
                       <Chip key={index} className={classes.chips} 
@@ -118,7 +119,8 @@ function CandidateCard(props) {
                 style={{ "marginTop": "20px" }}
                 variant="body2"
                 color="textPrimary"
-                component="p">
+                component="p"
+                align="justify">
                 {user.miniBio.substring(0, 240) + '...'}
               </Typography>
               </ThemeProvider>
