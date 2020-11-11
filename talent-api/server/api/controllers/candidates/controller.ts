@@ -19,8 +19,8 @@ export class Controller {
   async toFolder(req: Request, res: Response): Promise<void> {
     const candidate = await db.Candidate.findByPk(req.params.candidateId);
     const folder = await db.Folder.findByPk(req.params.folderId);
-    folder.addCandidate(candidate);
-    res.status(200).json(folder);
+    const reply = await folder.addCandidate(candidate);
+    res.status(200).json(reply);
   }
 }
 export default new Controller();

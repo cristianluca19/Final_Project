@@ -105,7 +105,7 @@ describe('Candidates', () => {
     });
   });
   describe('POST create relation between candidate and folder', () => {
-    it('should return an object', async () => {
+    it('should create an instance in the "folder_candidates" table', async () => {
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
         cohort: '4',
@@ -116,8 +116,12 @@ describe('Candidates', () => {
       const response = await request(Server).post(
         `/api/candidates/addToFolder/${candidate1.id}/${folder1.id}`
       );
-      console.log(response.body);
-      expect(response.body).to.be.an('object');
+      expect(response.body[0])
+        .to.have.property('folderId')
+        .to.be.equal(folder1.id);
+      expect(response.body[0])
+        .to.have.property('candidateId')
+        .to.be.equal(candidate1.id);
     });
   });
 });
