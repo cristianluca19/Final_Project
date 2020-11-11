@@ -6,8 +6,8 @@ import Footer from "./components/Footer/index.jsx";
 import Nav from "./components/Nav/index.jsx";
 import CardsContainer from './components/CardsContainer';
 import { useDispatch } from "react-redux";
-import React, { useEffect } from 'react';
-import { getAllCandidates } from './redux/Action';
+import React from 'react';
+import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
   //==============================================================

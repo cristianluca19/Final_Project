@@ -2,6 +2,21 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## .ENV VARIABLES
+
+APP_ID=
+PORT=
+LOG_LEVEL=
+REQUEST_LIMIT=
+SESSION_SECRET=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_HOST=
+DB_PORT=
+CLIENT_URL=
+OPENAPI_SPEC=
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -50,7 +50,7 @@ function CandidateCard(props) {
             item xs={8}
             container
             direction="column"
-            justify="flex-end"
+            justify="space-between"
             alignItems="stretch">
             <CardContent>
               <ThemeProvider theme={theme}>
@@ -58,7 +58,7 @@ function CandidateCard(props) {
                   container
                   justify="space-between"
                   alignItems="center">
-                  <Grid item xs={8}>
+                  <Grid item xs={9}>
                     {/*FullName*/}
                     <Typography
                       gutterBottom
@@ -69,13 +69,17 @@ function CandidateCard(props) {
                     {/*Top-right Icons*/}
                   </Grid>
                   <Grid item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={user.github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.github}>
+                        <GitHubIcon name='GitHub' fontSize='small' />
+                      </Link>
                   </Grid>
-                  <Grid style={{ "paddingRight": "10px", "marginBottom":"-2px" }} item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={user.linkedin}><LinkedInIcon name='LinkedIn' /></Link>
+                  <Grid style={{ "paddingRight": "5px", "marginBottom":"-2px" }} item xs={1}>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.linkedin}>
+                        <LinkedInIcon name='LinkedIn' />
+                      </Link>
                   </Grid>
-                  <Grid item xs={2}>
-                    <IconButton color="secondary" edge='end' onClick={handleFolderAdd}>
+                  <Grid item xs={1} style={{"paddingLeft": "5px"}}>
+                    <IconButton color="secondary" edge='start' onClick={handleFolderAdd}>
                     {user.role ? <CreateNewFolderIcon/> : <EmailIcon/>}
                     </IconButton>
                   </Grid>
@@ -83,11 +87,13 @@ function CandidateCard(props) {
               </ThemeProvider>
                {/*Location && Cohort*/}
               <Typography
+                align="left"
                 gutterBottom
                 variant="body2"
                 color="textSecondary"
-                component="p">
-                {`${user.country}  -  Cohort 0${user.cohort}`}
+                component="p"
+                style={{paddingLeft:15}}>
+                {`${user.country}  -  WebFT0${user.cohort}`}
                   </Typography>
               <Divider variant="middle" style={{"marginBottom": 10}}/>
               <ThemeProvider theme={theme}>
@@ -100,7 +106,7 @@ function CandidateCard(props) {
                     {/*skills.hard && skills.hard.map*/} 
                   {['JavaScript', 'React', 'Redux', 'HTML', 'CSS', 'SQL', 'Node', 'PHP'].map((techSkill, index) => (
                     (index < labelsMaxLimit) && 
-                      <Chip key={index} className={`${classes.chips} ${classes.chips.root}`} 
+                      <Chip key={index} className={classes.chips} 
                         size="small" 
                         color='primary' 
                         label={techSkill} />
@@ -113,10 +119,6 @@ function CandidateCard(props) {
                 variant="body2"
                 color="textPrimary"
                 component="p">
-                  {/* `
-    I'm a software engineer who believes that out-of-the-box thinking is what
-     separates a great project from a good one. I do most of mine in Javascript, 
-     React, Node.js and Python.` */}
                 {user.miniBio.substring(0, 240) + '...'}
               </Typography>
               </ThemeProvider>

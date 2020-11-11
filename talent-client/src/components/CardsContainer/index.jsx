@@ -4,7 +4,6 @@ import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector } from 'react-redux';
 import React from 'react';
-import { getAllCandidates } from '../../redux/Action';
 
 
 function CardsContainer (props) {
@@ -12,9 +11,9 @@ function CardsContainer (props) {
     const classes = useStyles();
 
     // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ==== 
-    const candidates = useSelector(store => store.mainReducer.allCandidates)
+    const candidates = useSelector(store => store.CandidateReducer.allCandidates)
 
-    const cardsMaxLimit = 10;
+    const cardsMaxLimit = 30;
 
     
     // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
@@ -30,7 +29,9 @@ function CardsContainer (props) {
                 {/* props.user.map((candidate,index) */} {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
                 {candidates && candidates.map((candidate,index) => (
                     ((index < cardsMaxLimit) && candidate.visibility == "listed") &&
-                    <div key={index} className={classes.CandidateCard}><CandidateCard user={candidate}/></div>
+                    <div key={index} className={classes.CandidateCard}>
+                        <CandidateCard user={candidate}/>
+                    </div>
                 ))} 
             </Grid>
         </Container>
