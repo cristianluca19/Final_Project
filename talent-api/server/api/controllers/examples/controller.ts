@@ -1,7 +1,9 @@
 import ExamplesService from '../../services/examples.service';
 import { Request, Response } from 'express';
+import db from '../../../models/index';
 
 export class Controller {
+
   all(req: Request, res: Response): void {
     ExamplesService.all().then((r) => res.json(r));
   }
@@ -15,7 +17,7 @@ export class Controller {
   }
 
   create(req: Request, res: Response): void {
-    ExamplesService.create(req.body.name).then((r) =>
+    db.Candidate.create(req.body.name).then((r) =>
       res.status(201).location(`/api/v1/examples/${r.id}`).json(r)
     );
   }

@@ -3,6 +3,6 @@ import controller from './controller';
 
 export default express
   .Router()
-  .post('/', controller.create)
+  .post('/csv', controller.create)
   .get('/', controller.all)
   .get('/:id', controller.byId);
