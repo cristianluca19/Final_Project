@@ -1,49 +1,31 @@
-import { Route } from 'react-router-dom'
-import React, { useEffect } from 'react';
-import CardsContainer from './components/CardsContainer'
-// import { increment, decrement } from "./redux/example/Action.js";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllCandidates } from './redux/Action.js';
-import axios from 'axios';
+import { Route } from "react-router-dom";
+import './App.css';
+import Catalogue from "./components/Catalogue/index.jsx";
+import ContentHome from "./components/ContentHome/index.jsx";
+import Footer from "./components/Footer/index.jsx";
+import Nav from "./components/Nav/index.jsx";
+import CardsContainer from './components/CardsContainer';
+import { useDispatch } from "react-redux";
+import React from 'react';
 
 function App() {
   //==============================================================
   const dispatch = useDispatch();
-  // const count = useSelector((store) => store.reducer.count);
   //===============================================================
 
-    axios.get('http://localhost:3001/api/candidates')
-    .then((candidates) => {
-      dispatch(getAllCandidates(candidates.data));
-      return
-    })
+    // axios.get('http://localhost:3001/api/candidates')
+    // .then((candidates) => {
+    //   dispatch(getAllCandidates(candidates.data));
+    //   return
+    // })
 
   return (
-    <div>
+    <div className="App">
+      <Route path='/' render={() => <Nav />} />
+      <Route path='/' render={() => <ContentHome />} />
       <Route path="/" render={() => <CardsContainer/>}/>
-{/* //======================================================================
-    //Esta funcion esta solo de ejemplo para probar que redux esta funcional...SACAR ANTES DE MERGEAR 
-    //====================================================================== 
-      <p>
-        Clickeado: {count} veces
-        <button
-          onClick={() => {
-            dispatch(increment());
-          }}>
-          +
-        </button>
-        <button
-          onClick={() => {
-            dispatch(decrement());
-          }}>
-          -
-        </button>
-      </p>
-  //======================================================================
-     //Esta funcion esta solo de ejemplo para probar que redux esta funcional...SACAR ANTES DE MERGEAR 
-    //====================================================================== */}
+      <Route path='/' render={() => <Footer />} />
     </div>
   );
 }
-
 export default App;
