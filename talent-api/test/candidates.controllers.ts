@@ -104,8 +104,8 @@ describe('Candidates', () => {
       expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
     });
   });
-  describe('POST create relation between candidate and folder', () => {
-    it('should create an instance in the "folder_candidates" table', async () => {
+  describe('POST add candidate to folder', () => {
+    it('should add a candidate to a specific folder', async () => {
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
         cohort: '4',
@@ -114,7 +114,7 @@ describe('Candidates', () => {
       const folder1 = await db.Folder.create();
       await db.Folder.create();
       const response = await request(Server).post(
-        `/api/candidates/addToFolder/${candidate1.id}/${folder1.id}`
+        `/api/candidates/${folder1.id}/addCandidate/${candidate1.id}`
       );
       expect(response.body[0])
         .to.have.property('folderId')
