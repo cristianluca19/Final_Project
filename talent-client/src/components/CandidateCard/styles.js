@@ -14,6 +14,7 @@ export const useStyles = makeStyles((theme) => ({
       boxShadow: "1px 2px 8px 1px #000000",
       '&:hover': {
         boxShadow: "2px 2px 24px -2px #fff",
+        borderColor: "#87868A",
       }
     },
     media: {

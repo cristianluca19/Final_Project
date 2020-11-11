@@ -22,7 +22,7 @@ import imgtest from '../../img/cvtest.png';
 
 function CandidateCard(props) {
 
-  const { firstName, lastName, cohort, country, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
+  const { user } = props;
 
   const labelsMaxLimit = 8;
 
@@ -42,7 +42,7 @@ function CandidateCard(props) {
             {/*Profile Picture*/}
             <CardMedia
               className={classes.media}
-              image={profilePicture || imgtest}
+              image={user.profilePicture || imgtest}
               title='Henry Candidate'
             />
           </Grid>
@@ -64,19 +64,19 @@ function CandidateCard(props) {
                       gutterBottom
                       variant="h5"
                       component="h2">
-                      {`${firstName} ${lastName}`}
+                      {`${user.firstName} ${user.lastName}`}
                     </Typography>
                     {/*Top-right Icons*/}
                   </Grid>
                   <Grid item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
                   </Grid>
                   <Grid style={{ "paddingRight": "10px", "marginBottom":"-2px" }} item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={linkedin}><LinkedInIcon name='LinkedIn' /></Link>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.linkedin}><LinkedInIcon name='LinkedIn' /></Link>
                   </Grid>
                   <Grid item xs={2}>
                     <IconButton color="secondary" edge='end' onClick={handleFolderAdd}>
-                    {role ? <CreateNewFolderIcon/> : <EmailIcon/>}
+                    {user.role ? <CreateNewFolderIcon/> : <EmailIcon/>}
                     </IconButton>
                   </Grid>
                 </Grid>
@@ -87,7 +87,7 @@ function CandidateCard(props) {
                 variant="body2"
                 color="textSecondary"
                 component="p">
-                {`${country}  -  Cohort 0${cohort}`}
+                {`${user.country}  -  Cohort 0${user.cohort}`}
                   </Typography>
               <Divider variant="middle" style={{"marginBottom": 10}}/>
               <ThemeProvider theme={theme}>
@@ -113,11 +113,11 @@ function CandidateCard(props) {
                 variant="body2"
                 color="textPrimary"
                 component="p">
-                  `
+                  {/* `
     I'm a software engineer who believes that out-of-the-box thinking is what
      separates a great project from a good one. I do most of mine in Javascript, 
-     React, Node.js and Python.`
-                {/* {miniBio.substring(0, 240) + '...'} Pending to check if 240 chars are OK with functionality... */}
+     React, Node.js and Python.` */}
+                {user.miniBio.substring(0, 240) + '...'}
               </Typography>
               </ThemeProvider>
             </CardContent>
