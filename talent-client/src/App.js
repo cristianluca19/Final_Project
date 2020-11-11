@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import './App.css';
 import Catalogue from "./components/Catalogue/index.jsx";
 import ContentHome from "./components/ContentHome/index.jsx";
@@ -8,6 +8,9 @@ import CandidateCard from './components/CandidateCard'
 import { increment, decrement } from "./redux/example/Action.js";
 import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
+import Dashboard from "./components/Dashboard";
+import Menu from './components/Dashboard/menu.jsx';
+import Candidates from './components/Dashboard/candidates.jsx';
 
 function App() {
   //==============================================================
@@ -17,11 +20,20 @@ function App() {
 
   return (
     <div className="App">
-      <Route path='/' render={() => <Nav />} />
-      <Route path='/' render={() => <ContentHome />} />
-      <Route path='/' render={() => <Catalogue />} />
-      <Route path="/" render={() => <CandidateCard/>}/>
-      <Route path='/' render={() => <Footer />} />
+      <Switch>
+        <Route path='/panel' render={() => <Dashboard />} />
+        <Route path='/' render={() => <Nav />} />
+      </Switch>
+      <Route exact path='/' render={() => <ContentHome />} />
+      <Route exact path='/' render={() => <Catalogue />} />
+      <Route exact path="/" render={() => <CandidateCard/>}/>
+      <Switch>
+        <Route path='/panel' />
+        <Route path='/' render={() => <Footer />} />
+      </Switch>
+      <Route path='/panel' render={() => <Menu />} />
+      <Route exact path='/panel/candidates' render={() => <Candidates />} />
+      
 {/*     <div className='App'>
       <Route path='/' render={() => <CandidateCard />} />
 //======================================================================
