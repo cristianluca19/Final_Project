@@ -11,7 +11,7 @@ function fill() {
       country: faker.address.country(),
       email: faker.internet.email(),
       cohort: `${Math.floor(Math.random() * 7) + 1}`,
-      mini_bio: faker.lorem.words(),
+      mini_bio: faker.lorem.paragraph(),
       profile_picture: faker.internet.avatar(),
       linkedin: faker.internet.url(),
       github: faker.internet.url(),
