@@ -10,5 +10,11 @@ export class Controller {
     const candidate = await db.Candidate.findByPk(req.params.candidateId);
     res.status(200).json(candidate);
   }
+  async updateById(req: Request, res: Response): Promise<void> {
+    const candidate = await db.Candidate.findByPk(req.params.candidateId);
+    candidate.visibility = req.body.visibility;
+    await candidate.save();
+    res.status(200).json(candidate);
+  }
 }
 export default new Controller();
