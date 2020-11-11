@@ -124,4 +124,37 @@ describe('Candidates', () => {
         .to.be.equal(candidate1.id);
     });
   });
+
+  describe('DELETE relation between candidate and folder', () => {
+    it('should delete an instance from the "folder_candidates" table', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      const folder1 = await db.Folder.create();
+      await db.Folder.create();
+      await folder1.addCandidate(candidate1);
+      const relation = await db.Folder.findOne({
+        where: {
+          id: folder1.id,
+        },
+        include: db.Candidate,
+      });
+      await request(Server).delete(
+        `/api/candidates/removeFromFolder/${candidate1.id}/${folder1.id}`
+      );
+      const response = await db.Folder.findOne({
+        where: {
+          id: folder1.id,
+        },
+        include: db.Candidate,
+      });
+      expect(response.dataValues.id).to.be.equal(relation.dataValues.id);
+      expect(relation.dataValues.candidates[0].dataValues)
+        .to.have.property('id')
+        .to.be.equal(candidate1.id);
+      expect(response.dataValues.candidates).to.have.lengthOf(0);
+    });
+  });
 });
