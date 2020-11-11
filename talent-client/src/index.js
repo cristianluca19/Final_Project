@@ -8,10 +8,12 @@ import { Provider } from "react-redux";
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducer from "./redux/example/Store";
+import mainReducer from "./redux/Store";
 
 const rootReducer = combineReducers(
   {
     reducer,
+    mainReducer,
   },
   compose(applyMiddleware(thunk))
 );

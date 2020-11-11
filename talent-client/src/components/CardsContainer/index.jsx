@@ -4,8 +4,6 @@ import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 
 
-
-
 function CardsContainer (props) {
 
     
