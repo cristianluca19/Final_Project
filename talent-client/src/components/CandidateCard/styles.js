@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { yellow, blueGrey } from '@material-ui/core/colors';
+import { yellow } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
     root: {

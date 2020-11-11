@@ -1,20 +1,10 @@
 import PropTypes from 'prop-types';
-import { Container, Typography, Grid, makeStyles } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import CandidateCard from '../CandidateCard';
+import { useStyles } from './styles.js';
 
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        paddingTop: "2rem",
-    },
-    paddingCandidate : {
-        paddingTop: 10,
-    },
-    CandidateCard: {
-        margin: 25,
-        borderRadious: 10,
-    }
-}))
+
 
 function CardsContainer (props) {
 
@@ -29,8 +19,8 @@ function CardsContainer (props) {
                 justify="center"
                 alignItems="center"
                 >
-                {props.users.map((candidate) => (
-                    <div className={classes.CandidateCard}><CandidateCard/></div>
+                {props.users.map((candidate,index) => (
+                    <div key={index} className={classes.CandidateCard}><CandidateCard/></div>
                 ))} 
             </Grid>
         </Container>
@@ -38,7 +28,7 @@ function CardsContainer (props) {
 }
 
 CardsContainer.propTypes = {
-    users: PropTypes.array,
+    users: PropTypes.array.isRequired,
   }
 
 CardsContainer.defaultProps = {

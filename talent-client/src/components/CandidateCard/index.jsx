@@ -71,11 +71,11 @@ function CandidateCard(props) {
                   <Grid item xs={1}>
                       <Link color="inherit" target="_blank" rel="noopener" href={github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
                   </Grid>
-                  <Grid style={{ "padding-right": "10px", "margin-bottom":"-2px" }} item xs={1}>
+                  <Grid style={{ "paddingRight": "10px", "marginBottom":"-2px" }} item xs={1}>
                       <Link color="inherit" target="_blank" rel="noopener" href={linkedin}><LinkedInIcon name='LinkedIn' /></Link>
                   </Grid>
                   <Grid item xs={2}>
-                    <IconButton color="Secondary" edge='end' onClick={handleFolderAdd}>
+                    <IconButton color="secondary" edge='end' onClick={handleFolderAdd}>
                     {role ? <CreateNewFolderIcon/> : <EmailIcon/>}
                     </IconButton>
                   </Grid>
@@ -83,15 +83,14 @@ function CandidateCard(props) {
               </ThemeProvider>
                {/*Location*/}
               <Typography
-                item xs={2}
                 gutterBottom
                 variant="body2"
                 color="textSecondary"
                 component="p">
                 {location}.
                   </Typography>
-              <Divider variant="middle" style={{"margin-bottom": 10}}/>
-              <ThemeProvider item xs={3} theme={theme} style={{ "padding": 1 }}>
+              <Divider variant="middle" style={{"marginBottom": 10}}/>
+              <ThemeProvider theme={theme}>
                 {/* Label mapping with TechSkills */}
                 <Grid
                   container
@@ -100,17 +99,17 @@ function CandidateCard(props) {
                   spacing={1}>
                   {skills.hard && skills.hard.map((techSkill, index) => (
                     (index < labelsMaxLimit) && 
-                      <Chip className={`${classes.chips} ${classes.chips.root}`} 
+                      <Chip key={index} className={`${classes.chips} ${classes.chips.root}`} 
                         size="small" 
                         color='primary' 
                         label={techSkill} />
                   ))}
                 </Grid>
-              <Divider style={{"margin-top":"20px"}} variant="fullWidth" />
+              <Divider style={{"marginTop":"20px"}} variant="fullWidth" />
               {/* Mini-Bio */}
               <Typography
-                style={{ "margin-top": "20px" }}
-                item xs={4} variant="body2"
+                style={{ "marginTop": "20px" }}
+                variant="body2"
                 color="textPrimary"
                 component="p">
                 {miniBio.substring(0, 240) + '...'} {/* Pending to check if 240 chars are OK with functionality... */}
