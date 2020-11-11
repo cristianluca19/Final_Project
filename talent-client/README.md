@@ -4,18 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## .ENV VARIABLES
 
-APP_ID=
-PORT=
-LOG_LEVEL=
-REQUEST_LIMIT=
-SESSION_SECRET=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-DB_HOST=
-DB_PORT=
-CLIENT_URL=
-OPENAPI_SPEC=
+REACT_APP_BACKEND_URL=
 
 ## Available Scripts
 
