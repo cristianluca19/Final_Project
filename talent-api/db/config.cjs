@@ -18,9 +18,16 @@ const config = {
     dialect: 'postgres',
     username: DB_USER,
     password: DB_PASSWORD,
-    database: DB_NAME,
+    database: `${DB_NAME}_test`,
     host: DB_HOST,
     port: DB_PORT,
+  },
+
+  ci: {
+    url:
+      DB_URL ||
+      `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+    // url: `postgres:postgres@${DB_HOST}:${DB_PORT}/postgres`,
   },
 
   production: {

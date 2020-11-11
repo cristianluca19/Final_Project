@@ -34,7 +34,7 @@ const db: DB = {
   Folder: Folder(sequelize),
   Recruiter: Recruiter(sequelize),
   Skill: Skill(sequelize),
-  User: User(sequelize)
+  User: User(sequelize),
 };
 
 // ...and all associations
