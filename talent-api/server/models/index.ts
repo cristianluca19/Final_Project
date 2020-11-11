@@ -9,7 +9,6 @@ import Recruiter from './Recruiter.model';
 import Skill from './Skill.model';
 import User from './User.model';
 
-
 interface DB {
   sequelize: any;
   Sequelize: any;
@@ -17,7 +16,7 @@ interface DB {
   Recruiter: any;
   Skill: any;
   Folder: any;
-  //User: any;
+  User: any;
 }
 
 // Set up Sequelize connection
