@@ -1,12 +1,12 @@
 import { Route } from 'react-router-dom'
 import React from 'react';
-import CandidateCard from './components/CandidateCard'
+import CardsContainer from './components/CardsContainer'
 
 function App() {
 
   return (
     <div>
-      <Route path="/" render={() => <CandidateCard/>}/>
+      <Route path="/" render={() => <CardsContainer/>}/>
     </div>
   )
 }
