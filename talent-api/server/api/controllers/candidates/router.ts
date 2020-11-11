@@ -5,4 +5,5 @@ export default express
   .Router()
   .get('/', controller.all)
   .put('/visibility/:candidateId', controller.updateById)
-  .get('/:candidateId', controller.byId);
+  .get('/:candidateId', controller.byId)
+  .post('/addToFolder/:candidateId/:folderId', controller.toFolder);
