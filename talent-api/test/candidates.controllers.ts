@@ -15,7 +15,6 @@ describe('Candidates', () => {
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
       const response = await request(Server).get('/api/candidates');
       expect(response.body).to.have.lengthOf(2);
-      expect(response.body).to.be.an('array');
       expect(response.body[0])
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
