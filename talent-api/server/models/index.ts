@@ -30,11 +30,11 @@ const sequelize = new Sequelize(DB_URL, {
 
 // Create all models...
 const db: DB = {
-  Candidate: Candidate(sequelize),
-  Folder: Folder(sequelize),
-  Recruiter: Recruiter(sequelize),
-  Skill: Skill(sequelize),
   User: User(sequelize),
+  Skill: Skill(sequelize),
+  Folder: Folder(sequelize),
+  Candidate: Candidate(sequelize),
+  Recruiter: Recruiter(sequelize),
 };
 
 // ...and all associations
