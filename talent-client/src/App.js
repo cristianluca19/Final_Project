@@ -1,23 +1,23 @@
 import { Route } from "react-router-dom";
 import './App.css';
-import Catalogue from "./components/Catalogue/index.jsx";
+// import Catalogue from "./components/Catalogue/index.jsx";
 import ContentHome from "./components/ContentHome/index.jsx";
 import Footer from "./components/Footer/index.jsx";
 import Nav from "./components/Nav/index.jsx";
 import CardsContainer from './components/CardsContainer';
 import { useDispatch } from "react-redux";
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getAllCandidates } from './redux/Action';
 
 function App() {
   //==============================================================
   const dispatch = useDispatch();
   //===============================================================
 
-    // axios.get('http://localhost:3001/api/candidates')
-    // .then((candidates) => {
-    //   dispatch(getAllCandidates(candidates.data));
-    //   return
-    // })
+  // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
+  // to lower loading times if candidate number is too high...
+  dispatch(getAllCandidates());
+
 
   return (
     <div className="App">

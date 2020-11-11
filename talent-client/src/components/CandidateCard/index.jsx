@@ -22,7 +22,7 @@ import imgtest from '../../img/cvtest.png';
 
 function CandidateCard(props) {
 
-  const { firstName, lastName, location, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
+  const { firstName, lastName, cohort, country, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
 
   const labelsMaxLimit = 8;
 
@@ -81,13 +81,13 @@ function CandidateCard(props) {
                   </Grid>
                 </Grid>
               </ThemeProvider>
-               {/*Location*/}
+               {/*Location && Cohort*/}
               <Typography
                 gutterBottom
                 variant="body2"
                 color="textSecondary"
                 component="p">
-                {location}.
+                {`${country}  -  Cohort 0${cohort}`}
                   </Typography>
               <Divider variant="middle" style={{"marginBottom": 10}}/>
               <ThemeProvider theme={theme}>
@@ -129,9 +129,11 @@ function CandidateCard(props) {
 
 CandidateCard.propTypes = {
   user: PropTypes.exact({
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
-    location: PropTypes.string,
+    email: PropTypes.string,
+    country: PropTypes.string,
     skills: PropTypes.object,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,

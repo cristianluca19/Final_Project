@@ -11,16 +11,19 @@ import thunk from "redux-thunk";
 import reducer from "./redux/example/Store";
 import mainReducer from "./redux/Store";
 
+// Adding of REDUX DEVTOOLS
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+// Mergin several reducers into one, if you want to add more reducers, just add them here...
 const rootReducer = combineReducers(
   {
     reducer,
     mainReducer,
-  },
-  compose(applyMiddleware(thunk))
+  }
 );
 
-const store = createStore(rootReducer);
+// Store creation and middleware add.
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>

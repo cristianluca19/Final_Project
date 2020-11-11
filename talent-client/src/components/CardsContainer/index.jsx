@@ -3,25 +3,21 @@ import { Container, Grid } from "@material-ui/core";
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector } from 'react-redux';
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
+import { getAllCandidates } from '../../redux/Action';
 
 
 function CardsContainer (props) {
 
     const classes = useStyles();
-    const [cand,setCand] = useState([]);
-    let cardsMaxLimit = 10;
+
+    // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ==== 
+    const candidates = useSelector(store => store.mainReducer.allCandidates)
+
+    const cardsMaxLimit = 10;
 
     
-    useEffect(()=>{
-        axios.get('http://localhost:3001/api/candidates')
-        .then((candidates) => {
-            setCand(candidates.data)
-          return
-        })
-    },[])
-
+    // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
 
     return (                                            
         <Container className={classes.container} maxWidth="xl">
@@ -31,9 +27,9 @@ function CardsContainer (props) {
                 justify="center"
                 alignItems="center"
                 >
-                {/* cand.map((candidate,index) */}
-                {cand.map((candidate,index) => (
-                    (index < cardsMaxLimit) &&
+                {/* props.user.map((candidate,index) */} {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
+                {candidates && candidates.map((candidate,index) => (
+                    ((index < cardsMaxLimit) && candidate.visibility == "listed") &&
                     <div key={index} className={classes.CandidateCard}><CandidateCard user={candidate}/></div>
                 ))} 
             </Grid>

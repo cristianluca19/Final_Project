@@ -11,7 +11,7 @@ export default function Reducer(state = initialState, action) {
               ...state, allCandidates: action.payload
           }
         default: 
-            return null
+            return state
     }
 }
 
