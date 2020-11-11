@@ -5,7 +5,9 @@ import { yellow } from '@material-ui/core/colors';
 export const useStyles = makeStyles((theme) => ({
     root: {
       maxWidth: 550,
+      minWidth: 550,
       maxHeigth: 300,
+      minHeight: 250,
       borderStyle: 'solid',
       borderColor: "#111",
       border: 2,
@@ -15,9 +17,10 @@ export const useStyles = makeStyles((theme) => ({
       }
     },
     media: {
+      minHeight: 250,
       height: "100%",
       width: "100%",
-      borderRight: '5px black',
+      objectFit: "contain",
     },
     chips: {
       borderRadius: 50,

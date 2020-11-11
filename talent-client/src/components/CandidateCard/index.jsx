@@ -24,7 +24,7 @@ function CandidateCard(props) {
 
   const { firstName, lastName, location, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
 
-  const labelsMaxLimit = 8 
+  const labelsMaxLimit = 8;
 
   const classes = useStyles();
 
@@ -97,7 +97,8 @@ function CandidateCard(props) {
                   justify="space-evenly"
                   alignItems="center"
                   spacing={1}>
-                  {skills.hard && skills.hard.map((techSkill, index) => (
+                    {/*skills.hard && skills.hard.map*/} 
+                  {['JavaScript', 'React', 'Redux', 'HTML', 'CSS', 'SQL', 'Node', 'PHP'].map((techSkill, index) => (
                     (index < labelsMaxLimit) && 
                       <Chip key={index} className={`${classes.chips} ${classes.chips.root}`} 
                         size="small" 
@@ -112,7 +113,11 @@ function CandidateCard(props) {
                 variant="body2"
                 color="textPrimary"
                 component="p">
-                {miniBio.substring(0, 240) + '...'} {/* Pending to check if 240 chars are OK with functionality... */}
+                  `
+    I'm a software engineer who believes that out-of-the-box thinking is what
+     separates a great project from a good one. I do most of mine in Javascript, 
+     React, Node.js and Python.`
+                {/* {miniBio.substring(0, 240) + '...'} Pending to check if 240 chars are OK with functionality... */}
               </Typography>
               </ThemeProvider>
             </CardContent>

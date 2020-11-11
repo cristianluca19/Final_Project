@@ -1,5 +1,5 @@
 import { Route } from 'react-router-dom'
-import React from 'react';
+import React, { useEffect } from 'react';
 import CardsContainer from './components/CardsContainer'
 // import { increment, decrement } from "./redux/example/Action.js";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,15 +9,14 @@ import axios from 'axios';
 function App() {
   //==============================================================
   const dispatch = useDispatch();
-  const count = useSelector((store) => store.reducer.count);
+  // const count = useSelector((store) => store.reducer.count);
   //===============================================================
 
-  axios.get('http://localhost:3001/api/candidates')
-  .then((candidates) => {
-    console.log(candidates)
-    dispatch(getAllCandidates(candidates.data));
-    return
-  })
+    axios.get('http://localhost:3001/api/candidates')
+    .then((candidates) => {
+      dispatch(getAllCandidates(candidates.data));
+      return
+    })
 
   return (
     <div>

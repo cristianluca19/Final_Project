@@ -1,5 +1,4 @@
 import * as actions from './Constants.js';
-console.log(actions)
 
 const initialState = {
    allCandidates: [],
