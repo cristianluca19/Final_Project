@@ -125,8 +125,8 @@ describe('Candidates', () => {
     });
   });
 
-  describe('DELETE relation between candidate and folder', () => {
-    it('should delete an instance from the "folder_candidates" table', async () => {
+  describe('DELETE candidate from folder', () => {
+    it('should delete a candidate from a specific folder', async () => {
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
         cohort: '4',
@@ -142,7 +142,7 @@ describe('Candidates', () => {
         include: db.Candidate,
       });
       await request(Server).delete(
-        `/api/candidates/removeFromFolder/${candidate1.id}/${folder1.id}`
+        `/api/candidates/${folder1.id}/removeCandidate/${candidate1.id}`
       );
       const response = await db.Folder.findOne({
         where: {

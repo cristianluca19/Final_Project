@@ -11,6 +11,6 @@ export default express
     CandidatesController.addToFolder
   )
   .delete(
-    '/removeFromFolder/:candidateId/:folderId',
-    CandidatesController.fromFolder
+    '/:folderId/removeCandidate/:candidateId',
+    CandidatesController.deleteFromFolder
   );
