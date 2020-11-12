@@ -7,7 +7,7 @@ import { USER_ROLES } from './enums';
 export default (sequelize) => {
   class User extends Model {
     static associate(models) {
-      this.hasMany(models.Folder, { foreignKey: 'user_id' });
+      this.hasMany(models.Folder);
     }
   }
 
