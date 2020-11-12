@@ -80,7 +80,8 @@ function CandidateCard(props) {
                   </Grid>
                   <Grid item xs={1} style={{"paddingLeft": "5px"}}>
                     <IconButton color="secondary" edge='start' onClick={handleFolderAdd}>
-                    {user.role ? <CreateNewFolderIcon/> : <EmailIcon/>}
+                    {/* {user.role ? <CreateNewFolderIcon/> : <EmailIcon/>} */}
+                    {<CreateNewFolderIcon/>}
                     </IconButton>
                   </Grid>
                 </Grid>
