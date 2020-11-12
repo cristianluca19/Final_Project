@@ -4,12 +4,18 @@ import path from 'path';
 import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import l from './logger';
 import errorHandler from '../api/middlewares/error.handler';
 import setUpOpenAPI from './openapi';
 
 const app = express();
+
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}
 
 export default class ExpressServer {
   private routes: (app: Application) => void;
@@ -28,6 +34,7 @@ export default class ExpressServer {
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(express.static(`${root}/public`));
     // TODO: configure CORS?;
+    app.use(cors(corsOptions));
 
     setUpOpenAPI(app);
   }

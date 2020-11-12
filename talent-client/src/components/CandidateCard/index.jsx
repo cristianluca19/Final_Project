@@ -22,9 +22,9 @@ import imgtest from '../../img/cvtest.png';
 
 function CandidateCard(props) {
 
-  const { firstName, lastName, location, skills, profilePicture, miniBio, linkedin, github, role } = props.user;
+  const { user } = props;
 
-  const labelsMaxLimit = 8 
+  const labelsMaxLimit = 8;
 
   const classes = useStyles();
 
@@ -42,7 +42,7 @@ function CandidateCard(props) {
             {/*Profile Picture*/}
             <CardMedia
               className={classes.media}
-              image={profilePicture || imgtest}
+              image={user.profilePicture || imgtest}
               title='Henry Candidate'
             />
           </Grid>
@@ -50,7 +50,7 @@ function CandidateCard(props) {
             item xs={8}
             container
             direction="column"
-            justify="flex-end"
+            justify="space-evenly"
             alignItems="stretch">
             <CardContent>
               <ThemeProvider theme={theme}>
@@ -58,62 +58,70 @@ function CandidateCard(props) {
                   container
                   justify="space-between"
                   alignItems="center">
-                  <Grid item xs={8}>
+                  <Grid item xs={9}>
                     {/*FullName*/}
                     <Typography
                       gutterBottom
                       variant="h5"
                       component="h2">
-                      {`${firstName} ${lastName}`}
+                      {`${user.firstName} ${user.lastName}`}
                     </Typography>
                     {/*Top-right Icons*/}
                   </Grid>
                   <Grid item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={github}><GitHubIcon name='GitHub' fontSize='small' /></Link>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.github}>
+                        <GitHubIcon name='GitHub' fontSize='small' />
+                      </Link>
                   </Grid>
-                  <Grid style={{ "padding-right": "10px", "margin-bottom":"-2px" }} item xs={1}>
-                      <Link color="inherit" target="_blank" rel="noopener" href={linkedin}><LinkedInIcon name='LinkedIn' /></Link>
+                  <Grid style={{ "paddingRight": "5px", "marginBottom":"-2px" }} item xs={1}>
+                      <Link color="inherit" target="_blank" rel="noopener" href={user.linkedin}>
+                        <LinkedInIcon name='LinkedIn' />
+                      </Link>
                   </Grid>
-                  <Grid item xs={2}>
-                    <IconButton color="Secondary" edge='end' onClick={handleFolderAdd}>
-                    {role ? <CreateNewFolderIcon/> : <EmailIcon/>}
+                  <Grid item xs={1} style={{"paddingLeft": "5px"}}>
+                    <IconButton color="secondary" edge='start' onClick={handleFolderAdd}>
+                    {user.role ? <CreateNewFolderIcon/> : <EmailIcon/>}
                     </IconButton>
                   </Grid>
                 </Grid>
               </ThemeProvider>
-               {/*Location*/}
+               {/*Location && Cohort*/}
               <Typography
-                item xs={2}
+                align="left"
                 gutterBottom
                 variant="body2"
                 color="textSecondary"
-                component="p">
-                {location}.
+                component="p"
+                style={{paddingLeft:15}}>
+                {`${user.country}  -  WebFT0${user.cohort}`}
                   </Typography>
-              <Divider variant="middle" style={{"margin-bottom": 10}}/>
-              <ThemeProvider item xs={3} theme={theme} style={{ "padding": 1 }}>
+              <Divider variant="middle" style={{"marginBottom": 10}}/>
+              <ThemeProvider theme={theme}>
                 {/* Label mapping with TechSkills */}
                 <Grid
                   container
                   justify="space-evenly"
                   alignItems="center"
                   spacing={1}>
-                  {skills.hard && skills.hard.map((techSkill, index) => (
+                    {/*skills.hard && skills.hard.map*/} 
+                    {/* Arreglar esto cuando este listo el endpoint con skills..*/} 
+                  {['JavaScript', 'React', 'Redux', 'HTML', 'CSS', 'SQL', 'Node', 'PHP'].map((techSkill, index) => (
                     (index < labelsMaxLimit) && 
-                      <Chip className={`${classes.chips} ${classes.chips.root}`} 
+                      <Chip key={index} className={classes.chips} 
                         size="small" 
                         color='primary' 
                         label={techSkill} />
                   ))}
                 </Grid>
-              <Divider style={{"margin-top":"20px"}} variant="fullWidth" />
+              <Divider style={{"marginTop":"20px"}} variant="fullWidth" />
               {/* Mini-Bio */}
               <Typography
-                style={{ "margin-top": "20px" }}
-                item xs={4} variant="body2"
+                style={{ "marginTop": "20px" }}
+                variant="body2"
                 color="textPrimary"
-                component="p">
-                {miniBio.substring(0, 240) + '...'} {/* Pending to check if 240 chars are OK with functionality... */}
+                component="p"
+                align="justify">
+                {user.miniBio.substring(0, 240) + '...'}
               </Typography>
               </ThemeProvider>
             </CardContent>
@@ -125,9 +133,11 @@ function CandidateCard(props) {
 
 CandidateCard.propTypes = {
   user: PropTypes.exact({
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
-    location: PropTypes.string,
+    email: PropTypes.string,
+    country: PropTypes.string,
     skills: PropTypes.object,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,
