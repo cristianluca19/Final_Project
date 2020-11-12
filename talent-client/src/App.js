@@ -1,4 +1,7 @@
-import { Route } from "react-router-dom";
+import React, { useState } from 'react';
+import { Route } from 'react-router-dom'
+import CandidateCard from './components/CandidateCard'
+import CsvToJson from "./components/csvToJson/CsvToJson";
 import './App.css';
 // import Catalogue from "./components/Catalogue/index.jsx";
 import ContentHome from "./components/ContentHome/index.jsx";
@@ -6,7 +9,6 @@ import Footer from "./components/Footer/index.jsx";
 import Nav from "./components/Nav/index.jsx";
 import CardsContainer from './components/CardsContainer';
 import { useDispatch } from "react-redux";
-import React from 'react';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
@@ -20,10 +22,13 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div>
+      
       <Route path='/' render={() => <Nav />} />
       <Route path='/' render={() => <ContentHome />} />
       <Route path="/" render={() => <CardsContainer/>}/>
+      {/* <Route path="/" render={() => <CandidateCard/>}/> */}
+      <Route exact path="/csv" component={CsvToJson}/>
       <Route path='/' render={() => <Footer />} />
     </div>
   );
