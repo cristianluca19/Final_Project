@@ -16,7 +16,7 @@ export class CandidatesController {
         return res.status(400).send('Please upload a CSV file!');
       }
       const candidates = [];
-      const unlinkAsync = promisify(fs.unlink)
+      const unlinkAsync = promisify(fs.unlink);
 
       fs.createReadStream(req.file.path)
         .pipe(parse({ headers: true, delimiter: ',' }))
