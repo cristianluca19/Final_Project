@@ -39,20 +39,26 @@ const useStyle = makeStyles((theme) => ({
     '&:hover': {
       background: '#ffda00',
     },
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    margin: '0px 8px',
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  selectInput: {
-    backgroundColor: '#ffffff1f',
-    paddingRight: '24px',
-    width: '280px',
-  },
+    button: {
+        backgroundColor: '#ffff00',
+        width: '78%',
+        color: '#000000',
+        "&:hover": {
+            background: '#ffda00'
+        }
+    },
+    formControl: {
+        minWidth: 120,
+        margin: '0px 8px'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+    selectInput: {
+        backgroundColor: '#ffffff1f',
+        paddingRight: '24px',
+        width: '280px'
+    }
 }));
 
 function Search() {
