@@ -1,7 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import ExampleReducer from './exampleReducer/Store';
-import CandidateReducer from './candidatesReducer/Store';
+import ExampleReducer from './exampleReducer/Reducer';
+import CandidateReducer from './candidatesReducer/Reducer';
 
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 

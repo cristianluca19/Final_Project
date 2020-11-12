@@ -50,7 +50,7 @@ function CandidateCard(props) {
             item xs={8}
             container
             direction="column"
-            justify="space-evenly"
+            justify="space-between"
             alignItems="stretch">
             <CardContent>
               <ThemeProvider theme={theme}>
@@ -121,7 +121,7 @@ function CandidateCard(props) {
                 color="textPrimary"
                 component="p"
                 align="justify">
-                {user.miniBio.substring(0, 240) + '...'}
+                {user.miniBio.substring(0, 180) + '...'}
               </Typography>
               </ThemeProvider>
             </CardContent>

@@ -3,10 +3,11 @@ import { Container, Grid } from "@material-ui/core";
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector } from 'react-redux';
+import Paginator from '../Paginator';
 import React from 'react';
 
 
-function CardsContainer (props) {
+function CardsContainer(props) {
 
     const classes = useStyles();
 
@@ -15,24 +16,27 @@ function CardsContainer (props) {
 
     const cardsMaxLimit = 30;
 
-    
+    console.log(props.users)
     // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
 
-    return (                                            
+    return (
         <Container className={classes.container} maxWidth="xl">
             <Grid className={classes.paddingCandidates}
                 container
                 direction="row"
                 justify="center"
                 alignItems="center"
-                >
+            >
                 {/* props.user.map((candidate,index) */} {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
-                {candidates && candidates.map((candidate,index) => (
+                {candidates.length && candidates.map((candidate, index) => (
                     ((index < cardsMaxLimit) && candidate.visibility == "listed") &&
                     <div key={index} className={classes.CandidateCard}>
-                        <CandidateCard user={candidate}/>
+                        <CandidateCard user={candidate} />
                     </div>
-                ))} 
+                ))}
+            </Grid>
+            <Grid>
+                <Paginator />
             </Grid>
         </Container>
     )
@@ -40,10 +44,10 @@ function CardsContainer (props) {
 
 CardsContainer.propTypes = {
     users: PropTypes.array.isRequired,
-  }
+}
 
 CardsContainer.defaultProps = {
-    users: [{},{},{},{},{},{},{},{},{},{}]
+    users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
 }
 
 export default CardsContainer;
