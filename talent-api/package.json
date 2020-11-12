@@ -12,14 +12,17 @@
     "dev:debug": "nodemon --exec \"node -r ts-node/register --inspect-brk\" server/index.ts | pino-pretty",
     "lint": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --quiet",
     "lint:fix": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --quiet --fix",
-    "test": "mocha -r ts-node/register test/**/*.ts --exit",
+    "prettier": "prettier -c -w \"{server,test}/**/*.{js,ts,tsx}\"",
+    "test": "mocha -r ts-node/register -w test/**/*.ts --delay",
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit",
+    "ci": "mocha -r ts-node/register test/**/*.ts --delay --exit",
     "seed": "sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@types/node": "^14.14.7",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-openapi-validator": "^4.2.0",
