@@ -4,3 +4,7 @@ timeout: 2000
 delay: true
 file:
   - './test/resetDB.ts'
+node:
+  - 14
+  - 13
+  - 12
