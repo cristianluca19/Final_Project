@@ -8,7 +8,7 @@ const skills = {
 
 function mixer(skills) {
   let skillType = ['hard', 'soft'];
-  let randomSkill = skillType[Math.floor(Math.randomSkill() * 2)];
+  let randomSkill = skillType[Math.floor(Math.random() * 2)];
   let mix = {
     name: skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
     type: randomSkill,
