@@ -135,7 +135,7 @@ describe('Candidates', () => {
       const folder1 = await db.Folder.create();
       await db.Folder.create();
       await folder1.addCandidate(candidate1);
-      const relation = await db.Folder.findOne({
+      const relationCreated = await db.Folder.findOne({
         where: {
           id: folder1.id,
         },
@@ -144,17 +144,17 @@ describe('Candidates', () => {
       await request(Server).delete(
         `/api/candidates/${folder1.id}/removeCandidate/${candidate1.id}`
       );
-      const response = await db.Folder.findOne({
+      const relationDeleted = await db.Folder.findOne({
         where: {
           id: folder1.id,
         },
         include: db.Candidate,
       });
-      expect(response.dataValues.id).to.be.equal(relation.dataValues.id);
-      expect(relation.dataValues.candidates[0].dataValues)
+      expect(relationDeleted.dataValues.id).to.be.equal(relationCreated.dataValues.id);
+      expect(relationCreated.dataValues.candidates[0].dataValues)
         .to.have.property('id')
         .to.be.equal(candidate1.id);
-      expect(response.dataValues.candidates).to.have.lengthOf(0);
+      expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
 });
