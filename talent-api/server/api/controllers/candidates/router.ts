@@ -1,7 +1,12 @@
 import express from 'express';
-import controller from './controller';
+import candidatesController from './controller';
 
 export default express
   .Router()
-  .get('/', controller.all)
-  .get('/:candidateId', controller.byId);
+  .get('/', candidatesController.all)
+  .put('/:candidateId/visibility', candidatesController.updateById)
+  .get('/:candidateId', candidatesController.byId)
+  .post(
+    '/:folderId/addCandidate/:candidateId',
+    candidatesController.addToFolder
+  );
