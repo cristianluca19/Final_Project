@@ -1,16 +1,16 @@
 import express from 'express';
-import CandidatesController from './controller';
+import candidatesController from './controller';
 
 export default express
   .Router()
-  .get('/', CandidatesController.all)
-  .put('/visibility/:candidateId', CandidatesController.updateById)
-  .get('/:candidateId', CandidatesController.byId)
+  .get('/', candidatesController.all)
+  .put('/:candidateId/visibility', candidatesController.updateById)
+  .get('/:candidateId', candidatesController.byId)
   .post(
     '/:folderId/addCandidate/:candidateId',
-    CandidatesController.addToFolder
+    candidatesController.addToFolder
   )
   .delete(
     '/:folderId/removeCandidate/:candidateId',
-    CandidatesController.deleteFromFolder
+    candidatesController.deleteFromFolder
   );
