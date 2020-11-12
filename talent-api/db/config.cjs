@@ -27,7 +27,6 @@ const config = {
     url:
       DB_URL ||
       `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
-    // url: `postgres:postgres@${DB_HOST}:${DB_PORT}/postgres`,
   },
 
   production: {
