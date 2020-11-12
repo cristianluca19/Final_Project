@@ -1,14 +1,14 @@
 import { Route, Switch } from "react-router-dom";
 import './App.css';
-import ContentHome from "./components/ContentHome/index.jsx";
-import Footer from "./components/Footer/index.jsx";
-import Nav from "./components/Nav/index.jsx";
+import ContentHome from './components/ContentHome/index';
+import Footer from './components/Footer/index';
+import Nav from './components/Nav/index';
 import CardsContainer from './components/CardsContainer';
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux';
 import React from 'react';
-import Dashboard from "./components/Dashboard";
-import Menu from './components/Dashboard/menu.jsx';
-import Candidates from './components/Dashboard/candidates.jsx';
+import Dashboard from './components/Dashboard';
+import Menu from './components/Dashboard/menu';
+import Candidates from './components/Dashboard/candidates';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
