@@ -1,4 +1,4 @@
 import express from 'express';
-import controller from './controller';
+import folderController from './controller';
 
-export default express.Router().post('/', controller.postFolder);
+export default express.Router().post('/', folderController.postFolder);

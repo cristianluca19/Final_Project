@@ -12,8 +12,6 @@ describe('Folders', () => {
   describe('POST one folder', () => {
     it('should post one folder', async () => {
       const response = await request(Server).post('/api/folders');
-      expect(response.body).to.be.an('object');
-      expect(response.body.folder).to.be.an('object');
       expect(response.body.folder).to.have.property('uuid');
     });
   });
