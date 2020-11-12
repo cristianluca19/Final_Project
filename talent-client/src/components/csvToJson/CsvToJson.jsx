@@ -9,7 +9,6 @@ function CsvToJson() {
   const handleCsvFile = (e) => {
     e.preventDefault();
     let csvToJson = e.target.files[0];
-    console.log(csvToJson)
     let formData = new FormData();
     formData.append("file", csvToJson);
     console.log(formData)

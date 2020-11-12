@@ -9,27 +9,119 @@ describe('Candidates', () => {
     db.Candidate.destroy({ where: {} });
   });
 
-  it('should get all candidates', async () => {
-    await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-    await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-    const response = await request(Server)
-      .get('/api/candidates')
-      console.log(response.body)
-    expect(response.body).to.have.lengthOf(2);
-    expect(response.body).to.be.an('array');
-    expect(response.body[0]).to.have.property('email').to.be.equal('leo@gmail.com');
+  describe('GET all candidates', () => {
+    it('should get all candidates', async () => {
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      const response = await request(Server).get('/api/candidates');
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('mati@gmail.com');
+    });
+
+    it('should be an array', async () => {
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      const response = await request(Server).get('/api/candidates');
+      expect(response.body).to.be.an('array');
+    });
   });
 
-  // it('should get all candidates', async () => {
-  //   await db.Candidate.create({ email: 'leo1@gmail.com', cohort: '4' });
-  //   await db.Candidate.create({ email: 'mati2@gmail.com', cohort: '4' });
-  //   const response = await request(Server)
-  //     .get('/candidate')
-  //       console.log(response.body, "aaaa")
-  //       expect(response.body).to.have.lengthOf(2);
-  //       expect(response.body).to.be.an('array');
-  //       expect(response.body[1]).to.have.property('id').to.be.equal(2);
-  // });
+  describe('GET specific candidate', () => {
+    it('should get a specific candidate', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
+      const response = await request(Server).get(
+        `/api/candidates/${candidate1.id}`
+      );
+      expect(response.body)
+        .to.have.property('email')
+        .to.be.equal('leo@gmail.com');
+      expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
+    });
+  });
+
+  describe('PUT update visibility', () => {
+    it('should update the visibility of the candidate to "listed"', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo12@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati12@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .send({ visibility: 'listed' });
+      expect(response.body)
+        .to.have.property('visibility')
+        .to.be.equal('listed');
+    });
+
+    it('should update the visibility of the candidate to "unlisted"', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo15@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati15@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .send({ visibility: 'unlisted' });
+      expect(response.body)
+        .to.have.property('visibility')
+        .to.be.equal('unlisted');
+    });
+
+    it('should update the visibility of the candidate to "private"', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo16@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati16@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .send({ visibility: 'private' });
+      expect(response.body)
+        .to.have.property('visibility')
+        .to.be.equal('private');
+    });
+
+    it('response should have same id as the one sent in params', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo10@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      const response = await request(Server)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .send({ visibility: 'listed' });
+      expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
+    });
+  });
+  describe('POST add candidate to folder', () => {
+    it('should add a candidate to a specific folder', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'leo@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      const folder1 = await db.Folder.create();
+      await db.Folder.create();
+      const response = await request(Server).post(
+        `/api/candidates/${folder1.id}/addCandidate/${candidate1.id}`
+      );
+      expect(response.body[0])
+        .to.have.property('folderId')
+        .to.be.equal(folder1.id);
+      expect(response.body[0])
+        .to.have.property('candidateId')
+        .to.be.equal(candidate1.id);
+    });
+  });
 });
-
-

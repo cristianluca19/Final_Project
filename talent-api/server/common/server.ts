@@ -4,13 +4,18 @@ import path from 'path';
 import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import cors from 'cors'
+import cors from 'cors';
 
 import l from './logger';
 import errorHandler from '../api/middlewares/error.handler';
 import setUpOpenAPI from './openapi';
 
 const app = express();
+
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+};
 
 export default class ExpressServer {
   private routes: (app: Application) => void;
@@ -34,7 +39,8 @@ export default class ExpressServer {
         origin: 'http://localhost:3000', // <-- location of the react app were connecting to
         credentials: true,
       })
-);
+    );
+    app.use(cors(corsOptions));
 
     setUpOpenAPI(app);
   }

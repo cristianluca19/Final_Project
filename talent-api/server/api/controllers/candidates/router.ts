@@ -1,9 +1,15 @@
 import express from 'express';
-import controller from './controller';
 import upload from '../../middlewares/csvFile';
+import candidatesController from './controller';
 
 export default express
   .Router()
-  .get('/', controller.all)
-  .post('/csv', upload.single('file'), controller.csvToJson)
-  .post('/', controller.bulkCreateCandidate);
+  .post('/csv', upload.single('file'), candidatesController.csvToJson)
+  .post('/', candidatesController.bulkCreateCandidate)
+  .get('/', candidatesController.all)
+  .put('/:candidateId/visibility', candidatesController.updateById)
+  .get('/:candidateId', candidatesController.byId)
+  .post(
+    '/:folderId/addCandidate/:candidateId',
+    candidatesController.addToFolder
+  );

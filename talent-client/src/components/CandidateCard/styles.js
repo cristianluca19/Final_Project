@@ -1,23 +1,27 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { yellow, blueGrey } from '@material-ui/core/colors';
+import { yellow } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
     root: {
       maxWidth: 550,
+      minWidth: 550,
       maxHeigth: 300,
+      minHeight: 300,
       borderStyle: 'solid',
       borderColor: "#111",
       border: 2,
-      boxShadow: "4px 4px 24px -6px #999",
+      boxShadow: "1px 2px 8px 1px #000000",
       '&:hover': {
-        boxShadow: "1px 2px 8px 1px #000000",
+        boxShadow: "2px 2px 24px -2px #fff",
+        borderColor: "#87868A",
       }
     },
     media: {
+      minHeight: 300,
       height: "100%",
       width: "100%",
-      borderRight: '5px black',
+      objectFit: "contain",
     },
     chips: {
       borderRadius: 50,
