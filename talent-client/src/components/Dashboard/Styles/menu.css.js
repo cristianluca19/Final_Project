@@ -31,5 +31,13 @@ export const useStyle = makeStyles({
     linkCandidate: {
         textDecoration: 'none',
         color: 'snow'
+    },
+    linkRecruiter: {
+        textDecoration: 'none',
+        color: 'snow'
+    },
+    linkSkills: {
+        textDecoration: 'none',
+        color: 'snow'
     }
 })
