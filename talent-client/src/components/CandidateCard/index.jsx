@@ -140,10 +140,15 @@ CandidateCard.propTypes = {
     email: PropTypes.string,
     country: PropTypes.string,
     skills: PropTypes.object,
+    cohort: PropTypes.string,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,
     linkedin: PropTypes.string,
-    github: PropTypes.string
+    github: PropTypes.string,
+    visibility: PropTypes.string,
+    status: PropTypes.string,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string,
   }),
 }
 

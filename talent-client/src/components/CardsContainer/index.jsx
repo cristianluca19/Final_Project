@@ -16,7 +16,6 @@ function CardsContainer(props) {
 
     const cardsMaxLimit = 30;
 
-    console.log(props.users)
     // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
 
     return (
