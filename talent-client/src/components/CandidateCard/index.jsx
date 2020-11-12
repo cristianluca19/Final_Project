@@ -18,7 +18,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Divider from '@material-ui/core/Divider';
 import EmailIcon from '@material-ui/icons/Email';
-import imgtest from '../../img/cvtest.png';
+import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
 

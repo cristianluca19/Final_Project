@@ -1,11 +1,12 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Pagination } from '@material-ui/lab';
 import { Grid } from '@material-ui/core';
-import { henryTheme, useStyles } from './styles';
+import { useStyles } from './styles';
+import { henryTheme } from '../../henryMuiTheme';
 
-export default function Paginator() {
+function Paginator(props) {
 
     const classes = useStyles();
 
@@ -17,8 +18,18 @@ export default function Paginator() {
             alignItems="center"
         >
             <ThemeProvider theme={henryTheme}>
-             <Pagination color="primary" count={10} variant="outlined" shape="rounded" />
+             <Pagination color="primary" count={props.pages} variant="outlined" shape="rounded" />
             </ThemeProvider>
         </Grid>
     )
 }
+
+Paginator.propTypes = {
+    pages: PropTypes.number
+}
+
+Paginator.defaultProps = {
+    pages: 10
+}
+
+export default Paginator
