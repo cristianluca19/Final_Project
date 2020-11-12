@@ -3,5 +3,8 @@
   "workspaces": [
     "api",
     "client"
-  ]
+  ],
+  "dependencies": {
+    "uuidv4": "^6.2.5"
+  }
 }

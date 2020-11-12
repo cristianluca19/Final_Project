@@ -17,5 +17,5 @@ export enum VISIBILITY {
 
 export enum STATUS {
   Unemployed = 'unemployed',
-  Employed = 'emplyed',
+  Employed = 'employed',
 }
