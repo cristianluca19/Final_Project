@@ -4,6 +4,7 @@ import path from 'path';
 import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors'
 
 import l from './logger';
 import errorHandler from '../api/middlewares/error.handler';
@@ -28,6 +29,12 @@ export default class ExpressServer {
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(express.static(`${root}/public`));
     // TODO: configure CORS?;
+    app.use(
+      cors({
+        origin: 'http://localhost:3000', // <-- location of the react app were connecting to
+        credentials: true,
+      })
+);
 
     setUpOpenAPI(app);
   }

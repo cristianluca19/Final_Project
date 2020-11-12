@@ -1,11 +1,11 @@
 import ExamplesService from '../../services/examples.service';
 import { Request, Response } from 'express';
-import db from '../../../models/index';
+import db from '../../../models';
 
 export class Controller {
-
-  all(req: Request, res: Response): void {
-    ExamplesService.all().then((r) => res.json(r));
+  async all(req: Request, res: Response): Promise<void> {
+    // ExamplesService.all().then((r) => res.json(r));
+     console.log(await db.Candidate.findAll())
   }
 
   byId(req: Request, res: Response): void {

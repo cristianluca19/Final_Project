@@ -13,6 +13,11 @@ import User from './User.model';
 interface DB {
   sequelize: any;
   Sequelize: any;
+  Candidate: any;
+  Recruiter: any;
+  Skill: any;
+  Folder: any;
+  //User: any;
 }
 
 // Set up Sequelize connection
@@ -21,6 +26,7 @@ const sequelize = new Sequelize(DB_URL, {
     underscored: true,
   },
   // TODO: logging
+  logging: false,
 });
 
 // Create all models...
