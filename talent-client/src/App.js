@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom'
 import CandidateCard from './components/CandidateCard'
-import CsvToJson from "./components/csvToJson/CsvToJson";
 import './App.css';
 // import Catalogue from "./components/Catalogue/index.jsx";
 import ContentHome from "./components/ContentHome/index.jsx";
@@ -28,7 +27,6 @@ function App() {
       <Route path='/' render={() => <ContentHome />} />
       <Route path="/" render={() => <CardsContainer/>}/>
       {/* <Route path="/" render={() => <CandidateCard/>}/> */}
-      <Route exact path="/csv" component={CsvToJson}/>
       <Route path='/' render={() => <Footer />} />
     </div>
   );
