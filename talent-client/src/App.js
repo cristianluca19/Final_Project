@@ -22,8 +22,7 @@ function App() {
 
 
   return (
-    <div>
-      
+    <div className="App">
       <Route path='/' render={() => <Nav />} />
       <Route path='/' render={() => <ContentHome />} />
       <Route path="/" render={() => <CardsContainer/>}/>
