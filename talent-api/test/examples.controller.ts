@@ -5,7 +5,6 @@ import Server from '../server';
 import db from '../server/models';
 
 describe('Example', () => {
-
   // it('should get all examples', () =>
   //   request(Server)
   //     .get('/api/v1/examples')
@@ -13,7 +12,6 @@ describe('Example', () => {
   //     .then((resp) => {
   //       expect(resp.body).to.be.an('array').of.length(2);
   //     }));
-
   // it('should add a new example', () =>
   //   request(Server)
   //     .post('/api/v1/examples')
@@ -25,7 +23,6 @@ describe('Example', () => {
   //         .that.has.property('name')
   //         .equal('test');
   //     }));
-
   // it('should get an example by id', () =>
   //   request(Server)
   //     .get('/api/v1/examples/2')
@@ -37,4 +34,3 @@ describe('Example', () => {
   //         .equal('test');
   //     }));
 });
-

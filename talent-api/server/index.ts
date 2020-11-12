@@ -10,6 +10,6 @@ const setUpDatabase = async (): Promise<void> => {
 };
 setUpDatabase();
 
-const port = parseInt(process.env.PORT);
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 export default new Server().router(routes).listen(port);
