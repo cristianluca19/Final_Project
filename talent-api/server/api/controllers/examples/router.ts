@@ -2,4 +2,4 @@ import express from 'express';
 import controller from './controller';
 
 export default express.Router();
-// .get('/:candidateId', controller.byId);
+//.get('/:candidateId', controller.byId);
