@@ -51,7 +51,7 @@ jobs:
 
     # - run: yarn run build --if-present
 
-    - run: yarn run test
+    - run: yarn run ci
       env:
         NODE_ENV: ci
         CI: true
