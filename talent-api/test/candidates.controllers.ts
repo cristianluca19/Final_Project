@@ -57,7 +57,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati12@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/visibility/${candidate1.id}`)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
       expect(response.body)
         .to.have.property('visibility')
@@ -71,7 +71,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati15@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/visibility/${candidate1.id}`)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'unlisted' });
       expect(response.body)
         .to.have.property('visibility')
@@ -85,7 +85,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati16@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/visibility/${candidate1.id}`)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'private' });
       expect(response.body)
         .to.have.property('visibility')
@@ -99,7 +99,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/visibility/${candidate1.id}`)
+        .put(`/api/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
       expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
     });
