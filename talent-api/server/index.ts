@@ -5,7 +5,7 @@ import routes from './routes';
 
 const setUpDatabase = async (): Promise<void> => {
   // TODO: turn force off!! At least outside of dev
-  const FORCE_SYNC_DB = true;
+  const FORCE_SYNC_DB = false;
   await db.sequelize.sync({ force: FORCE_SYNC_DB });
 };
 setUpDatabase();

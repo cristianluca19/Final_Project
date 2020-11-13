@@ -157,4 +157,19 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
-});
+
+  describe('DELETE candidate', ()=>{
+    it('should delete a candidate by id', async () => {
+      const candidate1 = await db.Candidate.create({
+        email: 'cristianL@gmail.com',
+        cohort: '5',
+    });
+    const response = await request(Server).delete(`/api/candidates/${candidate1.id}/delete`)
+    const candidate = await db.Candidate.findOne({where: {email: 'cristianL@gmail.com', cohort: '5'}})
+    expect(response.status).to.be.equal(204)
+    expect(candidate).to.be.equal(null)
+    });
+  });
+})
+
+

@@ -28,5 +28,9 @@ export class CandidatesController {
     const reply = await folder.removeCandidate(candidate);
     res.status(200).json(reply);
   }
+  async deleteCandidate(req: Request, res: Response): Promise<void>{
+    const candidate = await db.Candidate.destroy({where:{id:req.params.candidateId}});
+    res.status(204).end()
+  }
 }
 export default new CandidatesController();

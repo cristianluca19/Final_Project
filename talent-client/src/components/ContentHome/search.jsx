@@ -59,6 +59,7 @@ const useStyle = makeStyles((theme) => ({
         paddingRight: '24px',
         width: '280px'
     }
+  }
 }));
 
 function Search() {
