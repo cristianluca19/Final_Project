@@ -18,7 +18,7 @@ export class RecruitersController {
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    // CONSIDER CHANGING THIS FUNCTIONALITY IN THE FUTURE IF PARANOID MODE IS SETTED OFF IN SEQUELIZE
+    // TODO: CONSIDER CHANGING THIS FUNCTIONALITY IN THE FUTURE IF PARANOID MODE IS SETTED OFF IN SEQUELIZE
     const id: number = parseInt(req.params.recruiterId);
     await db.Recruiter.destroy({ where: { id } });
     res.sendStatus(204);
@@ -28,7 +28,7 @@ export class RecruitersController {
     await db.Recruiter.update(req.body, {
       where: { id: req.params.recruiterId },
     });
-    res.sendStatus(201);
+    res.sendStatus(200);
   }
 }
 

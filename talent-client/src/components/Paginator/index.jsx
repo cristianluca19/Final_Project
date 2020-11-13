@@ -6,6 +6,8 @@ import { Grid } from '@material-ui/core';
 import { useStyles } from './styles';
 import { henryTheme } from '../../henryMuiTheme';
 
+const defaultPagesToShow = 10;
+
 function Paginator(props) {
   const classes = useStyles();
 
@@ -34,7 +36,7 @@ Paginator.propTypes = {
 };
 
 Paginator.defaultProps = {
-  pages: 10,
+  pages: defaultPagesToShow,
 };
 
 export default Paginator;
