@@ -4,7 +4,7 @@ import candidatesController from './controller';
 export default express
   .Router()
   .get('/', candidatesController.all)
-  .get('/:visibility', candidatesController.byFilter)
+  .get('/filterBy/:visibility', candidatesController.byFilter)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post(

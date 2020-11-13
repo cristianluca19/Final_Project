@@ -34,7 +34,6 @@ export class CandidatesController {
         visibility: req.params.visibility,
       },
     });
-    console.log(candidates);
     res.status(200).json(candidates);
   }
 }
