@@ -10,7 +10,7 @@ export class usersController {
       profilePicture,
       role,
     });
-    res.status(201).json({ 'CREATED: ': user });
+    res.status(201).json(user);
     return;
   }
 }
