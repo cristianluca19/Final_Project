@@ -10,24 +10,41 @@ describe('Users', () => {
   });
 
   describe('Create one user', () => {
-    const obj = {
+    const federico = {
       firstName: 'Federico',
       lastName: 'Calderon',
       profilePicture:
         'https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg',
       role: 'admin',
     };
-    it('should create one user', async () => {
-      const response = await request(Server).post('/api/users').send(obj);
-      const dbCreated = await db.User.findOne({
-        where: { id: response.body['CREATED: '].id },
-      });
-      expect(dbCreated.dataValues).to.have.property;
+    const carlos = {
+      firstName: 'Carlos',
+      lastName: 'Martin',
+      profilePicture:
+        'https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg',
+      role: 'selector',
+    };
+
+    it('should create users', async () => {
+      await request(Server).post('/api/users').send(federico);
+
+      let allUsersInDataBase = await db.User.findAll();
+      expect(allUsersInDataBase).to.have.lengthOf(1);
+
+      await request(Server).post('/api/users').send(carlos);
+
+      allUsersInDataBase = await db.User.findAll();
+      expect(allUsersInDataBase).to.have.lengthOf(2);
+
+      console.log(allUsersInDataBase);
     });
+
     it('should create correctly properties', async () => {
-      const response = await request(Server).post('/api/users').send(obj);
+      const responseFederico = await request(Server)
+        .post('/api/users')
+        .send(federico);
       const dbCreated = await db.User.findOne({
-        where: { id: response.body['CREATED: '].id },
+        where: { id: responseFederico.body['CREATED: '].id },
       });
       expect(dbCreated.dataValues.firstName).to.be.equal('Federico');
       expect(dbCreated.dataValues.lastName).to.be.equal('Calderon');
