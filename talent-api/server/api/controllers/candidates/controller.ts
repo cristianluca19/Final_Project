@@ -32,7 +32,7 @@ export class CandidatesController {
     const reply = await folder.removeCandidate(candidate);
     res.status(200).json(reply);
   }
-  
+
   async byFilter(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll({
       where: {
