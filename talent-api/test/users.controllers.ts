@@ -36,7 +36,6 @@ describe('Users', () => {
       allUsersInDataBase = await db.User.findAll();
       expect(allUsersInDataBase).to.have.lengthOf(2);
 
-      console.log(allUsersInDataBase);
     });
 
     it('should create correctly properties', async () => {
