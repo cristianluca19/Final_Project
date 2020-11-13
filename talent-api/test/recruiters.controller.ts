@@ -57,7 +57,9 @@ describe('Recruiters', (): void => {
 
   describe('PUT Recruiters', (): void => {
     // eslint-disable-next-line prettier/prettier
-    it('Should update all the data in an specific recruiter', async (): Promise<void> => {
+    it('Should update all the data in an specific recruiter', async (): Promise<
+      void
+    > => {
       const bulk = await db.Recruiter.bulkCreate([
         {
           contactName: 'Victor Alarcon',
@@ -92,7 +94,9 @@ describe('Recruiters', (): void => {
     });
 
     // eslint-disable-next-line prettier/prettier
-    it('Should update some data in an specific recruiter', async (): Promise<void> => {
+    it('Should update some data in an specific recruiter', async (): Promise<
+      void
+    > => {
       const bulk = await db.Recruiter.bulkCreate([
         {
           contactName: 'Victor Alarcon',
