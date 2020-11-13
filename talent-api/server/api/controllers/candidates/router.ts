@@ -9,4 +9,8 @@ export default express
   .post(
     '/:folderId/addCandidate/:candidateId',
     candidatesController.addToFolder
+  )
+  .delete(
+    '/:folderId/removeCandidate/:candidateId',
+    candidatesController.deleteFromFolder
   );

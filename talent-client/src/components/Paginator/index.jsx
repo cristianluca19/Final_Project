@@ -7,29 +7,34 @@ import { useStyles } from './styles';
 import { henryTheme } from '../../henryMuiTheme';
 
 function Paginator(props) {
+  const classes = useStyles();
 
-    const classes = useStyles();
-
-    return (
-        <Grid className={classes.root}
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-        >
-            <ThemeProvider theme={henryTheme}>
-             <Pagination color="primary" count={props.pages} variant="outlined" shape="rounded" />
-            </ThemeProvider>
-        </Grid>
-    )
+  return (
+    <Grid
+      className={classes.root}
+      container
+      direction="row"
+      justify="center"
+      alignItems="center"
+    >
+      <ThemeProvider theme={henryTheme}>
+        <Pagination
+          color="primary"
+          count={props.pages}
+          variant="outlined"
+          shape="rounded"
+        />
+      </ThemeProvider>
+    </Grid>
+  );
 }
 
 Paginator.propTypes = {
-    pages: PropTypes.number
-}
+  pages: PropTypes.number,
+};
 
 Paginator.defaultProps = {
-    pages: 10
-}
+  pages: 10,
+};
 
-export default Paginator
+export default Paginator;
