@@ -7,4 +7,4 @@ export default express
   .post('/', RecruitersController.add)
   .delete('/:recruiterId', RecruitersController.delete)
   .get('/:recruiterId', RecruitersController.byId)
-  .put('/', RecruitersController.updateById);
+  .put('/:recruiterId', RecruitersController.updateById);

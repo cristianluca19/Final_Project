@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import { NumberDataType } from 'sequelize/types';
 import db from '../../../models';
-// import l from '../../../common/logger';
 
 export class RecruitersController {
   async all(req: Request, res: Response): Promise<void> {
@@ -27,8 +25,10 @@ export class RecruitersController {
   }
 
   async updateById(req: Request, res: Response): Promise<void> {
-    // TODO
-    res.sendStatus(204);
+    await db.Recruiter.update(req.body, {
+      where: { id: req.params.recruiterId },
+    });
+    res.sendStatus(201);
   }
 }
 

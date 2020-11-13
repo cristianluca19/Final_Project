@@ -55,6 +55,79 @@ describe('Recruiters', (): void => {
     });
   });
 
+  describe('PUT Recruiters', (): void => {
+    // eslint-disable-next-line prettier/prettier
+    it('Should update all the data in an specific recruiter', async (): Promise<void> => {
+      const bulk = await db.Recruiter.bulkCreate([
+        {
+          contactName: 'Victor Alarcon',
+          email: 'valarcon@gmail.com',
+          company: 'Globant',
+          siteUrl: 'www.globant.com',
+        },
+        {
+          contactName: 'Lionel Messi',
+          email: 'Liomessi@barcelona.es',
+          company: 'BarcelonaFC',
+          siteUrl: 'www.BarcelonaFC.com',
+        },
+      ]);
+
+      const newRecruiterData: Recruiter = {
+        contactName: 'Homero Simpson',
+        email: 'HJS@Springfield.com',
+        company: 'Planta Nuclear',
+        siteUrl: 'www.lossimpson.com',
+      };
+
+      await db.Recruiter.update(newRecruiterData, {
+        where: { id: bulk[1].id },
+      });
+
+      const foundRecruiter = await db.Recruiter.findOne({
+        where: { id: bulk[1].id },
+      });
+      expect(foundRecruiter).to.deep.include(newRecruiterData);
+      expect(foundRecruiter).to.not.include({ email: 'Liomessi@barcelona.es' });
+    });
+
+    // eslint-disable-next-line prettier/prettier
+    it('Should update some data in an specific recruiter', async (): Promise<void> => {
+      const bulk = await db.Recruiter.bulkCreate([
+        {
+          contactName: 'Victor Alarcon',
+          email: 'valarcon@gmail.com',
+          company: 'Globant',
+          siteUrl: 'www.globant.com',
+        },
+        {
+          contactName: 'Lionel Messi',
+          email: 'Liomessi@barcelona.es',
+          company: 'BarcelonaFC',
+          siteUrl: 'www.BarcelonaFC.com',
+        },
+      ]);
+
+      const newRecruiterData = {
+        contactName: 'Jose Romero',
+        email: 'JRomero@globant.com',
+      };
+
+      await db.Recruiter.update(newRecruiterData, {
+        where: { id: bulk[0].id },
+      });
+
+      const foundRecruiter = await db.Recruiter.findOne({
+        where: { id: bulk[0].id },
+      });
+      expect(foundRecruiter).to.deep.include(newRecruiterData);
+      expect(foundRecruiter).to.include({
+        company: 'Globant',
+        siteUrl: 'www.globant.com',
+      });
+    });
+  });
+
   describe('DELETE Recruiters', (): void => {
     it('Should delete an specific recruiter', async (): Promise<void> => {
       const newRecruiter = await db.Recruiter.create({
