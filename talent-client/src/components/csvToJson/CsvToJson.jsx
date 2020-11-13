@@ -1,20 +1,21 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import { bulkCandidates } from '../../redux/candidatesReducer/Action'
+import { connect } from 'react-redux';
 
-function CsvToJson() {
+function CsvToJson({ bulkCandidates }) {
 
   const [csvTransformedToJson, setCsvTransformedToJson] = useState()
   const [candidates, setCandidates] = useState()
 
-  const handleCsvFile = (e) => {
+  const handleCsvToJson = (e) => {
     e.preventDefault();
     let csvToJson = e.target.files[0];
     let formData = new FormData();
     formData.append("file", csvToJson);
-    console.log(formData)
     axios({
       method: 'post',
-      url: 'http://localhost:5000/api/candidates/csv',    //modificar puerto localhost
+      url: `${process.env.REACT_APP_BACKEND_URL}/api/candidates/csv`,  
       data: formData,
       config: { headers: { 'Content-Type': 'multipart/form-data' }}
     })
@@ -23,18 +24,13 @@ function CsvToJson() {
       });
   };
 
-  const handleConvert = () => {    //pasar esta funcion a redux
-    axios
-      .post(`http://localhost:5000/api/candidates`, csvTransformedToJson)   //modificar puerto localhost
-      .then((res) => {
-        console.log(res.data, "bulkCandidate")
-        setCandidates(res.data)
-      });
+  const handleBulkCandidates = () => {  
+    bulkCandidates(csvTransformedToJson)
   };
 
   return (
     <div>
-      <div class="conatiner mt-5">
+      <div class="container mt-5">
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-3">
@@ -44,11 +40,11 @@ function CsvToJson() {
               type="file"
               id="input"
               accept=".csv"
-              onChange={handleCsvFile}
+              onChange={handleCsvToJson}
             ></input>
           </div>
           <div class="col-md-2">
-            <button class="btn btn-primary" id="button" onClick={handleConvert}>
+            <button class="btn btn-primary" id="button" onClick={handleBulkCandidates}>
               Convert
             </button>
           </div>
@@ -61,4 +57,10 @@ function CsvToJson() {
   );
 }
 
-export default CsvToJson
+const mapDispatchToProps = () => (dispatch) => {
+  return {
+    bulkCandidates: (jsonCandidates) => dispatch(bulkCandidates(jsonCandidates))
+  }
+}
+
+export default connect( null, mapDispatchToProps )(CsvToJson)
