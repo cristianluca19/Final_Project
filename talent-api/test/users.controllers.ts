@@ -35,7 +35,6 @@ describe('Users', () => {
 
       allUsersInDataBase = await db.User.findAll();
       expect(allUsersInDataBase).to.have.lengthOf(2);
-
     });
 
     it('should create correctly properties', async () => {
@@ -43,7 +42,7 @@ describe('Users', () => {
         .post('/api/users')
         .send(federico);
       const dbCreated = await db.User.findOne({
-        where: { id: responseFederico.body['CREATED: '].id },
+        where: { id: responseFederico.body.id },
       });
       expect(dbCreated.dataValues.firstName).to.be.equal('Federico');
       expect(dbCreated.dataValues.lastName).to.be.equal('Calderon');
