@@ -74,6 +74,8 @@ describe('Candidates', () => {
         .to.have.property('email')
         .to.be.equal('mati@gmail.com');
       expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
+    });
+  });
 
   describe('GET filtered candidates', () => {
     it('should filter candidates by their visibility property as listed', async () => {
