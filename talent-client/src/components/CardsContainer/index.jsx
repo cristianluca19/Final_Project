@@ -3,6 +3,7 @@ import { Container, Grid } from '@material-ui/core';
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector } from 'react-redux';
+import Paginator from '../Paginator';
 import React from 'react';
 
 function CardsContainer(props) {
@@ -39,6 +40,11 @@ function CardsContainer(props) {
               )
           )}
       </Grid>
+      {candidates.length && (
+        <Grid>
+          <Paginator />
+        </Grid>
+      )}
     </Container>
   );
 }
