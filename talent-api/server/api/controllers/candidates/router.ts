@@ -7,6 +7,7 @@ export default express
   .post('/csv', upload.single('file'), candidatesController.csvToJson)
   .post('/', candidatesController.bulkCreateCandidate)
   .get('/', candidatesController.all)
+  .get('/filterBy/:visibility', candidatesController.byFilter)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post(
