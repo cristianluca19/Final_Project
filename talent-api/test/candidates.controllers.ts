@@ -49,6 +49,34 @@ describe('Candidates', () => {
     });
   });
 
+  describe('POST route bulk candidates to database', () => {
+    it('should create all candidates correctly', async () => {
+      const candidates = [
+        {
+          email: 'leo@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'mati@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'bryan@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const response = await request(Server)
+        .post(`/api/candidates/`)
+        .send(candidates);
+      expect(response.body).to.be.an('array');
+      expect(response.body).to.have.lengthOf(3);
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('mati@gmail.com');
+      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
+    });
+  });
+
   describe('PUT update visibility', () => {
     it('should update the visibility of the candidate to "listed"', async () => {
       const candidate1 = await db.Candidate.create({

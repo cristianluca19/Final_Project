@@ -21,6 +21,7 @@ function CsvToJson({ bulkCandidates }) {
     })
       .then((res) => {
         setCsvTransformedToJson(res.data)
+        console.log(res.data)
       });
   };
 

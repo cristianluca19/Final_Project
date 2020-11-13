@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-console.log(tmpobj); //ver esto
+
 const uploadFile = multer({ storage: storage });
 
 export default uploadFile;

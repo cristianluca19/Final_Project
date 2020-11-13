@@ -14,7 +14,6 @@ export class CandidatesController {
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
-
       const candidates = [];
 
       fs.createReadStream(req.file.path)
@@ -22,15 +21,22 @@ export class CandidatesController {
         .on('error', (error) => {
           throw error.message;
         })
-        .on('data', (row) => {
-          candidates.push(row);
+        .on('data', async (row) => {
+          const newUser = new db.Candidate(row);
+          candidates.push(newUser);
         })
         .on('end', () => {
           res.status(200).send(candidates);
         });
+      fs.unlink(req.file.path, (err) => {
+        if (err) {
+          throw err;
+        }
+        console.log('File is deleted.');
+      });
     } catch (error) {
-      res.status(500).send({
-        message: 'Could not upload the file: ' + req.file.originalname,
+      return res.status(500).send({
+        message: 'validation failed: ' + error,
       });
     }
   };
