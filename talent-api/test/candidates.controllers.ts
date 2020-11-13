@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+import { response } from 'express';
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -170,6 +171,18 @@ describe('Candidates', () => {
     expect(candidate).to.be.equal(null)
     });
   });
+  
+  describe('POST candidate',()=>{
+    it('should create a new candidate', async ()=>{
+      const response =  await request(Server).post(
+        '/api/candidates/addCandidate')
+      .send({
+          email: 'cristianL@gmail.com',
+          cohort: '5',
+        });
+      expect (response.status).to.be.equal(200)
+    })
+  })
 })
 
 

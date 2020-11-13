@@ -7,5 +7,6 @@ export default express
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post('/:folderId/addCandidate/:candidateId',candidatesController.addToFolder)
+  .post('/addCandidate', candidatesController.addCandidate)
   .delete('/:folderId/removeCandidate/:candidateId',candidatesController.deleteFromFolder)
   .delete('/:candidateId/delete', candidatesController.deleteCandidate)
