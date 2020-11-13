@@ -40,10 +40,11 @@ function CardsContainer(props) {
               )
           )}
       </Grid>
-      {candidates.length && 
-      <Grid>
+      {candidates.length && (
+        <Grid>
           <Paginator />
-      </Grid>}
+        </Grid>
+      )}
     </Container>
   );
 }

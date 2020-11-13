@@ -23,17 +23,17 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path='/panel' render={() => <Dashboard />} />
-        <Route path='/' render={() => <Nav />} />
+        <Route path="/panel" render={() => <Dashboard />} />
+        <Route path="/" render={() => <Nav />} />
       </Switch>
-      <Route exact path='/' render={() => <ContentHome />} />
-      <Route exact path='/' render={() => <CardsContainer />} />
+      <Route exact path="/" render={() => <ContentHome />} />
+      <Route exact path="/" render={() => <CardsContainer />} />
       <Switch>
-        <Route path='/panel' />
-        <Route path='/' render={() => <Footer />} />
+        <Route path="/panel" />
+        <Route path="/" render={() => <Footer />} />
       </Switch>
-      <Route path='/panel' render={() => <Menu />} />
-      <Route exact path='/panel/candidates' render={() => <Candidates />} />
+      <Route path="/panel" render={() => <Menu />} />
+      <Route exact path="/panel/candidates" render={() => <Candidates />} />
     </div>
   );
 }
