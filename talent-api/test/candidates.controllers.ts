@@ -51,7 +51,7 @@ describe('Candidates', () => {
 
   describe('GET filtered candidates', () => {
     it('should filter candidates by their visibility property as listed', async () => {
-      await db.Candidate.create({
+      const candidate = await db.Candidate.create({
         email: 'leo12@gmail.com',
         cohort: '4',
         visibility: 'listed',
@@ -73,10 +73,13 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('listed');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal(candidate.email);
     });
 
     it('should filter candidates by their visibility property as unlisted', async () => {
-      await db.Candidate.create({
+      const candidate = await db.Candidate.create({
         email: 'leo12@gmail.com',
         cohort: '4',
         visibility: 'unlisted',
@@ -98,6 +101,9 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('unlisted');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal(candidate.email);
     });
   });
 
