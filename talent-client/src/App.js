@@ -23,42 +23,17 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path='/panel' render={() => <Dashboard />} />
-        <Route path='/' render={() => <Nav />} />
+        <Route path="/panel" render={() => <Dashboard />} />
+        <Route path="/" render={() => <Nav />} />
       </Switch>
-      <Route exact path='/' render={() => <ContentHome />} />
-      <Route exact path='/' render={() => <Catalogue />} />
-      <Route exact path="/" render={() => <CandidateCard/>}/>
+      <Route exact path="/" render={() => <ContentHome />} />
+      <Route exact path="/" render={() => <CardsContainer />} />
       <Switch>
-        <Route path='/panel' />
-        <Route path='/' render={() => <Footer />} />
+        <Route path="/panel" />
+        <Route path="/" render={() => <Footer />} />
       </Switch>
-      <Route path='/panel' render={() => <Menu />} />
-      <Route exact path='/panel/candidates' render={() => <Candidates />} />
-      
-{/*     <div className='App'>
-      <Route path='/' render={() => <CandidateCard />} />
-//======================================================================
-    //Esta funcion esta solo de ejemplo para probar que redux esta funcional...SACAR ANTES DE MERGEAR 
-    //====================================================================== 
-      <p>
-        Clickeado: {count} veces
-        <button
-          onClick={() => {
-            dispatch(increment());
-          }}>
-          +
-        </button>
-        <button
-          onClick={() => {
-            dispatch(decrement());
-          }}>
-          -
-        </button>
-      </p>
-  //======================================================================
-     //Esta funcion esta solo de ejemplo para probar que redux esta funcional...SACAR ANTES DE MERGEAR 
-    //====================================================================== */}
+      <Route path="/panel" render={() => <Menu />} />
+      <Route exact path="/panel/candidates" render={() => <Candidates />} />
     </div>
   );
 }

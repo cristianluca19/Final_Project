@@ -202,7 +202,9 @@ describe('Candidates', () => {
         },
         include: db.Candidate,
       });
-      expect(relationDeleted.dataValues.id).to.be.equal(relationCreated.dataValues.id);
+      expect(relationDeleted.dataValues.id).to.be.equal(
+        relationCreated.dataValues.id
+      );
       expect(relationCreated.dataValues.candidates[0].dataValues)
         .to.have.property('id')
         .to.be.equal(candidate1.id);
