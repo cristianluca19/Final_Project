@@ -23,20 +23,18 @@ export class CandidatesController {
         })
         .on('data', async (row) => {
           const newUser = new db.Candidate(row);
+          //const userValidated = await newUser.validate(); //TODO: print more informative error
           candidates.push(newUser);
         })
         .on('end', () => {
           res.status(200).send(candidates);
         });
       fs.unlink(req.file.path, (err) => {
-        if (err) {
-          throw err;
-        }
-        console.log('File is deleted.');
+        if (err) throw err;
       });
     } catch (error) {
-      return res.status(500).send({
-        message: 'validation failed: ' + error,
+      return res.status(400).send({
+        error: `Validation failed: ${error}`,
       });
     }
   };
@@ -46,7 +44,7 @@ export class CandidatesController {
       const bulkCandidates = await db.Candidate.bulkCreate(req.body);
       res.status(200).json(bulkCandidates);
     } catch (error) {
-      res.status(400).send('an error ocurred while creating candidates');
+      res.status(400).send('An error has ocurred while creating candidates');
     }
   }
 
