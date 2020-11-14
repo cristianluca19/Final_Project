@@ -52,7 +52,7 @@ describe('Candidates', () => {
 
   describe('POST route transform csv file to json', () => {
     it('should transform all candidates correctly', async () => {
-      const csvFile = path.join('public/csvFileExample.csv');
+      const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
         .post(`/api/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
