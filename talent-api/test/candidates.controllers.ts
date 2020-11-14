@@ -56,7 +56,7 @@ describe('Candidates', () => {
       const response = await request(Server)
         .post(`/api/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
-        .attach('file', csvFile)
+        .attach('file', csvFile);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(4);
       expect(response.body[1])
@@ -118,6 +118,12 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('listed');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
     });
 
     it('should filter candidates by their visibility property as unlisted', async () => {
@@ -143,6 +149,12 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('unlisted');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
     });
   });
 
