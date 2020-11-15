@@ -74,6 +74,12 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('listed');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
     });
 
     it('should filter candidates by their visibility property as unlisted', async () => {
@@ -99,6 +105,12 @@ describe('Candidates', () => {
       expect(response.body[0])
         .to.have.property('visibility')
         .to.be.equal('unlisted');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
     });
   });
 
