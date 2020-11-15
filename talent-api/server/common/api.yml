@@ -230,6 +230,20 @@ paths:
         200:
           description: An empty response is sent with a 200 status if update succeded.
   /folders:
+    get:
+      tags:
+      - Folders
+      summary: Fetch all folders.
+      description: Returns all existing folders.
+      responses:
+        200:
+          description: a JSON array of folders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
     post:
       tags:
       - Folders
@@ -239,6 +253,63 @@ paths:
         201:
           description: Create a new folder with a uuid
           content: {}
+  /folders/{folderId}:
+    get:
+      tags:
+      - Folders
+      summary: Fetch an specific folder by id.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer        
+      responses:
+        200:
+          description: a JSON object with folder details.
+          content: {}
+    put:
+      tags:
+      - Folders
+      summary: Update an specific folder by id.
+      description: folderId needs to be passed through params. Require body with fields to update.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [created,sent]
+                opened:
+                  type: boolean
+      responses:
+        200:
+          description: a JSON object with folder updated details.
+          content: {}
+    delete:
+      tags:
+      - Folders
+      summary: Delete an specific folder by id.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+      responses:
+        204:
+          description: An empty response with status 204 is sent if deletion succeded.
   /users:
     post:
       tags:
