@@ -8,7 +8,28 @@ export class foldersController {
     res.status(200).json(folders);
   }
   async byId(req: Request, res: Response): Promise<void> {
-    const folder = await db.Folder.findByPk(req.params.folderId);
+    const folder = await db.Folder.findByPk(req.params.folderId, {
+      include: [
+        {
+          model: db.Candidate,
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+            'country',
+            'cohort',
+            'profilePicture',
+            'visibility',
+            'status',
+            'miniBio',
+            'linkedin',
+            'github',
+          ],
+          through: { attributes: [] }, // This avoids eager loading of intermediate table useless createdAt/updatedAt data. Shows a cleaner API response.
+        },
+      ],
+    });
     res.status(200).json(folder);
   }
   async postFolder(req: Request, res: Response): Promise<void> {

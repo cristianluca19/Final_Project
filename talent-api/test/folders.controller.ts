@@ -9,27 +9,38 @@ describe('Folders', () => {
   beforeEach(function () {
     db.Folder.destroy({ where: {} });
   });
-
+  describe('POST one folder', () => {
+    it('should post one folder', async () => {
+      const response = await request(Server).post('/api/v1/folders');
+      expect(response.body.folder).to.have.property('uuid');
+    });
+  });
   describe('GET', () => {
     it('Should retrieve all existing folders', async () => {
       await db.Folder.bulkCreate([{ uuid }, { uuid }, { uuid }, { uuid }]);
       const response = await request(Server).get('/api/v1/folders');
       expect(response.body).to.be.an('array').to.have.lengthOf(4);
     });
-    it('Should retrieve an specific folder', async () => {
+    it('Should retrieve an specific folder with all associated candidates', async () => {
       const foldersCreated = await db.Folder.bulkCreate([{ uuid }, { uuid }]);
+      const candidate = await db.Candidate.create({
+        email: 'taniamg@gmail.com',
+        cohort: 6,
+      });
+      await request(Server).post(
+        `/api/v1/candidates/${foldersCreated[0].id}/addCandidate/${candidate.id}`
+      );
       const response = await request(Server).get(
         `/api/v1/folders/${foldersCreated[0].id}`
       );
       expect(response.body)
         .to.be.an('object')
         .to.deep.include({ id: foldersCreated[0].id });
-    });
-  });
-  describe('POST one folder', () => {
-    it('should post one folder', async () => {
-      const response = await request(Server).post('/api/v1/folders');
-      expect(response.body.folder).to.have.property('uuid');
+      expect(response.body).to.have.property('candidates').to.be.an('array');
+      expect(response.body).to.have.nested.property('candidates[0].id');
+      expect(response.body).to.nested.include({
+        'candidates[0].email': 'taniamg@gmail.com',
+      });
     });
   });
   describe('DELETE', () => {
