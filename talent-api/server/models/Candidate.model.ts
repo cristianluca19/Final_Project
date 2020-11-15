@@ -48,7 +48,7 @@ export default (sequelize) => {
         allowNull: false,
       },
       miniBio: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       linkedin: {

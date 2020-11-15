@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+//import { faker } from 'faker';
 const faker = require('faker');
 // import * as enums from '../../server/models/enums';
 
@@ -25,11 +26,11 @@ function fill() {
 }
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     await queryInterface.bulkInsert('candidates', fill(), {});
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.bulkDelete('candidates', null, {});
   },
 };
