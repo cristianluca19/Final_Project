@@ -55,24 +55,57 @@ describe('Folders', () => {
     });
   });
   describe('PUT', () => {
-    it('Should update an specific folder', async () => {
-      const folders = await db.Folder.bulkCreate([{ uuid }, { uuid }]);
+    it('Should update an specific folder dinamically', async () => {
+      const folders = await db.Folder.bulkCreate([
+        { uuid },
+        { uuid },
+        { uuid },
+      ]);
+      const recruiter = await request(Server).post(`/api/v1/recruiters`).send({
+        contactName: 'Victor Alarcon',
+        email: 'valarcon@gmail.com',
+        company: 'Globant',
+        siteUrl: 'www.globant.com',
+      });
+      const user = await request(Server).post(`/api/v1/users`).send({
+        firstName: 'Lucas',
+        lastName: 'Verdiell',
+        profilePicture: 'https://www.test.com/lalala.png',
+        role: 'selector',
+      });
       const response = await request(Server)
-        .put(`/api/v1/folders/${folders[0].id}`)
+        .put(
+          `/api/v1/folders/${folders[0].id}?recruiterId=${recruiter.body['id']}`
+        )
         .send({ status: 'sent' });
       expect(response.status).to.be.equal(200);
       const foundFolder = await db.Folder.findByPk(folders[0].id);
       expect(foundFolder)
         .to.be.an('object')
-        .to.deep.include({ status: 'sent' });
+        .to.deep.include({ status: 'sent', recruiterId: recruiter.body['id'] });
       const responseTwo = await request(Server)
-        .put(`/api/v1/folders/${folders[1].id}`)
+        .put(
+          `/api/v1/folders/${folders[1].id}?userId=${user.body['id']}&recruiterId=${recruiter.body['id']}`
+        )
         .send({ opened: true, status: 'sent' });
       expect(responseTwo.status).to.be.equal(200);
       const foundFolderTwo = await db.Folder.findByPk(folders[1].id);
-      expect(foundFolderTwo)
-        .to.be.an('object')
-        .to.include({ opened: true, status: 'sent' });
+      expect(foundFolderTwo).to.be.an('object').to.include({
+        opened: true,
+        status: 'sent',
+        userId: user.body['id'],
+        recruiterId: recruiter.body['id'],
+      });
+      const responseThree = await request(Server).put(
+        `/api/v1/folders/${folders[2].id}?recruiterId=${recruiter.body['id']}&userId=${user.body['id']}`
+      );
+      // .send({}); // TODO: fix this...
+      expect(responseThree.status).to.be.equal(200);
+      const foundFolderThree = await db.Folder.findByPk(folders[2].id);
+      expect(foundFolderThree).to.be.an('object').to.include({
+        userId: user.body['id'],
+        recruiterId: recruiter.body['id'],
+      });
     });
   });
 });

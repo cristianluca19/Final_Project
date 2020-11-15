@@ -273,25 +273,23 @@ paths:
       tags:
       - Folders
       summary: Update an specific folder by id.
-      description: folderId needs to be passed through params. Require body with fields to update.
+      description: folderId needs to be passed through params. Query params should include userId or recruiterId to associate to folder. Body should include desired fields to update. Neither query or body are mandatory.
       parameters:
         - in: path
           name: folderId
           required: true
           schema:
            type: integer 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum: [created,sent]
-                opened:
-                  type: boolean
+        - in: query
+          name: recruiterId
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: userId
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: a JSON object with folder updated details.
