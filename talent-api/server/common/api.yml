@@ -257,7 +257,7 @@ paths:
     get:
       tags:
       - Folders
-      summary: Fetch an specific folder by id.
+      summary: Fetch an specific folder by id with all associated candidates.
       description: folderId needs to be passed through params.
       parameters:
         - in: path
