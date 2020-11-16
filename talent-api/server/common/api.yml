@@ -51,7 +51,7 @@ paths:
     get:
       tags:
       - Candidates
-      summary: Fetch all candidates filtered by visibility value
+      summary: Fetch all candidates filtered by a visibility value.
       description: visibility value "listed" or "unlisted" must be passed through params
       parameters:
         - in: path
@@ -72,7 +72,7 @@ paths:
     put:
       tags:
       - Candidates
-      summary: Updates visibility value of a candidate. 
+      summary: Updates the visibility of a candidate. 
       description: Update visibility of a candidate specified by params. Visibility "listed" or "unlisted" needs to be passed through body.
       parameters:
       - in: path
@@ -101,7 +101,7 @@ paths:
     post:
       tags:
       - Candidates
-      summary: creates a relation between a candidate an a folder.
+      summary: Adds a new candidate to a folder.
       description: folderId and candidateId needs to be passed through params.
       parameters:
       - in: path
@@ -124,7 +124,7 @@ paths:
     delete:
       tags:
       - Candidates
-      summary: removes the relation between a candidate an a folder.
+      summary: removes a candidate from a folder.
       description: folderId and candidateId needs to be passed through params.
       parameters:
       - in: path
@@ -177,7 +177,7 @@ paths:
                 company:
                   type: string
                 siteUrl:
-                 type: string
+                  type: string
       responses: 
         200:
           description: a JSON object with the new recruiter details.
@@ -204,7 +204,7 @@ paths:
     delete:
       tags:
       - Recruiters
-      summary: Delete an specific recruiter
+      summary: Delete a recruiter with a recruiterId.
       description: A recruiterId must be passed through params.
       parameters:
         - in: path
@@ -218,7 +218,7 @@ paths:
     put:
       tags:
       - Recruiters
-      summary: Modify an specific recruiter
+      summary: Modify an specific recruiter with a recruiterId.
       description: A recruiterId must be passed through params.
       parameters:
         - in: path
