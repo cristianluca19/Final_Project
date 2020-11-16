@@ -6,7 +6,13 @@ export default express
   .get('/', candidatesController.all)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
-  .post('/:folderId/addCandidate/:candidateId',candidatesController.addToFolder)
+  .post(
+    '/:folderId/addCandidate/:candidateId',
+    candidatesController.addToFolder
+  )
   .post('/addCandidate', candidatesController.addCandidate)
-  .delete('/:folderId/removeCandidate/:candidateId',candidatesController.deleteFromFolder)
-  .delete('/:candidateId/delete', candidatesController.deleteCandidate)
+  .delete(
+    '/:folderId/removeCandidate/:candidateId',
+    candidatesController.deleteFromFolder
+  )
+  .delete('/:candidateId/delete', candidatesController.deleteCandidate);
