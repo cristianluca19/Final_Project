@@ -50,6 +50,70 @@ describe('Candidates', () => {
     });
   });
 
+  describe('GET filtered candidates', () => {
+    it('should filter candidates by their visibility property as listed', async () => {
+      await db.Candidate.create({
+        email: 'leo12@gmail.com',
+        cohort: '4',
+        visibility: 'listed',
+      });
+      await db.Candidate.create({
+        email: 'seba@gmail.com',
+        cohort: '5',
+        visibility: 'listed',
+      });
+      await db.Candidate.create({
+        email: 'fabi@gmail.com',
+        cohort: '5',
+        visibility: 'unlisted',
+      });
+      const response = await request(Server).get(
+        `/api/candidates/filterBy/listed`
+      );
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body[0])
+        .to.have.property('visibility')
+        .to.be.equal('listed');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
+    });
+
+    it('should filter candidates by their visibility property as unlisted', async () => {
+      await db.Candidate.create({
+        email: 'leo12@gmail.com',
+        cohort: '4',
+        visibility: 'unlisted',
+      });
+      await db.Candidate.create({
+        email: 'seba@gmail.com',
+        cohort: '5',
+        visibility: 'unlisted',
+      });
+      await db.Candidate.create({
+        email: 'fabi@gmail.com',
+        cohort: '5',
+        visibility: 'listed',
+      });
+      const response = await request(Server).get(
+        `/api/candidates/filterBy/unlisted`
+      );
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body[0])
+        .to.have.property('visibility')
+        .to.be.equal('unlisted');
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('leo12@gmail.com');
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('seba@gmail.com');
+    });
+  });
+
   describe('PUT update visibility', () => {
     it('should update the visibility of the candidate to "listed"', async () => {
       const candidate1 = await db.Candidate.create({

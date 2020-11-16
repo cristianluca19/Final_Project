@@ -18,7 +18,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Divider from '@material-ui/core/Divider';
 import EmailIcon from '@material-ui/icons/Email';
-import imgtest from '../../img/cvtest.png';
+import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
   const { user } = props;
@@ -169,10 +169,15 @@ CandidateCard.propTypes = {
     email: PropTypes.string,
     country: PropTypes.string,
     skills: PropTypes.object,
+    cohort: PropTypes.string,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,
     linkedin: PropTypes.string,
     github: PropTypes.string,
+    visibility: PropTypes.string,
+    status: PropTypes.string,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string,
   }),
 };
 

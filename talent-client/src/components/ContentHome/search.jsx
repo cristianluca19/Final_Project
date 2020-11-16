@@ -40,19 +40,19 @@ const useStyle = makeStyles((theme) => ({
       background: '#ffda00',
     },
     button: {
-        backgroundColor: '#ffff00',
-        width: '78%',
-        color: '#000000',
-        "&:hover": {
-            background: '#ffda00'
-        }
+      backgroundColor: '#ffff00',
+      width: '78%',
+      color: '#000000',
+      '&:hover': {
+        background: '#ffda00',
+      },
     },
     formControl: {
-        minWidth: 120,
-        margin: '0px 8px'
+      minWidth: 120,
+      margin: '0px 8px',
     },
     selectEmpty: {
-        marginTop: theme.spacing(2),
+      marginTop: theme.spacing(2),
     },
     selectInput: {
         backgroundColor: '#ffffff1f',
