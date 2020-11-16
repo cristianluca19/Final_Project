@@ -9,6 +9,7 @@ import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
 import Menu from './components/Dashboard/menu';
 import Candidates from './components/Dashboard/candidates';
+import Skills from './components/SkillsTable/index'
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
@@ -34,6 +35,8 @@ function App() {
       </Switch>
       <Route path="/panel" render={() => <Menu />} />
       <Route exact path="/panel/candidates" render={() => <Candidates />} />
+      <Route exact path="/panel/skills" render={() => <Skills />} />
+
     </div>
   );
 }
