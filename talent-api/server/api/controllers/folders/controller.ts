@@ -37,15 +37,12 @@ export class foldersController {
     res.status(201).json({ folder });
     return;
   }
-  // this controller receives association data through query params and fields to update through body and handles
-  // them dinamically. No need to pass all the fields, just the ones necesary to update.
+  // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.
   async updateById(req: Request, res: Response): Promise<void> {
     const { recruiterId, userId } = req.query; // add associations
-    const { status } = req.body; // update model data values
     const folder = await db.Folder.findByPk(req.params.folderId);
     if (recruiterId) await folder.setRecruiter(recruiterId);
     if (userId) await folder.setUser(userId);
-    if (status) await folder.update({ status });
     res.status(200).json(folder);
   }
   async deleteById(req: Request, res: Response): Promise<void> {

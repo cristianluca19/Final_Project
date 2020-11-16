@@ -52,7 +52,7 @@ describe('Folders', () => {
     });
   });
   describe('PUT', () => {
-    it('Should update an specific folder dinamically', async () => {
+    it('Should update an specific add relation user/recruiter relation to folder', async () => {
       const folders = await db.Folder.bulkCreate([
         { uuid },
         { uuid },
@@ -70,25 +70,21 @@ describe('Folders', () => {
         profilePicture: 'https://www.test.com/lalala.png',
         role: 'selector',
       });
-      const response = await request(Server)
-        .put(`/api/v1/folders/${folders[0].id}?recruiterId=${recruiter.id}`)
-        .send({ status: 'created' });
+      const response = await request(Server).put(
+        `/api/v1/folders/${folders[0].id}?recruiterId=${recruiter.id}`
+      );
       expect(response.status).to.be.equal(200);
       const foundFolder = await db.Folder.findByPk(folders[0].id);
       expect(foundFolder)
         .to.be.an('object')
-        .to.deep.include({ status: 'created', recruiterId: recruiter.id });
-      const responseTwo = await request(Server)
-        .put(
-          `/api/v1/folders/${folders[1].id}?userId=${user.id}&recruiterId=${recruiter.id}`
-        )
-        .send({ status: 'created' });
+        .to.deep.include({ recruiterId: recruiter.id });
+      const responseTwo = await request(Server).put(
+        `/api/v1/folders/${folders[1].id}?userId=${user.id}`
+      );
       expect(responseTwo.status).to.be.equal(200);
       const foundFolderTwo = await db.Folder.findByPk(folders[1].id);
       expect(foundFolderTwo).to.be.an('object').to.include({
-        status: 'created',
         userId: user.id,
-        recruiterId: recruiter.id,
       });
       const responseThree = await request(Server).put(
         `/api/v1/folders/${folders[2].id}?recruiterId=${recruiter.id}&userId=${user.id}`

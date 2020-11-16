@@ -273,7 +273,7 @@ paths:
       tags:
       - Folders
       summary: Update an specific folder by id.
-      description: folderId needs to be passed through params. Query params should include userId or recruiterId to associate to folder. Body should include desired fields to update. Neither query or body are mandatory.
+      description: folderId needs to be passed through params. Query params should include userId or recruiterId to associate to folder.
       parameters:
         - in: path
           name: folderId
