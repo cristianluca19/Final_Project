@@ -22,6 +22,12 @@ export class candidatesFilter {
       if (!cohortArray.length) delete consult.where.cohort;
       if (!locationArray.length) delete consult.where.country;
       const candidatesFiltered = await db.Candidate.findAll(consult);
+      if (!candidatesFiltered.length){
+        res
+          .send(204)
+          .send('No se encontraron candidatos que cumplan con lo especificado');
+        return;
+      }
       res.status(200).json(candidatesFiltered);
       return;
     } catch (err) {
