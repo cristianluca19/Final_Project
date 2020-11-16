@@ -26,12 +26,12 @@ describe('Users', () => {
     };
 
     it('should create users', async () => {
-      await request(Server).post('/api/users').send(federico);
+      await request(Server).post('/api/v1/users').send(federico);
 
       let allUsersInDataBase = await db.User.findAll();
       expect(allUsersInDataBase).to.have.lengthOf(1);
 
-      await request(Server).post('/api/users').send(carlos);
+      await request(Server).post('/api/v1/users').send(carlos);
 
       allUsersInDataBase = await db.User.findAll();
       expect(allUsersInDataBase).to.have.lengthOf(2);
@@ -39,7 +39,7 @@ describe('Users', () => {
 
     it('should create correctly properties', async () => {
       const responseFederico = await request(Server)
-        .post('/api/users')
+        .post('/api/v1/users')
         .send(federico);
       const dbCreated = await db.User.findOne({
         where: { id: responseFederico.body.id },
