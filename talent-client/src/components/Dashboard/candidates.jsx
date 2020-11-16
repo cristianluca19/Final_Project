@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,14 +12,26 @@ import TableRow from '@material-ui/core/TableRow';
 import { useStyles } from './Styles/candidates.css.js';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { deleteCandidate } from '../../redux/candidatesReducer/Action.js';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 function Candidates() {
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const [idCandidate, setIdCandidate] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, [candidates]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
@@ -28,13 +42,13 @@ function Candidates() {
     { id: 'cohort', label: 'COHORTE', minWidth: 50, align: 'center' },
     { id: 'visibility', label: 'VISIBILITY', minWidth: 100 },
     { id: 'status', label: 'STATUS', minWidth: 100 },
-    { id: 'crud' , label: '', minWidth: 50 }
+    { id: 'crud', label: '', minWidth: 50 },
   ];
 
   const rows = [];
   if (candidates) {
     candidates.map((candidate) => {
-      rows.push({
+      return rows.push({
         id: candidate.id,
         firstName: candidate.firstName,
         lastName: candidate.lastName,
@@ -43,7 +57,8 @@ function Candidates() {
         cohort: candidate.cohort,
         visibility: candidate.visibility,
         status: candidate.status,
-        crud: ''
+        crud: '',
+        key: candidate.id,
       });
     });
   }
@@ -59,8 +74,18 @@ function Candidates() {
 
   const onClickDelete = (e, id) => {
     e.preventDefault();
-    console.log('hola', id);
-  } 
+    dispatch(deleteCandidate(id));
+    handleClose();
+  };
+
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setIdCandidate(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Paper className={classes.root}>
@@ -86,7 +111,7 @@ function Candidates() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -94,9 +119,13 @@ function Candidates() {
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
-                            {column.id === 'crud' && <DeleteIcon onClick={(e) => onClickDelete(e, row.id) }/>}
+                          {column.id === 'crud' && (
+                            <DeleteIcon
+                              onClick={() => handleClickOpen(row.id)}
+                            />
+                          )}
                         </TableCell>
-                      );                      
+                      );
                     })}
                   </TableRow>
                 );
@@ -113,6 +142,36 @@ function Candidates() {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {'¡Esta por eliminar un candidato!'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Presione en el boton eliminar realizar la acción o de lo contrario
+              en cancelar.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancelar
+            </Button>
+            <Button
+              onClick={(e) => onClickDelete(e, idCandidate)}
+              color="primary"
+              autoFocus
+            >
+              Eliminar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </Paper>
   );
 }

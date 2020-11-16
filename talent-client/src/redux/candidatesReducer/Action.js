@@ -12,3 +12,15 @@ export function getAllCandidates() {
     });
   };
 }
+
+export function deleteCandidate(id) {
+  return async (dispatch) => {
+    const deleteCandidate = await axios.delete(
+      `${BACKEND_URL}/api/candidates/${id}/delete`
+    );
+    dispatch({
+      type: actions.DELETE_CANDIDATE,
+      payload: id,
+    });
+  };
+}
