@@ -99,7 +99,6 @@ describe('Folders', () => {
       const responseThree = await request(Server).put(
         `/api/v1/folders/${folders[2].id}?recruiterId=${recruiter.body['id']}&userId=${user.body['id']}`
       );
-      // .send({}); // TODO: fix this...
       expect(responseThree.status).to.be.equal(200);
       const foundFolderThree = await db.Folder.findByPk(folders[2].id);
       expect(foundFolderThree).to.be.an('object').to.include({
