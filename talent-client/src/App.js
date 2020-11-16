@@ -23,7 +23,8 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path="/panel" render={() => <Dashboard />} />
+        <Route exact path="/panel" render={() => <Dashboard />} />
+        <Route path="/panel/candidates" render={() => <Dashboard tableAction={'candidates'} />} />
         <Route path="/" render={() => <Nav />} />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
@@ -32,8 +33,8 @@ function App() {
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />
       </Switch>
-      <Route path="/panel" render={() => <Menu />} />
-      <Route exact path="/panel/candidates" render={() => <Candidates />} />
+      {/* <Route path="/panel" render={() => <Menu />} />
+      <Route exact path="/panel/candidates" render={() => <Candidates />} /> */}
     </div>
   );
 }

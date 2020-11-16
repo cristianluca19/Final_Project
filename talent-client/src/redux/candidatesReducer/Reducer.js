@@ -5,6 +5,7 @@ const initialState = {
 };
 
 export default function Reducer(state = initialState, action) {
+  console.log('consolaProcces: ', action);
   switch (action.type) {
     case actions.GET_ALL_CANDIDATES:
       return {
