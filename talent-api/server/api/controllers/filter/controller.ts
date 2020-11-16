@@ -5,67 +5,25 @@ import db from '../../../models';
 export class candidatesFilter {
   async filter(req: Request, res: Response): Promise<void> {
     const { skillsArray, cohortArray, locationArray } = req.body;
+    const consult = {
+      where: {
+        cohort: cohortArray,
+        country: locationArray,
+      },
+      include: {
+        model: db.Skill,
+        where: {
+          name: skillsArray,
+        },
+      },
+    };
     try {
-      console.log('entra?');
-      if (!skillsArray.length) {
-        const candidatesFiltered = await db.Candidate.findAll({
-          where: {
-            cohort: cohortArray,
-            country: locationArray,
-          },
-        });
-        res.status(200).json(candidatesFiltered);
-        return;
-      } else if (!cohortArray.length) {
-        const candidatesFiltered = await db.Candidate.findAll({
-          where: {
-            country: locationArray,
-          },
-          include: {
-            model: db.Skill,
-            where: {
-              name: skillsArray,
-            },
-          },
-        });
-        if (!candidatesFiltered.length)
-          res.status(204).send('No se han encontrado resultados');
-        res.status(200).json(candidatesFiltered);
-        return;
-      } else if (!locationArray.length) {
-        const candidatesFiltered = await db.Candidate.findAll({
-          where: {
-            cohort: cohortArray,
-          },
-          include: {
-            model: db.Skill,
-            where: {
-              name: skillsArray,
-            },
-          },
-        });
-        if (!candidatesFiltered.length)
-          res.status(204).send('No se han encontrado resultados');
-        res.status(200).json(candidatesFiltered);
-        return;
-      } else {
-        const candidatesFiltered = await db.Candidate.findAll({
-          where: {
-            cohort: cohortArray,
-            country: locationArray,
-          },
-          include: {
-            model: db.Skill,
-            where: {
-              name: skillsArray,
-            },
-          },
-        });
-        if (!candidatesFiltered.length)
-          res.status(204).send('No se han encontrado resultados');
-        res.status(200).json(candidatesFiltered);
-        return;
-      }
+      if (!skillsArray.length) delete consult.include;
+      if (!cohortArray.length) delete consult.where.cohort;
+      if (!locationArray.length) delete consult.where.country;
+      const candidatesFiltered = await db.Candidate.findAll(consult);
+      res.status(200).json(candidatesFiltered);
+      return;
     } catch (err) {
       res.status(400).json(err);
       return;
