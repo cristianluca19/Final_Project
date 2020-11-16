@@ -34,12 +34,6 @@ export default class ExpressServer {
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(express.static(`${root}/public`));
     // TODO: configure CORS?;
-    app.use(
-      cors({
-        origin: 'http://localhost:3000', // <-- location of the react app were connecting to
-        credentials: true,
-      })
-    );
     app.use(cors(corsOptions));
 
     setUpOpenAPI(app);

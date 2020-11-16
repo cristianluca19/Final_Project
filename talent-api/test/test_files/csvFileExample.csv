@@ -1,5 +1,5 @@
 firstName,lastName,country,email,cohort,miniBio,linkedin,github,visibility,status
-Matias,funes,Argentina,mati@gmail.com,wft-05,hola soy Mati y estudio en Henry,matiLinkedin,matiGithub,unlisted,unemployed
-Bryan,Pineda,Colombia,bryan@gmail.com,wft-04,hola soy Bryan y estudio en Henry,bryanLinkedin,bryanGithub,unlisted,unemployed
-Leo,Cifuentes,Colombia,leo@gmail.com,wft-05,hola soy Leo y estudio en Henry,LeoLinkedin,LeoGithub,unlisted,unemployed
-Diego,Tolaba,Argentina,diego@gmail.com,wft-04,hola soy Diego y estudio en Henry,DiegoLinkedin,DiegoGithub,unlisted,unemployed
+Matias,funes,Argentina,mati@gmail.com,wft-05,"hola soy Mati y estudio en Henry",matiLinkedin,matiGithub,unlisted,unemployed
+Bryan,Pineda,Colombia,bryan@gmail.com,wft-04,"hola soy Bryan y estudio en Henry",bryanLinkedin,bryanGithub,unlisted,unemployed
+Leo,Cifuentes,Colombia,leo@gmail.com,wft-05,"hola soy Leo y estudio en Henry",LeoLinkedin,LeoGithub,unlisted,unemployed
+Diego,Tolaba,Argentina,diego@gmail.com,wft-04,"hola soy Diego y estudio en Henry",DiegoLinkedin,DiegoGithub,unlisted,unemployed
