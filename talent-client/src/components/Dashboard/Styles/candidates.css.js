@@ -11,6 +11,6 @@ export const useStyles = makeStyles({
         width: '100%',
       },
       container: {
-        maxHeight: 650,
+        maxHeight: 720,
       }
 });

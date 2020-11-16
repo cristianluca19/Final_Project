@@ -7,8 +7,6 @@ import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
 import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
-import Menu from './components/Dashboard/menu';
-import Candidates from './components/Dashboard/candidates';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
@@ -33,8 +31,6 @@ function App() {
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />
       </Switch>
-      {/* <Route path="/panel" render={() => <Menu />} />
-      <Route exact path="/panel/candidates" render={() => <Candidates />} /> */}
     </div>
   );
 }

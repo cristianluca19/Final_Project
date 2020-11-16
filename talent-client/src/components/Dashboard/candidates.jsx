@@ -9,10 +9,12 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { useStyles } from './Styles/candidates.css.js';
 import { useSelector } from 'react-redux';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function Candidates() {
-
-  const candidates = useSelector((store) => store.CandidateReducer.allCandidates);
+  const candidates = useSelector(
+    (store) => store.CandidateReducer.allCandidates
+  );
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -25,22 +27,25 @@ function Candidates() {
     { id: 'email', label: 'EMAIL', minWidth: 100 },
     { id: 'cohort', label: 'COHORTE', minWidth: 50, align: 'center' },
     { id: 'visibility', label: 'VISIBILITY', minWidth: 100 },
-    { id: 'status', label: 'STATUS', minWidth: 100 }
+    { id: 'status', label: 'STATUS', minWidth: 100 },
+    { id: 'crud' , label: '', minWidth: 50 }
   ];
 
   const rows = [];
-  if(candidates) {
+  if (candidates) {
     candidates.map((candidate) => {
-      rows.push({id: candidate.id, 
+      rows.push({
+        id: candidate.id,
         firstName: candidate.firstName,
         lastName: candidate.lastName,
         country: candidate.country,
         email: candidate.email,
         cohort: candidate.cohort,
         visibility: candidate.visibility,
-        status: candidate.status
-      })
-    })
+        status: candidate.status,
+        crud: ''
+      });
+    });
   }
 
   const handleChangePage = (event, newPage) => {
@@ -52,9 +57,15 @@ function Candidates() {
     setPage(0);
   };
 
+  const onClickDelete = (e, id) => {
+    e.preventDefault();
+    console.log('hola', id);
+  } 
+
   return (
     <Paper className={classes.root}>
-      <h1>CANDIDATOS</h1><br/>
+      <h1>CANDIDATOS</h1>
+      <br />
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -71,20 +82,25 @@ function Candidates() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>                  
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                            {column.id === 'crud' && <DeleteIcon onClick={(e) => onClickDelete(e, row.id) }/>}
+                        </TableCell>
+                      );                      
+                    })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
