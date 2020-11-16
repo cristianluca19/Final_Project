@@ -51,7 +51,7 @@ paths:
     get:
       tags:
       - Candidates
-      summary: Fetch all candidates filtered by a visibility value.
+      summary: Fetch all candidates filtered by visibility value
       description: visibility value "listed" or "unlisted" must be passed through params
       parameters:
         - in: path
@@ -72,7 +72,7 @@ paths:
     put:
       tags:
       - Candidates
-      summary: Updates the visibility of a candidate. 
+      summary: Updates visibility value of a candidate. 
       description: Update visibility of a candidate specified by params. Visibility "listed" or "unlisted" needs to be passed through body.
       parameters:
       - in: path
@@ -101,7 +101,7 @@ paths:
     post:
       tags:
       - Candidates
-      summary: Adds a new candidate to a folder.
+      summary: creates a relation between a candidate an a folder.
       description: folderId and candidateId needs to be passed through params.
       parameters:
       - in: path
@@ -124,7 +124,7 @@ paths:
     delete:
       tags:
       - Candidates
-      summary: removes a candidate from a folder.
+      summary: removes the relation between a candidate an a folder.
       description: folderId and candidateId needs to be passed through params.
       parameters:
       - in: path
@@ -177,7 +177,7 @@ paths:
                 company:
                   type: string
                 siteUrl:
-                  type: string
+                 type: string
       responses: 
         200:
           description: a JSON object with the new recruiter details.
@@ -204,7 +204,7 @@ paths:
     delete:
       tags:
       - Recruiters
-      summary: Delete a recruiter with a recruiterId.
+      summary: Delete an specific recruiter
       description: A recruiterId must be passed through params.
       parameters:
         - in: path
@@ -218,7 +218,7 @@ paths:
     put:
       tags:
       - Recruiters
-      summary: Modify an specific recruiter with a recruiterId.
+      summary: Modify an specific recruiter
       description: A recruiterId must be passed through params.
       parameters:
         - in: path
@@ -230,6 +230,20 @@ paths:
         200:
           description: An empty response is sent with a 200 status if update succeded.
   /folders:
+    get:
+      tags:
+      - Folders
+      summary: Fetch all folders.
+      description: Returns all existing folders.
+      responses:
+        200:
+          description: a JSON array of folders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
     post:
       tags:
       - Folders
@@ -239,6 +253,61 @@ paths:
         201:
           description: Create a new folder with a uuid
           content: {}
+  /folders/{folderId}:
+    get:
+      tags:
+      - Folders
+      summary: Fetch an specific folder by id with all associated candidates.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer        
+      responses:
+        200:
+          description: a JSON object with folder details.
+          content: {}
+    put:
+      tags:
+      - Folders
+      summary: Update an specific folder by id.
+      description: folderId needs to be passed through params. Query params should include userId or recruiterId to associate to folder.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+        - in: query
+          name: recruiterId
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: userId
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: a JSON object with folder updated details.
+          content: {}
+    delete:
+      tags:
+      - Folders
+      summary: Delete an specific folder by id.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+      responses:
+        204:
+          description: An empty response with status 204 is sent if deletion succeded.
   /users:
     post:
       tags:
