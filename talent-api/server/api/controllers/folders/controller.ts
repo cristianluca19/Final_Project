@@ -41,11 +41,11 @@ export class foldersController {
   // them dinamically. No need to pass all the fields, just the ones necesary to update.
   async updateById(req: Request, res: Response): Promise<void> {
     const { recruiterId, userId } = req.query; // add associations
-    const { status, opened } = req.body; // update model data values
+    const { status } = req.body; // update model data values
     const folder = await db.Folder.findByPk(req.params.folderId);
-    recruiterId && (await folder.setRecruiter(recruiterId));
-    userId && (await folder.setUser(userId));
-    (status || opened) && (await folder.update(req.body));
+    if (recruiterId) await folder.setRecruiter(recruiterId);
+    if (userId) await folder.setUser(userId);
+    if (status) await folder.update({ status });
     res.status(200).json(folder);
   }
   async deleteById(req: Request, res: Response): Promise<void> {

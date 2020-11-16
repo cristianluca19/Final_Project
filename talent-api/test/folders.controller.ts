@@ -25,11 +25,9 @@ describe('Folders', () => {
       const foldersCreated = await db.Folder.bulkCreate([{ uuid }, { uuid }]);
       const candidate = await db.Candidate.create({
         email: 'taniamg@gmail.com',
-        cohort: 6,
+        cohort: 'WebFT06',
       });
-      await request(Server).post(
-        `/api/v1/candidates/${foldersCreated[0].id}/addCandidate/${candidate.id}`
-      );
+      await foldersCreated[0].addCandidate(candidate.id);
       const response = await request(Server).get(
         `/api/v1/folders/${foldersCreated[0].id}`
       );
@@ -38,9 +36,8 @@ describe('Folders', () => {
         .to.deep.include({ id: foldersCreated[0].id });
       expect(response.body).to.have.property('candidates').to.be.an('array');
       expect(response.body).to.have.nested.property('candidates[0].id');
-      expect(response.body).to.nested.include({
-        'candidates[0].email': 'taniamg@gmail.com',
-      });
+      expect(response.body.candidates[0].email).to.equal('taniamg@gmail.com');
+      expect(response.body.candidates[0].cohort).to.equal('WebFT06');
     });
   });
   describe('DELETE', () => {
@@ -61,49 +58,46 @@ describe('Folders', () => {
         { uuid },
         { uuid },
       ]);
-      const recruiter = await request(Server).post(`/api/v1/recruiters`).send({
+      const recruiter = await db.Recruiter.create({
         contactName: 'Victor Alarcon',
         email: 'valarcon@gmail.com',
         company: 'Globant',
         siteUrl: 'www.globant.com',
       });
-      const user = await request(Server).post(`/api/v1/users`).send({
+      const user = await db.User.create({
         firstName: 'Lucas',
         lastName: 'Verdiell',
         profilePicture: 'https://www.test.com/lalala.png',
         role: 'selector',
       });
       const response = await request(Server)
-        .put(
-          `/api/v1/folders/${folders[0].id}?recruiterId=${recruiter.body['id']}`
-        )
-        .send({ status: 'sent' });
+        .put(`/api/v1/folders/${folders[0].id}?recruiterId=${recruiter.id}`)
+        .send({ status: 'created' });
       expect(response.status).to.be.equal(200);
       const foundFolder = await db.Folder.findByPk(folders[0].id);
       expect(foundFolder)
         .to.be.an('object')
-        .to.deep.include({ status: 'sent', recruiterId: recruiter.body['id'] });
+        .to.deep.include({ status: 'created', recruiterId: recruiter.id });
       const responseTwo = await request(Server)
         .put(
-          `/api/v1/folders/${folders[1].id}?userId=${user.body['id']}&recruiterId=${recruiter.body['id']}`
+          `/api/v1/folders/${folders[1].id}?userId=${user.id}&recruiterId=${recruiter.id}`
         )
-        .send({ opened: true, status: 'sent' });
+        .send({ status: 'created' });
       expect(responseTwo.status).to.be.equal(200);
       const foundFolderTwo = await db.Folder.findByPk(folders[1].id);
       expect(foundFolderTwo).to.be.an('object').to.include({
-        opened: true,
-        status: 'sent',
-        userId: user.body['id'],
-        recruiterId: recruiter.body['id'],
+        status: 'created',
+        userId: user.id,
+        recruiterId: recruiter.id,
       });
       const responseThree = await request(Server).put(
-        `/api/v1/folders/${folders[2].id}?recruiterId=${recruiter.body['id']}&userId=${user.body['id']}`
+        `/api/v1/folders/${folders[2].id}?recruiterId=${recruiter.id}&userId=${user.id}`
       );
       expect(responseThree.status).to.be.equal(200);
       const foundFolderThree = await db.Folder.findByPk(folders[2].id);
       expect(foundFolderThree).to.be.an('object').to.include({
-        userId: user.body['id'],
-        recruiterId: recruiter.body['id'],
+        userId: user.id,
+        recruiterId: recruiter.id,
       });
     });
   });
