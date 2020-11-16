@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../../../models';
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 
 export class CandidatesController {
   async all(req: Request, res: Response): Promise<void> {
@@ -37,6 +39,37 @@ export class CandidatesController {
     const candidates = await db.Candidate.findAll({
       where: {
         visibility: req.params.visibility,
+      },
+    });
+    res.status(200).json(candidates);
+  }
+
+  async searchByProp(req: Request, res: Response): Promise<void> {
+    const { firstName, lastName, cohort, email } = req.query;
+    const candidates = await db.Candidate.findAll({
+      where: {
+        [Op.or]: [
+          {
+            firstName: {
+              [Op.iLike]: '%' + firstName + '%',
+            },
+          },
+          {
+            lastName: {
+              [Op.iLike]: '%' + lastName + '%',
+            },
+          },
+          {
+            cohort: {
+              [Op.iLike]: '%' + cohort + '%',
+            },
+          },
+          {
+            email: {
+              [Op.iLike]: '%' + email + '%',
+            },
+          },
+        ],
       },
     });
     res.status(200).json(candidates);

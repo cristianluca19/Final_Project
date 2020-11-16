@@ -5,6 +5,7 @@ export default express
   .Router()
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
+  .get('/search', candidatesController.searchByProp)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post(
