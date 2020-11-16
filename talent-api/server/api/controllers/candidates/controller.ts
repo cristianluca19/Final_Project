@@ -33,16 +33,18 @@ export class CandidatesController {
     res.status(200).json(reply);
   }
 
-
-  async deleteCandidate(req: Request, res: Response): Promise<void>{
-    const candidate = await db.Candidate.destroy({where:{id:req.params.candidateId}});
-    res.status(204).end()
+  async deleteCandidate(req: Request, res: Response): Promise<void> {
+    const candidate = await db.Candidate.destroy({
+      where: { id: req.params.candidateId },
+    });
+    res.status(204).end();
   }
-  async addCandidate(req: Request, res: Response): Promise<void>{
-    const body = req.body
-    const candidate = await db.Candidate.create(body)
-    res.status(200).json(candidate);
 
+  async addCandidate(req: Request, res: Response): Promise<void> {
+    const body = req.body;
+    const candidate = await db.Candidate.create(body);
+    res.status(200).json(candidate);
+  }
 
   async byFilter(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll({
@@ -51,7 +53,7 @@ export class CandidatesController {
       },
     });
     res.status(200).json(candidates);
-
   }
 }
+
 export default new CandidatesController();
