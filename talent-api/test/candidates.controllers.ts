@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+import path from 'path';
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -46,6 +47,50 @@ describe('Candidates', () => {
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
       expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
+    });
+  });
+
+  describe('POST route transform csv file to json', () => {
+    it('should transform all candidates correctly', async () => {
+      const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
+      const response = await request(Server)
+        .post(`/api/candidates/csv`)
+        .set('Content-Type', 'multipart/form-data')
+        .attach('file', csvFile);
+      expect(response.body).to.be.an('array');
+      expect(response.body).to.have.lengthOf(4);
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('bryan@gmail.com');
+      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-04');
+    });
+  });
+
+  describe('POST route bulk candidates to database', () => {
+    it('should create all candidates correctly', async () => {
+      const candidates = [
+        {
+          email: 'leo@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'mati@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'bryan@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const response = await request(Server)
+        .post(`/api/candidates/`)
+        .send(candidates);
+      expect(response.body).to.be.an('array');
+      expect(response.body).to.have.lengthOf(3);
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('mati@gmail.com');
+      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
     });
   });
 
