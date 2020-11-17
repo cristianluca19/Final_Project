@@ -24,3 +24,26 @@ export function deleteCandidate(id) {
     });
   };
 }
+
+export function candidateById(id) {
+  return async (dispatch) => {
+    const candidate = await axios.get(`${BACKEND_URL}/api/candidates/${id}`);
+    dispatch({
+      type: actions.CANDIDATE_BY_ID,
+      payload: candidate.data,
+    });
+  };
+}
+
+export function candidateUpdate(candidateData) {
+  return async (dispatch) => {
+    const candidate = await axios.put(
+      `${BACKEND_URL}/api/candidates/${candidateData.id}/update`,
+      candidateData
+    );
+    dispatch({
+      type: actions.CANDIDATE_UPDATE,
+      payload: candidateData,
+    });
+  };
+}
