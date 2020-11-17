@@ -90,36 +90,87 @@ describe('Filter', () => {
       visibility: 'listed',
       status: 'employed',
     };
+
+    const skillsOne = {
+      id: 1,
+      name: 'trabajo en equipo ',
+      type: 'soft',
+    };
+    const skillsTwo = {
+      id: 2,
+      name: 'react',
+      type: 'hard',
+    };
+    const skillsThree = {
+      id: 3,
+      name: 'liderazgo',
+      type: 'soft',
+    };
+    const skillsFour = {
+      id: 4,
+      name: 'html5',
+      type: 'hard',
+    };
+    const skillsFive = {
+      id: 5,
+      name: 'javascript',
+      type: 'hard',
+    };
+
     const bodyFilterOne = {
-      cohorts: '1,2,7,5',
+      cohorts: '2,7',
     };
-    it('should filter candidates', async () => {
-      await db.Candidate.create(Jarrod);
-      await db.Candidate.create(Laurence);
-      await db.Candidate.create(Drake);
-      await db.Candidate.create(Francesco);
-      await db.Candidate.create(Andreanne);
-      const filterOne = await request(Server)
-        .get('/api/filter')
-        .send(bodyFilterOne);
-      expect(filterOne.body).to.be.an('array').to.have.lengthOf(5);
-    });
+
     const bodyFilterTwo = {
-      cohortArray: ['1', '2', '7', '5'],
-      locationArray: 'United Kingdom,Afghanistan',
+      cohorts: '1,2,7,5',
+      locations: 'United Kingdom,Afghanistan',
     };
+    const bodyFilterThree = {
+      cohorts: '1,2,7,5',
+      locations: 'United Kingdom,Afghanistan',
+      skills: 'react,liderazgo,javascript',
+    };
+
     it('should filter candidates', async () => {
       await db.Candidate.create(Jarrod);
       await db.Candidate.create(Laurence);
       await db.Candidate.create(Drake);
       await db.Candidate.create(Francesco);
       await db.Candidate.create(Andreanne);
-      const filterTwo = await request(Server)
-        .get('/api/filter')
-        .send(bodyFilterTwo);
+
+      await db.Skill.create(skillsOne);
+      await db.Skill.create(skillsTwo);
+      await db.Skill.create(skillsThree);
+      await db.Skill.create(skillsFour);
+      await db.Skill.create(skillsFive);
+
+      // await db.candidate_skills.create({ skill_id: 2, candidate_id: 1 });
+
+      const filterOne = await request(Server)
+        .get('/api/v1/filter')
+        .query({ cohorts: bodyFilterOne.cohorts });
+      // console.log('bodyFilterOne', bodyFilterOne.cohorts)
+      // console.log(filterOne.body);
+      expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
+      expect(filterOne.body[0].id).to.be.equal(1);
+      expect(filterOne.body[0].firstName).to.be.equal('Jarrod');
+      expect(filterOne.body[1].id).to.be.equal(4);
+      expect(filterOne.body[1].firstName).to.be.equal('Francesco');
+
+      const filterTwo = await request(Server).get('/api/v1/filter').query({
+        cohorts: bodyFilterTwo.cohorts,
+        locations: bodyFilterTwo.locations,
+      });
       expect(filterTwo.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterTwo.body[0].firstName).to.equal('Drake');
       expect(filterTwo.body[1].firstName).to.equal('Andreanne');
+
+      const filterThree = await request(Server).get('api/v1/filter').query({
+        cohorts: bodyFilterThree.cohorts,
+        locations: bodyFilterThree.locations,
+        skills: bodyFilterThree.skills,
+      });
+      expect(filterThree.body).to.be.an('array').to.have.lengthOf(1);
     });
   });
 });
