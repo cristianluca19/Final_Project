@@ -19,3 +19,8 @@ export enum STATUS {
   Unemployed = 'unemployed',
   Employed = 'employed',
 }
+
+export enum FOLDER_STATUS {
+  Created = 'created',
+  Sent = 'sent',
+}

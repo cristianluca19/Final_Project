@@ -47,3 +47,11 @@ export function candidateUpdate(candidateData) {
     });
   };
 }
+
+export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
+  const bulkedCandidates = await axios.post(`${BACKEND_URL}/api/candidates`, jsonCandidates);
+  dispatch({
+    type: actions.BULK_CANDIDATES,
+    payload: bulkedCandidates.data
+  })
+}

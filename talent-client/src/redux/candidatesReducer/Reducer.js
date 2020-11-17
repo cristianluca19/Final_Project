@@ -3,6 +3,7 @@ import * as actions from './Constants.js';
 const initialState = {
   allCandidates: [],
   candidate: {},
+  bulkedCandidates: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -30,6 +31,11 @@ export default function Reducer(state = initialState, action) {
         allCandidates: state.allCandidates
           .filter((candidate) => candidate.id !== action.payload.id)
           .concat(action.payload),
+      };
+    case actions.BULK_CANDIDATES:
+      return {
+        ...state,
+        bulkedCandidates: action.payload,
       };
     default:
       return state;
