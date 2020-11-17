@@ -12,5 +12,5 @@ export default function routes(app: Application): void {
   app.use('/api/v1/folders', foldersRouter);
   app.use('/api/v1/users', usersRouter);
   app.use('/api/v1/examples', examplesRouter);
-  app.use('/api/filter', candidateFilter);
+  app.use('/api/v1/filter', candidateFilter);
 }
