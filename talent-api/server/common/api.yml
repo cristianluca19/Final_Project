@@ -167,7 +167,6 @@ paths:
             application/json:
               schema:
                   type: object
-  /skills:
     get:
       tags:
       - Skills
@@ -198,7 +197,7 @@ paths:
       responses:
         200:
           description: a JSON object with the skill details
-  /skills/{skillId}:
+          content: {}
     delete:
       tags:
       - Skills
@@ -215,12 +214,17 @@ paths:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
-  /skills/:
     put:
       tags:
       - Skills
       summary: Updates one skill.
       description: name needs to be sent as request.body and skillId as request.params.
+      parameters:
+        - in: path
+          name: skillId
+          required: true
+          schema:
+           type: integer
       requestBody:
         required: true
         content:

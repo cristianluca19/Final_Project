@@ -52,7 +52,7 @@ describe('Skills', () => {
       );
       expect(response.status).to.be.equal(200);
       await db.Skill.findAll();
-      const responseGet = await request(Server).get('/api/skills');
+      const responseGet = await request(Server).get('/api/v1/skills');
       expect(responseGet.body).to.have.lengthOf(1);
     });
   });
