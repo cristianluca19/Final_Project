@@ -114,11 +114,23 @@ describe('Candidates', () => {
   });
 
   describe('GET search candidates by specific props', () => {
-    it('should bring all candidates with a specific "cohort" property', async () => {
+    it('should filter all candidates that match the query "firstName" property', async () => {
       const candidate = await db.Candidate.create({
         firstName: 'Leonardo',
         lastName: 'Sbaraglia',
         email: 'leosbar@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Leo',
+        lastName: 'Messi',
+        email: 'mesidiez@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Leonidas',
+        lastName: 'Spartano',
+        email: 'threehundred@gmail.com',
         cohort: '4',
       });
       await db.Candidate.create({
@@ -134,47 +146,19 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).get(
-        `/api/candidates/search?cohort=4`
+        `/api/candidates/search?firstName=Leo`
       );
-      expect(response.body).to.have.lengthOf(2);
-      expect(response.body[0]).to.have.property('cohort').to.be.equal('4');
-      expect(response.body[0])
-        .to.have.property('email')
-        .to.be.equal('leosbar@gmail.com');
-      expect(response.body[1])
-        .to.have.property('email')
-        .to.be.equal('lastjedi@gmail.com');
-    });
-
-    it('should filter an specific candidate by his "firstName" property', async () => {
-      const candidate = await db.Candidate.create({
-        firstName: 'Leonardo',
-        lastName: 'Sbaraglia',
-        email: 'leosbar@gmail.com',
-        cohort: '4',
-      });
-      await db.Candidate.create({
-        firstName: 'Luke',
-        lastName: 'Skywalker',
-        email: 'lastjedi@gmail.com',
-        cohort: '4',
-      });
-      await db.Candidate.create({
-        firstName: 'Indian',
-        lastName: 'Jones',
-        email: 'indijones@gmail.com',
-        cohort: '5',
-      });
-      const response = await request(Server).get(
-        `/api/candidates/search?firstName=Leonardo`
-      );
-      expect(response.body).to.have.lengthOf(1);
+      expect(response.body).to.have.lengthOf(3);
       expect(response.body[0])
         .to.have.property('firstName')
         .to.be.equal('Leonardo');
+      expect(response.body[1]).to.have.property('firstName').to.be.equal('Leo');
+      expect(response.body[2])
+        .to.have.property('firstName')
+        .to.be.equal('Leonidas');
     });
 
-    it('should filter an specific candidate by his "lastName" property', async () => {
+    it('should filter all candidates that match the query "lastName" property', async () => {
       const candidate = await db.Candidate.create({
         firstName: 'Leonardo',
         lastName: 'Sbaraglia',
@@ -188,18 +172,25 @@ describe('Candidates', () => {
         cohort: '4',
       });
       await db.Candidate.create({
+        firstName: 'Leah',
+        lastName: 'Sky',
+        email: 'princessleah@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
         firstName: 'Indian',
         lastName: 'Jones',
         email: 'indijones@gmail.com',
         cohort: '5',
       });
       const response = await request(Server).get(
-        `/api/candidates/search?lastName=Skywalker`
+        `/api/candidates/search?lastName=Sky`
       );
-      expect(response.body).to.have.lengthOf(1);
+      expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('lastName')
         .to.be.equal('Skywalker');
+      expect(response.body[1]).to.have.property('lastName').to.be.equal('Sky');
     });
 
     it('should filter an specific candidate by his "email" property', async () => {
@@ -222,7 +213,7 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).get(
-        `/api/candidates/search?email=indijones@gmail.com`
+        `/api/candidates/search?email=indijo`
       );
       expect(response.body).to.have.lengthOf(1);
       expect(response.body[0])

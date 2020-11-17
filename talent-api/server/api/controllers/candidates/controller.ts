@@ -45,7 +45,7 @@ export class CandidatesController {
   }
 
   async searchByProp(req: Request, res: Response): Promise<void> {
-    const { firstName, lastName, cohort, email } = req.query;
+    const { firstName, lastName, email } = req.query;
     const candidates = await db.Candidate.findAll({
       where: {
         [Op.or]: [
@@ -57,11 +57,6 @@ export class CandidatesController {
           {
             lastName: {
               [Op.iLike]: '%' + lastName + '%',
-            },
-          },
-          {
-            cohort: {
-              [Op.iLike]: '%' + cohort + '%',
             },
           },
           {
