@@ -6,6 +6,7 @@ export default express
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
   .put('/:candidateId/visibility', candidatesController.updateById)
+  .put('/:candidateId/update', candidatesController.updateByIdCandidate)
   .get('/:candidateId', candidatesController.byId)
   .post(
     '/:folderId/addCandidate/:candidateId',

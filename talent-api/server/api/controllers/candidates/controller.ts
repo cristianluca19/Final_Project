@@ -19,6 +19,13 @@ export class CandidatesController {
     res.status(200).json(candidate);
   }
 
+  async updateByIdCandidate(req: Request, res: Response): Promise<void> {
+    const candidateUpdate = await db.Candidate.update(req.body, {
+      where: { id: req.params.candidateId },
+    });
+    res.status(200).json(candidateUpdate);
+  }
+
   async addToFolder(req: Request, res: Response): Promise<void> {
     const candidate = await db.Candidate.findByPk(req.params.candidateId);
     const folder = await db.Folder.findByPk(req.params.folderId);
