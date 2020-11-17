@@ -7,10 +7,10 @@ import usersRouter from './api/controllers/users/router';
 import candidateFilter from './api/controllers/filter/router'
 
 export default function routes(app: Application): void {
-  app.use('/api/candidates', candidatesRouter);
-  app.use('/api/recruiters', recruitersRouter);
+  app.use('/api/v1/candidates', candidatesRouter);
+  app.use('/api/v1/recruiters', recruitersRouter);
+  app.use('/api/v1/folders', foldersRouter);
+  app.use('/api/v1/users', usersRouter);
   app.use('/api/v1/examples', examplesRouter);
-  app.use('/api/folders', foldersRouter);
-  app.use('/api/users', usersRouter);
   app.use('/api/filter', candidateFilter);
 }

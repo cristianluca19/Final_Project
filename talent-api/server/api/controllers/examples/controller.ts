@@ -13,6 +13,12 @@ export class Controller {
   //   res.status(200).json(candidate);
   // }
 
+  // create(req: Request, res: Response): void {
+  //   db.Candidate.create(req.body.name).then((r) =>
+  //     res.status(201).location(`/api/v1/examples/${r.id}`).json(r)
+  //   );
+  // }
+
   // all(req: Request, res: Response): void {
   //   ExamplesService.all().then((r) => res.json(r));
   // }
