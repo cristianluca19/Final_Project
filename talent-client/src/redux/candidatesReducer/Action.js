@@ -14,9 +14,12 @@ export function getAllCandidates() {
 }
 
 export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
-  const bulkedCandidates = await axios.post(`${BACKEND_URL}/api/v1/candidates`, jsonCandidates);
+  const bulkedCandidates = await axios.post(
+    `${BACKEND_URL}/api/v1/candidates`,
+    jsonCandidates
+  );
   dispatch({
     type: actions.BULK_CANDIDATES,
-    payload: bulkedCandidates.data
-  })
-}
+    payload: bulkedCandidates.data,
+  });
+};

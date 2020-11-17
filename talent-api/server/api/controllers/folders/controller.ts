@@ -41,7 +41,7 @@ export class foldersController {
   async byUuid(req: Request, res: Response): Promise<void> {
     const folder = await db.Folder.findOne({
       where: { uuid: req.query.uuid },
-      attributes: ['id', 'uuid','recruiterId'],
+      attributes: ['id', 'uuid', 'recruiterId'],
       include: [
         {
           model: db.Recruiter,

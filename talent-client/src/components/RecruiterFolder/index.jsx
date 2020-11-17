@@ -10,33 +10,38 @@ import CandidateCard from '../CandidateCard';
 import { getDossierByUuid } from '../../redux/foldersReducer/Action.js';
 
 function RecruiterFolder() {
-  const { uuid } = useParams()
+  const { uuid } = useParams();
   const dispatch = useDispatch();
   const classes = useStyles();
   const [folder, setFolder] = useState([]);
   const [recruiter, setRecruiter] = useState([]);
   const cardsMaxLimit = 10;
-  console.log(uuid)
+  console.log(uuid);
 
   useEffect(() => {
-    dispatch(getDossierByUuid(uuid)) // por si sirve a futuro...
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/folders?uuid=${uuid}`)
+    dispatch(getDossierByUuid(uuid)); // por si sirve a futuro...
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/folders?uuid=${uuid}`)
       .then((response) => {
         setRecruiter(response.data.recruiter);
         setFolder(response.data.candidates);
-        return
-      })
-  }, [])
+        return;
+      });
+  }, []);
 
-  if (!folder.length) return <h1>Loading...</h1>
+  if (!folder.length) return <h1>Loading...</h1>;
 
-
-  console.log('folder ', folder)
-  console.log('recruiter ', recruiter)
+  console.log('folder ', folder);
+  console.log('recruiter ', recruiter);
   return (
     <Container className={classes.container} maxWidth="xl">
       <ThemeProvider theme={henryTheme}>
-        <Typography color='primary' gutterBottom variant="h5" component="h2">Candidatos Seleccionados {Object.keys(recruiter).length ? ` para: ${recruiter.contactName} - ${recruiter.company}` : `:`}</Typography>
+        <Typography color="primary" gutterBottom variant="h5" component="h2">
+          Candidatos Seleccionados{' '}
+          {Object.keys(recruiter).length
+            ? ` para: ${recruiter.contactName} - ${recruiter.company}`
+            : `:`}
+        </Typography>
         <Grid
           className={classes.paddingCandidates}
           container
@@ -47,9 +52,8 @@ function RecruiterFolder() {
           {folder.length &&
             folder.map(
               (candidate, index) =>
-                index < cardsMaxLimit &&
-                // candidate.visibility == 'listed' && 
-                (
+                index < cardsMaxLimit && (
+                  // candidate.visibility == 'listed' &&
                   <div key={index} className={classes.CandidateCard}>
                     <CandidateCard user={candidate} />
                   </div>
@@ -58,7 +62,7 @@ function RecruiterFolder() {
         </Grid>
       </ThemeProvider>
     </Container>
-  )
+  );
 }
 
 export default RecruiterFolder;

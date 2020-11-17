@@ -10,7 +10,7 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         dossier: action.payload,
-      }
+      };
     default:
       return state;
   }
