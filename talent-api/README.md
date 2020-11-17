@@ -2,6 +2,22 @@
 
 Henry Talent API
 
+
+## .ENV VARIABLES
+
+APP_ID=
+PORT=
+LOG_LEVEL=
+REQUEST_LIMIT=
+SESSION_SECRET=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_HOST=
+DB_PORT=
+CLIENT_URL=
+OPENAPI_SPEC=
+
 ## Quick Start
 
 Get started developing...

@@ -1,5 +1,5 @@
-export const INCREMENT = "INCREMENT";
-export const DECREMENT = "DECREMENT";
+export const INCREMENT = 'INCREMENT';
+export const DECREMENT = 'DECREMENT';
 
 //======================================================================
 //Esta funcion esta solo de ejemplo para probar que redux esta funcional...SACAR ANTES DE MERGEAR

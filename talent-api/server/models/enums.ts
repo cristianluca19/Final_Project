@@ -17,5 +17,10 @@ export enum VISIBILITY {
 
 export enum STATUS {
   Unemployed = 'unemployed',
-  Employed = 'emplyed',
+  Employed = 'employed',
+}
+
+export enum FOLDER_STATUS {
+  Created = 'created',
+  Sent = 'sent',
 }
