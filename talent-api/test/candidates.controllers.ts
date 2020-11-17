@@ -146,7 +146,7 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).get(
-        `/api/candidates/search?firstName=Leo`
+        `/api/candidates/search?firstName=leo`
       );
       expect(response.body).to.have.lengthOf(3);
       expect(response.body[0])
@@ -184,7 +184,7 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).get(
-        `/api/candidates/search?lastName=Sky`
+        `/api/candidates/search?lastName=sky`
       );
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
