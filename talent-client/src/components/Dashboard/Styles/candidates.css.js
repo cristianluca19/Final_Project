@@ -52,7 +52,7 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
   avatar: {
-    width:130,
+    width: 130,
     height: 130,
   },
   titleCandidates: {
@@ -67,5 +67,5 @@ export const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontWeight: 100,
     fontSize: 40,
-  }
+  },
 }));

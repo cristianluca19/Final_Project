@@ -4,21 +4,26 @@ import Candidates from './candidates';
 import { useStyle } from './Styles/index.css.js';
 import { Container, Grid } from '@material-ui/core';
 
-function Dashboard({tableAction}) {
+function Dashboard({ tableAction }) {
   const classes = useStyle();
 
-  return <div className={classes.dashboardMain}>
-
+  return (
+    <div className={classes.dashboardMain}>
       <Grid container item xs={2} sm={2} spacing={1} className={classes.menu}>
         <Menu />
       </Grid>
-      <Grid container item xs={10} sm={10} spacing={1} className={classes.containerRight}>
-        { tableAction === 'candidates' && <Candidates /> }
+      <Grid
+        container
+        item
+        xs={10}
+        sm={10}
+        spacing={1}
+        className={classes.containerRight}
+      >
+        {tableAction === 'candidates' && <Candidates />}
       </Grid>
-
-    
-    
-  </div>;
+    </div>
+  );
 }
 
 export default Dashboard;

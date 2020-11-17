@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CsvToJson from "./components/csvToJson/CsvToJson";
-import CandidateCard from './components/CandidateCard'
+import CsvToJson from './components/csvToJson/CsvToJson';
+import CandidateCard from './components/CandidateCard';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import './App.css';
@@ -25,11 +25,14 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path="/panel" render={() => <Dashboard />} />
-        <Route path="/panel/candidates" render={() => <Dashboard tableAction={'candidates'} />} />
+        <Route
+          path="/panel/candidates"
+          render={() => <Dashboard tableAction={'candidates'} />}
+        />
         <Route path="/" render={() => <Nav />} />
       </Switch>
-      {/* <Route exact path="/" render={() => <CandidateCard/>}/> */} 
-      <Route exact path="/csv" component={CsvToJson}/>
+      {/* <Route exact path="/" render={() => <CandidateCard/>}/> */}
+      <Route exact path="/csv" component={CsvToJson} />
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />
       <Switch>

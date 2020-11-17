@@ -5,11 +5,11 @@ export const useStyle = makeStyles({
     backgroundColor: '#ffffff !important',
   },
   menu: {
-    float: 'left'
+    float: 'left',
   },
   containerRight: {
     float: 'left',
     width: '100%',
-    padding: '50px 30px 50px 50px'
-  }
+    padding: '50px 30px 50px 50px',
+  },
 });

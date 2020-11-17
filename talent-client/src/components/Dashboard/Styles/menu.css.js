@@ -5,7 +5,7 @@ export const useStyle = makeStyles({
     background: 'linear-gradient(135deg, #282c34 0%,#10151d 100%) !important',
     height: 'calc(100vh - 0px)',
     float: 'left',
-    width: '100%'
+    width: '100%',
   },
   logo: {
     width: 180,
