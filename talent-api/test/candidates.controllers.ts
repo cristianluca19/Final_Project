@@ -55,7 +55,7 @@ describe('Candidates', () => {
     it('should transform all candidates correctly', async () => {
       const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
-        .post(`/api/candidates/csv`)
+        .post(`/api/v1/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
         .attach('file', csvFile);
       expect(response.body).to.be.an('array');
@@ -84,7 +84,7 @@ describe('Candidates', () => {
         },
       ];
       const response = await request(Server)
-        .post(`/api/candidates/`)
+        .post(`/api/v1/candidates/`)
         .send(candidates);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(3);
@@ -277,7 +277,7 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).delete(
-        `/api/candidates/${candidate1.id}/delete`
+        `/api/v1/candidates/${candidate1.id}/delete`
       );
       const candidate = await db.Candidate.findOne({
         where: { email: 'cristianL@gmail.com', cohort: '5' },
@@ -290,7 +290,7 @@ describe('Candidates', () => {
   describe('POST candidate', () => {
     it('should create a new candidate', async () => {
       const response = await request(Server)
-        .post('/api/candidates/addCandidate')
+        .post('/api/v1/candidates/addCandidate')
         .send({
           email: 'cristianL@gmail.com',
           cohort: '5',
