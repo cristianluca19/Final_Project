@@ -39,35 +39,42 @@ export class foldersController {
   }
 
   async byUuid(req: Request, res: Response): Promise<void> {
-    const folder = await db.Folder.findOne({
-      where: { uuid: req.query.uuid },
-      attributes: ['id', 'uuid', 'recruiterId'],
-      include: [
-        {
-          model: db.Recruiter,
-          attributes: ['company', 'contactName', 'email'],
-        },
-        {
-          model: db.Candidate,
-          attributes: [
-            'id',
-            'firstName',
-            'lastName',
-            'email',
-            'country',
-            'cohort',
-            'profilePicture',
-            'visibility',
-            'status',
-            'miniBio',
-            'linkedin',
-            'github',
-          ],
-          through: { attributes: [] },
-        },
-      ],
-    });
-    res.status(200).json(folder);
+    try {
+      const folder = await db.Folder.findOne({
+        where: { uuid: req.query.uuid },
+        attributes: ['id', 'uuid', 'recruiterId'],
+        include: [
+          {
+            model: db.Recruiter,
+            attributes: ['company', 'contactName', 'email'],
+          },
+          {
+            model: db.Candidate,
+            attributes: [
+              'id',
+              'firstName',
+              'lastName',
+              'email',
+              'country',
+              'cohort',
+              'profilePicture',
+              'visibility',
+              'status',
+              'miniBio',
+              'linkedin',
+              'github',
+            ],
+            through: { attributes: [] },
+          },
+        ],
+      });
+      res.status(200).json(folder);
+    } catch (error) {
+      error.status = 400;
+      error.message = 'UUID invalido';
+      res.status(error.status).send(error.message)
+      throw error;
+    }
   }
 
   async postFolder(req: Request, res: Response): Promise<void> {
