@@ -3,5 +3,9 @@
   "workspaces": [
     "api",
     "client"
-  ]
+  ],
+  "dependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "uuidv4": "^6.2.5"
+  }
 }

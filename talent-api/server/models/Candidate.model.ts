@@ -54,16 +54,10 @@ export default (sequelize) => {
       linkedin: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-          isUrl: true,
-        },
       },
       github: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-          isUrl: true,
-        },
       },
       visibility: {
         type: DataTypes.ENUM,
