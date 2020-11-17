@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStyles, theme } from './styles.js';
-// import axios from 'axios';
+import axios from 'axios';
 
 // MUI Components
 import Link from '@material-ui/core/Link';
@@ -21,15 +21,35 @@ import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
-  const { user } = props;
+  const { candidate, uuid, folder } = props; // TODO: hacer que le llegue el folder.id por props...
 
   const labelsMaxLimit = 8;
 
   const classes = useStyles();
 
   // HANDLERS //
-  const handleFolderAdd = (event) => {
-    //pending functionality
+  const handleFolderAdd = (event, uuid) => {
+    if (!uuid) {
+      event.preventDefault();
+      axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
+            folder ? folder.id : 1
+          }/addCandidate/${candidate.id}`
+        )
+        .then((response) => {
+          return window.alert('Candidato agregado con éxito');
+          //TODO: cambiar por un modal piola de MUI o algo asi..
+        })
+        .catch((error) => {
+          console.log(error.message);
+          // TODO: cambiar por un modal de error piola de MUI o algo asi..
+          return;
+        });
+    } else {
+      // TODO: Add functionality to contact candidate (mailto:)
+      return;
+    }
   };
 
   //pending improvement to responsive Grids
@@ -41,7 +61,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={user.profilePicture || imgtest}
+            image={candidate.profilePicture || imgtest}
             title="Henry Candidate"
           />
         </Grid>
@@ -59,7 +79,7 @@ function CandidateCard(props) {
                 <Grid item xs={9}>
                   {/*FullName*/}
                   <Typography gutterBottom variant="h5" component="h2">
-                    {`${user.firstName} ${user.lastName}`}
+                    {`${candidate.firstName} ${candidate.lastName}`}
                   </Typography>
                   {/*Top-right Icons*/}
                 </Grid>
@@ -68,7 +88,7 @@ function CandidateCard(props) {
                     color="inherit"
                     target="_blank"
                     rel="noopener"
-                    href={user.github}
+                    href={candidate.github}
                   >
                     <GitHubIcon name="GitHub" fontSize="small" />
                   </Link>
@@ -82,7 +102,7 @@ function CandidateCard(props) {
                     color="inherit"
                     target="_blank"
                     rel="noopener"
-                    href={user.linkedin}
+                    href={candidate.linkedin}
                   >
                     <LinkedInIcon name="LinkedIn" />
                   </Link>
@@ -91,9 +111,11 @@ function CandidateCard(props) {
                   <IconButton
                     color="secondary"
                     edge="start"
-                    onClick={handleFolderAdd}
+                    onClick={(event) => {
+                      handleFolderAdd(event, uuid);
+                    }}
                   >
-                    {user.role ? <CreateNewFolderIcon /> : <EmailIcon />}
+                    {!uuid ? <CreateNewFolderIcon /> : <EmailIcon />}
                   </IconButton>
                 </Grid>
               </Grid>
@@ -107,7 +129,7 @@ function CandidateCard(props) {
               component="p"
               style={{ paddingLeft: 15 }}
             >
-              {`${user.country}  -  WebFT0${user.cohort}`}
+              {`${candidate.country}  -  WebFT0${candidate.cohort}`}
             </Typography>
             <Divider variant="middle" style={{ marginBottom: 10 }} />
             <ThemeProvider theme={theme}>
@@ -151,7 +173,7 @@ function CandidateCard(props) {
                 component="p"
                 align="justify"
               >
-                {user.miniBio.substring(0, 240) + '...'}
+                {candidate.miniBio.substring(0, 240) + '...'}
               </Typography>
             </ThemeProvider>
           </CardContent>
@@ -162,7 +184,7 @@ function CandidateCard(props) {
 }
 
 CandidateCard.propTypes = {
-  user: PropTypes.exact({
+  candidate: PropTypes.exact({
     id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
@@ -179,11 +201,12 @@ CandidateCard.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
   }),
+  folder: PropTypes.object,
 };
 
-// Mock user for props received in CandidateCard
+// Mock candidate for props received in CandidateCard
 CandidateCard.defaultProps = {
-  user: {
+  candidate: {
     firstName: 'Daniel',
     lastName: 'Stadler',
     location: 'Sarasota, TX, USA',
@@ -207,6 +230,12 @@ CandidateCard.defaultProps = {
      React, Node.js and Python.`,
     linkedin: '/',
     github: 'https://github.com/henry-labs/talent',
+  },
+  folder: {
+    id: 1,
+    contactName: 'Tim Cook',
+    email: 'Cookingwithtim@apple.com',
+    company: 'Apple Inc.',
   },
 };
 

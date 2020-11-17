@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useStyles } from './styles.js';
-import { Container, Grid, Typography } from '@material-ui/core';
+import { Container, Grid, Typography, Link } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
 import { getDossierByUuid } from '../../redux/foldersReducer/Action.js';
+import NotFound from '../../images/404notfound.jpg';
 
 function RecruiterFolder() {
   const { uuid } = useParams();
   const dispatch = useDispatch();
   const classes = useStyles();
   const [folder, setFolder] = useState([]);
+  const [error, setError] = useState(`<h1>Loading...</h1>`);
   const [recruiter, setRecruiter] = useState([]);
   const cardsMaxLimit = 10;
-  console.log(uuid);
 
   useEffect(() => {
     dispatch(getDossierByUuid(uuid)); // por si sirve a futuro...
@@ -26,13 +27,29 @@ function RecruiterFolder() {
         setRecruiter(response.data.recruiter);
         setFolder(response.data.candidates);
         return;
+      })
+      .catch((error) => {
+        setError(
+          <ThemeProvider theme={henryTheme}>
+            <img src={NotFound} height="auto" width="auto" />
+            <Typography color="primary" gutterBottom variant="body2">
+              La página que estas buscando no existe o ha ocurrido un error.
+            </Typography>
+            <Typography
+              color="primary"
+              gutterBottom
+              variant="body2"
+              style={{ paddingBottom: 50 }}
+            >
+              <Link href="/">Vuelve atrás</Link> o ponte en contacto con nuestro
+              staff.
+            </Typography>
+          </ThemeProvider>
+        );
       });
-  }, []);
+  }, [uuid]);
 
-  if (!folder.length) return <h1>Loading...</h1>;
-
-  console.log('folder ', folder);
-  console.log('recruiter ', recruiter);
+  if (!folder.length) return error;
   return (
     <Container className={classes.container} maxWidth="xl">
       <ThemeProvider theme={henryTheme}>
@@ -55,7 +72,7 @@ function RecruiterFolder() {
                 index < cardsMaxLimit && (
                   // candidate.visibility == 'listed' &&
                   <div key={index} className={classes.CandidateCard}>
-                    <CandidateCard user={candidate} />
+                    <CandidateCard uuid={uuid} candidate={candidate} />
                   </div>
                 )
             )}

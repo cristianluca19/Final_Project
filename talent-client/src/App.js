@@ -29,9 +29,9 @@ function App() {
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />
-      <Route path="/dossier/:uuid" render={({ match }) => match.params.uuid}>
+      <Route exact path="/dossier/:uuid">
         <ContentHome />
-        <RecruiterFolder />
+        <RecruiterFolder render={({ match }) => match.params.uuid} />
       </Route>
       <Switch>
         <Route path="/panel" />

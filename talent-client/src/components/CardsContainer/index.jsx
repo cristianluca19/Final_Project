@@ -33,9 +33,9 @@ function CardsContainer(props) {
           candidates.map(
             (candidate, index) =>
               index < cardsMaxLimit &&
-              candidate.visibility == 'listed' && (
+              candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
-                  <CandidateCard user={candidate} />
+                  <CandidateCard candidate={candidate} />
                 </div>
               )
           )}

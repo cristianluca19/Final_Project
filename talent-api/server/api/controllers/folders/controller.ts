@@ -72,7 +72,7 @@ export class foldersController {
     } catch (error) {
       error.status = 400;
       error.message = 'UUID invalido';
-      res.status(error.status).send(error.message)
+      res.status(error.status).send(error.message);
       throw error;
     }
   }

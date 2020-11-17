@@ -1,1 +1,3 @@
 export const GET_DOSSIER = 'GET_DOSSIER';
+export const ACTIVE_FOLDER = 'ACTIVE_FOLDER';
+export const CONFIRM_FOLDER = 'CONFIRM_FOLDER';
