@@ -9,6 +9,7 @@ import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
 import Menu from './components/Dashboard/menu';
 import Candidates from './components/Dashboard/candidates';
+import RecruiterFolder from './components/RecruiterFolder';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />
+      <Route exact path="/dossier/:uuid" render={({match}) => <RecruiterFolder uuid={match.params.uuid}/>} />
       <Switch>
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />

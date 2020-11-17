@@ -235,6 +235,12 @@ paths:
       - Folders
       summary: Fetch all folders.
       description: Returns all existing folders.
+      parameters:
+        - in: query
+          name: uuid
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: a JSON array of folders.
