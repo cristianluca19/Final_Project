@@ -153,35 +153,29 @@ describe('Filter', () => {
       await candidates[1].addSkills(skills[3]);
 
       const filterOne = await request(Server)
-        .get('/api/v1/filter')
+        .get('/api/v1/candidates/filter')
         .query(bodyFilterOne);
       expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterOne.body[0].id).to.be.equal(1);
       expect(filterOne.body[0].firstName).to.be.equal('Jarrod');
       expect(filterOne.body[1].id).to.be.equal(4);
       expect(filterOne.body[1].firstName).to.be.equal('Francesco');
-      expect(filterOne.body[3]).to.be.undefined;
-      expect(filterOne.body[4]).to.be.undefined;
 
       const filterTwo = await request(Server)
-        .get('/api/v1/filter')
+        .get('/api/v1/candidates/filter')
         .query(bodyFilterTwo);
       expect(filterTwo.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterTwo.body[0].firstName).to.equal('Drake');
       expect(filterTwo.body[1].firstName).to.equal('Andreanne');
-      expect(filterTwo.body[3]).to.be.undefined;
-      expect(filterTwo.body[4]).to.be.undefined;
 
       const filterThree = await request(Server)
-        .get('/api/v1/filter')
+        .get('/api/v1/candidates/filter')
         .query(bodyFilterThree);
       expect(filterThree.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterThree.body[0].id).to.be.equal(1);
       expect(filterThree.body[0].firstName).to.be.equal('Jarrod');
       expect(filterThree.body[1].id).to.be.equal(2);
       expect(filterThree.body[1].firstName).to.be.equal('Laurence');
-      expect(filterThree.body[3]).to.be.undefined;
-      expect(filterThree.body[4]).to.be.undefined;
     });
   });
 });

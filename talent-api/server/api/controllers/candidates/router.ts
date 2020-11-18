@@ -8,6 +8,7 @@ export default express
   .post('/', candidatesController.bulkCreateCandidate)
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
+  .get('/filter', candidatesController.filter)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post(
@@ -17,5 +18,4 @@ export default express
   .delete(
     '/:folderId/removeCandidate/:candidateId',
     candidatesController.deleteFromFolder
-  )
-  .get('/filter', candidatesController.filter);
+  );
