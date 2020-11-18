@@ -1,30 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 import { useStyles } from './Styles/candidates.css.js';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { deleteCandidate, candidateById, candidateUpdate } from '../../redux/candidatesReducer/Action.js';
-import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
 
 function Candidates() {
   const candidates = useSelector(
