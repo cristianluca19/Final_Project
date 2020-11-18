@@ -31,6 +31,15 @@ paths:
                 type: array
                 items:
                   type: object
+    post:
+      tags:
+      - Candidates
+      summary: Bulk creates
+      description: TODO
+      responses:
+        200:
+          description: TODO
+          content: {}
   /candidates/{candidateId}:
     get:
       tags:
@@ -143,6 +152,16 @@ paths:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
+  /candidates/csv:
+    post:
+      tags:
+      - Candidates
+      summary: csv
+      description: TODO
+      responses:
+        200:
+          description: A JSON array of objects... TODO
+          content: {}
   /recruiters:
     get:
       tags:
@@ -235,6 +254,12 @@ paths:
       - Folders
       summary: Fetch all folders.
       description: Returns all existing folders.
+      parameters:
+        - in: query
+          name: uuid
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: a JSON array of folders.
