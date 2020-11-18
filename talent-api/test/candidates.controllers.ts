@@ -54,7 +54,7 @@ describe('Candidates', () => {
     it('should transform all candidates correctly', async () => {
       const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
-        .post(`/api/candidates/csv`)
+        .post(`/api/v1/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
         .attach('file', csvFile);
       expect(response.body).to.be.an('array');
@@ -83,7 +83,7 @@ describe('Candidates', () => {
         },
       ];
       const response = await request(Server)
-        .post(`/api/candidates/`)
+        .post(`/api/v1/candidates`)
         .send(candidates);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(3);
