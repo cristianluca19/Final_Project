@@ -195,10 +195,10 @@ paths:
       tags:
       - Candidates
       summary: csv
-      description: TODO
+      description: Receive a csv file and parse it to JSON
       responses:
         200:
-          description: A JSON array of objects... TODO
+          description: Returns a JSON of candidates
           content: {}
   /recruiters:
     get:
