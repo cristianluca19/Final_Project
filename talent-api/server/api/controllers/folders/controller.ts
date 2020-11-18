@@ -42,7 +42,7 @@ export class foldersController {
     try {
       const folder = await db.Folder.findOne({
         where: { uuid: req.query.uuid },
-        attributes: ['id', 'uuid', 'recruiterId'],
+        attributes: ['id', 'uuid', 'recruiterId', 'opened'],
         include: [
           {
             model: db.Recruiter,
@@ -68,6 +68,7 @@ export class foldersController {
           },
         ],
       });
+      if (!folder.opened) await folder.update({ opened: true });
       res.status(200).json(folder);
     } catch (error) {
       error.status = 400;

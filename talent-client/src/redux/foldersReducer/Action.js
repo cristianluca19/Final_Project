@@ -3,8 +3,17 @@ import * as actions from './Constants.js';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export function activeFolder() {
-  return async (dispatch) => {};
+export function addToFolder() {
+  return;
+}
+
+export function getFolder() {}
+
+export function newFolder(newFolder) {
+  return {
+    type: actions.NEW_FOLDER,
+    payload: newFolder,
+  };
 }
 
 export function confirmFolder() {

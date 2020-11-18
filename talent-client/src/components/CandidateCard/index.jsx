@@ -6,6 +6,7 @@ import axios from 'axios';
 // MUI Components
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
+import Badge from '@material-ui/core/Badge';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import { IconButton } from '@material-ui/core/';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import FolderIcon from '@material-ui/icons/Folder';
 import Chip from '@material-ui/core/Chip';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
@@ -21,38 +23,17 @@ import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
-  const { candidate, uuid, folder } = props; // TODO: hacer que le llegue el folder.id por props...
+  const { includes, candidate, uuid, folder, addCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
+  // TODO: add functionality that show selector if candidate is already in folder...
 
   const labelsMaxLimit = 8;
 
   const classes = useStyles();
 
   // HANDLERS //
-  const handleFolderAdd = (event, uuid) => {
-    if (!uuid) {
-      event.preventDefault();
-      axios
-        .post(
-          `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
-            folder ? folder.id : 1
-          }/addCandidate/${candidate.id}`
-        )
-        .then((response) => {
-          return window.alert('Candidato agregado con éxito');
-          //TODO: cambiar por un modal piola de MUI o algo asi..
-        })
-        .catch((error) => {
-          console.log(error.message);
-          // TODO: cambiar por un modal de error piola de MUI o algo asi..
-          return;
-        });
-    } else {
-      // TODO: Add functionality to contact candidate (mailto:)
-      return;
-    }
+  const handleContactCandidate = () => {
+    //TODO: add function to send :mailto
   };
-
-  //pending improvement to responsive Grids
 
   return (
     <Card className={classes.root}>
@@ -61,7 +42,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={candidate.profilePicture || imgtest}
+            image={imgtest} // add "candidate.profilePicture" when seed works again
             title="Henry Candidate"
           />
         </Grid>
@@ -112,10 +93,22 @@ function CandidateCard(props) {
                     color="secondary"
                     edge="start"
                     onClick={(event) => {
-                      handleFolderAdd(event, uuid);
+                      addCandidate
+                        ? addCandidate(event, candidate.id, uuid, includes)
+                        : handleContactCandidate(event);
                     }}
                   >
-                    {!uuid ? <CreateNewFolderIcon /> : <EmailIcon />}
+                    {!uuid ? (
+                      includes ? (
+                        <Badge badgeContent="✔" color="primary">
+                          <FolderIcon />
+                        </Badge>
+                      ) : (
+                        <CreateNewFolderIcon />
+                      )
+                    ) : (
+                      <EmailIcon />
+                    )}
                   </IconButton>
                 </Grid>
               </Grid>
@@ -233,9 +226,25 @@ CandidateCard.defaultProps = {
   },
   folder: {
     id: 1,
-    contactName: 'Tim Cook',
-    email: 'Cookingwithtim@apple.com',
-    company: 'Apple Inc.',
+    recruiter: {
+      contactName: 'Tim Cook',
+      email: 'Cookingwithtim@apple.com',
+      company: 'Apple Inc.',
+    },
+    candidates: [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+      {
+        id: 3,
+      },
+      {
+        id: 6,
+      },
+    ],
   },
 };
 

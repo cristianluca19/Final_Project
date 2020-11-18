@@ -2,6 +2,7 @@ import * as actions from './Constants.js';
 
 const initialState = {
   dossier: [],
+  newFolder: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -10,6 +11,11 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         dossier: action.payload,
+      };
+    case actions.NEW_FOLDER:
+      return {
+        ...state,
+        newFolder: action.payload,
       };
     default:
       return state;
