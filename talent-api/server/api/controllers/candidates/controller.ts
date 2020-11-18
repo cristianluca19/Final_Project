@@ -89,7 +89,7 @@ export class CandidatesController {
   }
 
   async addCandidate(req: Request, res: Response): Promise<void> {
-    const body = req.body;
+    const candidateData = req.body;
     const candidate = await db.Candidate.create(body);
     res.status(200).json(candidate);
   }
