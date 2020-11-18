@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import db from '../../../models';
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
+import fs from 'fs';
+import { parse } from '@fast-csv/parse';
 
 export class CandidatesController {
   async all(req: Request, res: Response): Promise<void> {

@@ -114,6 +114,7 @@ describe('Candidates', () => {
       const response = await request(Server).get(
         `/api/v1/candidates/filterBy/listed`
       );
+
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('visibility')
@@ -145,6 +146,7 @@ describe('Candidates', () => {
       const response = await request(Server).get(
         `/api/v1/candidates/filterBy/unlisted`
       );
+
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('visibility')
@@ -190,9 +192,9 @@ describe('Candidates', () => {
         email: 'indijones@gmail.com',
         cohort: '5',
       });
-      const response = await request(Server).get(
-        `/api/candidates/search?firstName=leo`
-      );
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'eo' });
       expect(response.body).to.have.lengthOf(3);
       expect(response.body[0])
         .to.have.property('firstName')
@@ -228,9 +230,9 @@ describe('Candidates', () => {
         email: 'indijones@gmail.com',
         cohort: '5',
       });
-      const response = await request(Server).get(
-        `/api/candidates/search?lastName=sky`
-      );
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'ky' });
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('lastName')
@@ -257,9 +259,9 @@ describe('Candidates', () => {
         email: 'indijones@gmail.com',
         cohort: '5',
       });
-      const response = await request(Server).get(
-        `/api/candidates/search?email=indijo`
-      );
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'indijo' });
       expect(response.body).to.have.lengthOf(1);
       expect(response.body[0])
         .to.have.property('email')
