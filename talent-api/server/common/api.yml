@@ -35,10 +35,10 @@ paths:
       tags:
       - Candidates
       summary: Bulk creates
-      description: TODO
+      description: Receive an array in json and reload the db
       responses:
         200:
-          description: TODO
+          description: Returns an array with the candidates
           content: {}
   /candidates/{candidateId}:
     get:
