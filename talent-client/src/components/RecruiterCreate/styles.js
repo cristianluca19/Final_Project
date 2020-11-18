@@ -9,10 +9,13 @@ export const useStyles = makeStyles((theme) => ({
     '& .MuiInputBase-input': {
       color: '#FFFFFF',
     },
-    paddingBottom: 30,
+    '& .MuiFormControl-root': {
+      margin: theme.spacing(2),
+    }
   },
   submitbtn: {
     maxWidth: 600,
+    marginBottom: theme.spacing(2),
     '&:hover': {
       color: '#111111',
       backgroundColor: '#FFF001',

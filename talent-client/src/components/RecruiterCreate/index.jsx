@@ -9,8 +9,8 @@ function RecruiterCreate() {
   return (
     <ThemeProvider theme={henryTheme}>
       <Container>
-        <Typography color="secondary" variant="h5">
-          Agregar un Recruiter
+        <Typography color="primary" variant="h4">
+          Agregar Recruiter
         </Typography>
         <Divider variant="middle" style={{ marginBottom: 10 }} />
         <RecruiterForm />
