@@ -16,10 +16,7 @@ export class SkillsController {
   async byId(req: Request, res: Response): Promise<void> {
     try {
       const { skillId } = req.params;
-      const skill = await db.Skill.findOne(
-        { where: { id: skillId } },
-        { attributes: ['id', 'name', 'type'] }
-      );
+      const skill = await db.Skill.findByPk(skillId);
       res.status(200).json({
         id: skill.id,
         name: skill.name,
@@ -46,8 +43,8 @@ export class SkillsController {
     try {
       const { skillId } = req.params;
       const { name, type } = req.body;
-      const skillUpdated = await db.Skill.update(
-        { name: name },
+      await db.Skill.update(
+        { name: name, type: type },
         { where: { id: skillId } }
       );
       res.status(200).json({
