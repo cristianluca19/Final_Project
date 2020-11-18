@@ -23,8 +23,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
-  const { includes, candidate, uuid, folder, addCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
-  // TODO: add functionality that show selector if candidate is already in folder...
+  const { includes, candidate, uuid, folder, handleCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
 
   const labelsMaxLimit = 8;
 
@@ -93,8 +92,8 @@ function CandidateCard(props) {
                     color="secondary"
                     edge="start"
                     onClick={(event) => {
-                      addCandidate
-                        ? addCandidate(event, candidate.id, uuid, includes)
+                      handleCandidate
+                        ? handleCandidate(event, candidate.id, uuid, includes)
                         : handleContactCandidate(event);
                     }}
                   >
@@ -195,6 +194,8 @@ CandidateCard.propTypes = {
     updatedAt: PropTypes.string,
   }),
   folder: PropTypes.object,
+  includes: PropTypes.bool,
+  uuid: PropTypes.string,
 };
 
 // Mock candidate for props received in CandidateCard

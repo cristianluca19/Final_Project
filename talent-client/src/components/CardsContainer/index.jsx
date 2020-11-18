@@ -19,32 +19,29 @@ function CardsContainer(props) {
 
   const cardsMaxLimit = 30;
 
-  const handleAddCandidate = (event, candidate, uuid, includes) => {
+  const handleCandidate = (event, candidate, uuid, includes) => {
     event.preventDefault();
     if (!uuid) {
       if (!includes) {
-        console.log(includes);
         axios
           .post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${folder ? folder.id : 1
+            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
+              folder ? folder.id : 1
             }/addCandidate/${candidate}`
           )
           .then((response) => {
-            // dispatch()
             setSelectedCandidates([...selectedCandidates, candidate]);
-            return
-            //TODO: cambiar por un modal piola de MUI o algo asi..
+            return;
           })
           .catch((error) => {
             console.log(error.message);
-            // TODO: cambiar por un modal de error piola de MUI o algo asi..
             return;
           });
       } else {
-        console.log('entre al else')
         axios
           .delete(
-            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${folder ? folder.id : 1
+            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
+              folder ? folder.id : 1
             }/removeCandidate/${candidate}`
           )
           .then((response) => {
@@ -52,15 +49,13 @@ function CardsContainer(props) {
               (eachCandidate) => eachCandidate !== candidate
             );
             setSelectedCandidates(newSelectedCandidates);
-            return
-            //TODO: cambiar por un modal piola de MUI o algo asi..
+            return;
           })
           .catch((error) => {
             console.log(error.message);
-            // TODO: cambiar por un modal de error piola de MUI o algo asi..
             return;
-          })
-      };
+          });
+      }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
       return;
@@ -92,7 +87,7 @@ function CardsContainer(props) {
                 <div key={index} className={classes.CandidateCard}>
                   <CandidateCard
                     candidate={candidate}
-                    addCandidate={handleAddCandidate}
+                    handleCandidate={handleCandidate}
                     includes={includesCandidate(candidate.id)}
                   />
                 </div>
