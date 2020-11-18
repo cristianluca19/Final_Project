@@ -14,11 +14,12 @@ function Candidates() {
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
   const classes = useStyles();
+  const DEFAULT_ROWS_PER_PAGE = 30;
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
   const dispatch = useDispatch();
   const [candidateData, setCandidateData] = React.useState({
     firstName: 'Daniel',
