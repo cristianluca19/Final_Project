@@ -21,19 +21,18 @@ function CardsContainer(props) {
 
   const handleAddCandidate = (event, candidate, uuid, includes) => {
     event.preventDefault();
-    setSelectedCandidates([...selectedCandidates, candidate]);
     if (!uuid) {
       if (!includes) {
         console.log(includes);
         axios
           .post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
-              folder ? folder.id : 1
+            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${folder ? folder.id : 1
             }/addCandidate/${candidate}`
           )
           .then((response) => {
             // dispatch()
-            return window.alert('Candidato agregado con éxito');
+            setSelectedCandidates([...selectedCandidates, candidate]);
+            return
             //TODO: cambiar por un modal piola de MUI o algo asi..
           })
           .catch((error) => {
@@ -42,13 +41,26 @@ function CardsContainer(props) {
             return;
           });
       } else {
-        //TODO: agregar axios para sacar candidato de la carpeta en el back...
-        let newSelectedCandidates = selectedCandidates.filter(
-          (eachCandidate) => eachCandidate !== candidate
-        );
-        setSelectedCandidates(newSelectedCandidates);
-        return;
-      }
+        console.log('entre al else')
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${folder ? folder.id : 1
+            }/removeCandidate/${candidate}`
+          )
+          .then((response) => {
+            let newSelectedCandidates = selectedCandidates.filter(
+              (eachCandidate) => eachCandidate !== candidate
+            );
+            setSelectedCandidates(newSelectedCandidates);
+            return
+            //TODO: cambiar por un modal piola de MUI o algo asi..
+          })
+          .catch((error) => {
+            console.log(error.message);
+            // TODO: cambiar por un modal de error piola de MUI o algo asi..
+            return;
+          })
+      };
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
       return;
