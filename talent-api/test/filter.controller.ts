@@ -127,50 +127,61 @@ describe('Filter', () => {
     };
     const bodyFilterThree = {
       cohorts: '1,2,7,5',
-      locations: 'United Kingdom,Afghanistan',
-      skills: 'react,liderazgo,javascript',
+      locations: 'Chad,Slovenia',
+      skills: 'trabajo en equipo,react,liderazgo,html5',
     };
 
     it('should filter candidates', async () => {
-      await db.Candidate.create(Jarrod);
-      await db.Candidate.create(Laurence);
-      await db.Candidate.create(Drake);
-      await db.Candidate.create(Francesco);
-      await db.Candidate.create(Andreanne);
+      const candidates = await db.Candidate.bulkCreate([
+        Jarrod,
+        Laurence,
+        Drake,
+        Francesco,
+        Andreanne,
+      ]);
+      const skills = await db.Skill.bulkCreate([
+        skillsOne,
+        skillsTwo,
+        skillsThree,
+        skillsFour,
+        skillsFive,
+      ]);
 
-      await db.Skill.create(skillsOne);
-      await db.Skill.create(skillsTwo);
-      await db.Skill.create(skillsThree);
-      await db.Skill.create(skillsFour);
-      await db.Skill.create(skillsFive);
-
-      // await db.candidate_skills.create({ skill_id: 2, candidate_id: 1 });
+      await candidates[0].addSkills(skills[0]);
+      await candidates[0].addSkills(skills[1]);
+      await candidates[1].addSkills(skills[2]);
+      await candidates[1].addSkills(skills[3]);
 
       const filterOne = await request(Server)
         .get('/api/v1/filter')
-        .query({ cohorts: bodyFilterOne.cohorts });
-      // console.log('bodyFilterOne', bodyFilterOne.cohorts)
-      // console.log(filterOne.body);
+        .query(bodyFilterOne);
       expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterOne.body[0].id).to.be.equal(1);
       expect(filterOne.body[0].firstName).to.be.equal('Jarrod');
       expect(filterOne.body[1].id).to.be.equal(4);
       expect(filterOne.body[1].firstName).to.be.equal('Francesco');
+      expect(filterOne.body[3]).to.be.undefined;
+      expect(filterOne.body[4]).to.be.undefined;
 
-      const filterTwo = await request(Server).get('/api/v1/filter').query({
-        cohorts: bodyFilterTwo.cohorts,
-        locations: bodyFilterTwo.locations,
-      });
+      const filterTwo = await request(Server)
+        .get('/api/v1/filter')
+        .query(bodyFilterTwo);
       expect(filterTwo.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterTwo.body[0].firstName).to.equal('Drake');
       expect(filterTwo.body[1].firstName).to.equal('Andreanne');
+      expect(filterTwo.body[3]).to.be.undefined;
+      expect(filterTwo.body[4]).to.be.undefined;
 
-      const filterThree = await request(Server).get('api/v1/filter').query({
-        cohorts: bodyFilterThree.cohorts,
-        locations: bodyFilterThree.locations,
-        skills: bodyFilterThree.skills,
-      });
-      expect(filterThree.body).to.be.an('array').to.have.lengthOf(1);
+      const filterThree = await request(Server)
+        .get('/api/v1/filter')
+        .query(bodyFilterThree);
+      expect(filterThree.body).to.be.an('array').to.have.lengthOf(2);
+      expect(filterThree.body[0].id).to.be.equal(1);
+      expect(filterThree.body[0].firstName).to.be.equal('Jarrod');
+      expect(filterThree.body[1].id).to.be.equal(2);
+      expect(filterThree.body[1].firstName).to.be.equal('Laurence');
+      expect(filterThree.body[3]).to.be.undefined;
+      expect(filterThree.body[4]).to.be.undefined;
     });
   });
 });
