@@ -8,13 +8,14 @@ import { deleteCandidate, getCandidateById, updateCandidate } from '../../redux/
 import SaveIcon from '@material-ui/icons/Save';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
 
+const DEFAULT_ROWS_PER_PAGE = 30;
+
 function Candidates() {
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
-  const classes = useStyles();
-  const DEFAULT_ROWS_PER_PAGE = 30;
+  const classes = useStyles();  
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
