@@ -8,10 +8,11 @@ const skills = {
 };
 
 function mixer(skills) {
-  let skillType = ['hard', 'soft'];
-  let randomSkill = skillType[Math.floor(Math.random() * 2)];
+  const skillType = Object.keys(skills);
+  let randomSkill = skillType[Math.floor(Math.random() * skillType.length - 1)];
   let mix = {
-    name: skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
+    name:
+      skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
     type: randomSkill,
     created_at: faker.date.past(),
     updated_at: faker.date.recent(),

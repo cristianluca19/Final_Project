@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+import faker from 'faker';
 
 describe('Skills', () => {
   beforeEach(function () {
@@ -39,15 +40,16 @@ describe('Skills', () => {
 
   describe('GET specific skill', () => {
     it('should get a specific skill', async () => {
-      await db.Skill.create({ name: 'Go', type: 'tech' });
-      await db.Skill.create({ name: '.NET', type: 'tech' });
-      await db.Skill.create({ name: 'Analitico', type: 'soft' });
-      await db.Skill.create({ name: 'Liderazgo', type: 'soft' });
-      const randomNumber = Math.floor(Math.random() * (8 - 5) + 5); //Todo
-      const response = await request(Server).get(
-        `/api/v1/skills/${randomNumber}`
-      );
-      switch (randomNumber) {
+      const skills = [
+        { name: 'Go', type: 'tech' },
+        { name: '.NET', type: 'tech' },
+        { name: 'Analitico', type: 'soft' },
+        { name: 'Liderazgo', type: 'soft' },
+      ]
+      const skillsCreated = await db.Skill.bulkCreate(skills);
+      const randomId = faker.helpers.randomize(skillsCreated).id;
+      const response = await request(Server).get(`/api/v1/skills/${randomId}`);
+      switch (randomId) {
         case 5:
           expect(response.body).to.have.property('name').to.be.equal('Go');
           break;
