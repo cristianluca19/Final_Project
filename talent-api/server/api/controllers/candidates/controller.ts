@@ -45,29 +45,34 @@ export class CandidatesController {
   }
 
   async searchByProp(req: Request, res: Response): Promise<void> {
-    const { firstName, lastName, email } = req.query;
-    const candidates = await db.Candidate.findAll({
-      where: {
-        [Op.or]: [
-          {
-            firstName: {
-              [Op.iLike]: '%' + firstName + '%',
+    const { search } = req.query;
+    try {
+      const candidates = await db.Candidate.findAll({
+        where: {
+          [Op.or]: [
+            {
+              firstName: {
+                [Op.iLike]: '%' + search + '%',
+              },
             },
-          },
-          {
-            lastName: {
-              [Op.iLike]: '%' + lastName + '%',
+            {
+              lastName: {
+                [Op.iLike]: '%' + search + '%',
+              },
             },
-          },
-          {
-            email: {
-              [Op.iLike]: '%' + email + '%',
+            {
+              email: {
+                [Op.iLike]: '%' + search + '%',
+              },
             },
-          },
-        ],
-      },
-    });
-    res.status(200).json(candidates);
+          ],
+        },
+      });
+      res.status(200).json(candidates);
+    } catch (err) {
+      res.status(404).send(err.message);
+      throw err;
+    }
   }
 }
 export default new CandidatesController();
