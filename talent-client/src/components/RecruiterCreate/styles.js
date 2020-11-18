@@ -11,11 +11,14 @@ export const useStyles = makeStyles((theme) => ({
     },
     '& .MuiFormControl-root': {
       margin: theme.spacing(2),
-    }
+    },
+    '& .Mui-disabled': {
+      backgroundColor: '#FFF001',
+    },
   },
   submitbtn: {
     maxWidth: 600,
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
     '&:hover': {
       color: '#111111',
       backgroundColor: '#FFF001',
