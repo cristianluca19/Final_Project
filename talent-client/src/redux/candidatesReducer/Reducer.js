@@ -20,12 +20,12 @@ export default function Reducer(state = initialState, action) {
           (candidate) => candidate.id !== action.payload
         ),
       };
-    case actions.CANDIDATE_BY_ID:
+    case actions.GET_CANDIDATE_BY_ID:
       return {
         ...state,
         candidate: action.payload,
       };
-    case actions.CANDIDATE_UPDATE:
+    case actions.UPDATE_CANDIDATE:
       return {
         ...state,
         allCandidates: state.allCandidates
