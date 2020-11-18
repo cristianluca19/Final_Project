@@ -17,4 +17,5 @@ export default express
   .delete(
     '/:folderId/removeCandidate/:candidateId',
     candidatesController.deleteFromFolder
-  );
+  )
+  .get('/filter', candidatesController.filter);

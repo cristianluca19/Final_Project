@@ -353,10 +353,10 @@ paths:
         201:
           description: a JSON object with the new user details.
           content: {}
-  /filter:
+  /candidates/filter:
     get:
       tags:
-      - Filer
+      - Filter
       summary: Fetch all candidates filtered
       description: returns a list with candidates whose skills, cohorts and location was specify by query
       parameters: 
@@ -385,7 +385,7 @@ paths:
                 items:
                   type: object
         204: 
-          description: Error if queries are empty
+          description: if queries are empty
           
         400:
           description: Bad request error
