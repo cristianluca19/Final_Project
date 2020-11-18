@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme) => ({
       marginBottom: 20,
     },
     '& .MuiInputBase-input': {
-      color: '#FFFFFF'
+      color: '#FFFFFF',
     },
     paddingBottom: 30,
   },
@@ -15,7 +15,7 @@ export const useStyles = makeStyles((theme) => ({
     maxWidth: 600,
     '&:hover': {
       color: '#111111',
-      backgroundColor: '#FFF001'
+      backgroundColor: '#FFF001',
     },
-  }
+  },
 }));

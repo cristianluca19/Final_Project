@@ -6,16 +6,17 @@ import { useStyles } from './styles.js';
 import { RecruiterForm } from './form';
 
 function RecruiterCreate() {
-
   return (
     <ThemeProvider theme={henryTheme}>
       <Container>
-        <Typography color='secondary' variant='h5'>Agregar un Recruiter</Typography>
+        <Typography color="secondary" variant="h5">
+          Agregar un Recruiter
+        </Typography>
         <Divider variant="middle" style={{ marginBottom: 10 }} />
         <RecruiterForm />
       </Container>
     </ThemeProvider>
-  )
+  );
 }
 
 export default RecruiterCreate;

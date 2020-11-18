@@ -9,11 +9,9 @@ const initialValues = {
   email: '',
   company: '',
   siteUrl: '',
-}
-
+};
 
 export function RecruiterForm() {
-
   // TODO: Error handlers
 
   const [values, setValues] = useState(initialValues);
@@ -21,21 +19,22 @@ export function RecruiterForm() {
 
   const handleChange = (event) => {
     event.preventDefault();
-    setValues({ ...values, [event.target.id]: event.target.value })
-  }
-  
+    setValues({ ...values, [event.target.id]: event.target.value });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/recruiters`,values)
-    .then((response) => {
-      return
-    })
-    .catch((error) => {
-      console.log(error);
-      return;
-    })
-    return
-  }
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/recruiters`, values)
+      .then((response) => {
+        return;
+      })
+      .catch((error) => {
+        console.log(error);
+        return;
+      });
+    return;
+  };
 
   return (
     <form className={classes.root} onSubmit={handleSubmit} autoComplete="off">
@@ -45,7 +44,9 @@ export function RecruiterForm() {
           variant="filled"
           fullWidth
           id={'contactName'}
-          value={values.contactName} onChange={handleChange} />
+          value={values.contactName}
+          onChange={handleChange}
+        />
       </div>
       <div>
         <TextField
@@ -54,15 +55,18 @@ export function RecruiterForm() {
           fullWidth
           id={'email'}
           value={values.email}
-          onChange={handleChange} />
+          onChange={handleChange}
+        />
       </div>
       <div>
         <TextField
           label="Empresa"
           variant="outlined"
-          fullWidth id={'company'}
+          fullWidth
+          id={'company'}
           value={values.company}
-          onChange={handleChange} />
+          onChange={handleChange}
+        />
       </div>
       <div>
         <TextField
@@ -71,9 +75,18 @@ export function RecruiterForm() {
           fullWidth
           id={'siteUrl'}
           value={values.sitUrl}
-          onChange={handleChange} />
+          onChange={handleChange}
+        />
       </div>
-      <Button className={classes.submitbtn} color='primary' variant='contained' type='submit' fullWidth>Crear Recruiter</Button>
+      <Button
+        className={classes.submitbtn}
+        color="primary"
+        variant="contained"
+        type="submit"
+        fullWidth
+      >
+        Crear Recruiter
+      </Button>
     </form>
-  )
+  );
 }
