@@ -20,8 +20,8 @@ export default (sequelize) => {
       },
       type: {
         type: DataTypes.ENUM,
-        values: [SKILLS.Hard, SKILLS.Soft],
-        allowNull: true,
+        values: [SKILLS.Tech, SKILLS.Soft, SKILLS.Other],
+        allowNull: false,
       },
     },
     {

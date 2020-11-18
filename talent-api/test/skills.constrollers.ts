@@ -8,45 +8,72 @@ describe('Skills', () => {
   beforeEach(function () {
     db.Skill.destroy({ where: {} });
   });
+
   describe('POST create skill', () => {
     it('should create one skill', async () => {
       const newSkill = {
         name: 'Python',
+        type: 'tech',
       };
       const response = await request(Server)
         .post('/api/v1/skills')
         .send(newSkill);
-      expect(response.body).to.have.property('name').to.be.equal('Python');
+      const skillCreated = await db.Skill.findByPk(response.body.id);
+      expect(skillCreated).to.have.property('name').to.be.equal('Python');
+      expect(skillCreated).to.have.property('type').to.be.equal('tech');
     });
   });
+
   describe('GET all skills', () => {
     it('Should return all existing skills', async () => {
-      await db.Skill.create({ name: 'PHP' });
-      await db.Skill.create({ name: 'Java' });
-      await db.Skill.create({ name: 'C++' });
+      await db.Skill.create({ name: 'PHP', type: 'tech' });
+      await db.Skill.create({ name: 'Java', type: 'tech' });
+      await db.Skill.create({ name: 'Liderazgo', type: 'soft' });
       const response = await request(Server).get('/api/v1/skills');
       expect(response.body).to.be.an('array').to.have.lengthOf(3);
-      expect(response.body[2]).to.have.property('name').to.be.equal('C++');
+      expect(response.body[2])
+        .to.have.property('name')
+        .to.be.equal('Liderazgo');
     });
   });
 
   describe('GET specific skill', () => {
     it('should get a specific skill', async () => {
-      const skillOne = await db.Skill.create({
-        name: 'Go',
-      });
-      await db.Skill.create({ name: '.NET' });
-      await db.Skill.create({ name: 'C' });
+      await db.Skill.create({ name: 'Go', type: 'tech' });
+      await db.Skill.create({ name: '.NET', type: 'tech' });
+      await db.Skill.create({ name: 'Analitico', type: 'soft' });
+      await db.Skill.create({ name: 'Liderazgo', type: 'soft' });
+      const randomNumber = Math.floor(Math.random() * (8 - 5) + 5); //Todo
       const response = await request(Server).get(
-        `/api/v1/skills/${skillOne.id}`
+        `/api/v1/skills/${randomNumber}`
       );
-      expect(response.body).to.have.property('name').to.be.equal('Go');
+      switch (randomNumber) {
+        case 5:
+          expect(response.body).to.have.property('name').to.be.equal('Go');
+          break;
+        case 6:
+          expect(response.body).to.have.property('name').to.be.equal('.NET');
+          break;
+        case 7:
+          expect(response.body)
+            .to.have.property('name')
+            .to.be.equal('Analitico');
+          break;
+        case 8:
+          expect(response.body)
+            .to.have.property('name')
+            .to.be.equal('Liderazgo');
+          break;
+        default:
+          break;
+      }
     });
   });
+
   describe('DELETE', () => {
     it('Should delete one skill', async () => {
-      const skillOne = await db.Skill.create({ name: '.NET' });
-      const skillTwo = await db.Skill.create({ name: 'C' });
+      const skillOne = await db.Skill.create({ name: '.NET', type: 'tech' });
+      const skillTwo = await db.Skill.create({ name: 'C', type: 'tech' });
       const response = await request(Server).delete(
         `/api/v1/skills/${skillTwo.id}`
       );
@@ -54,16 +81,23 @@ describe('Skills', () => {
       await db.Skill.findAll();
       const responseGet = await request(Server).get('/api/v1/skills');
       expect(responseGet.body).to.have.lengthOf(1);
+      expect(responseGet.body[0]).to.have.property('name').to.be.equal('.NET');
     });
   });
+
   describe('PUT update skill', () => {
     it('should update one skill', async () => {
-      const skillOne = await db.Skill.create({ name: 'Java' });
-      const skillTwo = await db.Skill.create({ name: 'PHP' });
+      const skillOne = await db.Skill.create({ name: 'Java', type: 'tech' });
+      const skillTwo = await db.Skill.create({ name: 'PHP', type: 'tech' });
+      const skillThree = await db.Skill.create({
+        name: 'Trabajo en equipo',
+        type: 'soft',
+      });
       const response = await request(Server)
         .put(`/api/v1/skills/${skillOne.id}`)
         .send({ name: 'Python' });
-      expect(response.body).to.have.property('name').to.be.equal('Python');
+      const skillUpdated = await db.Skill.findByPk(response.body.id);
+      expect(skillUpdated).to.have.property('name').to.be.equal('Python');
     });
   });
 });

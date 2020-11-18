@@ -6,5 +6,5 @@ export default express
   .get('/', skillsController.all)
   .get('/:skillId', skillsController.byId)
   .post('/', skillsController.create)
-  .delete('/:skillId', skillsController.delete)
-  .put('/:skillId', skillsController.updateById);
+  .put('/:skillId', skillsController.updateById)
+  .delete('/:skillId', skillsController.delete);

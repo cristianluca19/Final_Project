@@ -4,34 +4,59 @@ import db from '../../../models';
 export class SkillsController {
   async all(req: Request, res: Response): Promise<void> {
     try {
-      const skills = await db.Skill.findAll({ attributes: ['id', 'name'] });
+      const skills = await db.Skill.findAll({
+        attributes: ['id', 'name', 'type'],
+      });
       res.status(200).json(skills);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).json({ error });
     }
   }
 
   async byId(req: Request, res: Response): Promise<void> {
     try {
       const { skillId } = req.params;
-      const skill = await db.Skill.findByPk(skillId);
+      const skill = await db.Skill.findOne(
+        { where: { id: skillId } },
+        { attributes: ['id', 'name', 'type'] }
+      );
       res.status(200).json({
         id: skill.id,
         name: skill.name,
+        type: skill.type,
       });
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).json({ error });
     }
   }
 
   async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name } = req.body;
-      const newSkill = await db.Skill.create({ name });
-      await newSkill.save();
-      res.status(200).send({ name: newSkill.name });
+      const { name, type } = req.body;
+      const newSkill = await db.Skill.create({ name, type });
+      res
+        .status(200)
+        .json({ id: newSkill.id, name: newSkill.name, type: newSkill.type });
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).json({ error });
+    }
+  }
+
+  async updateById(req: Request, res: Response): Promise<void> {
+    try {
+      const { skillId } = req.params;
+      const { name, type } = req.body;
+      const skillUpdated = await db.Skill.update(
+        { name: name },
+        { where: { id: skillId } }
+      );
+      res.status(200).json({
+        id: skillId,
+        name: name,
+        type: type,
+      });
+    } catch (error) {
+      res.status(400).json({ error });
     }
   }
 
@@ -39,25 +64,9 @@ export class SkillsController {
     try {
       const { skillId } = req.params;
       await db.Skill.destroy({ where: { id: skillId } });
-      res.status(200).send('Skill deleted');
+      res.status(200).json('Skill deleted');
     } catch (error) {
-      res.status(400).send({ error });
-    }
-  }
-
-  async updateById(req: Request, res: Response): Promise<void> {
-    try {
-      const { skillId } = req.params;
-      const { name } = req.body;
-      const skill = await db.Skill.findByPk(skillId);
-      skill.name = name;
-      await skill.save();
-      res.status(200).json({
-        id: skill.id,
-        name: skill.name,
-      });
-    } catch (error) {
-      res.status(400).send({ error });
+      res.status(404).json({ error });
     }
   }
 }

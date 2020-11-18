@@ -4,6 +4,7 @@ const faker = require('faker');
 const skills = {
   hard: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
   soft: ['compañerismo', 'trabajo en equipo', 'liderazgo', 'flexible'],
+  other: ['Ruso', 'Ingles'],
 };
 
 function mixer(skills) {
