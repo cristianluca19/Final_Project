@@ -2,6 +2,7 @@ import * as actions from './Constants.js';
 
 const initialState = {
   allCandidates: [],
+  bulkedCandidates: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -10,6 +11,11 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allCandidates: action.payload,
+      };
+    case actions.BULK_CANDIDATES:
+      return {
+        ...state,
+        bulkedCandidates: action.payload,
       };
     default:
       return state;

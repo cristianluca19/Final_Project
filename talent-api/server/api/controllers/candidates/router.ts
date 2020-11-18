@@ -1,8 +1,11 @@
 import express from 'express';
+import upload from '../../middlewares/csvFile';
 import candidatesController from './controller';
 
 export default express
   .Router()
+  .post('/csv', upload.single('file'), candidatesController.csvToJson)
+  .post('/', candidatesController.bulkCreateCandidate)
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
   .get('/search', candidatesController.searchByProp)

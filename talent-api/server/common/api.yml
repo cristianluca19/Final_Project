@@ -5,70 +5,331 @@ info:
   version: 1.0.0
 servers:
 - url: /api/v1
+  description: Development test server
 tags:
-- name: Examples
-  description: Simple example endpoints
-- name: Specification
-  description: The swagger API specification
+- name: Candidates
+  description: list of candidate endpoints
+- name: Recruiters
+  description: list of recruiter endpoints
+- name: Folders
+  description: list of folder endpoints
+- name: Users
+  description: list of user endpoints
 paths:
-  /examples:
+  /candidates:
     get:
       tags:
-      - Examples
-      description: Fetch all examples
+      - Candidates
+      summary: Fetch all candidates
+      description: returns a list with all candidates and their details
       responses:
         200:
-          description: Returns all examples
-          content: {}
-    post:
-      tags:
-      - Examples
-      description: Create a new example
-      requestBody:
-        description: an example
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExampleBody'
-        required: true
-      responses:
-        200:
-          description: Returns all examples
-          content: {}
-  /examples/{id}:
+          description: A JSON array of candidate details
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /candidates/{candidateId}:
     get:
       tags:
-      - Examples
+      - Candidates
+      summary: Fetch an specific candidate by id.
+      description: candidateId needs to be passed through params.
       parameters:
-      - name: id
-        in: path
-        description: The id of the example to retrieve
+        - in: path
+          name: candidateId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with the candidate details
+  /candidates/filterBy/{visibility}:
+    get:
+      tags:
+      - Candidates
+      summary: Fetch all candidates filtered by visibility value
+      description: visibility value "listed" or "unlisted" must be passed through params
+      parameters:
+        - in: path
+          name: visibility
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: a JSON array of listed or unlisted candidates and their details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /candidates/{candidateId}/visibility:
+    put:
+      tags:
+      - Candidates
+      summary: Updates visibility value of a candidate. 
+      description: Update visibility of a candidate specified by params. Visibility "listed" or "unlisted" needs to be passed through body.
+      parameters:
+      - in: path
+        name: candidateId
         required: true
         schema:
           type: integer
+          minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                visibility:
+                  type: string
       responses:
         200:
-          description: Return the example with the specified id
+          description: a JSON object with the modified candidate new details.
+          content:
+            application/json:
+              schema:
+                type: object
+  /candidates/{folderId}/addCandidate/{candidateId}:
+    post:
+      tags:
+      - Candidates
+      summary: creates a relation between a candidate an a folder.
+      description: folderId and candidateId needs to be passed through params.
+      parameters:
+      - in: path
+        name: folderId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        name: candidateId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: a JSON object with the folderId and candidateId associated.
           content: {}
-        404:
-          description: Example not found
+  /candidates/{folderId}/removeCandidate/{candidateId}:
+    delete:
+      tags:
+      - Candidates
+      summary: removes the relation between a candidate an a folder.
+      description: folderId and candidateId needs to be passed through params.
+      parameters:
+      - in: path
+        name: folderId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        name: candidateId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
-  /spec:
+  /recruiters:
     get:
       tags:
-      - Specification
+      - Recruiters
+      summary: Fetch all recruiters.
+      description: Returns a list with all recruiters and their details
+      responses: 
+        200:
+          description: a JSON array of recruiters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    post:
+      tags:
+      - Recruiters
+      summary: Creates a new recruiter.
+      description: Recruiter details must be passed throug body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contactName:
+                  type: string
+                email:
+                  type: string
+                company:
+                  type: string
+                siteUrl:
+                 type: string
+      responses: 
+        200:
+          description: a JSON object with the new recruiter details.
+          content:
+            application/json:
+              schema:
+                  type: object
+  /recruiters/{recruiterId}:
+    get:
+      tags:
+      - Recruiters
+      summary: Fetch an specific recruiter
+      description: A recruiterId must be passed through params.
+      parameters:
+        - in: path
+          name: recruiterId
+          required: true
+          schema:
+            type: integer
       responses:
         200:
-          description: Return the API specification
+          description: A JSON object with the desired recruiter
           content: {}
-components:
-  schemas:
-    ExampleBody:
-      title: example
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-          example: no_stress
+    delete:
+      tags:
+      - Recruiters
+      summary: Delete an specific recruiter
+      description: A recruiterId must be passed through params.
+      parameters:
+        - in: path
+          name: recruiterId
+          required: true
+          schema:
+           type: integer
+      responses:
+        204:
+          description: An empty response is sent with a 204 status if deletion succeed.
+    put:
+      tags:
+      - Recruiters
+      summary: Modify an specific recruiter
+      description: A recruiterId must be passed through params.
+      parameters:
+        - in: path
+          name: recruiterId
+          required: true
+          schema:
+           type: integer
+      responses:
+        200:
+          description: An empty response is sent with a 200 status if update succeded.
+  /folders:
+    get:
+      tags:
+      - Folders
+      summary: Fetch all folders.
+      description: Returns all existing folders.
+      responses:
+        200:
+          description: a JSON array of folders.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    post:
+      tags:
+      - Folders
+      summary: Creates a new folder
+      description: No need any param or body. UUID is generated.
+      responses: 
+        201:
+          description: Create a new folder with a uuid
+          content: {}
+  /folders/{folderId}:
+    get:
+      tags:
+      - Folders
+      summary: Fetch an specific folder by id with all associated candidates.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer        
+      responses:
+        200:
+          description: a JSON object with folder details.
+          content: {}
+    put:
+      tags:
+      - Folders
+      summary: Update an specific folder by id.
+      description: folderId needs to be passed through params. Query params should include userId or recruiterId to associate to folder.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+        - in: query
+          name: recruiterId
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: userId
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: a JSON object with folder updated details.
+          content: {}
+    delete:
+      tags:
+      - Folders
+      summary: Delete an specific folder by id.
+      description: folderId needs to be passed through params.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+      responses:
+        204:
+          description: An empty response with status 204 is sent if deletion succeded.
+  /users:
+    post:
+      tags:
+      - Users
+      summary: Creates a new user
+      description: details need to be passed through body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                profilePicture:
+                  type: string
+                role:
+                 type: string
+      responses:
+        201:
+          description: a JSON object with the new user details.
+          content: {}
