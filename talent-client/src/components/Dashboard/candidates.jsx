@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import Paper from '@material-ui/core/Paper';
 import { useStyles } from './Styles/candidates.css.js';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { deleteCandidate, candidateById, candidateUpdate } from '../../redux/candidatesReducer/Action.js';
+import { deleteCandidate, getCandidateById, updateCandidate } from '../../redux/candidatesReducer/Action.js';
 import SaveIcon from '@material-ui/icons/Save';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
 
 function Candidates() {
   const candidates = useSelector(
@@ -92,7 +91,7 @@ function Candidates() {
 
   const handleClickOpen = (id, action) => {
     if (action === 'update') {
-      dispatch(candidateById(id));
+      dispatch(getCandidateById(id));
       setOpenUpdate(true);
     } else {
       setOpenDelete(true);
@@ -113,7 +112,7 @@ function Candidates() {
 
   const onClickUpdate = (e) => {
     e.preventDefault();
-    dispatch(candidateUpdate(candidateData));
+    dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
   };
 
