@@ -26,10 +26,8 @@ export function RecruiterForm() {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(values)
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/recruiters`,{values})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/recruiters`,values)
     .then((response) => {
-      console.log('reseponse axios ', response);
       return
     })
     .catch((error) => {
