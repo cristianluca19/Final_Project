@@ -4,7 +4,7 @@ import Candidates from './candidates';
 import { useStyle } from './Styles/index.css.js';
 import { Container, Grid } from '@material-ui/core';
 
-function Dashboard({ tableAction }) {
+function Dashboard({ componentToRender }) {
   const classes = useStyle();
 
   return (
@@ -20,7 +20,7 @@ function Dashboard({ tableAction }) {
         spacing={1}
         className={classes.containerRight}
       >
-        {tableAction === 'candidates' && <Candidates />}
+        {componentToRender === 'candidates' && <Candidates />}
       </Grid>
     </div>
   );
