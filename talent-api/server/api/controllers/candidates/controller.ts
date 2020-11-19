@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
@@ -84,7 +84,40 @@ export class CandidatesController {
     });
     res.status(200).json(candidates);
   }
-
+  async filter(req: Request, res: Response): Promise<void> {
+    const skills = req.query.skills || '';
+    const cohorts = req.query.cohorts || '';
+    const location = req.query.locations || '';
+    const skillsArray = skills ? skills.toString().split(',') : [];
+    const cohortArray = cohorts ? cohorts.toString().split(',') : [];
+    const locationArray = location ? location.toString().split(',') : [];
+    const query = {
+      where: {
+        cohort: cohortArray,
+        country: locationArray,
+      },
+      include: {
+        model: db.Skill,
+        where: {
+          name: skillsArray,
+        },
+      },
+    };
+    if (!skillsArray.length) delete query.include;
+    if (!cohortArray.length) delete query.where.cohort;
+    if (!locationArray.length) delete query.where.country;
+    if (!skillsArray.length && !cohortArray.length && !locationArray.length) {
+      res.sendStatus(204);
+    } else {
+      try {
+        const candidatesFiltered = await db.Candidate.findAll(query);
+        res.status(200).json(candidatesFiltered);
+      } catch (err) {
+        res.sendStatus(400);
+        throw err;
+      }
+    }
+  }
   async searchByProp(req: Request, res: Response): Promise<void> {
     const { search } = req.query;
     try {
