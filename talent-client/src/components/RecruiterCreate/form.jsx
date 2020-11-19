@@ -5,7 +5,7 @@ import { useStyles } from './styles.js';
 import axios from 'axios';
 import { ThemeProvider, Typography } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
-import Alert from '@material-ui/lab/Alert';
+import Notification from './notification';
 
 const initialValues = {
   contactName: '',
@@ -18,6 +18,7 @@ export function RecruiterForm() {
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(true);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
   const classes = useStyles();
 
 
@@ -31,7 +32,7 @@ export function RecruiterForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createRecruiter(values, setValues);
+    createRecruiter(values, setValues, notify, setNotify);
     return;
   };
 
@@ -97,6 +98,7 @@ export function RecruiterForm() {
           {(!errors || JSON.stringify(errors) !== JSON.stringify({})) ? 'Completar todos los campos' : 'Crear Recruiter'}
         </Button>
       </ThemeProvider>
+      <Notification notify={notify} setNotify={setNotify}/>
     </form>
   );
 }
@@ -105,17 +107,19 @@ export function RecruiterForm() {
 
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook,setHook) => {
+const createRecruiter = (hook,setHook,notify,setNotify) => {
   axios
     .post(`${process.env.REACT_APP_BACKEND_URL}/recruiters`, hook)
     .then((response) => {
       setHook(initialValues)
-      return (<Alert severity="success">Recruiter creado con éxito</Alert>)
+      setNotify({isOpen: true, message: 'Recruiter creado con éxito', type: 'success'})
+      return
 
     })
     .catch((error) => {
       console.log(error);
-      return (<Alert severity="error">Oops.. ocurrió un error.</Alert>);
+      setNotify({isOpen: true, message: 'Oops... ocurrió un error.', type: 'error'})
+      return 
     });
 }
 
