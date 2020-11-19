@@ -152,6 +152,34 @@ paths:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
+  /candidates/{candidateId}/update:
+    put:
+      tags:
+      - Candidates
+      summary: Updates data from a candidate. 
+      description: Updates any field of the Candidate model and returns the updated candidate.
+      parameters:
+        - in: path
+          name: candidateId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object that contains all the properties updated from a Candidate.
+          content:
+            application/json:
+              schema:
+                  type: object
   /candidates/{candidateId}/delete:
     delete:
       tags:
