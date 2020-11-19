@@ -25,7 +25,7 @@ describe('Recruiters', (): void => {
         siteUrl: 'www.google.com',
       };
       const response = await request(Server)
-        .post('/api/recruiters')
+        .post('/api/v1/recruiters')
         .send(newRecruiter);
       expect(response.body)
         .to.be.an('object')
@@ -49,7 +49,7 @@ describe('Recruiters', (): void => {
           siteUrl: 'www.BarcelonaFC.com',
         },
       ]);
-      const response = await request(Server).get('/api/recruiters');
+      const response = await request(Server).get('/api/v1/recruiters');
       expect(response.status).to.be.equal(200);
       expect(response.body).to.have.lengthOf(2);
     });
@@ -142,7 +142,7 @@ describe('Recruiters', (): void => {
       });
 
       const response = await request(Server).delete(
-        `/api/recruiters/${newRecruiter.id}`
+        `/api/v1/recruiters/${newRecruiter.id}`
       );
       expect(response.status).to.be.equal(204);
       const foundRecruiter = await db.Recruiter.findOne({
