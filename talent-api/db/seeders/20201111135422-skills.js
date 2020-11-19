@@ -2,7 +2,7 @@
 const faker = require('faker');
 
 const skills = {
-  hard: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
+  tech: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
   soft: ['compañerismo', 'trabajo en equipo', 'liderazgo', 'flexible'],
   other: ['Ruso', 'Ingles'],
 };
@@ -12,7 +12,7 @@ function mixer(skills) {
   let randomSkill = skillType[Math.floor(Math.random() * (skillType.length - 1))];
   let mix = {
     name:
-      skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
+    skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
     type: randomSkill,
     created_at: faker.date.past(),
     updated_at: faker.date.recent(),
@@ -20,6 +20,7 @@ function mixer(skills) {
   return mix;
 }
 
+console.log('holaaa ameo')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     let count = 20;
