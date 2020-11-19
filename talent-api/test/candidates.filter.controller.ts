@@ -99,7 +99,7 @@ describe('Filter', () => {
     const skillsTwo = {
       id: 2,
       name: 'react',
-      type: 'hard',
+      type: 'tech',
     };
     const skillsThree = {
       id: 3,
@@ -109,12 +109,12 @@ describe('Filter', () => {
     const skillsFour = {
       id: 4,
       name: 'html5',
-      type: 'hard',
+      type: 'tech',
     };
     const skillsFive = {
       id: 5,
       name: 'javascript',
-      type: 'hard',
+      type: 'tech',
     };
 
     const bodyFilterOne = {

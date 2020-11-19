@@ -149,6 +149,15 @@ paths:
       responses:
         200:
           description: A JSON array of candidate details
+    post:
+      tags:
+      - Candidates
+      summary: Bulk creates
+      description: TODO
+      responses:
+        200:
+          description: TODO
+          content: {}
   /candidates/filter:
     get:
       tags:
