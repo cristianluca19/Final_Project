@@ -3,7 +3,11 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+
 import { response } from 'express';
+
+import path from 'path';
+
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -14,7 +18,7 @@ describe('Candidates', () => {
     it('should get all candidates', async () => {
       await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-      const response = await request(Server).get('/api/candidates');
+      const response = await request(Server).get('/api/v1/candidates');
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('email')
@@ -27,7 +31,7 @@ describe('Candidates', () => {
     it('should be an array', async () => {
       await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-      const response = await request(Server).get('/api/candidates');
+      const response = await request(Server).get('/api/v1/candidates');
       expect(response.body).to.be.an('array');
     });
   });
@@ -41,12 +45,56 @@ describe('Candidates', () => {
       await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
       await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
       const response = await request(Server).get(
-        `/api/candidates/${candidate1.id}`
+        `/api/v1/candidates/${candidate1.id}`
       );
       expect(response.body)
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
       expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
+    });
+  });
+
+  describe('POST route transform csv file to json', () => {
+    it('should transform all candidates correctly', async () => {
+      const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
+      const response = await request(Server)
+        .post(`/api/candidates/csv`)
+        .set('Content-Type', 'multipart/form-data')
+        .attach('file', csvFile);
+      expect(response.body).to.be.an('array');
+      expect(response.body).to.have.lengthOf(4);
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('bryan@gmail.com');
+      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-04');
+    });
+  });
+
+  describe('POST route bulk candidates to database', () => {
+    it('should create all candidates correctly', async () => {
+      const candidates = [
+        {
+          email: 'leo@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'mati@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          email: 'bryan@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const response = await request(Server)
+        .post(`/api/candidates/`)
+        .send(candidates);
+      expect(response.body).to.be.an('array');
+      expect(response.body).to.have.lengthOf(3);
+      expect(response.body[1])
+        .to.have.property('email')
+        .to.be.equal('mati@gmail.com');
+      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
     });
   });
 
@@ -68,7 +116,7 @@ describe('Candidates', () => {
         visibility: 'unlisted',
       });
       const response = await request(Server).get(
-        `/api/candidates/filterBy/listed`
+        `/api/v1/candidates/filterBy/listed`
       );
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
@@ -99,7 +147,7 @@ describe('Candidates', () => {
         visibility: 'listed',
       });
       const response = await request(Server).get(
-        `/api/candidates/filterBy/unlisted`
+        `/api/v1/candidates/filterBy/unlisted`
       );
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
@@ -122,7 +170,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati12@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
       expect(response.body)
         .to.have.property('visibility')
@@ -136,7 +184,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati15@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'unlisted' });
       expect(response.body)
         .to.have.property('visibility')
@@ -150,7 +198,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati16@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'private' });
       expect(response.body)
         .to.have.property('visibility')
@@ -164,7 +212,7 @@ describe('Candidates', () => {
       });
       await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
       const response = await request(Server)
-        .put(`/api/candidates/${candidate1.id}/visibility`)
+        .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
       expect(response.body).to.have.property('id').to.be.equal(candidate1.id);
     });
@@ -179,7 +227,7 @@ describe('Candidates', () => {
       const folder1 = await db.Folder.create();
       await db.Folder.create();
       const response = await request(Server).post(
-        `/api/candidates/${folder1.id}/addCandidate/${candidate1.id}`
+        `/api/v1/candidates/${folder1.id}/addCandidate/${candidate1.id}`
       );
       expect(response.body[0])
         .to.have.property('folderId')
@@ -207,7 +255,7 @@ describe('Candidates', () => {
         include: db.Candidate,
       });
       await request(Server).delete(
-        `/api/candidates/${folder1.id}/removeCandidate/${candidate1.id}`
+        `/api/v1/candidates/${folder1.id}/removeCandidate/${candidate1.id}`
       );
       const relationDeleted = await db.Folder.findOne({
         where: {
