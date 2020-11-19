@@ -8,7 +8,7 @@ const status = ['unemployed', 'employed'];
 
 function fill() {
   let candidates = [];
-  for (let candidate = 1; candidate <= 20; candidate++){
+  for (let candidate = 1; candidate <= 22; candidate++){
     const randomStatus = status[Math.floor(Math.random() * status.length)];
     const randomVisbilty = visibility[Math.floor(Math.random() * visibility.length)];
     const bio = faker.lorem.paragraph().slice(0, 200);
