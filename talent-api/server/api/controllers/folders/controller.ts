@@ -3,13 +3,9 @@ import db from '../../../models';
 import uuid from 'uuidv4';
 
 export class foldersController {
-  async all(req: Request, res: Response, next: NextFunction): Promise<void> {
-    if (req.query.uuid) {
-      next();
-    } else {
-      const folders = await db.Folder.findAll();
-      res.status(200).json(folders);
-    }
+  async all(req: Request, res: Response): Promise<void> {
+    const folders = await db.Folder.findAll();
+    res.status(200).json(folders);
   }
 
   async byId(req: Request, res: Response): Promise<void> {
@@ -41,7 +37,7 @@ export class foldersController {
   async byUuid(req: Request, res: Response): Promise<void> {
     try {
       const folder = await db.Folder.findOne({
-        where: { uuid: req.query.uuid },
+        where: { uuid: req.params.uuid },
         attributes: ['id', 'uuid', 'recruiterId', 'opened'],
         include: [
           {
@@ -68,7 +64,7 @@ export class foldersController {
           },
         ],
       });
-      if (!folder.opened) await folder.update({ opened: true });
+      if (!folder.opened) folder.update({ opened: true });
       res.status(200).json(folder);
     } catch (error) {
       error.status = 400;

@@ -23,7 +23,7 @@ export function confirmFolder() {
 export function getDossierByUuid(uuid) {
   return async (dispatch) => {
     const dossier = await axios.get(
-      `${BACKEND_URL}/api/v1/folders?uuid=${uuid}`
+      `${BACKEND_URL}/folders/dossier/${uuid}`
     );
     dispatch({
       type: actions.GET_DOSSIER,
