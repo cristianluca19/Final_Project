@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../../../models';
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 import fs from 'fs';
 import { parse } from '@fast-csv/parse';
 
@@ -81,6 +83,36 @@ export class CandidatesController {
       },
     });
     res.status(200).json(candidates);
+  }
+
+  async searchByProp(req: Request, res: Response): Promise<void> {
+    const { search } = req.query;
+    try {
+      const candidates = await db.Candidate.findAll({
+        where: {
+          [Op.or]: [
+            {
+              firstName: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+            {
+              lastName: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+            {
+              email: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+          ],
+        },
+      });
+      res.status(200).json(candidates);
+    } catch (err) {
+      res.status(404).send(err.message);
+    }
   }
 }
 
