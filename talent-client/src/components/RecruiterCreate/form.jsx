@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useStyles } from './styles.js';
 import axios from 'axios';
-import { ThemeProvider, Typography } from '@material-ui/core';
+import { TextareaAutosize, ThemeProvider, Typography } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
 
@@ -35,7 +35,7 @@ export function RecruiterForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createRecruiter(values, setValues, notify, setNotify);
+    createRecruiter(values, setValues, setErrors, notify, setNotify);
     return;
   };
 
@@ -114,11 +114,12 @@ export function RecruiterForm() {
 
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook, setHook, notify, setNotify) => {
+const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
   axios
     .post(`${process.env.REACT_APP_BACKEND_URL}/recruiters`, hook)
     .then((response) => {
       setHook(initialValues);
+      setErrors(true);
       setNotify({
         isOpen: true,
         message: 'Recruiter creado con éxito',
