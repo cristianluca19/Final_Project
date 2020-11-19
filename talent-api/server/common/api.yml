@@ -18,16 +18,6 @@ tags:
 - name: Users
   description: list of user endpoints
 paths:
-  /candidates/csv:
-    post:
-      tags:
-      - Candidates
-      summary: csv
-      description: TODO
-      responses:
-        200:
-          description: A JSON array of objects... TODO
-          content: {}
   /candidates:
     get:
       tags:
@@ -187,6 +177,16 @@ paths:
       responses:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
+          content: {}
+  /candidates/csv:
+    post:
+      tags:
+      - Candidates
+      summary: csv
+      description: TODO
+      responses:
+        200:
+          description: A JSON array of objects... TODO
           content: {}
   /skills:
     post:
@@ -406,6 +406,12 @@ paths:
       - Folders
       summary: Fetch all folders.
       description: Returns all existing folders.
+      parameters:
+        - in: query
+          name: uuid
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: a JSON array of folders.
@@ -424,6 +430,22 @@ paths:
         201:
           description: Create a new folder with a uuid
           content: {}
+  /folders/dossier/{uuid}:
+    get:
+      tags:
+      - Folders
+      summary: Fetch an specific folder by uuid with all associated candidates, recruiter and user.
+      description: uuid needs to be passed through params. When you use this endpoint, the 'opened' will be set to true.
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+           type: string        
+      responses:
+        200:
+          description: a JSON object with the dossier important details and candidates
+          content: {}  
   /folders/{folderId}:
     get:
       tags:
