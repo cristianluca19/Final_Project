@@ -80,7 +80,6 @@ describe('Skills', () => {
         `/api/v1/skills/${skillTwo.id}`
       );
       expect(response.status).to.be.equal(200);
-      await db.Skill.findAll();
       const responseGet = await request(Server).get('/api/v1/skills');
       expect(responseGet.body).to.have.lengthOf(1);
       expect(responseGet.body[0]).to.have.property('name').to.be.equal('.NET');
