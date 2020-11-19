@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
-import { useSelector } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { deleteCandidate, getCandidateById, updateCandidate } from '../../redux/candidatesReducer/Action.js';
 import SaveIcon from '@material-ui/icons/Save';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination,
+TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
 
 const DEFAULT_ROWS_PER_PAGE = 30;
 
@@ -15,7 +16,7 @@ function Candidates() {
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
-  const classes = useStyles();  
+  const classes = useStyles();
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
@@ -45,15 +46,15 @@ function Candidates() {
   }, [candidates, candidate]);
 
   const columns = [
-    { id: 'id', label: 'ID', minWidth: 30 },
-    { id: 'firstName', label: 'FIRST NAME', minWidth: 100 },
-    { id: 'lastName', label: 'LAST NAME', minWidth: 100 },
-    { id: 'country', label: 'COUNTRY', minWidth: 80 },
-    { id: 'email', label: 'EMAIL', minWidth: 100 },
+    { id: 'id', label: 'ID', minWidth: 10 },
+    { id: 'firstName', label: 'FIRST NAME', minWidth: 60 },
+    { id: 'lastName', label: 'LAST NAME', minWidth: 60 },
+    { id: 'country', label: 'COUNTRY', minWidth: 180 },
+    { id: 'email', label: 'EMAIL', minWidth: 180 },
     { id: 'cohort', label: 'COHORTE', minWidth: 30, align: 'center' },
-    { id: 'visibility', label: 'VISIBILITY', minWidth: 60 },
-    { id: 'status', label: 'STATUS', minWidth: 60 },
-    { id: 'crud', label: '', minWidth: 50 },
+    { id: 'visibility', label: 'VISIBILITY', minWidth: 90 },
+    { id: 'status', label: 'STATUS', minWidth: 90 },
+    { id: 'iconUpdateDelete', label: '', minWidth: 60 },
   ];
 
   const rows = [];
@@ -70,7 +71,7 @@ function Candidates() {
           cohort: candidate.cohort,
           visibility: candidate.visibility,
           status: candidate.status,
-          crud: '',
+          iconUpdateDelete: '',
           key: candidate.id,
         });
       });
@@ -118,6 +119,151 @@ function Candidates() {
     setOpenUpdate(false);
   };
 
+  const dialogDeleteCandidate = () => (
+    <Dialog
+      open={openDelete}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {'¡Esta por eliminar un candidato!'}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Presione en el boton eliminar realizar la acción o de lo contrario en
+          cancelar.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => handleClose('delete')} color="primary">
+          Cancelar
+        </Button>
+        <Button
+          onClick={(e) => onClickDelete(e, idCandidate)}
+          color="primary"
+          autoFocus
+        >
+          Eliminar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  const modalUpdateCandidate = () => (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={classes.modal}
+      open={openUpdate}
+      onClose={() => handleClose('update')}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={openUpdate}>
+        <div className={classes.paper}>
+          <h1 className={classes.titleCandidates}>Modificar Usuario</h1>
+          <form
+            className={classes.formCandidates}
+            noValidate
+            autoComplete="off"
+          >
+            <Avatar
+              id="profilePicture"
+              alt="Remy Sharp"
+              src={candidateData.profilePicture}
+              className={classes.avatar}
+              value={candidateData.profilePicture}
+            />
+            <TextField
+              id="firstName"
+              label="Nombre"
+              value={candidateData.firstName}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="lastName"
+              label="Apellido"
+              value={candidateData.lastName}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="country"
+              label="Ciudad"
+              value={candidateData.country}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <br />
+            <TextField
+              id="email"
+              label="Email"
+              value={candidateData.email}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="linkedin"
+              label="LinkedIn"
+              value={candidateData.linkedin}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="github"
+              label="GitHub"
+              value={candidateData.github}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <br />
+            <TextField
+              id="visibility"
+              label="Visibilidad"
+              value={candidateData.visibility}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="status"
+              label="Estado"
+              value={candidateData.status}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <TextField
+              id="cohort"
+              label="Cohorte"
+              value={candidateData.cohort}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <br />
+            <br />
+            <TextField
+              id="miniBio"
+              label="Minibio"
+              multiline
+              rows={2}
+              value={candidateData.miniBio}
+              variant="outlined"
+              className={classes.miniBio}
+              onChange={(e) => handleInputCandidate(e)}
+            />
+            <br />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.button}
+              startIcon={<SaveIcon />}
+              onClick={(e) => onClickUpdate(e)}
+            >
+              Guardar
+            </Button>
+          </form>
+        </div>
+      </Fade>
+    </Modal>
+  );
+
   return (
     <Paper className={classes.root}>
       <h1>CANDIDATOS</h1>
@@ -150,7 +296,7 @@ function Candidates() {
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
-                          {column.id === 'crud' && (
+                          {column.id === 'iconUpdateDelete' && (
                             <ul className={classes.ulEditCondidate}>
                               <li className={classes.liEditCondidate}>
                                 <EditIcon
@@ -186,149 +332,8 @@ function Candidates() {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <div>
-        <Dialog
-          open={openDelete}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'¡Esta por eliminar un candidato!'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Presione en el boton eliminar realizar la acción o de lo contrario
-              en cancelar.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => handleClose('delete')} color="primary">
-              Cancelar
-            </Button>
-            <Button
-              onClick={(e) => onClickDelete(e, idCandidate)}
-              color="primary"
-              autoFocus
-            >
-              Eliminar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          className={classes.modal}
-          open={openUpdate}
-          onClose={() => handleClose('update')}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={openUpdate}>
-            <div className={classes.paper}>
-              <h1 className={classes.titleCandidates}>Modificar Usuario</h1>
-              <form
-                className={classes.formCandidates}
-                noValidate
-                autoComplete="off"
-              >
-                <Avatar
-                  id="profilePicture"
-                  alt="Remy Sharp"
-                  src={candidateData.profilePicture}
-                  className={classes.avatar}
-                  value={candidateData.profilePicture}
-                />
-                <TextField
-                  id="firstName"
-                  label="Nombre"
-                  value={candidateData.firstName}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="lastName"
-                  label="Apellido"
-                  value={candidateData.lastName}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="country"
-                  label="Ciudad"
-                  value={candidateData.country}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <br />
-                <TextField
-                  id="email"
-                  label="Email"
-                  value={candidateData.email}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="linkedin"
-                  label="LinkedIn"
-                  value={candidateData.linkedin}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="github"
-                  label="GitHub"
-                  value={candidateData.github}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <br />
-                <TextField
-                  id="visibility"
-                  label="Visibilidad"
-                  value={candidateData.visibility}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="status"
-                  label="Estado"
-                  value={candidateData.status}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <TextField
-                  id="cohort"
-                  label="Cohorte"
-                  value={candidateData.cohort}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <br />
-                <br />
-                <TextField
-                  id="miniBio"
-                  label="Minibio"
-                  multiline
-                  rows={2}
-                  value={candidateData.miniBio}
-                  variant="outlined"
-                  className={classes.miniBio}
-                  onChange={(e) => handleInputCandidate(e)}
-                />
-                <br />
-                <br />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  className={classes.button}
-                  startIcon={<SaveIcon />}
-                  onClick={(e) => onClickUpdate(e)}
-                >
-                  Guardar
-                </Button>
-              </form>
-            </div>
-          </Fade>
-        </Modal>
-      </div>
+      {dialogDeleteCandidate()}
+      {modalUpdateCandidate()}
     </Paper>
   );
 }

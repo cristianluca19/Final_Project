@@ -2,7 +2,7 @@ import React from 'react';
 import Menu from './menu';
 import Candidates from './candidates';
 import { useStyle } from './Styles/index.css.js';
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 function Dashboard({ componentToRender }) {
   const classes = useStyle();
