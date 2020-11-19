@@ -19,11 +19,11 @@ export const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 720,
   },
-  ulEditCondidate: {
+  ulEditCandidate: {
     listStyle: 'none',
     margin: 0,
   },
-  liEditCondidate: {
+  liEditCandidate: {
     float: 'left',
     paddingRight: 6,
   },
@@ -67,5 +67,11 @@ export const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontWeight: 100,
     fontSize: 40,
+  },
+  selectItems: {
+    float: 'left',
+  },
+  selectOptions: {
+    minWidth: 196,
   },
 }));

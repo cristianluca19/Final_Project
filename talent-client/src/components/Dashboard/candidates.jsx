@@ -7,7 +7,7 @@ import { deleteCandidate, getCandidateById, updateCandidate } from '../../redux/
 import SaveIcon from '@material-ui/icons/Save';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination,
 TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
+Modal, Backdrop, Fade, TextField, Avatar, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 const DEFAULT_ROWS_PER_PAGE = 30;
 
@@ -113,10 +113,18 @@ function Candidates() {
     });
   };
 
+  const handleSelectCandidate = (e, visibilityOrStatus) => {
+    setCandidateData({
+      ...candidateData,
+      [visibilityOrStatus]: e.target.value,
+    });
+  };
+
   const onClickUpdate = (e) => {
     e.preventDefault();
     dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
+
   };
 
   const dialogDeleteCandidate = () => (
@@ -216,18 +224,33 @@ function Candidates() {
               onChange={(e) => handleInputCandidate(e)}
             />
             <br />
-            <TextField
-              id="visibility"
-              label="Visibilidad"
-              value={candidateData.visibility}
-              onChange={(e) => handleInputCandidate(e)}
-            />
-            <TextField
-              id="status"
-              label="Estado"
-              value={candidateData.status}
-              onChange={(e) => handleInputCandidate(e)}
-            />
+            <div className={classes.selectItems}>
+              <InputLabel id='visibilityLabel'>Visibilidad</InputLabel>
+              <Select
+                labelId='Visibilidad'
+                id='visibility'
+                value={ candidateData.visibility }
+                onChange={(e) => handleSelectCandidate(e, 'visibility')}
+                className={classes.selectOptions}
+              >
+                <MenuItem value={'listed'} >Listed</MenuItem>
+                <MenuItem value={'unlisted'} >Unlisted</MenuItem>
+                <MenuItem value={'private'} >Private</MenuItem>
+              </Select>
+            </div>
+            <div className={classes.selectItems}>
+              <InputLabel id='visibilityLabel'>Estado</InputLabel>
+              <Select
+                labelId='Estado'
+                id='status'
+                value={ candidateData.status }
+                onChange={(e) => handleSelectCandidate(e, 'status')}
+                className={classes.selectOptions}
+              >
+                <MenuItem value={'employed'} >Employed</MenuItem>
+                <MenuItem value={'unemployed'} >Unemployed</MenuItem>
+              </Select>
+            </div>
             <TextField
               id="cohort"
               label="Cohorte"
@@ -297,15 +320,15 @@ function Candidates() {
                             ? column.format(value)
                             : value}
                           {column.id === 'iconUpdateDelete' && (
-                            <ul className={classes.ulEditCondidate}>
-                              <li className={classes.liEditCondidate}>
+                            <ul className={classes.ulEditCandidate}>
+                              <li className={classes.liEditCandidate}>
                                 <EditIcon
                                   onClick={() =>
                                     handleClickOpen(row.id, 'update')
                                   }
                                 />
                               </li>
-                              <li className={classes.liEditCondidate}>
+                              <li className={classes.liEditCandidate}>
                                 <DeleteIcon
                                   onClick={() =>
                                     handleClickOpen(row.id, 'delete')
