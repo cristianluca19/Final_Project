@@ -18,14 +18,17 @@ export function RecruiterForm() {
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(true);
-  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: '',
+    type: '',
+  });
   const classes = useStyles();
-
 
   // ====== HANDLERS ====== //
   const handleChange = (event) => {
     event.preventDefault();
-    const { id, value } = event.target
+    const { id, value } = event.target;
     setValues({ ...values, [id]: value });
     setErrors(validate({ ...values, [id]: value }));
   };
@@ -88,40 +91,51 @@ export function RecruiterForm() {
       </div>
       <ThemeProvider theme={henryTheme}>
         <Button
-          disabled={(!errors || JSON.stringify(errors) !== JSON.stringify({})) ? true : false}
+          disabled={
+            !errors || JSON.stringify(errors) !== JSON.stringify({})
+              ? true
+              : false
+          }
           className={classes.submitbtn}
           color="primary"
           variant="contained"
           type="submit"
           fullWidth
         >
-          {(!errors || JSON.stringify(errors) !== JSON.stringify({})) ? 'Completar todos los campos' : 'Crear Recruiter'}
+          {!errors || JSON.stringify(errors) !== JSON.stringify({})
+            ? 'Completar todos los campos'
+            : 'Crear Recruiter'}
         </Button>
       </ThemeProvider>
-      <Notification notify={notify} setNotify={setNotify}/>
+      <Notification notify={notify} setNotify={setNotify} />
     </form>
   );
 }
 
-
-
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook,setHook,notify,setNotify) => {
+const createRecruiter = (hook, setHook, notify, setNotify) => {
   axios
     .post(`${process.env.REACT_APP_BACKEND_URL}/recruiters`, hook)
     .then((response) => {
-      setHook(initialValues)
-      setNotify({isOpen: true, message: 'Recruiter creado con éxito', type: 'success'})
-      return
-
+      setHook(initialValues);
+      setNotify({
+        isOpen: true,
+        message: 'Recruiter creado con éxito',
+        type: 'success',
+      });
+      return;
     })
     .catch((error) => {
       console.log(error);
-      setNotify({isOpen: true, message: 'Oops... ocurrió un error.', type: 'error'})
-      return 
+      setNotify({
+        isOpen: true,
+        message: 'Oops... ocurrió un error.',
+        type: 'error',
+      });
+      return;
     });
-}
+};
 
 const validate = (input) => {
   let errors = {};

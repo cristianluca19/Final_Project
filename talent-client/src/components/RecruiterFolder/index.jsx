@@ -32,7 +32,7 @@ function RecruiterFolder() {
         setError(wrongPathError());
       });
   }, [uuid]);
-  console.log(recruiter)
+  console.log(recruiter);
 
   if (!folder.length) return error;
   return (
@@ -40,8 +40,7 @@ function RecruiterFolder() {
       <ThemeProvider theme={henryTheme}>
         <Typography color="primary" gutterBottom variant="h5" component="h2">
           Candidatos Seleccionados{' '}
-          {recruiter &&
-            Object.keys(recruiter).length
+          {recruiter && Object.keys(recruiter).length
             ? ` para: ${recruiter.contactName} - ${recruiter.company}`
             : `:`}
         </Typography>
@@ -71,10 +70,10 @@ function RecruiterFolder() {
 const wrongPathError = () => {
   return (
     <ThemeProvider theme={henryTheme}>
-      <img src={NotFound} alt='Sorry not found' height="auto" width="auto" />
+      <img src={NotFound} alt="Sorry not found" height="auto" width="auto" />
       <Typography color="primary" gutterBottom variant="body2">
         La página que estas buscando no existe o ha ocurrido un error.
-            </Typography>
+      </Typography>
       <Typography
         color="primary"
         gutterBottom
@@ -82,10 +81,10 @@ const wrongPathError = () => {
         style={{ paddingBottom: 50 }}
       >
         <Link href="/">Vuelve atrás</Link> o ponte en contacto con nuestro
-              staff.
-            </Typography>
+        staff.
+      </Typography>
     </ThemeProvider>
-  )
-}
+  );
+};
 
 export default RecruiterFolder;

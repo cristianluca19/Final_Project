@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStyles, theme } from './styles.js';
-import axios from 'axios';
 
 // MUI Components
 import Link from '@material-ui/core/Link';
