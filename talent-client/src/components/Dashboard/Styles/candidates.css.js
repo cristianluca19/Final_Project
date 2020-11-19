@@ -19,11 +19,11 @@ export const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 720,
   },
-  ulEditCondidate: {
+  ulEditCandidate: {
     listStyle: 'none',
     margin: 0,
   },
-  liEditCondidate: {
+  liEditCandidate: {
     float: 'left',
     paddingRight: 6,
   },
