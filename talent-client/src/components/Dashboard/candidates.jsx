@@ -297,15 +297,15 @@ function Candidates() {
                             ? column.format(value)
                             : value}
                           {column.id === 'iconUpdateDelete' && (
-                            <ul className={classes.ulEditCondidate}>
-                              <li className={classes.liEditCondidate}>
+                            <ul className={classes.ulEditCandidate}>
+                              <li className={classes.liEditCandidate}>
                                 <EditIcon
                                   onClick={() =>
                                     handleClickOpen(row.id, 'update')
                                   }
                                 />
                               </li>
-                              <li className={classes.liEditCondidate}>
+                              <li className={classes.liEditCandidate}>
                                 <DeleteIcon
                                   onClick={() =>
                                     handleClickOpen(row.id, 'delete')
