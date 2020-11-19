@@ -5,8 +5,9 @@ export enum USER_ROLES {
 }
 
 export enum SKILLS {
-  Hard = 'hard',
+  Tech = 'tech',
   Soft = 'soft',
+  Other = 'other',
 }
 
 export enum VISIBILITY {

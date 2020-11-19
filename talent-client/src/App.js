@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CsvToJson from './components/csvToJson/CsvToJson';
-import CandidateCard from './components/CandidateCard';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import './App.css';
 import ContentHome from './components/ContentHome/index';
 import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
-import Catalogue from './components/Catalogue/index';
 import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
+import RecruiterFolder from './components/RecruiterFolder';
+import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import './App.css';
 
 function App() {
   //==============================================================
@@ -31,10 +31,14 @@ function App() {
         />
         <Route path="/" render={() => <Nav />} />
       </Switch>
-      {/* <Route exact path="/" render={() => <CandidateCard/>}/> */}
-      <Route exact path="/csv" component={CsvToJson} />
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />
+      <Route exact path="/csv" component={CsvToJson} />
+      <Route exact path="/recruiters/add" render={() => <RecruiterCreate />} />
+      <Route exact path="/dossier/:uuid">
+        <ContentHome />
+        <RecruiterFolder render={({ match }) => match.params.uuid} />
+      </Route>
       <Switch>
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />

@@ -2,15 +2,17 @@
 const faker = require('faker');
 
 const skills = {
-  hard: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
+  tech: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
   soft: ['compañerismo', 'trabajo en equipo', 'liderazgo', 'flexible'],
+  other: ['Ruso', 'Ingles'],
 };
 
 function mixer(skills) {
-  let skillType = ['hard', 'soft'];
-  let randomSkill = skillType[Math.floor(Math.random() * 2)];
+  const skillType = Object.keys(skills);
+  let randomSkill = skillType[Math.floor(Math.random() * (skillType.length - 1))];
   let mix = {
-    name: skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
+    name:
+    skills[randomSkill][Math.floor(Math.random() * (randomSkill.length - 1))],
     type: randomSkill,
     created_at: faker.date.past(),
     updated_at: faker.date.recent(),
