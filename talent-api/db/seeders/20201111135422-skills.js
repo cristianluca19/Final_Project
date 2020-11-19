@@ -20,7 +20,6 @@ function mixer(skills) {
   return mix;
 }
 
-console.log('holaaa ameo')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     let count = 20;
