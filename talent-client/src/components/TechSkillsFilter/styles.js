@@ -18,6 +18,8 @@ export const getModalStyle = () => {
 export const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
     width: 400,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
@@ -49,6 +51,22 @@ export const useStyles = makeStyles((theme) => ({
     // border: 1px yellow solid,
   },
   checkIcon: {
-    fontSize: '1px'
-  }
+    fontSize: '1px',
+  },
+  divSkillsSelected: {
+    marginBottom: '100px',
+  },
+  divAllSkills: {
+    marginTop: '50px',
+  },
+  generalDiv: {
+    marginBottom: '40px',
+  },
+  inputLabel: {
+    marginBottom: '100px',
+  },
+  input: {
+    marginTop: '10px',
+    color: 'white',
+  },
 }));

@@ -65,7 +65,7 @@ const TechSkillsFilter = () => {
       skillsSelected.filter((skill) => skill !== e.target.value)
     );
     if (e.target.value) {
-      setAllSkills((oldSkills) => [e.target.value, ...oldSkills]);
+      setAllSkills((oldSkills) => [...oldSkills, e.target.value]);
     }
   };
 
@@ -80,8 +80,8 @@ const TechSkillsFilter = () => {
           onChange={handleSearchSkill}
         />
       </FormControl>
-      <div>
-        <div>
+      <div className={classes.generalDiv}>
+        <div className={classes.divSkillsSelected}>
           {skillsSelected &&
             skillsSelected.map((skill, index) => (
               <div key={index} style={{ float: 'left' }}>
@@ -99,7 +99,7 @@ const TechSkillsFilter = () => {
               </div>
             ))}
         </div>
-        <div>
+        <div className={classes.divAllSkills}>
           {allSkills.slice(0, 10).map((skill, index) => (
             <div
               key={index}
