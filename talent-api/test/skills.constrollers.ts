@@ -45,7 +45,7 @@ describe('Skills', () => {
         { name: '.NET', type: 'tech' },
         { name: 'Analitico', type: 'soft' },
         { name: 'Liderazgo', type: 'soft' },
-      ]
+      ];
       const skillsCreated = await db.Skill.bulkCreate(skills);
       const randomId = faker.helpers.randomize(skillsCreated).id;
       const response = await request(Server).get(`/api/v1/skills/${randomId}`);

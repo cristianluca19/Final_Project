@@ -56,7 +56,7 @@ describe('Candidates', () => {
     it('should transform all candidates correctly', async () => {
       const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
-        .post(`/api/candidates/csv`)
+        .post(`/api/v1/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
         .attach('file', csvFile);
       expect(response.body).to.be.an('array');
@@ -85,7 +85,7 @@ describe('Candidates', () => {
         },
       ];
       const response = await request(Server)
-        .post(`/api/candidates/`)
+        .post(`/api/v1/candidates`)
         .send(candidates);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(3);
@@ -116,6 +116,7 @@ describe('Candidates', () => {
       const response = await request(Server).get(
         `/api/v1/candidates/filterBy/listed`
       );
+
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('visibility')
@@ -147,6 +148,7 @@ describe('Candidates', () => {
       const response = await request(Server).get(
         `/api/v1/candidates/filterBy/unlisted`
       );
+
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
         .to.have.property('visibility')
@@ -157,6 +159,115 @@ describe('Candidates', () => {
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('seba@gmail.com');
+    });
+  });
+
+  describe('GET search candidates by specific props', () => {
+    it('should filter all candidates that match the query "firstName" property', async () => {
+      const candidate = await db.Candidate.create({
+        firstName: 'Leonardo',
+        lastName: 'Sbaraglia',
+        email: 'leosbar@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Leo',
+        lastName: 'Messi',
+        email: 'mesidiez@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Leonidas',
+        lastName: 'Spartano',
+        email: 'threehundred@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Luke',
+        lastName: 'Skywalker',
+        email: 'lastjedi@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Indian',
+        lastName: 'Jones',
+        email: 'indijones@gmail.com',
+        cohort: '5',
+      });
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'eo' });
+      expect(response.body).to.have.lengthOf(3);
+      expect(response.body[0])
+        .to.have.property('firstName')
+        .to.be.equal('Leonardo');
+      expect(response.body[1]).to.have.property('firstName').to.be.equal('Leo');
+      expect(response.body[2])
+        .to.have.property('firstName')
+        .to.be.equal('Leonidas');
+    });
+
+    it('should filter all candidates that match the query "lastName" property', async () => {
+      const candidate = await db.Candidate.create({
+        firstName: 'Leonardo',
+        lastName: 'Sbaraglia',
+        email: 'leosbar@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Luke',
+        lastName: 'Skywalker',
+        email: 'lastjedi@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Leah',
+        lastName: 'Sky',
+        email: 'princessleah@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Indian',
+        lastName: 'Jones',
+        email: 'indijones@gmail.com',
+        cohort: '5',
+      });
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'ky' });
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body[0])
+        .to.have.property('lastName')
+        .to.be.equal('Skywalker');
+      expect(response.body[1]).to.have.property('lastName').to.be.equal('Sky');
+    });
+
+    it('should filter an specific candidate by his "email" property', async () => {
+      const candidate = await db.Candidate.create({
+        firstName: 'Leonardo',
+        lastName: 'Sbaraglia',
+        email: 'leosbar@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Luke',
+        lastName: 'Skywalker',
+        email: 'lastjedi@gmail.com',
+        cohort: '4',
+      });
+      await db.Candidate.create({
+        firstName: 'Indian',
+        lastName: 'Jones',
+        email: 'indijones@gmail.com',
+        cohort: '5',
+      });
+      const response = await request(Server)
+        .get(`/api/v1/candidates/search`)
+        .query({ search: 'indijo' });
+      expect(response.body).to.have.lengthOf(1);
+      expect(response.body[0])
+        .to.have.property('email')
+        .to.be.equal('indijones@gmail.com');
     });
   });
 
