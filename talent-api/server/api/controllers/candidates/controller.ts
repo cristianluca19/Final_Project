@@ -112,7 +112,6 @@ export class CandidatesController {
       res.status(200).json(candidates);
     } catch (err) {
       res.status(404).send(err.message);
-      throw err;
     }
   }
 }
