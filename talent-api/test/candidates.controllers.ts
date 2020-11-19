@@ -270,6 +270,19 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
+  
+  describe('POST candidate', () => {
+    it('should create a new candidate', async () => {
+      const candidateTest={ email: 'cristianL@gmail.com', cohort: '5',}
+      const response = await request(Server)
+      .post('/api/v1/candidates/addCandidate')
+      .send(candidateTest);
+      console.log('response', response.status)
+      expect(response.status).to.be.equal(200);
+      expect(response.body[0].email).to.be.equal('cristianL@gmail.com');
+      expect(response.body[0].cohort).to.be.equal('5');
+    });
+  });
 
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
@@ -278,27 +291,14 @@ describe('Candidates', () => {
         cohort: '5',
       });
       const response = await request(Server).delete(
-        `/api/candidates/${candidate1.id}/delete`
+        `/api/v1/candidates/${candidate1.id}/delete`
       );
       const candidate = await db.Candidate.findOne({
         where: { email: 'cristianL@gmail.com', cohort: '5' },
       });
-      expect(response.status).to.be.equal(204);
+      expect(response.status).to.be.equal(200);
       expect(candidate).to.be.equal(null);
     });
   });
-
-  describe('POST candidate', () => {
-    it('should create a new candidate', async () => {
-      const response = await request(Server)
-        .post('/api/candidates/addCandidate')
-        .send({
-          email: 'cristianL@gmail.com',
-          cohort: '5',
-        });
-      expect(response.status).to.be.equal(200);
-      expect(response.body[0].email).to.be.equal('cristianL@getMaxListeners.com');
-      expect(response.body[0].cohort).to.be.equal('5');
-    });
-  });
+  
 });
