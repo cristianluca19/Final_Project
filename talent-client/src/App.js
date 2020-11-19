@@ -27,7 +27,7 @@ function App() {
         <Route exact path="/panel" render={() => <Dashboard />} />
         <Route
           path="/panel/candidates"
-          render={() => <Dashboard tableAction={'candidates'} />}
+          render={() => <Dashboard componentToRender={'candidates'} />}
         />
         <Route path="/" render={() => <Nav />} />
       </Switch>
