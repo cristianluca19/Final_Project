@@ -4,6 +4,7 @@ import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
 import path from 'path';
+import { getMaxListeners } from 'process';
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -295,6 +296,8 @@ describe('Candidates', () => {
           cohort: '5',
         });
       expect(response.status).to.be.equal(200);
+      expect(response.body[0].email).to.be.equal('cristianL@getMaxListeners.com');
+      expect(response.body[0].cohort).to.be.equal('5');
     });
   });
 });

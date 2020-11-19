@@ -80,8 +80,8 @@ export class CandidatesController {
     res.status(204).end();
   }
   async addCandidate(req: Request, res: Response): Promise<void> {
-    const body = req.body;
-    const candidate = await db.Candidate.create(body);
+    const userData = req.body;
+    const candidate = await db.Candidate.create(userData);
     res.status(200).json(candidate);
   }
   async byFilter(req: Request, res: Response): Promise<void> {
