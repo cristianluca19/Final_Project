@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStyles } from './styles.js';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import Swal from 'sweetalert2'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
@@ -36,6 +36,25 @@ function SkillsTable() {
     setOpen(false);
   };
 
+  const handleDelete = async () => {
+    const alert = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    })
+    if(alert.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+    }
+  }
+
 
   return (
     <div className={classes.container}>
@@ -55,13 +74,19 @@ function SkillsTable() {
                 >
                   <div className={classes.modal}>
                     <h1>Editar Skill</h1>
-                    <div>
-                      <input type='text' name='name' />
-                      <input type='submit' />
+                    <div className={classes.form}>
+                      <label className={classes.label}>Nombre:</label>
+                      <input className={classes.input} type='text' name='name' />
+                      <label for='type' className={classes.label}>Tipo:</label>
+                      <select className={classes.input} name='type' id='type'>
+                        <option value="Hard">Hard</option>
+                        <option value="Soft">Soft</option>
+                      </select>
+                      <input type='submit' className={classes.button} value='Guardar Cambios' />
                     </div>
                   </div>
                 </Modal>
-                <DeleteIcon className={classes.icon} onClick={handleOpen} />
+                <DeleteIcon className={classes.icon} onClick={handleDelete} />
               </div>
             </div>
           )}
@@ -73,7 +98,30 @@ function SkillsTable() {
           {softSKills.map(item =>
             <div className={classes.listItem}>
               <p className={classes.text}>{item.name}</p>
-              <MoreHorizIcon className={classes.icon} />
+              <div className={classes.iconContainer}>
+                <EditIcon className={classes.icon} onClick={() => {
+                  handleOpen(item.id);
+                }} />
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <div className={classes.modal}>
+                    <h1>Editar Skill</h1>
+                    <div className={classes.form}>
+                      <label className={classes.label}>Nombre:</label>
+                      <input className={classes.input} type='text' name='name' />
+                      <label for='type' className={classes.label}>Tipo:</label>
+                      <select className={classes.input} name='type' id='type'>
+                        <option value="Hard">Hard</option>
+                        <option value="Soft">Soft</option>
+                      </select>
+                      <input type='submit' className={classes.button} value='Guardar Cambios' />
+                    </div>
+                  </div>
+                </Modal>
+                <DeleteIcon className={classes.icon} onClick={handleDelete} />
+              </div>
             </div>
           )}
         </div>
