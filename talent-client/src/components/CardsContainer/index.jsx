@@ -4,17 +4,38 @@ import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector } from 'react-redux';
 import Paginator from '../Paginator';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function CardsContainer(props) {
   const classes = useStyles();
 
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
   // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
+  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const cardsMaxLimit = 30;
+
+  const handleCandidate = (event, candidate, folder, uuid, includes ) => {
+    event.preventDefault();
+    if (!uuid) {
+      if (!includes) {
+        AddCandidateToFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
+      } else {
+        RemoveCandidateFromFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
+      }
+    } else {
+      // TODO: Add functionality to contact candidate (mailto:)
+      return;
+    }
+  };
+
+  const includesCandidate = (id) => {
+    return selectedCandidates.includes(id);
+  };
 
   // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
 
@@ -33,9 +54,13 @@ function CardsContainer(props) {
           candidates.map(
             (candidate, index) =>
               index < cardsMaxLimit &&
-              candidate.visibility == 'listed' && (
+              candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
-                  <CandidateCard user={candidate} />
+                  <CandidateCard
+                    candidate={candidate}
+                    handleCandidate={handleCandidate}
+                    includes={includesCandidate(candidate.id)}
+                  />
                 </div>
               )
           )}
@@ -56,5 +81,43 @@ CardsContainer.propTypes = {
 CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
+
+
+const AddCandidateToFolder = (candidate,folder,hook,setHook) => {
+  axios
+  .post(
+    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+      folder ? folder.id : 1
+    }/addCandidate/${candidate}`
+  )
+  .then((response) => {
+    setHook([...hook, candidate]);
+    return;
+  })
+  .catch((error) => {
+    console.log(error.message);
+    return;
+  });
+}
+
+const RemoveCandidateFromFolder = (candidate,folder,hook,setHook) => {
+  axios
+  .delete(
+    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+      folder ? folder.id : 1
+    }/removeCandidate/${candidate}`
+  )
+  .then((response) => {
+    let newSelectedCandidates = hook.filter(
+      (eachCandidate) => eachCandidate !== candidate
+    );
+    setHook(newSelectedCandidates);
+    return;
+  })
+  .catch((error) => {
+    console.log(error.message);
+    return;
+  });
+}
 
 export default CardsContainer;

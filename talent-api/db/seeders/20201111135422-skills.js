@@ -2,6 +2,7 @@
 const faker = require('faker');
 
 const skills = {
+<<<<<<< HEAD
   tech: [
     'javascript',
     'react',
@@ -20,6 +21,9 @@ const skills = {
     'angular',
     'C#',
   ],
+=======
+  tech: ['javascript', 'react', 'html5', 'nodeJs', 'express', 'sequelize'],
+>>>>>>> main
   soft: ['compañerismo', 'trabajo en equipo', 'liderazgo', 'flexible'],
   other: ['Ruso', 'Ingles'],
 };
