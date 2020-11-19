@@ -84,11 +84,7 @@ describe('Candidates', () => {
         },
       ];
       const response = await request(Server)
-<<<<<<< HEAD
-        .post(`/api/v1/candidates/`)
-=======
         .post(`/api/v1/candidates`)
->>>>>>> main
         .send(candidates);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(3);
