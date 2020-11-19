@@ -28,6 +28,7 @@ function CandidateCard(props) {
 
   const classes = useStyles();
 
+  console.log(includes)
   // HANDLERS //
   const handleContactCandidate = () => {
     //TODO: add function to send :mailto
@@ -92,7 +93,7 @@ function CandidateCard(props) {
                     edge="start"
                     onClick={(event) => {
                       handleCandidate
-                        ? handleCandidate(event, candidate.id, uuid, includes)
+                        ? handleCandidate(event, candidate.id, folder, uuid, includes)
                         : handleContactCandidate(event);
                     }}
                   >

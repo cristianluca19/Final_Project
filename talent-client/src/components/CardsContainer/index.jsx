@@ -19,42 +19,13 @@ function CardsContainer(props) {
 
   const cardsMaxLimit = 30;
 
-  const handleCandidate = (event, candidate, uuid, includes) => {
+  const handleCandidate = (event, candidate, folder, uuid, includes ) => {
     event.preventDefault();
     if (!uuid) {
       if (!includes) {
-        axios
-          .post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
-              folder ? folder.id : 1
-            }/addCandidate/${candidate}`
-          )
-          .then((response) => {
-            setSelectedCandidates([...selectedCandidates, candidate]);
-            return;
-          })
-          .catch((error) => {
-            console.log(error.message);
-            return;
-          });
+        AddCandidateToFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
       } else {
-        axios
-          .delete(
-            `${process.env.REACT_APP_BACKEND_URL}/api/v1/candidates/${
-              folder ? folder.id : 1
-            }/removeCandidate/${candidate}`
-          )
-          .then((response) => {
-            let newSelectedCandidates = selectedCandidates.filter(
-              (eachCandidate) => eachCandidate !== candidate
-            );
-            setSelectedCandidates(newSelectedCandidates);
-            return;
-          })
-          .catch((error) => {
-            console.log(error.message);
-            return;
-          });
+        RemoveCandidateFromFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -110,5 +81,43 @@ CardsContainer.propTypes = {
 CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
+
+
+const AddCandidateToFolder = (candidate,folder,hook,setHook) => {
+  axios
+  .post(
+    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+      folder ? folder.id : 1
+    }/addCandidate/${candidate}`
+  )
+  .then((response) => {
+    setHook([...hook, candidate]);
+    return;
+  })
+  .catch((error) => {
+    console.log(error.message);
+    return;
+  });
+}
+
+const RemoveCandidateFromFolder = (candidate,folder,hook,setHook) => {
+  axios
+  .delete(
+    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+      folder ? folder.id : 1
+    }/removeCandidate/${candidate}`
+  )
+  .then((response) => {
+    let newSelectedCandidates = hook.filter(
+      (eachCandidate) => eachCandidate !== candidate
+    );
+    setHook(newSelectedCandidates);
+    return;
+  })
+  .catch((error) => {
+    console.log(error.message);
+    return;
+  });
+}
 
 export default CardsContainer;
