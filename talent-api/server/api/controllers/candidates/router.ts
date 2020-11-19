@@ -9,6 +9,7 @@ export default express
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
   .get('/filter', candidatesController.filter)
+  .get('/search', candidatesController.searchByProp)
   .put('/:candidateId/visibility', candidatesController.updateById)
   .get('/:candidateId', candidatesController.byId)
   .post(

@@ -6,7 +6,6 @@ const visibility = ['unlisted', 'listed'];
 
 const status = ['unemployed', 'employed'];
 
-
 function fill() {
   let candidates = [];
   for (let candidate = 1; candidate <= 22; candidate++){
