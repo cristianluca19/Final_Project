@@ -20,22 +20,6 @@ function fill() {
   }
   return folders;
 }
-
-// function relationCandidatesFolders() {
-//   let random;
-//   for (let i = 1; i < array.length; i++) {
-//     random = faker.number.random(14);
-//     folder_candidates.push({
-//       folder_id: random,
-//       candidate_id: random,
-//     });
-//   }
-//   // for (let j = 0; j < array.length; j++) {
-//   // }
-//   // if (!folder_candidates.includes(random) && i !==1){
-//   // }
-//   return folder_candidates;
-// }
 function relationCandidatesFolders() {
   const folder_candidates = [];
   let count = 0;

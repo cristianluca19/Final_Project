@@ -3,7 +3,7 @@ const faker = require('faker');
 
 function fill() {
   let recruiters = [];
-  for (let recruiter = 1; recruiter <= 15; recruiter++){
+  for (let id = 1; id <= 15; id++){
     recruiters.push({
       contact_name: faker.name.firstName(),
       email: faker.internet.email(),

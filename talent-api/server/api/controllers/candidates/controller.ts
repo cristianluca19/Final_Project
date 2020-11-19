@@ -85,7 +85,6 @@ export class CandidatesController {
     res.status(200).json(candidates);
   }
   async filter(req: Request, res: Response): Promise<void> {
-    // const { skillsArray, cohortArray, locationArray } = req.body;
     const skills = req.query.skills || '';
     const cohorts = req.query.cohorts || '';
     const location = req.query.locations || '';
