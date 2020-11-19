@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useStyles } from './styles.js';
 import axios from 'axios';
-import { TextareaAutosize, ThemeProvider, Typography } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
 
@@ -46,7 +46,7 @@ export function RecruiterForm() {
           error={errors.contactName ? true : false}
           label="Nombre completo del contacto"
           variant="filled"
-          helperText="Campo Requerido"
+          helperText={errors.contactName ? "Campo Requerido" : null}
           fullWidth
           id={'contactName'}
           value={values.contactName}
@@ -58,7 +58,7 @@ export function RecruiterForm() {
           error={errors.email ? true : false}
           label="Email"
           variant="filled"
-          helperText="Campo Requerido"
+          helperText={errors.email ? "Campo Requerido" : null}
           fullWidth
           id={'email'}
           value={values.email}
@@ -69,7 +69,7 @@ export function RecruiterForm() {
         <TextField
           error={errors.company ? true : false}
           label="Empresa"
-          helperText="Campo Requerido"
+          helperText={errors.company ? "Campo Requerido" : null}
           variant="filled"
           fullWidth
           id={'company'}
@@ -81,7 +81,7 @@ export function RecruiterForm() {
         <TextField
           error={errors.siteUrl ? true : false}
           label="Web"
-          helperText="Campo Requerido"
+          helperText={errors.siteUrl ? "Campo Requerido" : null}
           variant="filled"
           fullWidth
           id={'siteUrl'}
