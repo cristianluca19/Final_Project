@@ -13,6 +13,7 @@ import Dashboard from './components/Dashboard';
 import Menu from './components/Dashboard/menu';
 import Candidates from './components/Dashboard/candidates';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import TechSkillsFilter from './components/TechSkillsFilter/TechSkillsFilter';
 
 function App() {
   //==============================================================
@@ -39,6 +40,7 @@ function App() {
       </Switch>
       <Route path="/panel" render={() => <Menu />} />
       <Route exact path="/panel/candidates" render={() => <Candidates />} />
+      <Route exact path="/techSkillFilter" render={() => <TechSkillsFilter />} />
     </div>
   );
 }
