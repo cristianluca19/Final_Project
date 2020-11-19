@@ -22,32 +22,17 @@ function RecruiterFolder() {
   useEffect(() => {
     dispatch(getDossierByUuid(uuid)); // por si sirve a futuro...
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/folders?uuid=${uuid}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/folders/dossier/${uuid}`)
       .then((response) => {
         setRecruiter(response.data.recruiter);
         setFolder(response.data.candidates);
         return;
       })
       .catch((error) => {
-        setError(
-          <ThemeProvider theme={henryTheme}>
-            <img src={NotFound} height="auto" width="auto" />
-            <Typography color="primary" gutterBottom variant="body2">
-              La página que estas buscando no existe o ha ocurrido un error.
-            </Typography>
-            <Typography
-              color="primary"
-              gutterBottom
-              variant="body2"
-              style={{ paddingBottom: 50 }}
-            >
-              <Link href="/">Vuelve atrás</Link> o ponte en contacto con nuestro
-              staff.
-            </Typography>
-          </ThemeProvider>
-        );
+        setError(wrongPathError());
       });
   }, [uuid]);
+  console.log(recruiter)
 
   if (!folder.length) return error;
   return (
@@ -55,7 +40,8 @@ function RecruiterFolder() {
       <ThemeProvider theme={henryTheme}>
         <Typography color="primary" gutterBottom variant="h5" component="h2">
           Candidatos Seleccionados{' '}
-          {Object.keys(recruiter).length
+          {recruiter &&
+            Object.keys(recruiter).length
             ? ` para: ${recruiter.contactName} - ${recruiter.company}`
             : `:`}
         </Typography>
@@ -80,6 +66,26 @@ function RecruiterFolder() {
       </ThemeProvider>
     </Container>
   );
+}
+
+const wrongPathError = () => {
+  return (
+    <ThemeProvider theme={henryTheme}>
+      <img src={NotFound} alt='Sorry not found' height="auto" width="auto" />
+      <Typography color="primary" gutterBottom variant="body2">
+        La página que estas buscando no existe o ha ocurrido un error.
+            </Typography>
+      <Typography
+        color="primary"
+        gutterBottom
+        variant="body2"
+        style={{ paddingBottom: 50 }}
+      >
+        <Link href="/">Vuelve atrás</Link> o ponte en contacto con nuestro
+              staff.
+            </Typography>
+    </ThemeProvider>
+  )
 }
 
 export default RecruiterFolder;
