@@ -9,6 +9,8 @@ servers:
 tags:
 - name: Candidates
   description: list of candidate endpoints
+- name: Skills
+  description: list of skill endpoints
 - name: Recruiters
   description: list of recruiter endpoints
 - name: Folders
@@ -143,6 +145,132 @@ paths:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
+  /skills:
+    post:
+      tags:
+      - Skills
+      summary: Create one skill.
+      description: Create a Skill so that it can be added to a Candidate. By default it has no type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object with the skill name and id.
+          content:
+            application/json:
+              schema:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    get:
+      tags:
+      - Skills
+      summary: Fetch all skills
+      description: Returns a list with all skills that includes id, name and type.
+      responses:
+        200:
+          description: A JSON array of skills
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+  /skills/{skillId}:
+    get:
+      tags:
+      - Skills
+      summary: Fetch an specific skill by id.
+      description: Return a Skill that includes id, name and type.
+      parameters:
+        - in: path
+          name: skillId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with the skill details
+          content: {}
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    delete:
+      tags:
+      - Skills
+      summary: removes skill from database.
+      description: Deletes a skill and shows "Skill deleted" if it is successful
+      parameters:
+      - in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: Shows "Skill deleted".
+          content: {}
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    put:
+      tags:
+      - Skills
+      summary: Updates one skill.
+      description: Updates a skill and return the skill that was updated which includes id, name and type.
+      parameters:
+        - in: path
+          name: skillId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object with the skill name and id.
+          content:
+            application/json:
+              schema:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
   /recruiters:
     get:
       tags:
