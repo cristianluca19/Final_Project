@@ -27,8 +27,6 @@ function CandidateCard(props) {
   const labelsMaxLimit = 8;
 
   const classes = useStyles();
-
-  console.log(includes)
   // HANDLERS //
   const handleContactCandidate = () => {
     //TODO: add function to send :mailto
@@ -227,6 +225,7 @@ CandidateCard.defaultProps = {
   },
   folder: {
     id: 1,
+    mock: true,
     recruiter: {
       contactName: 'Tim Cook',
       email: 'Cookingwithtim@apple.com',

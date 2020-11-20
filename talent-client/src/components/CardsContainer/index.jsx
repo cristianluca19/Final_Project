@@ -1,16 +1,30 @@
 import PropTypes from 'prop-types';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Typography, ThemeProvider, Button } from '@material-ui/core';
+import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Paginator from '../Paginator';
 import React, { useState } from 'react';
 import axios from 'axios';
+import Notification from '../RecruiterCreate/notification';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+import { newFolder } from '../../redux/foldersReducer/Action.js';
+
+const MySwal = withReactContent(Swal)
 
 function CardsContainer(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [selectedCandidates, setSelectedCandidates] = useState([]);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: '',
+    type: '',
+  });
+
   // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
@@ -19,13 +33,17 @@ function CardsContainer(props) {
 
   const cardsMaxLimit = 30;
 
-  const handleCandidate = (event, candidate, folder, uuid, includes ) => {
+  const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
+    if(folder.mock) {
+      noActiveFolder(dispatch);
+      return
+    }
     if (!uuid) {
       if (!includes) {
-        AddCandidateToFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
+        AddCandidateToFolder(candidate, folder, selectedCandidates, setSelectedCandidates, setNotify)
       } else {
-        RemoveCandidateFromFolder(candidate,folder,selectedCandidates,setSelectedCandidates)
+        RemoveCandidateFromFolder(candidate, folder, selectedCandidates, setSelectedCandidates, setNotify)
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -38,9 +56,19 @@ function CardsContainer(props) {
   };
 
   // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
-
+  console.log(folder)
   return (
     <Container className={classes.container} maxWidth="xl">
+      { folder &&
+        <ThemeProvider theme={henryTheme}>
+          <Grid container row>
+            <Typography color='primary'>
+               {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' ' }`}
+            </Typography>
+            {!folder.company && <Button className={classes.newFolderButton} color='primary' variant='contained'>Asignar Recruiter</Button>}
+          </Grid>
+        </ThemeProvider>
+      }
       <Grid
         className={classes.paddingCandidates}
         container
@@ -60,6 +88,7 @@ function CardsContainer(props) {
                     candidate={candidate}
                     handleCandidate={handleCandidate}
                     includes={includesCandidate(candidate.id)}
+                    folder={folder}
                   />
                 </div>
               )
@@ -70,6 +99,7 @@ function CardsContainer(props) {
           <Paginator />
         </Grid>
       )}
+      <Notification notify={notify} setNotify={setNotify} />
     </Container>
   );
 }
@@ -83,41 +113,76 @@ CardsContainer.defaultProps = {
 };
 
 
-const AddCandidateToFolder = (candidate,folder,hook,setHook) => {
+const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
-  .post(
-    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-      folder ? folder.id : 1
-    }/addCandidate/${candidate}`
-  )
-  .then((response) => {
-    setHook([...hook, candidate]);
-    return;
-  })
-  .catch((error) => {
-    console.log(error.message);
-    return;
-  });
+    .post(
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
+      }/addCandidate/${candidate}`
+    )
+    .then((response) => {
+      setHook([...hook, candidate]);
+      AlertCandidate.fire({
+        icon: 'success',
+        title: 'Candidato agregado...'
+      })
+      return;
+    })
+    .catch((error) => {
+      setNotify({ isOpen: true, message: 'Oops... ocurrió un error', type: 'error' })
+      return;
+    });
 }
 
-const RemoveCandidateFromFolder = (candidate,folder,hook,setHook) => {
+const RemoveCandidateFromFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
-  .delete(
-    `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-      folder ? folder.id : 1
-    }/removeCandidate/${candidate}`
-  )
-  .then((response) => {
-    let newSelectedCandidates = hook.filter(
-      (eachCandidate) => eachCandidate !== candidate
-    );
-    setHook(newSelectedCandidates);
-    return;
-  })
-  .catch((error) => {
-    console.log(error.message);
-    return;
-  });
+    .delete(
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
+      }/removeCandidate/${candidate}`
+    )
+    .then((response) => {
+      let newSelectedCandidates = hook.filter(
+        (eachCandidate) => eachCandidate !== candidate
+      );
+      setHook(newSelectedCandidates);
+      AlertCandidate.fire({
+        icon: 'error',
+        title: 'Candidato removido...'
+      })
+      return;
+    })
+    .catch((error) => {
+      setNotify({ isOpen: true, message: 'Oops... ocurrió un error', type: 'error' })
+      return;
+    });
 }
+
+const AlertCandidate = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 1500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+const noActiveFolder = (dispatch) => {Swal.fire({
+  title: 'No tienes niguna carpeta activa, quieres crearla?',
+  showDenyButton: true,
+  confirmButtonText: `Crear`,
+  denyButtonText: `Cancelar`,
+}).then((result) => {
+  if (result.isConfirmed) {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+    .then((response) => {
+      dispatch(newFolder(response.data));
+      Swal.fire('Carpeta Creada!', `id: ${response.data.folder.id} - ${response.data.folder.uuid}`, 'success')
+    })
+  } else if (result.isDenied) {
+    return
+  }
+})}
 
 export default CardsContainer;

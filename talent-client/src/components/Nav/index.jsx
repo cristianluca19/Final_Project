@@ -8,6 +8,7 @@ import Settings from '@material-ui/icons/Settings';
 import Menu from './menu.jsx';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
+import Modal from '@material-ui/core/Modal';
 
 const useStyle = makeStyles({
   logo: {
@@ -22,14 +23,16 @@ const useStyle = makeStyles({
   },
 });
 
-function Nav() {
+function Nav({ location }) {
+
+
   const dispatch = useDispatch();
   const classes = useStyle();
 
   const HandleAddFolder = async (event) => {
     try {
       const nFolder = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/v1/folders`
+        `${process.env.REACT_APP_BACKEND_URL}/folders`
       );
       dispatch(newFolder(nFolder.data));
       return window.alert('Carpeta creada con éxito');
@@ -43,11 +46,12 @@ function Nav() {
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid container item xs={3} sm={3} spacing={3}>
-            <img className={classes.logo} src={logo} />
+            <img className={classes.logo} alt='Henry Logo' src={logo} />
           </Grid>
-          <Grid container item xs={6} sm={6} spacing={3}>
+          {!checkDossierRoute(location) && <Grid container item xs={6} sm={6} spacing={3}>
             <Menu />
-          </Grid>
+          </Grid>}
+          {!checkDossierRoute(location) && 
           <Grid
             className={classes.containerIcons}
             container
@@ -78,11 +82,19 @@ function Nav() {
             >
               <Settings />
             </IconButton>
-          </Grid>
+          </Grid>}
         </Grid>
       </Container>
     </nav>
   );
+}
+
+const checkDossierRoute = (url) => {
+  if (url.slice(0, 9).toLowerCase() === '/dossier/') {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export default Nav;

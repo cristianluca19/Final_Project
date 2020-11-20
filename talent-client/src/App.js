@@ -27,7 +27,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route path="/panel" render={() => <Dashboard />} />
-        <Route path="/" render={() => <Nav />} />
+        <Route path="/" render={({location}) => <Nav location={location.pathname}/>} />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />
