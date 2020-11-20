@@ -13,6 +13,7 @@ import Skills from './components/SkillsTable/index'
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import { getAllSkills } from './redux/skillsReducer/Action'
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
   // to lower loading times if candidate number is too high...
   dispatch(getAllCandidates());
+  dispatch(getAllSkills());
 
   return (
     <div className="App">

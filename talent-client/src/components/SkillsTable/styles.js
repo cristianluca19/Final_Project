@@ -10,13 +10,40 @@ export const useStyles = makeStyles((theme) => ({
   list: {
     width: '17vw',
     height: 'min-content',
-    marginTop: '10vh'
+    marginTop: '30vh'
   },
   title: {
     textAlign: 'left'
   },
-  listItems: {
-    backgroundColor: '#FFFAFA'
+  techListItems: {
+    backgroundColor: '#FFFAFA',
+  },
+  techListScroll: {
+    backgroundColor: '#FFFAFA',
+    overflowX: 'hidden',
+    overflow: 'scroll',
+    minHeight: 'min-content',
+    maxHeight: 300,
+  },
+  softListItems: {
+    backgroundColor: '#FFFAFA',
+  },
+  softListScroll: {
+    backgroundColor: '#FFFAFA',
+    overflowX: 'hidden',
+    overflow: 'scroll',
+    minHeight: 'min-content',
+    maxHeight: 300,
+  },
+  otherListItems: {
+    backgroundColor: '#FFFAFA',
+  },
+  otherListScroll: {
+    backgroundColor: '#FFFAFA',
+    overflowX: 'hidden',
+    overflow: 'scroll',
+    minHeight: 'min-content',
+    maxHeight: 300,
   },
   listItem: {
     display: 'flex',
@@ -24,7 +51,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   text: {
     marginLeft: '0.5vw',
-    fontSize: '18px'
+    fontSize: '18px',
+    textTransform: 'capitalize',
   },
   icon: {
     marginRight: '0.5vw',
