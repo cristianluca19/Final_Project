@@ -8,8 +8,10 @@ export default express
   .post('/', candidatesController.bulkCreateCandidate)
   .get('/', candidatesController.all)
   .get('/filterBy/:visibility', candidatesController.byFilter)
+  .get('/filter', candidatesController.filter)
   .get('/search', candidatesController.searchByProp)
   .put('/:candidateId/visibility', candidatesController.updateById)
+  .put('/:candidateId/update', candidatesController.updateByIdCandidate)
   .get('/:candidateId', candidatesController.byId)
   .post(
     '/:folderId/addCandidate/:candidateId',

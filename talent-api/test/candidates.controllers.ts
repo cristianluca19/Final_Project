@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+import { response } from 'express';
 import path from 'path';
 import { getMaxListeners } from 'process';
 import { response } from 'express';
@@ -381,6 +382,7 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
+
   
   describe('POST candidate', () => {
     it('should create a new candidate', async () => {
@@ -392,6 +394,42 @@ describe('Candidates', () => {
       expect(response.status).to.be.equal(200);
       expect(response.body[0].email).to.be.equal('cristianL@gmail.com');
       expect(response.body[0].cohort).to.be.equal('5');
+
+
+  describe('PUT update candidate', () => {
+    it('should update one candidate', async () => {
+      const candidates = [
+        {
+          firstName: 'Matias',
+          email: 'matifu@gmail.com',
+          cohort: 'wft-07',
+        },
+        {
+          firstName: 'Diego',
+          email: 'diego@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          firstName: 'Cristian',
+          email: 'cristian@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const candidatesList = await db.Candidate.bulkCreate(candidates);
+      const response = await request(Server)
+        .put(`/api/v1/candidates/${candidatesList[1].dataValues.id}/update`)
+        .send({
+          firstName: 'Dieguito',
+          email: 'DiegoSoyHenry@gmail.com',
+          cohort: 'wft-04',
+        });
+      const candidateUpdated = await db.Candidate.findByPk(
+        candidatesList[1].dataValues.id
+      );
+      expect(candidateUpdated)
+        .to.have.property('email')
+        .to.be.equal('DiegoSoyHenry@gmail.com');
+
     });
   });
 
@@ -407,9 +445,27 @@ describe('Candidates', () => {
       const candidate = await db.Candidate.findOne({
         where: { email: 'cristianL@gmail.com', cohort: '5' },
       });
+
       expect(response.status).to.be.equal(200);
       expect(candidate).to.be.equal(null);
     });
   });
   
+
+      expect(response.status).to.be.equal(204);
+      expect(candidate).to.be.equal(null);
+    });
+  });
+
+  describe('POST candidate', () => {
+    it('should create a new candidate', async () => {
+      const response = await request(Server)
+        .post('/api/v1/candidates/addCandidate')
+        .send({
+          email: 'cristianL@gmail.com',
+          cohort: '5',
+        });
+      expect(response.status).to.be.equal(200);
+    });
+  });
 });
