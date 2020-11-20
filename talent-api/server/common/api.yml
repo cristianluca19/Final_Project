@@ -9,6 +9,8 @@ servers:
 tags:
 - name: Candidates
   description: list of candidate endpoints
+- name: Skills
+  description: list of skill endpoints
 - name: Recruiters
   description: list of recruiter endpoints
 - name: Folders
@@ -31,6 +33,38 @@ paths:
                 type: array
                 items:
                   type: object
+    post:
+      tags:
+      - Candidates
+      summary: Bulk creates
+      description: TODO
+      responses:
+        200:
+          description: TODO
+          content: {}
+  /candidates/search:
+    get:
+      tags:
+      - Candidates
+      summary: Fetch all candidates filtered by props
+      description: returns a list off candidates whome props match the querys
+      parameters: 
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: A JSON array of candidates 
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        404:
+          description: Not Found
   /candidates/{candidateId}:
     get:
       tags:
@@ -143,6 +177,178 @@ paths:
         200:
           description: An empty body is sent with the status code 200 if the removal succeded.
           content: {}
+  /candidates/csv:
+    post:
+      tags:
+      - Candidates
+      summary: csv
+      description: TODO
+      responses:
+        200:
+          description: A JSON array of objects... TODO
+          content: {}
+  /candidates/filter:
+    get:
+      tags:
+      - Candidates
+      summary: Fetch all candidates filtered
+      description: returns a list with candidates whose skills, cohorts and location was specify by query
+      parameters: 
+        - in: query
+          name: cohorts
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skills
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: locations
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: A JSON array of candidates 
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        204: 
+          description: Error if queries are empty
+          
+        400:
+          description: Bad request error
+  /skills:
+    post:
+      tags:
+      - Skills
+      summary: Create one skill.
+      description: Create a Skill so that it can be added to a Candidate. By default it has no type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object with the skill name and id.
+          content:
+            application/json:
+              schema:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    get:
+      tags:
+      - Skills
+      summary: Fetch all skills
+      description: Returns a list with all skills that includes id, name and type.
+      responses:
+        200:
+          description: A JSON array of skills
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+  /skills/{skillId}:
+    get:
+      tags:
+      - Skills
+      summary: Fetch an specific skill by id.
+      description: Return a Skill that includes id, name and type.
+      parameters:
+        - in: path
+          name: skillId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with the skill details
+          content: {}
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    delete:
+      tags:
+      - Skills
+      summary: removes skill from database.
+      description: Deletes a skill and shows "Skill deleted" if it is successful
+      parameters:
+      - in: path
+        name: skillId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: Shows "Skill deleted".
+          content: {}
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
+    put:
+      tags:
+      - Skills
+      summary: Updates one skill.
+      description: Updates a skill and return the skill that was updated which includes id, name and type.
+      parameters:
+        - in: path
+          name: skillId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object with the skill name and id.
+          content:
+            application/json:
+              schema:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
   /recruiters:
     get:
       tags:
@@ -235,6 +441,12 @@ paths:
       - Folders
       summary: Fetch all folders.
       description: Returns all existing folders.
+      parameters:
+        - in: query
+          name: uuid
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: a JSON array of folders.
@@ -253,6 +465,22 @@ paths:
         201:
           description: Create a new folder with a uuid
           content: {}
+  /folders/dossier/{uuid}:
+    get:
+      tags:
+      - Folders
+      summary: Fetch an specific folder by uuid with all associated candidates, recruiter and user.
+      description: uuid needs to be passed through params. When you use this endpoint, the 'opened' will be set to true.
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+           type: string        
+      responses:
+        200:
+          description: a JSON object with the dossier important details and candidates
+          content: {}  
   /folders/{folderId}:
     get:
       tags:
@@ -332,4 +560,70 @@ paths:
       responses:
         201:
           description: a JSON object with the new user details.
+          content: {}
+  /candidates/{candidateId}/update:
+    put:
+      tags:
+      - Candidates
+      summary: Updates data from a candidate. 
+      description: Updates any field of the Candidate model and returns the updated candidate.
+      parameters:
+        - in: path
+          name: candidateId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object that contains all the properties updated from a Candidate.
+          content:
+            application/json:
+              schema:
+                  type: object
+  /candidates/{candidateId}/delete:
+    delete:
+      tags:
+      - Candidates
+      summary: removes candidate by id.
+      description: candidateId needs to be passed through params.
+      parameters:
+      - in: path
+        name: candidateId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: An empty body is sent with the status code 200 if the removal succeded.
+          content: {}
+  /candidates/addCandidate:
+    post:
+      tags:
+      - Candidates
+      summary: create a candidate.
+      description: email and cohort needs to be passed through body.      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                cohort:
+                  type: string
+      responses:
+        200:
+          description: a JSON object with the folderId and candidateId associated.
           content: {}

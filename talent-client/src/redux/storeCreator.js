@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import ExampleReducer from './exampleReducer/Reducer';
 import CandidateReducer from './candidatesReducer/Reducer';
 import FolderReducer from './foldersReducer/Reducer';
+import RecruitersReducer from './recruitersReducer/Reducer';
 
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 
@@ -13,7 +14,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   ExampleReducer,
   CandidateReducer,
-  FolderReducer
+  FolderReducer,
+  RecruitersReducer,
 });
 
 export const store = createStore(

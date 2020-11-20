@@ -1,2 +1,6 @@
+export const GET_DOSSIER = 'GET_DOSSIER';
+export const NEW_FOLDER = 'NEW_FOLDER';
+export const CONFIRM_FOLDER = 'CONFIRM_FOLDER';
 export const GET_ALL_FOLDERS = 'GET_ALL_FOLDERS';
 export const DELETE_FOLDER = 'DELETE_FOLDER';
+export const UPDATE_FOLDER = 'UPDATE_FOLDER';

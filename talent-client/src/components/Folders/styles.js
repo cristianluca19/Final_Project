@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: '70px 56px 48px',
+    padding: '70px 175px 48px',
   },
   miniBio: {
     width: 705,
@@ -56,9 +56,9 @@ export const useStyles = makeStyles((theme) => ({
     height: 130,
   },
   titleCandidates: {
-    margin: '0px -57px',
+    margin: '0px -175px',
     backgroundColor: '#282f3c',
-    padding: '20px 41px',
+    padding: '15px 0px',
     position: 'absolute',
     marginTop: '-70px',
     textAlign: 'center',
@@ -80,7 +80,11 @@ export const useStyles = makeStyles((theme) => ({
   CandidateCard: {
     margin: 25,
     borderRadious: 10,
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 
 }));
 

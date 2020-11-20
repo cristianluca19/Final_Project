@@ -4,9 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Consider using henryMuiTheme.js as your default theme with Material UI components.
 
-## .ENV VARIABLES
+## .ENV VARIABLES e.g.
 
-REACT_APP_BACKEND_URL=
+REACT_APP_BACKEND_URL=http://localhost:3000/api/v1
 
 
 ## Available Scripts

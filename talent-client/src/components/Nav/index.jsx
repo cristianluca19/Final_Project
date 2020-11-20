@@ -1,5 +1,6 @@
 import React from 'react';
 import {useState} from 'react';
+import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
 import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -7,6 +8,8 @@ import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
 import Menu from './menu.jsx';
 import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import { newFolder } from '../../redux/foldersReducer/Action.js';
 
 const useStyle = makeStyles({
   logo: {
@@ -23,7 +26,20 @@ const useStyle = makeStyles({
 
 
 function Nav() {
+  const dispatch = useDispatch();
   const classes = useStyle();
+
+  const HandleAddFolder = async (event) => {
+    try {
+      const nFolder = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/folders`
+      );
+      dispatch(newFolder(nFolder.data));
+      return window.alert('Carpeta creada con éxito');
+    } catch (error) {
+      return window.alert(error.message);
+    }
+  };
 
   return (
     <nav>
@@ -50,9 +66,19 @@ function Nav() {
             >
               <AcountCircle />
             </IconButton>
-            <IconButton className={classes.icons} label="Folder" value="folder">
+            
+            {/*<IconButton className={classes.icons} label="Folder" value="folder">
             <Link to={"/folders/"}>
                 <FolderIcon  />
+            </Link>*/}
+
+            <IconButton
+              className={classes.icons}
+              label="Folder"
+              value="folder"
+            >
+            <Link to={"/folders/"}>
+              <FolderIcon />
             </Link>
             </IconButton>
             <IconButton

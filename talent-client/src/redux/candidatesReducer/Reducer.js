@@ -2,6 +2,7 @@ import * as actions from './Constants.js';
 
 const initialState = {
   allCandidates: [],
+  candidate: {},
   bulkedCandidates: [],
 };
 
@@ -11,6 +12,29 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allCandidates: action.payload,
+      };
+    case actions.DELETE_CANDIDATE:
+      return {
+        ...state,
+        allCandidates: state.allCandidates.filter(
+          (candidate) => candidate.id !== action.payload
+        ),
+      };
+    case actions.REMOVE_CANDIDATE_FROM_FOLDER:
+      return{
+        ...state
+      }
+    case actions.GET_CANDIDATE_BY_ID:
+      return {
+        ...state,
+        candidate: action.payload,
+      };
+    case actions.UPDATE_CANDIDATE:
+      return {
+        ...state,
+        allCandidates: state.allCandidates
+          .filter((candidate) => candidate.id !== action.payload.id)
+          .concat(action.payload),
       };
     case actions.BULK_CANDIDATES:
       return {

@@ -1,173 +1,127 @@
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Grid } from '@material-ui/core';
 import CandidateCard from '../CandidateCard';
 import { useSelector } from 'react-redux';
 import Paginator from '../Paginator';
-import React from 'react';
 import { useStyles } from './styles.js';
-import DeleteIcon from '@material-ui/icons/DeleteForever';
-import SaveIcon from '@material-ui/icons/Save';
 import { useDispatch } from 'react-redux';
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Avatar } from '@material-ui/core';
+import {getAllFolders,} from '../../redux/foldersReducer/Action';
+import {removeCandidateFromFolder} from '../../redux/candidatesReducer/Action';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+
 function Folder(props) {
 
-const DEFAULT_ROWS_PER_PAGE = 30;
-const classes = useStyles();
-const [folderData, setFolderData] = React.useState({})
-const [openDelete, setOpenDelete] = React.useState(false);
-const [openUpdate, setOpenUpdate] = React.useState(false);
-const [idCandidate, setIdCandidate] = React.useState(0);
-const [page, setPage] = React.useState(0);
-const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
-const dispatch = useDispatch();
+    const DEFAULT_ROWS_PER_PAGE = 30;
 
-const candidates = [
-    {
-    firstName: 'Daniel',
-    lastName: 'Stadler',
-    location: 'Sarasota, TX, USA',
-    skills: {
-        hard: [
-        'JavaScript',
-        'React',
-        'Redux',
-        'HTML',
-        'CSS',
-        'SQL',
-        'Node',
-        'PHP',
-        ],
-        soft: ['Leadership', 'English', 'Portuguese'],
-    },
-    visibility: "listed",
-    profilePicture: null,
-    miniBio: `
-    I'm a software engineer who believes that out-of-the-box thinking is what
-    separates a great project from a good one. I do most of mine in Javascript, 
-    React, Node.js and Python.`,
-    linkedin: '/',
-    github: 'https://github.com/henry-labs/talent'
+    const classes = useStyles();
+    const [folderData, setFolderData] = React.useState({})
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [idCandidate, setIdCandidate] = React.useState(0);
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
+    const dispatch = useDispatch();
+
+    const folders = useSelector(
+        (store) => store.FolderReducer.allFolders
+    );
+    const path = window.location.pathname.split('/folder/')
+    const findFolder = folders.filter(folder => folder.uuid === path[1])
+
+    const folderObject = {
+            candidates :  findFolder[0].candidates,
+            selector: findFolder[0].user.firstName + findFolder[0].user.lastName,
+            recruiter: findFolder[0].recruiter.contactName,
+            company: findFolder[0].recruiter.company,
+            idFolder: findFolder[0].id
     }
-]
 
-const handleInputFolder = (e) => {
-    setFolderData({
-      ...folderData,
-      [e.target.id]: e.target.value,
-    });
-  };
+    const onClickDelete = async (e) => {
+        e.preventDefault();
+        await dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
+        dispatch(getAllFolders())
+        handleClose('delete');
+    };
 
+    const handleClickOpen = (id, action) => {
+        if (action === 'delete') {
+            setOpenDelete(true);
+        } 
+        setIdCandidate(id);
+    };
 
-const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-};
+    const handleClose = (action) => {
+        if (action === 'delete') {
+            setOpenDelete(false);
+        } 
+    };
 
-const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-};
+    return (
+        <div className = {classes.background}> 
 
-const onClickDelete = (e, id) => {
-    e.preventDefault();
-    //dispatch(deleteCandidate(id));
-    handleClose();
-};
+            <h1> CARPETA PARA: {folderObject.company} </h1>
+            <h2> SELECTOR: {folderObject.selector} </h2>
+            <h3> RECRUITER: {folderObject.recruiter} </h3>
+            <h4> COMPANY: {folderObject.company} </h4>
 
-const handleClickOpen = (id, action) => {
-    if (action === 'update') {
-      //dispatch(getCandidateById(id));
-        setOpenUpdate(true);
-    } else {
-        setOpenDelete(true);
-    }
-    setIdCandidate(id);
-};
-
-const handleClose = (action) => {
-    action === 'update' ? setOpenUpdate(false) : setOpenDelete(false);
-};
-
-
-
-return (
-    <div className = {classes.background}> 
-
-    <h1> FOLDER'S NAME </h1>
-    <h2> SELECTOR'S NAME (WHO CREATED THE FOLDER) </h2>
-    <h3> RECRUITER'S NAME </h3>
-
-    <Container  className={classes.container}   maxWidth="xl">
-        <Grid
-        className={classes.paddingCandidates}
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        >
-        {/* props.user.map((candidate,index) */}{' '}
-        {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
-        {candidates &&
-            candidates.map(
-            (candidate, index) =>
-                index < DEFAULT_ROWS_PER_PAGE &&
-                candidate.visibility === 'listed' && (
-                <div key={index} className={classes.CandidateCard}>
-                    <CandidateCard user={candidate} />
-                    <Button onClick={() => {handleClickOpen(candidate.id, 'delete')}}> Delete this Candidate </Button>
-                </div>
-                )
-            )}
-        </Grid>
-        {candidates.length && (
-        <Grid>
-            <Paginator />
-        </Grid>
-        )}
-    </Container>
-
-    <div>
-        <Dialog
-            open={openDelete}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle id="alert-dialog-title">
-            {'¡Esta por eliminar un candidato de esta carpeta!'}
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                Presione en el boton eliminar realizar la acción o de lo contrario
-                en cancelar.
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={() => handleClose('delete')} color="primary">
-                Cancelar
-            </Button>
-            <Button
-                onClick={(e) => onClickDelete(e, idCandidate)}
-                color="primary"
-                autoFocus
-            >
-                Eliminar
-            </Button>
-            </DialogActions>
-        </Dialog>
+            <Container  className={classes.container}   maxWidth="xl">
+                <Grid
+                className={classes.paddingCandidates}
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                >
+                    {folderObject.candidates &&
+                        folderObject.candidates.map(
+                        (candidate, index) =>
+                            index < DEFAULT_ROWS_PER_PAGE &&
+                            candidate.visibility === 'listed' && (
+                            <div key={index} className={classes.CandidateCard}>
+                                <CandidateCard
+                                    candidate={candidate}
+                                />
+                                <Button onClick={() => {handleClickOpen(candidate.id, 'delete')}}> Delete this Candidate </Button>
+                            </div>
+                            )
+                        )}
+                </Grid>
+                {folderObject.candidates && folderObject.candidates.length && (
+                <Grid>
+                    <Paginator />
+                </Grid>
+                )}
+            </Container>
+            <div>
+                <Dialog
+                    open={openDelete}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                    {'¡Esta por eliminar un candidato de esta carpeta!'}
+                    </DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Presione en el boton eliminar realizar la acción o de lo contrario en cancelar.
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => handleClose('delete')} color="primary">
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={(e) => onClickDelete(e, idCandidate)}
+                            color="primary"
+                            autoFocus
+                        >
+                            Eliminar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
-    </div>
-
-
-
     );
 }
-
-Folder.propTypes = {
-    users: PropTypes.array.isRequired,
-};
-
-Folder.defaultProps = {
-    users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-};
-
 export default Folder;

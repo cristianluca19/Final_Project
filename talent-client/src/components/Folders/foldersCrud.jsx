@@ -6,10 +6,10 @@ import ViewIcon from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
-import {getAllFolders, deleteFolder} from '../../redux/foldersReducer/Action';
+import {getAllFolders, deleteFolder, updateFolder} from '../../redux/foldersReducer/Action';
+import { getAllRecruiters } from '../../redux/recruitersReducer/Action';  
 import { useSelector } from 'react-redux';
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField } from '@material-ui/core';
-
+import {FormControl, MenuItem, InputLabel, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Select } from '@material-ui/core';
 
 function FoldersCrud() {
     
@@ -17,9 +17,13 @@ function FoldersCrud() {
     const folders = useSelector(
         (store) => store.FolderReducer.allFolders
     );
+    const recruiters = useSelector(
+        (store) => store.RecruitersReducer.allRecruiters
+    );
     const classes = useStyles();
     const [folderData, setFolderData] = React.useState({})
     const [openUpdate, setOpenUpdate] = React.useState(false);
+    const [openSelect, setOpenSelect] = React.useState(false);
     const [idFolder, setIdFolder] = React.useState(0);
     const [open, setOpen] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -45,6 +49,7 @@ function FoldersCrud() {
             return rows.push(
                                 {  
                                     id: folders.id, 
+                                    uuid: folders.uuid,
                                     selector: folders.user && folders.user.firstName + ' ' + folders.user.lastName,
                                     status: folders.status,
                                     opened: folders.opened.toString(),
@@ -80,31 +85,37 @@ function FoldersCrud() {
         setOpen(false);
         setOpenUpdate(false)
     };
+    const handleOpenSelect = () => {
+        setOpenSelect(true);
+    };
+    const handleCloseSelect = () => {
+        setOpenSelect(false);
+    };
 
-    const handleInputFolder = (e) => {
+    const handleChangeSelect = (e) => {
         setFolderData({
             ...folderData,
-            [e.target.id]: e.target.value,
+            [e.target.name]: e.target.value,
         });
-        };
+    };
         
     const handleClickOpen = (id, action) => {
             if (action === 'update') {
-                //dispatch(getCandidateById(id));
                 setOpenUpdate(true);
             } 
             setIdFolder(id);
         };
     
-    const onClickUpdate = (e) => {
+    const onClickUpdate = async (e) => {
         e.preventDefault();
-        console.log(folderData)
-        // dispatch(updateCandidate(candidateData));
+        await dispatch(updateFolder(idFolder, folderData));
+        dispatch(getAllFolders())
         setOpenUpdate(false);
     };
 
     useEffect(() => {
         dispatch(getAllFolders());
+        dispatch(getAllRecruiters());
     }, []);
     
     return (
@@ -141,13 +152,13 @@ function FoldersCrud() {
                                                     : value}
 
                                                     {column.id === 'view' && (
-                                                        <Link to={"/folder/" + row.id }>
+                                                        <Link to={"/folder/" + row.uuid }>
                                                             <ViewIcon />
                                                         </Link>
                                                     )}
 
                                                     {column.id === 'edit' && (
-                                                        <EditIcon onClick={()=> {handleClickOpen(column.id, 'update')} } />
+                                                        <EditIcon onClick={()=> {handleClickOpen(row.id, 'update')} } />
                                                     )}
 
                                                     {column.id === 'delete' && (
@@ -224,47 +235,30 @@ function FoldersCrud() {
                                 noValidate
                                 autoComplete="off"
                                 >
-                                    <TextField
-                                        id="folderName"
-                                        label="Name"
-                                        value={folderData.name}
-                                        onChange={(e) => handleInputFolder(e)}
-                                    />
-                                    <TextField
-                                        id="opened"
-                                        label="Opened"
-                                        value={folderData.opened}
-                                        onChange={(e) => handleInputFolder(e)}
-                                    />
-                                    <TextField
-                                        id="status"
-                                        label="Status"
-                                        value={folderData.status}
-                                        onChange={(e) => handleInputFolder(e)}
-                                    />
-                                    <br />
-                                    <TextField
-                                        id="user_id"
-                                        label="Selector's Name"
-                                        value={folderData.user_id}
-                                        onChange={(e) => handleInputFolder(e)}
-                                    />
-                                    <TextField
-                                        id="recruiter_id"
-                                        label="Recruiter's name"
-                                        value={folderData.name}
-                                        onChange={(e) => handleInputFolder(e)}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="large"
-                                        className={classes.button}
-                                        startIcon={<SaveIcon />}
-                                        onClick={(e) => onClickUpdate(e)}
-                                    >
-                                        Guardar
-                                    </Button>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel>Recruiter</InputLabel>
+                                    <Select
+                                        name='recruiterId'
+                                        open={openSelect}
+                                        onClose={handleCloseSelect}
+                                        onOpen={handleOpenSelect}
+                                        onChange={(e) => {handleChangeSelect(e)}}
+                                        >
+                                        { recruiters && recruiters.map( (recruiter, index) => {
+                                                return <MenuItem value={recruiter.id}>{ recruiter.contactName + ', ' + 'Compañia: ' + ' ' + recruiter.company} </MenuItem>
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    className={classes.button}
+                                    startIcon={<SaveIcon />}
+                                    onClick={(e) => onClickUpdate(e)}
+                                >
+                                    Guardar
+                                </Button>
                                 </form>
                             </div>
                         </Fade>
