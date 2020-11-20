@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core';
 export const useStyle = makeStyles({
   dashboardSidebar: {
     background: 'linear-gradient(135deg, #282c34 0%,#10151d 100%) !important',
-    width: '20%',
     height: 'calc(100vh - 0px)',
     float: 'left',
+    width: '100%',
   },
   logo: {
     width: 180,
