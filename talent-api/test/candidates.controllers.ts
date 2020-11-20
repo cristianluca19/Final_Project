@@ -3,10 +3,6 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
-<<<<<<< HEAD
-=======
-import { response } from 'express';
->>>>>>> a39b9f448f244cba3205f0cb630a5ee892842371
 import path from 'path';
 import { getMaxListeners } from 'process';
 import { response } from 'express';
@@ -443,12 +439,8 @@ describe('Candidates', () => {
       ];
       const candidatesList = await db.Candidate.bulkCreate(candidates);
       const response = await request(Server).delete(
-        `/api/v1/candidates//${candidatesList[2].dataValues.id}/delete`
-      );
-      const candidate = await db.Candidate.findOne({
-        where: { email: 'cristian@gmail.com', cohort: '5' },
-      });
-      expect(response.status).to.be.equal(404);
+        `/api/v1/candidates/${candidatesList[2].dataValues.id}/delete`
+      );  
       const candidateCreated = await db.Candidate.findAll();
       expect(candidateCreated).to.have.lengthOf(2)     
     });
