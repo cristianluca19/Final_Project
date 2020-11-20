@@ -17,8 +17,7 @@ export const useStyles = makeStyles((theme) => ({
     },
     '& .MuiFilledInput-root': {
       backgroundColor: '#0e0e0e',
-      '&:hover': {
-    }
+      '&:hover': {},
     },
   },
   submitbtn: {

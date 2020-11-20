@@ -13,6 +13,41 @@ export function getAllCandidates() {
   };
 }
 
+export function deleteCandidate(id) {
+  return async (dispatch) => {
+    const deleteCandidate = await axios.delete(
+      `${BACKEND_URL}/candidates/${id}/delete`
+    );
+    dispatch({
+      type: actions.DELETE_CANDIDATE,
+      payload: id,
+    });
+  };
+}
+
+export function getCandidateById(id) {
+  return async (dispatch) => {
+    const candidate = await axios.get(`${BACKEND_URL}/candidates/${id}`);
+    dispatch({
+      type: actions.GET_CANDIDATE_BY_ID,
+      payload: candidate.data,
+    });
+  };
+}
+
+export function updateCandidate(candidateData) {
+  return async (dispatch) => {
+    const candidate = await axios.put(
+      `${BACKEND_URL}/candidates/${candidateData.id}/update`,
+      candidateData
+    );
+    dispatch({
+      type: actions.UPDATE_CANDIDATE,
+      payload: candidateData,
+    });
+  };
+}
+
 export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
   const bulkedCandidates = await axios.post(
     `${BACKEND_URL}/candidates`,
