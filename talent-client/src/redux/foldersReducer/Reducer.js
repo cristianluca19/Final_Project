@@ -1,15 +1,21 @@
 import * as actions from './Constants.js';
 
 const initialState = {
-  allSkills: [],
+  dossier: [],
+  newFolder: [],
 };
 
 export default function Reducer(state = initialState, action) {
   switch (action.type) {
-    case actions.GET_ALL_SKILLS:
+    case actions.GET_DOSSIER:
       return {
         ...state,
-        allSkills: action.payload,
+        dossier: action.payload,
+      };
+    case actions.NEW_FOLDER:
+      return {
+        ...state,
+        newFolder: action.payload,
       };
     default:
       return state;

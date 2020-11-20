@@ -51,15 +51,15 @@ export const useStyles = makeStyles((theme) => ({
     // border: 1px yellow solid,
   },
   checkIcon: {
-    fontSize: '1px',
-  },
-  divSkillsSelected: {
-    marginBottom: '100px',
+    marginLeft: '10px',
+    width: '15px',
   },
   divAllSkills: {
-    marginTop: '50px',
+    marginTop: '20px',
   },
   generalDiv: {
+    display: 'flex',
+    flexDirection: "column",
     marginBottom: '40px',
   },
   inputLabel: {

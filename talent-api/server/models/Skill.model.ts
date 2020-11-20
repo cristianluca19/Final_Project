@@ -16,11 +16,12 @@ export default (sequelize) => {
     {
       name: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
       },
       type: {
         type: DataTypes.ENUM,
-        values: [SKILLS.Hard, SKILLS.Soft],
+        values: [SKILLS.Tech, SKILLS.Soft, SKILLS.Other],
         allowNull: false,
       },
     },

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { getAllSkills } from '../../redux/skillsReducer/Actions';
 import { getModalStyle, useStyles } from './styles';
 import Modal from '@material-ui/core/Modal';
 import FormControl from '@material-ui/core/FormControl';
 import { InputLabel } from '@material-ui/core';
 import { Input } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
+import axios from 'axios';
 
 const skillsArray = [
   'PHP',
@@ -28,14 +30,24 @@ const skillsArray = [
 const TechSkillsFilter = () => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
   const [modalStyle] = useState(getModalStyle);
-  const [allSkills, setAllSkills] = useState([]);
+  const [allSkills, setAllSkills] = useState([]); // como hago esto????
   const [skillsSelected, setSkillsSelected] = useState([]);
+  const [filteredSkills, setFilteredSkills] = useState([]);
   const [open, setOpen] = useState(false);
 
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
   useEffect(() => {
-    setAllSkills(skillsArray);
-  }, []);
+    const getAllSkills = async (techSkills) => {
+      const skills = await axios.get(`${BACKEND_URL}/skills/`);
+      techSkills = skills.data.filter(skill => skill.type === "tech")
+      setAllSkills(techSkills.map(skill => skill.name))
+    }
+    getAllSkills();
+  }, [BACKEND_URL])
 
   const handleOpen = () => {
     setOpen(true);
@@ -45,18 +57,20 @@ const TechSkillsFilter = () => {
     setOpen(false);
   };
 
+  let tempArray = allSkills.slice()
+  console.log(tempArray, "we")
+
   const handleSearchSkill = (e) => {
-    setAllSkills(
-      skillsArray.filter(
-        (skill) => skill.toLowerCase().indexOf(e.target.value) > -1
-      )
-    );
+    setFilteredSkills(tempArray.filter(
+        (skill) => skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
+    ));
   };
 
   const addSkill = (e) => {
     if (!skillsSelected.some((skill) => skill === e.target.value)) {
       setSkillsSelected((oldSkills) => [...oldSkills, e.target.value]);
       setAllSkills(allSkills.filter((skill) => skill !== e.target.value));
+      setFilteredSkills(filteredSkills.filter((skill) => skill !== e.target.value))
     }
   };
 
@@ -65,7 +79,8 @@ const TechSkillsFilter = () => {
       skillsSelected.filter((skill) => skill !== e.target.value)
     );
     if (e.target.value) {
-      setAllSkills((oldSkills) => [...oldSkills, e.target.value]);
+      setAllSkills((oldSkills) => [e.target.value, ...oldSkills]);
+      setFilteredSkills((oldSkills) => [e.target.value, ...oldSkills]);
     }
   };
 
@@ -75,13 +90,14 @@ const TechSkillsFilter = () => {
       <FormControl className={classes.searchBar}>
         <InputLabel htmlFor="my-input">Search skill</InputLabel>
         <Input
+          className={classes.input}
           id="my-input"
           aria-describedby="my-helper-text"
           onChange={handleSearchSkill}
         />
       </FormControl>
       <div className={classes.generalDiv}>
-        <div className={classes.divSkillsSelected}>
+        <div>
           {skillsSelected &&
             skillsSelected.map((skill, index) => (
               <div key={index} style={{ float: 'left' }}>
@@ -100,10 +116,28 @@ const TechSkillsFilter = () => {
             ))}
         </div>
         <div className={classes.divAllSkills}>
-          {allSkills.slice(0, 10).map((skill, index) => (
+          {filteredSkills.length > 0 ?
+          filteredSkills.slice(0, 10).map((skill, index) => (
             <div
               key={index}
-              className={classes.blackButton}
+              style={{
+                margin: '10px',
+                float: 'left',
+              }}
+            >
+              <button
+                className={classes.blackButton}
+                onClick={addSkill}
+                value={skill}
+              >
+                {skill}
+              </button>
+            </div>
+            ))
+          :
+          allSkills.slice(0, 10).map((skill, index) => (
+            <div
+              key={index}
               style={{
                 margin: '10px',
                 float: 'left',
