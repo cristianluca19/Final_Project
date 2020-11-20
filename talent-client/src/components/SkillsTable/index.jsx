@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStyles } from './styles.js';
 import Swal from 'sweetalert2'
 import EditIcon from '@material-ui/icons/Edit';
@@ -9,23 +9,12 @@ import Modal from '@material-ui/core/Modal';
 function SkillsTable() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const skills = [{
-    name: 'Javascript',
-    type: 'hard',
-    id: 1
-  },
-  {
-    name: 'Leadership',
-    type: 'soft',
-    id: 2
-  },
-  {
-    name: 'React',
-    type: 'hard',
-    id: 3
-  }]
-  const softSKills = skills.filter(item => item.type === 'soft')
-  const hardSkills = skills.filter(item => item.type === 'hard')
+  const [skill, setSkill] = useState({
+    name: null,
+    type: null
+  })
+  // const softSKills = skills.filter(item => item.type === 'soft')
+  // const hardSkills = skills.filter(item => item.type === 'hard')
 
   const handleOpen = (id) => {
     setOpen(true);
