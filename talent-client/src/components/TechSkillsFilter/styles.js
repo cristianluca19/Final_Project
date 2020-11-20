@@ -76,5 +76,15 @@ export const useStyles = makeStyles((theme) => ({
   skillSelected: {
     position: "relative",
     bottom: '5px'
+  },
+  divBlackButton: {
+    margin: '10px',
+    float: 'left',
+  },
+  divSelectedSkills: {
+    float: 'left',
+  },
+  marginTop: {
+    marginTop: '20px'
   }
 }));

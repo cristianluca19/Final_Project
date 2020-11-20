@@ -71,13 +71,12 @@ const TechSkillsFilter = () => {
         />
       </FormControl>
       <div className={classes.generalDiv}>
-        <div>
+        <div className={classes.marginTop}>
           {skillsSelected &&
             skillsSelected.map((skill, index) => (
-              <div key={index} style={{ float: 'left' }}>
+              <div key={index} className={classes.divSelectedSkills}>
                 <button
                   className={classes.yellowButton}
-                  style={{ backgroundColor: 'yellow' }}
                   onClick={removeSkill}
                   value={skill}
                 >
@@ -87,15 +86,12 @@ const TechSkillsFilter = () => {
               </div>
             ))}
         </div>
-        <div className={classes.divAllSkills}>
+        <div className={classes.divAllSkills} >
           {filteredSkills.length > 0 ?
           filteredSkills.slice(0, 10).map((skill, index) => (
             <div
               key={index}
-              style={{
-                margin: '10px',
-                float: 'left',
-              }}
+              className={classes.divBlackButton}
             >
               <button
                 className={classes.blackButton}
@@ -110,10 +106,7 @@ const TechSkillsFilter = () => {
           allSkills.slice(0, 10).map((skill, index) => (
             <div
               key={index}
-              style={{
-                margin: '10px',
-                float: 'left',
-              }}
+              className={classes.divBlackButton}
             >
               <button
                 className={classes.blackButton}
