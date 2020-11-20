@@ -1,33 +1,31 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { bulkCandidates } from '../../redux/candidatesReducer/Action'
-import { useDispatch } from "react-redux";
+import { bulkCandidates } from '../../redux/candidatesReducer/Action';
+import { useDispatch } from 'react-redux';
 
 function CsvToJson() {
+  const [csvTransformedToJson, setCsvTransformedToJson] = useState();
 
-  const [csvTransformedToJson, setCsvTransformedToJson] = useState()
-  
   const dispatch = useDispatch();
 
   const handleCsvToJson = (e) => {
     e.preventDefault();
     let csvFile = e.target.files[0];
     let formData = new FormData();
-    formData.append("file", csvFile);
+    formData.append('file', csvFile);
     axios({
       method: 'post',
-      url: `${process.env.REACT_APP_BACKEND_URL}/api/candidates/csv`,  
+      url: `${process.env.REACT_APP_BACKEND_URL}/api/candidates/csv`,
       data: formData,
-      config: { headers: { 'Content-Type': 'multipart/form-data' }}
-    })
-      .then((res) => {
-        setCsvTransformedToJson(res.data)
-        console.log(res.data)
-      });
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
+    }).then((res) => {
+      setCsvTransformedToJson(res.data);
+      console.log(res.data);
+    });
   };
 
-  const handleBulkCandidates = () => {  
-    dispatch(bulkCandidates(csvTransformedToJson))
+  const handleBulkCandidates = () => {
+    dispatch(bulkCandidates(csvTransformedToJson));
   };
 
   return (
@@ -46,7 +44,11 @@ function CsvToJson() {
             ></input>
           </div>
           <div className="col-md-2">
-            <button className="btn btn-primary" id="button" onClick={handleBulkCandidates}>
+            <button
+              className="btn btn-primary"
+              id="button"
+              onClick={handleBulkCandidates}
+            >
               Convert
             </button>
           </div>
@@ -54,7 +56,7 @@ function CsvToJson() {
             <pre id="jsondata"></pre>
           </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 }
