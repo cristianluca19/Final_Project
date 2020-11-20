@@ -8,8 +8,6 @@ import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
 import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
-import Menu from './components/Dashboard/menu';
-import Candidates from './components/Dashboard/candidates';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
@@ -26,7 +24,11 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path="/panel" render={() => <Dashboard />} />
+        <Route exact path="/panel" render={() => <Dashboard />} />
+        <Route
+          path="/panel/candidates"
+          render={() => <Dashboard componentToRender={'candidates'} />}
+        />
         <Route path="/" render={() => <Nav />} />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
@@ -41,8 +43,6 @@ function App() {
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />
       </Switch>
-      <Route path="/panel" render={() => <Menu />} />
-      <Route exact path="/panel/candidates" render={() => <Candidates />} />
     </div>
   );
 }
