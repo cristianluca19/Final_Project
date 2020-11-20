@@ -46,7 +46,7 @@ export function RecruiterForm() {
           error={errors.contactName ? true : false}
           label="Nombre completo del contacto"
           variant="filled"
-          helperText={errors.contactName ? "Campo Requerido" : null}
+          helperText={errors.contactName ? 'Campo Requerido' : null}
           fullWidth
           id={'contactName'}
           value={values.contactName}
@@ -58,7 +58,7 @@ export function RecruiterForm() {
           error={errors.email ? true : false}
           label="Email"
           variant="filled"
-          helperText={errors.email ? "Campo Requerido" : null}
+          helperText={errors.email ? 'Campo Requerido' : null}
           fullWidth
           id={'email'}
           value={values.email}
@@ -69,7 +69,7 @@ export function RecruiterForm() {
         <TextField
           error={errors.company ? true : false}
           label="Empresa"
-          helperText={errors.company ? "Campo Requerido" : null}
+          helperText={errors.company ? 'Campo Requerido' : null}
           variant="filled"
           fullWidth
           id={'company'}
@@ -81,7 +81,7 @@ export function RecruiterForm() {
         <TextField
           error={errors.siteUrl ? true : false}
           label="Web"
-          helperText={errors.siteUrl ? "Campo Requerido" : null}
+          helperText={errors.siteUrl ? 'Campo Requerido' : null}
           variant="filled"
           fullWidth
           id={'siteUrl'}
@@ -124,7 +124,12 @@ const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
         isOpen: true,
         message: 'Recruiter creado con éxito',
         type: 'success',
-      });
+      })
+      return response.data
+    })
+    .then((response) => {
+      console.log(response)
+      axios.put(`${process.env.REACT_APP_BACKEND_URL}/folders/${localStorage.getItem('activeFolderId')}?recruiterId=${response.id}`)
       return;
     })
     .catch((error) => {

@@ -23,7 +23,7 @@ import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
   const { includes, candidate, uuid, folder, handleCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
-
+  const {skills} = candidate
   const labelsMaxLimit = 8;
 
   const classes = useStyles();
@@ -91,7 +91,13 @@ function CandidateCard(props) {
                     edge="start"
                     onClick={(event) => {
                       handleCandidate
-                        ? handleCandidate(event, candidate.id, folder, uuid, includes)
+                        ? handleCandidate(
+                            event,
+                            candidate.id,
+                            folder,
+                            uuid,
+                            includes
+                          )
                         : handleContactCandidate(event);
                     }}
                   >
@@ -132,27 +138,19 @@ function CandidateCard(props) {
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
-                {[
-                  'JavaScript',
-                  'React',
-                  'Redux',
-                  'HTML',
-                  'CSS',
-                  'SQL',
-                  'Node',
-                  'PHP',
-                ].map(
-                  (techSkill, index) =>
+                {skills.length ? skills.map(
+                  (objSkill, index) =>
+                  
                     index < labelsMaxLimit && (
                       <Chip
                         key={index}
                         className={classes.chips}
                         size="small"
                         color="primary"
-                        label={techSkill}
+                        label={objSkill.name.charAt(0).toUpperCase() + objSkill.name.slice(1)}
                       />
                     )
-                )}
+                ) : null}
               </Grid>
               <Divider style={{ marginTop: '20px' }} variant="fullWidth" />
               {/* Mini-Bio */}
@@ -180,7 +178,7 @@ CandidateCard.propTypes = {
     lastName: PropTypes.string,
     email: PropTypes.string,
     country: PropTypes.string,
-    skills: PropTypes.object,
+    skills: PropTypes.array,
     cohort: PropTypes.string,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,

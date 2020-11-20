@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Container, Grid, Typography, ThemeProvider, Button } from '@material-ui/core';
+import { Container, Grid, Typography, ThemeProvider, CircularProgress } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
@@ -10,9 +10,7 @@ import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
-import { newFolder } from '../../redux/foldersReducer/Action.js';
-
-const MySwal = withReactContent(Swal)
+import { newFolder, getFolderById } from '../../redux/foldersReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -35,10 +33,7 @@ function CardsContainer(props) {
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
-    if(folder.mock) {
-      noActiveFolder(dispatch);
-      return
-    }
+    if (folder.mock) return noActiveFolder(dispatch);
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(candidate, folder, selectedCandidates, setSelectedCandidates, setNotify)
@@ -55,18 +50,17 @@ function CardsContainer(props) {
     return selectedCandidates.includes(id);
   };
 
-  // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
+
   console.log(folder)
+  if (!candidates.length) return loadingAnimation();
+
   return (
     <Container className={classes.container} maxWidth="xl">
       { folder &&
         <ThemeProvider theme={henryTheme}>
-          <Grid container row>
-            <Typography color='primary'>
-               {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' ' }`}
-            </Typography>
-            {!folder.company && <Button className={classes.newFolderButton} color='primary' variant='contained'>Asignar Recruiter</Button>}
-          </Grid>
+          <Typography color='primary'>
+            {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' '}`}
+          </Typography>
         </ThemeProvider>
       }
       <Grid
@@ -76,8 +70,6 @@ function CardsContainer(props) {
         justify="center"
         alignItems="center"
       >
-        {/* props.user.map((candidate,index) */}{' '}
-        {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
         {candidates &&
           candidates.map(
             (candidate, index) =>
@@ -168,21 +160,29 @@ const AlertCandidate = Swal.mixin({
   }
 })
 
-const noActiveFolder = (dispatch) => {Swal.fire({
-  title: 'No tienes niguna carpeta activa, quieres crearla?',
-  showDenyButton: true,
-  confirmButtonText: `Crear`,
-  denyButtonText: `Cancelar`,
-}).then((result) => {
-  if (result.isConfirmed) {
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
-    .then((response) => {
-      dispatch(newFolder(response.data));
-      Swal.fire('Carpeta Creada!', `id: ${response.data.folder.id} - ${response.data.folder.uuid}`, 'success')
-    })
-  } else if (result.isDenied) {
-    return
-  }
-})}
+const noActiveFolder = (dispatch) => {
+  Swal.fire({
+    title: 'No tienes niguna carpeta activa, quieres crearla?',
+    showDenyButton: true,
+    confirmButtonText: `Crear`,
+    denyButtonText: `Cancelar`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+        .then((response) => {
+          dispatch(newFolder(response.data));
+          localStorage.setItem('activeFolderId', response.data.folder.id)
+          Swal.fire('Carpeta Creada!', `id: ${response.data.folder.id} - ${response.data.folder.uuid}`, 'success')
+        })
+    } else if (result.isDenied) {
+      return
+    }
+  })
+}
 
+const loadingAnimation = () => (
+  <ThemeProvider theme={henryTheme}>
+    <CircularProgress style={{ marginTop: 100, marginBottom: 100 }} color="primary" />
+  </ThemeProvider>
+)
 export default CardsContainer;

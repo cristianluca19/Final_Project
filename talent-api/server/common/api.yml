@@ -42,7 +42,6 @@ paths:
         200:
           description: TODO
           content: {}
-
   /candidates/search:
     get:
       tags:
@@ -188,6 +187,42 @@ paths:
         200:
           description: A JSON array of objects... TODO
           content: {}
+  /candidates/filter:
+    get:
+      tags:
+      - Candidates
+      summary: Fetch all candidates filtered
+      description: returns a list with candidates whose skills, cohorts and location was specify by query
+      parameters: 
+        - in: query
+          name: cohorts
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skills
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: locations
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: A JSON array of candidates 
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        204: 
+          description: Error if queries are empty
+          
+        400:
+          description: Bad request error
   /skills:
     post:
       tags:
@@ -525,4 +560,70 @@ paths:
       responses:
         201:
           description: a JSON object with the new user details.
+          content: {}
+  /candidates/{candidateId}/update:
+    put:
+      tags:
+      - Candidates
+      summary: Updates data from a candidate. 
+      description: Updates any field of the Candidate model and returns the updated candidate.
+      parameters:
+        - in: path
+          name: candidateId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses: 
+        200:
+          description: a JSON object that contains all the properties updated from a Candidate.
+          content:
+            application/json:
+              schema:
+                  type: object
+  /candidates/{candidateId}/delete:
+    delete:
+      tags:
+      - Candidates
+      summary: removes candidate by id.
+      description: candidateId needs to be passed through params.
+      parameters:
+      - in: path
+        name: candidateId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        200:
+          description: An empty body is sent with the status code 200 if the removal succeded.
+          content: {}
+  /candidates/addCandidate:
+    post:
+      tags:
+      - Candidates
+      summary: create a candidate.
+      description: email and cohort needs to be passed through body.      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                cohort:
+                  type: string
+      responses:
+        200:
+          description: a JSON object with the folderId and candidateId associated.
           content: {}

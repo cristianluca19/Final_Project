@@ -8,6 +8,7 @@ import Settings from '@material-ui/icons/Settings';
 import Menu from './menu.jsx';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
+import { Link } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
 
 const useStyle = makeStyles({
@@ -21,6 +22,10 @@ const useStyle = makeStyles({
   containerIcons: {
     justifyContent: 'flex-end',
   },
+  link: {
+      textDecoration: 'none',
+      color: '#ffff00',
+  }
 });
 
 function Nav({ location }) {
@@ -80,7 +85,7 @@ function Nav({ location }) {
               label="Setting"
               value="folder"
             >
-              <Settings />
+              <Link to='/panel' className={classes.link}><Settings /></Link>
             </IconButton>
           </Grid>}
         </Grid>
@@ -88,6 +93,7 @@ function Nav({ location }) {
     </nav>
   );
 }
+
 
 const checkDossierRoute = (url) => {
   if (url.slice(0, 9).toLowerCase() === '/dossier/') {
