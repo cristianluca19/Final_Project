@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllSkills } from '../../redux/skillsReducer/Actions';
 import { getModalStyle, useStyles } from './styles';
 import Modal from '@material-ui/core/Modal';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,30 +7,11 @@ import { Input } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import axios from 'axios';
 
-const skillsArray = [
-  'PHP',
-  'Python',
-  'JavaScript',
-  'Java',
-  'Rust',
-  'Node js',
-  'React',
-  'Redux',
-  'Express js',
-  'Laravel',
-  'Next js',
-  '.Net',
-  'C++',
-  'Angular',
-];
-
 const TechSkillsFilter = () => {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
   const [modalStyle] = useState(getModalStyle);
-  const [allSkills, setAllSkills] = useState([]); // como hago esto????
+  const [allSkills, setAllSkills] = useState([]);
   const [skillsSelected, setSkillsSelected] = useState([]);
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [open, setOpen] = useState(false);
@@ -57,15 +35,12 @@ const TechSkillsFilter = () => {
     setOpen(false);
   };
 
-  let tempArray = allSkills.slice()
-  console.log(tempArray, "we")
-
   const handleSearchSkill = (e) => {
-    setFilteredSkills(tempArray.filter(
+    setFilteredSkills(allSkills.filter(
         (skill) => skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
     ));
   };
-
+  
   const addSkill = (e) => {
     if (!skillsSelected.some((skill) => skill === e.target.value)) {
       setSkillsSelected((oldSkills) => [...oldSkills, e.target.value]);
@@ -80,7 +55,6 @@ const TechSkillsFilter = () => {
     );
     if (e.target.value) {
       setAllSkills((oldSkills) => [e.target.value, ...oldSkills]);
-      setFilteredSkills((oldSkills) => [e.target.value, ...oldSkills]);
     }
   };
 
@@ -88,7 +62,7 @@ const TechSkillsFilter = () => {
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Technologies</h2>
       <FormControl className={classes.searchBar}>
-        <InputLabel htmlFor="my-input">Search skill</InputLabel>
+        <InputLabel className={classes.inputLabel} htmlFor="my-input">Search skill...</InputLabel>
         <Input
           className={classes.input}
           id="my-input"
@@ -107,10 +81,8 @@ const TechSkillsFilter = () => {
                   onClick={removeSkill}
                   value={skill}
                 >
-                  {skill}
-                  <span className={classes.checkIcon}>
-                    <CheckIcon />
-                  </span>
+                  <span className={classes.skillSelected}>{skill}</span>
+                    <CheckIcon className={classes.checkIcon}/>
                 </button>
               </div>
             ))}

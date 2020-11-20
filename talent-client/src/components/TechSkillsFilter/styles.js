@@ -30,7 +30,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   searchBar: {
     '& > *': {
-      margin: theme.spacing(1),
+      margin: theme.spacing(0),
       width: '25ch',
     },
   },
@@ -48,11 +48,14 @@ export const useStyles = makeStyles((theme) => ({
     height: '35px',
     borderRadius: '4px',
     margin: '10px',
-    // border: 1px yellow solid,
+    border: '1px yellow solid',
+    '&:focus': {
+      border: '1px yellow solid',
+    }
   },
   checkIcon: {
     marginLeft: '10px',
-    width: '15px',
+    width: '15px !important',
   },
   divAllSkills: {
     marginTop: '20px',
@@ -63,10 +66,15 @@ export const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   inputLabel: {
-    marginBottom: '100px',
+    marginBottom: '25px !important',
   },
   input: {
     marginTop: '10px',
-    color: 'white',
+    borderRadius: '30px',
+    color: 'white'
   },
+  skillSelected: {
+    position: "relative",
+    bottom: '5px'
+  }
 }));
