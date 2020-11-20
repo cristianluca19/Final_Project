@@ -1,5 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 import fs from 'fs';
 import { parse } from '@fast-csv/parse';
 
@@ -60,6 +62,13 @@ export class CandidatesController {
     res.status(200).json(candidate);
   }
 
+  async updateByIdCandidate(req: Request, res: Response): Promise<void> {
+    const candidateUpdate = await db.Candidate.update(req.body, {
+      where: { id: req.params.candidateId },
+    });
+    res.status(200).json(candidateUpdate);
+  }
+
   async addToFolder(req: Request, res: Response): Promise<void> {
     const candidate = await db.Candidate.findByPk(req.params.candidateId);
     const folder = await db.Folder.findByPk(req.params.folderId);
@@ -91,6 +100,69 @@ export class CandidatesController {
       },
     });
     res.status(200).json(candidates);
+  }
+  async filter(req: Request, res: Response): Promise<void> {
+    const skills = req.query.skills || '';
+    const cohorts = req.query.cohorts || '';
+    const location = req.query.locations || '';
+    const skillsArray = skills ? skills.toString().split(',') : [];
+    const cohortArray = cohorts ? cohorts.toString().split(',') : [];
+    const locationArray = location ? location.toString().split(',') : [];
+    const query = {
+      where: {
+        cohort: cohortArray,
+        country: locationArray,
+      },
+      include: {
+        model: db.Skill,
+        where: {
+          name: skillsArray,
+        },
+      },
+    };
+    if (!skillsArray.length) delete query.include;
+    if (!cohortArray.length) delete query.where.cohort;
+    if (!locationArray.length) delete query.where.country;
+    if (!skillsArray.length && !cohortArray.length && !locationArray.length) {
+      res.sendStatus(204);
+    } else {
+      try {
+        const candidatesFiltered = await db.Candidate.findAll(query);
+        res.status(200).json(candidatesFiltered);
+      } catch (err) {
+        res.sendStatus(400);
+        throw err;
+      }
+    }
+  }
+  async searchByProp(req: Request, res: Response): Promise<void> {
+    const { search } = req.query;
+    try {
+      const candidates = await db.Candidate.findAll({
+        where: {
+          [Op.or]: [
+            {
+              firstName: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+            {
+              lastName: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+            {
+              email: {
+                [Op.iLike]: '%' + search + '%',
+              },
+            },
+          ],
+        },
+      });
+      res.status(200).json(candidates);
+    } catch (err) {
+      res.status(404).send(err.message);
+    }
   }
 }
 

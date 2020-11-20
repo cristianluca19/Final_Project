@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStyles, theme } from './styles.js';
-// import axios from 'axios';
 
 // MUI Components
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
+import Badge from '@material-ui/core/Badge';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import { IconButton } from '@material-ui/core/';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import FolderIcon from '@material-ui/icons/Folder';
 import Chip from '@material-ui/core/Chip';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
@@ -21,18 +22,17 @@ import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../images/cvtest.png';
 
 function CandidateCard(props) {
-  const { user } = props;
+  const { includes, candidate, uuid, folder, handleCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
 
   const labelsMaxLimit = 8;
 
   const classes = useStyles();
 
+  console.log(includes);
   // HANDLERS //
-  const handleFolderAdd = (event) => {
-    //pending functionality
+  const handleContactCandidate = () => {
+    //TODO: add function to send :mailto
   };
-
-  //pending improvement to responsive Grids
 
   return (
     <Card className={classes.root}>
@@ -41,7 +41,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={user.profilePicture || imgtest}
+            image={imgtest} // add "candidate.profilePicture" when seed works again
             title="Henry Candidate"
           />
         </Grid>
@@ -59,7 +59,7 @@ function CandidateCard(props) {
                 <Grid item xs={9}>
                   {/*FullName*/}
                   <Typography gutterBottom variant="h5" component="h2">
-                    {`${user.firstName} ${user.lastName}`}
+                    {`${candidate.firstName} ${candidate.lastName}`}
                   </Typography>
                   {/*Top-right Icons*/}
                 </Grid>
@@ -68,7 +68,7 @@ function CandidateCard(props) {
                     color="inherit"
                     target="_blank"
                     rel="noopener"
-                    href={user.github}
+                    href={candidate.github}
                   >
                     <GitHubIcon name="GitHub" fontSize="small" />
                   </Link>
@@ -82,7 +82,7 @@ function CandidateCard(props) {
                     color="inherit"
                     target="_blank"
                     rel="noopener"
-                    href={user.linkedin}
+                    href={candidate.linkedin}
                   >
                     <LinkedInIcon name="LinkedIn" />
                   </Link>
@@ -91,9 +91,29 @@ function CandidateCard(props) {
                   <IconButton
                     color="secondary"
                     edge="start"
-                    onClick={handleFolderAdd}
+                    onClick={(event) => {
+                      handleCandidate
+                        ? handleCandidate(
+                            event,
+                            candidate.id,
+                            folder,
+                            uuid,
+                            includes
+                          )
+                        : handleContactCandidate(event);
+                    }}
                   >
-                    {user.role ? <CreateNewFolderIcon /> : <EmailIcon />}
+                    {!uuid ? (
+                      includes ? (
+                        <Badge badgeContent="✔" color="primary">
+                          <FolderIcon />
+                        </Badge>
+                      ) : (
+                        <CreateNewFolderIcon />
+                      )
+                    ) : (
+                      <EmailIcon />
+                    )}
                   </IconButton>
                 </Grid>
               </Grid>
@@ -107,7 +127,7 @@ function CandidateCard(props) {
               component="p"
               style={{ paddingLeft: 15 }}
             >
-              {`${user.country}  -  WebFT0${user.cohort}`}
+              {`${candidate.country}  -  WebFT0${candidate.cohort}`}
             </Typography>
             <Divider variant="middle" style={{ marginBottom: 10 }} />
             <ThemeProvider theme={theme}>
@@ -151,7 +171,7 @@ function CandidateCard(props) {
                 component="p"
                 align="justify"
               >
-                {user.miniBio.substring(0, 240) + '...'}
+                {candidate.miniBio.substring(0, 240) + '...'}
               </Typography>
             </ThemeProvider>
           </CardContent>
@@ -162,7 +182,7 @@ function CandidateCard(props) {
 }
 
 CandidateCard.propTypes = {
-  user: PropTypes.exact({
+  candidate: PropTypes.exact({
     id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
@@ -179,11 +199,14 @@ CandidateCard.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
   }),
+  folder: PropTypes.object,
+  includes: PropTypes.bool,
+  uuid: PropTypes.string,
 };
 
-// Mock user for props received in CandidateCard
+// Mock candidate for props received in CandidateCard
 CandidateCard.defaultProps = {
-  user: {
+  candidate: {
     firstName: 'Daniel',
     lastName: 'Stadler',
     location: 'Sarasota, TX, USA',
@@ -207,6 +230,28 @@ CandidateCard.defaultProps = {
      React, Node.js and Python.`,
     linkedin: '/',
     github: 'https://github.com/henry-labs/talent',
+  },
+  folder: {
+    id: 1,
+    recruiter: {
+      contactName: 'Tim Cook',
+      email: 'Cookingwithtim@apple.com',
+      company: 'Apple Inc.',
+    },
+    candidates: [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+      {
+        id: 3,
+      },
+      {
+        id: 6,
+      },
+    ],
   },
 };
 
