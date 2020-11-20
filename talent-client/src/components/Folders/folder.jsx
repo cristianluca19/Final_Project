@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { Container, Grid } from '@material-ui/core';
 import CandidateCard from '../CandidateCard';
 import { useSelector } from 'react-redux';
@@ -15,11 +14,8 @@ function Folder(props) {
     const DEFAULT_ROWS_PER_PAGE = 30;
 
     const classes = useStyles();
-    const [folderData, setFolderData] = React.useState({})
     const [openDelete, setOpenDelete] = React.useState(false);
     const [idCandidate, setIdCandidate] = React.useState(0);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
     const dispatch = useDispatch();
 
     const folders = useSelector(

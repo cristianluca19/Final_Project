@@ -14,7 +14,7 @@ export class foldersController {
         },
         {
           model: db.Candidate,
-        }
+        },
       ],
     });
     res.status(200).json(folders);
