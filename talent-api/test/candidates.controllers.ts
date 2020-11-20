@@ -3,6 +3,10 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
+<<<<<<< HEAD
+=======
+import { response } from 'express';
+>>>>>>> a39b9f448f244cba3205f0cb630a5ee892842371
 import path from 'path';
 import { getMaxListeners } from 'process';
 import { response } from 'express';
@@ -381,7 +385,6 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
-
   describe('PUT update candidate', () => {
     it('should update one candidate', async () => {
       const candidates = [
@@ -415,6 +418,7 @@ describe('Candidates', () => {
       expect(candidateUpdated)
         .to.have.property('email')
         .to.be.equal('DiegoSoyHenry@gmail.com');
+
     });
   });
 
