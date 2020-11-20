@@ -381,6 +381,42 @@ describe('Candidates', () => {
     });
   });
 
+  describe('PUT update candidate', () => {
+    it('should update one candidate', async () => {
+      const candidates = [
+        {
+          firstName: 'Matias',
+          email: 'matifu@gmail.com',
+          cohort: 'wft-07',
+        },
+        {
+          firstName: 'Diego',
+          email: 'diego@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          firstName: 'Cristian',
+          email: 'cristian@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const candidatesList = await db.Candidate.bulkCreate(candidates);
+      const response = await request(Server)
+        .put(`/api/v1/candidates/${candidatesList[1].dataValues.id}/update`)
+        .send({
+          firstName: 'Dieguito',
+          email: 'DiegoSoyHenry@gmail.com',
+          cohort: 'wft-04',
+        });
+      const candidateUpdated = await db.Candidate.findByPk(
+        candidatesList[1].dataValues.id
+      );
+      expect(candidateUpdated)
+        .to.have.property('email')
+        .to.be.equal('DiegoSoyHenry@gmail.com');
+    });
+  });
+
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
       const candidate1 = await db.Candidate.create({

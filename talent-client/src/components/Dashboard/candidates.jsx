@@ -3,11 +3,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { deleteCandidate, getCandidateById, updateCandidate } from '../../redux/candidatesReducer/Action.js';
+import {
+  deleteCandidate,
+  getCandidateById,
+  updateCandidate,
+} from '../../redux/candidatesReducer/Action.js';
 import SaveIcon from '@material-ui/icons/Save';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination,
-TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-Modal, Backdrop, Fade, TextField, Avatar, Select, MenuItem, InputLabel } from '@material-ui/core';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Backdrop,
+  Fade,
+  TextField,
+  Avatar,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core';
 
 const DEFAULT_ROWS_PER_PAGE = 30;
 
@@ -124,7 +149,6 @@ function Candidates() {
     e.preventDefault();
     dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
-
   };
 
   const dialogDeleteCandidate = () => (
@@ -225,30 +249,30 @@ function Candidates() {
             />
             <br />
             <div className={classes.selectItems}>
-              <InputLabel id='visibilityLabel'>Visibilidad</InputLabel>
+              <InputLabel id="visibilityLabel">Visibilidad</InputLabel>
               <Select
-                labelId='Visibilidad'
-                id='visibility'
-                value={ candidateData.visibility }
+                labelId="Visibilidad"
+                id="visibility"
+                value={candidateData.visibility}
                 onChange={(e) => handleSelectCandidate(e, 'visibility')}
                 className={classes.selectOptions}
               >
-                <MenuItem value={'listed'} >Listed</MenuItem>
-                <MenuItem value={'unlisted'} >Unlisted</MenuItem>
-                <MenuItem value={'private'} >Private</MenuItem>
+                <MenuItem value={'listed'}>Listed</MenuItem>
+                <MenuItem value={'unlisted'}>Unlisted</MenuItem>
+                <MenuItem value={'private'}>Private</MenuItem>
               </Select>
             </div>
             <div className={classes.selectItems}>
-              <InputLabel id='visibilityLabel'>Estado</InputLabel>
+              <InputLabel id="visibilityLabel">Estado</InputLabel>
               <Select
-                labelId='Estado'
-                id='status'
-                value={ candidateData.status }
+                labelId="Estado"
+                id="status"
+                value={candidateData.status}
                 onChange={(e) => handleSelectCandidate(e, 'status')}
                 className={classes.selectOptions}
               >
-                <MenuItem value={'employed'} >Employed</MenuItem>
-                <MenuItem value={'unemployed'} >Unemployed</MenuItem>
+                <MenuItem value={'employed'}>Employed</MenuItem>
+                <MenuItem value={'unemployed'}>Unemployed</MenuItem>
               </Select>
             </div>
             <TextField
