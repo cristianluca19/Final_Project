@@ -4,7 +4,16 @@ import uuid from 'uuidv4';
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
-    const folders = await db.Folder.findAll();
+    const folders = await db.Folder.findAll({
+      include: [
+        {
+          model: db.User,
+        },
+        {
+          model: db.Recruiter,
+        },
+      ],
+    });
     res.status(200).json(folders);
   }
   async byId(req: Request, res: Response): Promise<void> {

@@ -1,10 +1,12 @@
 import React from 'react';
+import {useState} from 'react';
 import logo from '../../images/logo.png';
 import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
 import Menu from './menu.jsx';
+import { Link, Redirect } from 'react-router-dom';
 
 const useStyle = makeStyles({
   logo: {
@@ -18,6 +20,7 @@ const useStyle = makeStyles({
     justifyContent: 'flex-end',
   },
 });
+
 
 function Nav() {
   const classes = useStyle();
@@ -48,7 +51,9 @@ function Nav() {
               <AcountCircle />
             </IconButton>
             <IconButton className={classes.icons} label="Folder" value="folder">
-              <FolderIcon />
+            <Link to={"/folders/"}>
+                <FolderIcon  />
+            </Link>
             </IconButton>
             <IconButton
               className={classes.icons}

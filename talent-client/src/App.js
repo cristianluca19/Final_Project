@@ -13,6 +13,9 @@ import Dashboard from './components/Dashboard';
 import Menu from './components/Dashboard/menu';
 import Candidates from './components/Dashboard/candidates';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import FoldersCrud from './components/Folders/index';
+import Folder from './components/Folders/folder';
+
 
 function App() {
   //==============================================================
@@ -25,7 +28,10 @@ function App() {
 
   return (
     <div className="App">
+
       <Switch>
+        <Route path="/folder/:id" render={() => <Folder />} />
+        <Route path="/folders" render={() => <FoldersCrud />} />
         <Route path="/panel" render={() => <Dashboard />} />
         <Route path="/" render={() => <Nav />} />
       </Switch>

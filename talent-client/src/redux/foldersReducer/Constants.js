@@ -1,0 +1,2 @@
+export const GET_ALL_FOLDERS = 'GET_ALL_FOLDERS';
+export const DELETE_FOLDER = 'DELETE_FOLDER';
