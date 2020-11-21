@@ -34,6 +34,10 @@ function App() {
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
         />
+        <Route
+          path="/panel/skills"
+          render={() => <Dashboard componentToRender={'skills'} />}
+        />
         <Route path="/" render={() => <Nav />} />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
@@ -48,9 +52,9 @@ function App() {
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />
       </Switch>
-      <Route path="/panel" render={() => <Menu />} />
+      {/* <Route path="/panel" render={() => <Menu />} />
       <Route exact path="/panel/candidates" render={() => <Candidates />} />
-      <Route exact path="/panel/skills" render={() => <Skills />} />
+      <Route exact path="/panel/skills" render={() => <Skills />} /> */}
     </div>
   );
 }

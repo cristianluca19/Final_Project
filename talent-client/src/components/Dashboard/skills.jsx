@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useStyles } from './styles.js';
+import { useStyles } from './Styles/skills.css';
 import Swal from 'sweetalert2'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
