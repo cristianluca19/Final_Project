@@ -5,13 +5,11 @@ import Swal from 'sweetalert2'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
-import axios from 'axios';
-import { getAllSkills } from '../../redux/skillsReducer/Action'
+import { getAllSkills, editSkill, deleteSkill } from '../../redux/skillsReducer/Action'
 import { useDispatch } from 'react-redux';
 
 
-function SkillsTable() {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+function Skills() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const skills = useSelector(
@@ -22,33 +20,37 @@ function SkillsTable() {
     id: null,
     name: null,
     type: null
-  })
+  });
 
   const softSKills = skills.filter(item => item.type === 'soft');
-  let soft;
-  softSKills.length > 5 ? soft = classes.softListScroll : soft = classes.softListItems
+  const soft = softSKills.length > 5 ? classes.softListScroll : classes.softListItems;
 
   const techSkills = skills.filter(item => item.type === 'tech');
-  let tech;
-  techSkills.length > 5 ? tech = classes.techListScroll : tech = classes.techListItems
+  const tech = techSkills.length > 5 ? classes.techListScroll : classes.techListItems;
 
   const otherSkills = skills.filter(item => item.type === 'other');
-  let other;
-  otherSkills.length > 5 ? other = classes.otherListScroll : other = classes.otherListItems
+  const other = otherSkills.length > 5 ? classes.otherListScroll : classes.otherListItems
 
 
-  const handleOpen = async (id) => {
-    const skill = skills.filter(item => item.id === id);
-    await setSkill({
-      id: skill.id,
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    let editedSkill = {
       name: skill.name,
-      type: skill.type
-    })
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+      type: skill.type,
+    }
+    const resp = await dispatch(editSkill(skill.id, editedSkill));
+    if (resp === 200) {
+      handleClose();
+      await Swal.fire('Skill edited successfully!');
+      dispatch(getAllSkills());
+    } else {
+      handleClose();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
+    }
   };
 
   const handleDelete = async (id) => {
@@ -62,18 +64,31 @@ function SkillsTable() {
       confirmButtonText: 'Yes, delete it!'
     })
     if (alert.isConfirmed) {
-      const resp = await axios.delete(`${BACKEND_URL}/skills/${id}`);
-      console.log(resp.data)
-      if (resp.data === 'Skill deleted') {
+      const resp = await dispatch(deleteSkill(id))
+      if (resp === 200) {
         await Swal.fire(
           'Deleted!',
-          'Your file has been deleted.',
+          'The skill has been deleted.',
           'success'
         )
         dispatch(getAllSkills());
       }
     }
-  }
+  };
+
+  const handleOpen = async (id) => {
+    const getSkill = await skills.filter(item => item.id === id);
+    setSkill({
+      id: getSkill[0].id,
+      name: getSkill[0].name,
+      type: getSkill[0].type
+    })
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleInput = (e) => {
     setSkill({
@@ -89,82 +104,32 @@ function SkillsTable() {
     })
   }
 
-  const handleEdit = async (e) => {
-    e.preventDefault();
-    let json = {
-      name: skill.name,
-      type: skill.type,
-    }
-    const resp = await axios.put(`${BACKEND_URL}/skills/${skill.id}`, json, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    if (resp.data.id) {
-      handleClose();
-      await Swal.fire('Skill edited successfully!');
-      dispatch(getAllSkills());
-    }
-  }
+  const Table = (props) => {
 
+    return (
+      <div className={classes.list}>
+        <h2 className={classes.title}>{props.title}</h2>
+        <div className={props.styled}>
+          {props.type.map(item =>
+            <div className={classes.listItem}>
+              <p className={classes.text}>{item.name}</p>
+              <div className={classes.iconContainer}>
+                <EditIcon className={classes.icon} onClick={() => {
+                  handleOpen(item.id);
+                }} />
+                <DeleteIcon className={classes.icon} onClick={() => {
+                  handleDelete(item.id)
+                }} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>)
+  };
 
-  return (
-    <div className={classes.container}>
-      <div className={classes.list}>
-        <h2 className={classes.title}>Tech Skills</h2>
-        <div className={tech}>
-          {techSkills.map(item =>
-            <div className={classes.listItem}>
-              <p className={classes.text}>{item.name}</p>
-              <div className={classes.iconContainer}>
-                <EditIcon className={classes.icon} onClick={() => {
-                  handleOpen(item.id);
-                }} />
-                <DeleteIcon className={classes.icon} onClick={() => {
-                  handleDelete(item.id)
-                }} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className={classes.list}>
-        <h2 className={classes.title}>Soft Skills</h2>
-        <div className={soft}>
-          {softSKills.map(item =>
-            <div className={classes.listItem}>
-              <p className={classes.text}>{item.name}</p>
-              <div className={classes.iconContainer}>
-                <EditIcon className={classes.icon} onClick={() => {
-                  handleOpen(item.id);
-                }} />
-                <DeleteIcon className={classes.icon} onClick={() => {
-                  handleDelete(item.id)
-                }} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className={classes.list}>
-        <h2 className={classes.title}>Other Skills</h2>
-        { }
-        <div className={other}>
-          {otherSkills.map(item =>
-            <div className={classes.listItem}>
-              <p className={classes.text}>{item.name}</p>
-              <div className={classes.iconContainer}>
-                <EditIcon className={classes.icon} onClick={() => {
-                  handleOpen(item.id);
-                }} />
-                <DeleteIcon className={classes.icon} onClick={() => {
-                  handleDelete(item.id)
-                }} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+  const EditSkillModal = () => {
+
+    return (
       <Modal
         open={open}
         onClose={handleClose}
@@ -183,10 +148,20 @@ function SkillsTable() {
             <input type='submit' className={classes.button} value='Guardar Cambios' onClick={handleEdit} />
           </div>
         </div>
-      </Modal>
+      </Modal>)
+  };
+
+
+
+  return (
+    <div className={classes.container}>
+      <Table title='Tech Skills' styled={tech} type={techSkills} />
+      <Table title='Soft Skills' styled={soft} type={softSKills} />
+      <Table title='Other Skills' styled={other} type={otherSkills} />
+      <EditSkillModal />
     </div>
   )
 }
 
-export default SkillsTable
+export default Skills;
 

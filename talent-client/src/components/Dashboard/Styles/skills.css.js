@@ -2,10 +2,9 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   container: {
-    backgroundColor: '#ebebeb',
-    minHeight: '100vh',
     display: 'flex',
     justifyContent: 'space-around',
+    width: '100%'
   },
   list: {
     width: '17vw',
@@ -16,30 +15,30 @@ export const useStyles = makeStyles((theme) => ({
     textAlign: 'left'
   },
   techListItems: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
   },
   techListScroll: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
     overflowX: 'hidden',
     overflow: 'scroll',
     minHeight: 'min-content',
     maxHeight: 300,
   },
   softListItems: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
   },
   softListScroll: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
     overflowX: 'hidden',
     overflow: 'scroll',
     minHeight: 'min-content',
     maxHeight: 300,
   },
   otherListItems: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
   },
   otherListScroll: {
-    backgroundColor: '#FFFAFA',
+    backgroundColor: '#ebebeb',
     overflowX: 'hidden',
     overflow: 'scroll',
     minHeight: 'min-content',
