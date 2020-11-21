@@ -4,7 +4,7 @@ export default (sequelize) => {
   class Cohort extends Model {
     static associate(models) {
       // define associations here, e.g.
-      this.hasMany(models.Candidate, { as: 'cohort' });
+      this.hasMany(models.Candidate);
     }
   }
   Cohort.init(

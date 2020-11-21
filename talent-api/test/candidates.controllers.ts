@@ -13,8 +13,11 @@ describe('Candidates', () => {
 
   describe('GET all candidates', () => {
     it('should get all candidates', async () => {
-      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '1' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '1' });
       const response = await request(Server).get('/api/v1/candidates');
       expect(response.body).to.have.lengthOf(2);
       expect(response.body[0])
@@ -26,8 +29,11 @@ describe('Candidates', () => {
     });
 
     it('should be an array', async () => {
-      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '1' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '1' });
       const response = await request(Server).get('/api/v1/candidates');
       expect(response.body).to.be.an('array');
     });
@@ -35,12 +41,15 @@ describe('Candidates', () => {
 
   describe('GET specific candidate', () => {
     it('should get a specific candidate', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
-        cohort: '4',
+        cohortId: '1',
       });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati@gmail.com', cohortId: '1' });
+      await db.Candidate.create({ email: 'martin@gmail.com', cohortId: '1' });
       const response = await request(Server).get(
         `/api/v1/candidates/${candidate1.id}`
       );
@@ -53,6 +62,9 @@ describe('Candidates', () => {
 
   describe('POST route transform csv file to json', () => {
     it('should transform all candidates correctly', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
         .post(`/api/v1/candidates/csv`)
@@ -63,24 +75,33 @@ describe('Candidates', () => {
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('bryan@gmail.com');
-      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-04');
+      expect(response.body[1]).to.have.property('cohortId').to.be.equal('1');
     });
   });
 
   describe('POST route bulk candidates to database', () => {
     it('should create all candidates correctly', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-02',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-03',
+      });
       const candidates = [
         {
           email: 'leo@gmail.com',
-          cohort: 'wft-05',
+          cohortId: 1,
         },
         {
           email: 'mati@gmail.com',
-          cohort: 'wft-05',
+          cohortId: 2,
         },
         {
           email: 'bryan@gmail.com',
-          cohort: 'wft-04',
+          cohortId: 3,
         },
       ];
       const response = await request(Server)
@@ -91,7 +112,7 @@ describe('Candidates', () => {
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('mati@gmail.com');
-      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
+      expect(response.body[1]).to.have.property('cohortId').to.be.equal(2);
     });
   });
 
@@ -419,15 +440,18 @@ describe('Candidates', () => {
 
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'cristianL@gmail.com',
-        cohort: '5',
+        cohortId: '1',
       });
       const response = await request(Server).delete(
         `/api/v1/candidates/${candidate1.id}/delete`
       );
       const candidate = await db.Candidate.findOne({
-        where: { email: 'cristianL@gmail.com', cohort: '5' },
+        where: { email: 'cristianL@gmail.com', cohortId: '1' },
       });
       expect(response.status).to.be.equal(204);
       expect(candidate).to.be.equal(null);
@@ -436,11 +460,14 @@ describe('Candidates', () => {
 
   describe('POST candidate', () => {
     it('should create a new candidate', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const response = await request(Server)
         .post('/api/v1/candidates/addCandidate')
         .send({
           email: 'cristianL@gmail.com',
-          cohort: '5',
+          cohortId: '1',
         });
       expect(response.status).to.be.equal(200);
     });

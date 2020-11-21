@@ -22,22 +22,26 @@ describe('Folders', () => {
       expect(response.body).to.be.an('array').to.have.lengthOf(4);
     });
     it('Should retrieve an specific folder with all associated candidates', async () => {
+      await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const foldersCreated = await db.Folder.bulkCreate([{ uuid }, { uuid }]);
       const candidate = await db.Candidate.create({
         email: 'taniamg@gmail.com',
-        cohort: 'WebFT06',
+        cohortId: 1,
       });
       await foldersCreated[0].addCandidate(candidate.id);
       const response = await request(Server).get(
         `/api/v1/folders/${foldersCreated[0].id}`
       );
+      await console.log(response.body)
       expect(response.body)
         .to.be.an('object')
         .to.deep.include({ id: foldersCreated[0].id });
       expect(response.body).to.have.property('candidates').to.be.an('array');
       expect(response.body).to.have.nested.property('candidates[0].id');
       expect(response.body.candidates[0].email).to.equal('taniamg@gmail.com');
-      expect(response.body.candidates[0].cohort).to.equal('WebFT06');
+      expect(response.body.candidates[0].cohortId).to.equal(1);
     });
   });
   describe('DELETE', () => {
