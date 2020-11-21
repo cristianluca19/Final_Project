@@ -19,18 +19,18 @@ export default function Reducer(state = initialState, action) {
         newFolder: action.payload,
       };
     case actions.GET_ALL_FOLDERS:
-        return {
-          ...state,
-          allFolders: action.payload,
+      return {
+        ...state,
+        allFolders: action.payload,
       };
     case action.DELETE_FOLDER:
-        return {
-          ...state,
+      return {
+        ...state,
       };
     case action.UPDATE_FOLDER:
       return {
-          ...state,
-      }
+        ...state,
+      };
     default:
       return state;
   }

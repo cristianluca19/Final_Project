@@ -28,7 +28,6 @@ function CandidateCard(props) {
 
   const classes = useStyles();
 
-
   // HANDLERS //
   const handleContactCandidate = () => {
     //TODO: add function to send :mailto

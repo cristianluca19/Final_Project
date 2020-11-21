@@ -69,7 +69,7 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: 40,
   },
   background: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   container: {
     paddingTop: '2rem',
@@ -85,7 +85,4 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
-
 }));
-
-  

@@ -1,5 +1,4 @@
 import React from 'react';
-import {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
 import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
@@ -23,7 +22,6 @@ const useStyle = makeStyles({
     justifyContent: 'flex-end',
   },
 });
-
 
 function Nav() {
   const dispatch = useDispatch();
@@ -66,20 +64,16 @@ function Nav() {
             >
               <AcountCircle />
             </IconButton>
-            
+
             {/*<IconButton className={classes.icons} label="Folder" value="folder">
             <Link to={"/folders/"}>
                 <FolderIcon  />
             </Link>*/}
 
-            <IconButton
-              className={classes.icons}
-              label="Folder"
-              value="folder"
-            >
-            <Link to={"/folders/"}>
-              <FolderIcon />
-            </Link>
+            <IconButton className={classes.icons} label="Folder" value="folder">
+              <Link to={'/folders/'}>
+                <FolderIcon />
+              </Link>
             </IconButton>
             <IconButton
               className={classes.icons}

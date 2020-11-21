@@ -21,9 +21,9 @@ export default function Reducer(state = initialState, action) {
         ),
       };
     case actions.REMOVE_CANDIDATE_FROM_FOLDER:
-      return{
-        ...state
-      }
+      return {
+        ...state,
+      };
     case actions.GET_CANDIDATE_BY_ID:
       return {
         ...state,

@@ -12,6 +12,8 @@ import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 import FoldersCrud from './components/Folders/index';
 import Folder from './components/Folders/folder';
+import { getAllFolders } from './redux/foldersReducer/Action';
+
 import './App.css';
 
 function App() {
@@ -22,10 +24,10 @@ function App() {
   // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
   // to lower loading times if candidate number is too high...
   dispatch(getAllCandidates());
+  dispatch(getAllFolders());
 
   return (
     <div className="App">
-
       <Switch>
         <Route path="/folder/:id" render={() => <Folder />} />
         <Route path="/folders" render={() => <FoldersCrud />} />

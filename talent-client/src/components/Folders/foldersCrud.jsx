@@ -6,267 +6,299 @@ import ViewIcon from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
-import {getAllFolders, deleteFolder, updateFolder} from '../../redux/foldersReducer/Action';
-import { getAllRecruiters } from '../../redux/recruitersReducer/Action';  
+import {
+  getAllFolders,
+  deleteFolder,
+  updateFolder,
+} from '../../redux/foldersReducer/Action';
+import { getAllRecruiters } from '../../redux/recruitersReducer/Action';
 import { useSelector } from 'react-redux';
-import {FormControl, MenuItem, InputLabel, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Backdrop, Fade, TextField, Select } from '@material-ui/core';
+import {
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Backdrop,
+  Fade,
+  TextField,
+  Select,
+} from '@material-ui/core';
 
 function FoldersCrud() {
-    
-    const dispatch = useDispatch();
-    const folders = useSelector(
-        (store) => store.FolderReducer.allFolders
-    );
-    const recruiters = useSelector(
-        (store) => store.RecruitersReducer.allRecruiters
-    );
-    const classes = useStyles();
-    const [folderData, setFolderData] = React.useState({})
-    const [openUpdate, setOpenUpdate] = React.useState(false);
-    const [openSelect, setOpenSelect] = React.useState(false);
-    const [idFolder, setIdFolder] = React.useState(0);
-    const [open, setOpen] = React.useState(false);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const columns = [
-        { id: 'id', label: 'ID', minWidth: 30 },
-        { id: 'selector', label: 'SELECTOR', minWidth: 100 },
-        { id: 'status', label: 'STATUS', minWidth: 100 },
-        { id: 'opened', label: 'OPENED', minWidth: 100 },
-        { id: 'recruiter', label: 'RECRUITER', minWidth: 100 },
-        { id: 'email', label: 'EMAIL', minWidth: 100 },
-        { id: 'company', label: 'COMPANY', minWidth: 100 },
-        { id: 'view',   label: '', minWidth: 50 },
-        { id: 'edit',   label: '', minWidth: 50},
-        { id: 'delete', label: '', minWidth: 50 },
-    ];
-    const rows = [];
-    
-    if(folders) {
-        folders
-        .sort((a, b) => a.id - b.id)
-        .map((folders) => {
-            return rows.push(
-                                {  
-                                    id: folders.id, 
-                                    uuid: folders.uuid,
-                                    selector: folders.user && folders.user.firstName + ' ' + folders.user.lastName,
-                                    status: folders.status,
-                                    opened: folders.opened.toString(),
-                                    recruiter: folders.recruiter && folders.recruiter.contactName,
-                                    email: folders.recruiter && folders.recruiter.email,
-                                    company: folders.recruiter && folders.recruiter.company,
-                                    key: folders.id,
-                                }
-                            )
-            })
-        }
+  const [folderData, setFolderData] = React.useState({});
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+  const [openSelect, setOpenSelect] = React.useState(false);
+  const [idFolder, setIdFolder] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch = useDispatch();
+  const classes = useStyles();
+  const folders = useSelector((store) => store.FolderReducer.allFolders);
+  const recruiters = useSelector(
+    (store) => store.RecruitersReducer.allRecruiters
+  );
+  const UPDATE_CLICK_ACTION = 'update';
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-            setPage(0);
-        };
+  const columns = [
+    { id: 'id', label: 'ID', minWidth: 30 },
+    { id: 'selector', label: 'SELECTOR', minWidth: 100 },
+    { id: 'status', label: 'STATUS', minWidth: 100 },
+    { id: 'opened', label: 'OPENED', minWidth: 100 },
+    { id: 'recruiter', label: 'RECRUITER', minWidth: 100 },
+    { id: 'email', label: 'EMAIL', minWidth: 100 },
+    { id: 'company', label: 'COMPANY', minWidth: 100 },
+    { id: 'view', label: '', minWidth: 50 },
+    { id: 'edit', label: '', minWidth: 50 },
+    { id: 'delete', label: '', minWidth: 50 },
+  ];
+  const rows = [];
 
-    const handleClickDelete = (id) => {
-        setIdFolder(id);
-        setOpen(true);
-    };
-    const onClickDelete = async (e) => {
-        e.preventDefault();
-        await dispatch(deleteFolder(idFolder));
-        dispatch(getAllFolders());
-        handleClose();
-    };
-    
-    const handleClose = () => {
-        setOpen(false);
-        setOpenUpdate(false)
-    };
-    const handleOpenSelect = () => {
-        setOpenSelect(true);
-    };
-    const handleCloseSelect = () => {
-        setOpenSelect(false);
-    };
-
-    const handleChangeSelect = (e) => {
-        setFolderData({
-            ...folderData,
-            [e.target.name]: e.target.value,
+  if (folders) {
+    folders
+      .sort((a, b) => a.id - b.id)
+      .map((folders) => {
+        return rows.push({
+          id: folders.id,
+          uuid: folders.uuid,
+          selector:
+            folders.user &&
+            folders.user.firstName + ' ' + folders.user.lastName,
+          status: folders.status,
+          opened: folders.opened.toString(),
+          recruiter: folders.recruiter && folders.recruiter.contactName,
+          email: folders.recruiter && folders.recruiter.email,
+          company: folders.recruiter && folders.recruiter.company,
+          key: folders.id,
         });
-    };
-        
-    const handleClickOpen = (id, action) => {
-            if (action === 'update') {
-                setOpenUpdate(true);
-            } 
-            setIdFolder(id);
-        };
-    
-    const onClickUpdate = async (e) => {
-        e.preventDefault();
-        await dispatch(updateFolder(idFolder, folderData));
-        dispatch(getAllFolders())
-        setOpenUpdate(false);
-    };
+      });
+  }
 
-    useEffect(() => {
-        dispatch(getAllFolders());
-        dispatch(getAllRecruiters());
-    }, []);
-    
-    return (
-        <Paper  >
-            <h1>FOLDERS</h1>
-            <br />
-            <TableContainer  >
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number'
-                                                    ? column.format(value)
-                                                    : value}
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
-                                                    {column.id === 'view' && (
-                                                        <Link to={"/folder/" + row.uuid }>
-                                                            <ViewIcon />
-                                                        </Link>
-                                                    )}
+  const handleClickDelete = (id) => {
+    setIdFolder(id);
+    setOpen(true);
+  };
+  const onClickDelete = async (e) => {
+    e.preventDefault();
+    await dispatch(deleteFolder(idFolder));
+    dispatch(getAllFolders());
+    handleClose();
+  };
 
-                                                    {column.id === 'edit' && (
-                                                        <EditIcon onClick={()=> {handleClickOpen(row.id, 'update')} } />
-                                                    )}
+  const handleClose = () => {
+    setOpen(false);
+    setOpenUpdate(false);
+  };
+  const handleOpenSelect = () => {
+    setOpenSelect(true);
+  };
+  const handleCloseSelect = () => {
+    setOpenSelect(false);
+  };
 
-                                                    {column.id === 'delete' && (
-                                                        <DeleteIcon onClick={() => handleClickDelete(row.id)}/>
-                                                    )}
+  const handleChangeSelect = (e) => {
+    setFolderData({
+      ...folderData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-                                                </TableCell>
-                                            );                      
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-                <div>
-                    {/*MODAL PARA ELIMINAR UNA FOLDER*/}
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {'¡Esta a punto de eleminar esta carpeta!'}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                            Presione eleminar si desea hacerlo, o cancelar.
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">
-                                Cancelar
-                            </Button>
-                            <Button
-                                onClick={(e) => onClickDelete(e)}
-                                color="primary"
-                                autoFocus
-                            >
-                                Eliminar
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-                <div>
-                    {/*MODAL PARA EDITAR UNA FOLDER*/}        
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal} 
-                        open={openUpdate}
-                        onClose={() => handleClose('update')}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                        timeout: 500,
-                        }}
-                    >
-                        <Fade in={openUpdate}>
-                            <div className={classes.paper}>
-                                <h1 className={classes.titleCandidates}> Actualizar Carpeta </h1>
-                                <form
-                                className={classes.formCandidates}
-                                noValidate
-                                autoComplete="off"
-                                >
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel>Recruiter</InputLabel>
-                                    <Select
-                                        name='recruiterId'
-                                        open={openSelect}
-                                        onClose={handleCloseSelect}
-                                        onOpen={handleOpenSelect}
-                                        onChange={(e) => {handleChangeSelect(e)}}
-                                        >
-                                        { recruiters && recruiters.map( (recruiter, index) => {
-                                                return <MenuItem value={recruiter.id}>{ recruiter.contactName + ', ' + 'Compañia: ' + ' ' + recruiter.company} </MenuItem>
-                                        })}
-                                    </Select>
-                                </FormControl>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    className={classes.button}
-                                    startIcon={<SaveIcon />}
-                                    onClick={(e) => onClickUpdate(e)}
-                                >
-                                    Guardar
-                                </Button>
-                                </form>
-                            </div>
-                        </Fade>
-                    </Modal>
-                </div> 
-        </Paper>
-    );
+  const handleClickOpen = (id, action) => {
+    if (action === UPDATE_CLICK_ACTION) {
+      setOpenUpdate(true);
+    }
+    setIdFolder(id);
+  };
+
+  const onClickUpdate = async (e) => {
+    e.preventDefault();
+    await dispatch(updateFolder(idFolder, folderData));
+    dispatch(getAllFolders());
+    setOpenUpdate(false);
+  };
+
+  const EditFolderModal = () => (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={classes.modal}
+      open={openUpdate}
+      onClose={() => handleClose(UPDATE_CLICK_ACTION)}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={openUpdate}>
+        <div className={classes.paper}>
+          <h1 className={classes.titleCandidates}> Actualizar Carpeta </h1>
+          <form
+            className={classes.formCandidates}
+            noValidate
+            autoComplete="off"
+          >
+            <FormControl className={classes.formControl}>
+              <InputLabel>Recruiter</InputLabel>
+              <Select
+                name="recruiterId"
+                open={openSelect}
+                onClose={handleCloseSelect}
+                onOpen={handleOpenSelect}
+                onChange={(e) => {
+                  handleChangeSelect(e);
+                }}
+              >
+                {recruiters &&
+                  recruiters.map((recruiter, index) => {
+                    return (
+                      <MenuItem value={recruiter.id}>
+                        {`${recruiter.contactName}, Compañia: ${recruiter.company}`}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.button}
+              startIcon={<SaveIcon />}
+              onClick={(e) => onClickUpdate(e)}
+            >
+              Guardar
+            </Button>
+          </form>
+        </div>
+      </Fade>
+    </Modal>
+  );
+
+  const DeleteFolderModal = () => (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {'¡Esta a punto de eleminar esta carpeta!'}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Presione eleminar si desea hacerlo, o cancelar.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={(e) => onClickDelete(e)} color="primary" autoFocus>
+          Eliminar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  const FolderRow = (row) => (
+    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+      {columns.map((column) => {
+        const value = row[column.id];
+        return (
+          <TableCell key={column.id} align={column.align}>
+            {column.format && typeof value === 'number'
+              ? column.format(value)
+              : value}
+            {column.id === 'view' && (
+              <Link to={'/folder/' + row.uuid}>
+                <ViewIcon />
+              </Link>
+            )}
+            {column.id === 'edit' && (
+              <EditIcon
+                onClick={() => {
+                  handleClickOpen(row.id, UPDATE_CLICK_ACTION);
+                }}
+              />
+            )}
+            {column.id === 'delete' && (
+              <DeleteIcon onClick={() => handleClickDelete(row.id)} />
+            )}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  );
+
+  useEffect(() => {
+    dispatch(getAllFolders());
+    dispatch(getAllRecruiters());
+  }, []);
+
+  return (
+    <Paper>
+      <h1>FOLDERS</h1>
+      <br />
+      <TableContainer>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return FolderRow(row);
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+      {EditFolderModal()}
+      {DeleteFolderModal()}
+    </Paper>
+  );
 }
 
 export default FoldersCrud;
-

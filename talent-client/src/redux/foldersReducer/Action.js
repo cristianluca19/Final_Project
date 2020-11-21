@@ -5,31 +5,33 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export function getAllFolders() {
   return async (dispatch) => {
-      const folders = await axios.get(`${BACKEND_URL}/folders`);
-      dispatch({
-          type: actions.GET_ALL_FOLDERS,
-          payload: folders.data,
-      });
+    const folders = await axios.get(`${BACKEND_URL}/folders`);
+    dispatch({
+      type: actions.GET_ALL_FOLDERS,
+      payload: folders.data,
+    });
   };
 }
 
 export function deleteFolder(id) {
   return async (dispatch) => {
-      await axios.delete(`${BACKEND_URL}/folders/`+id);
-      dispatch({
-          type: actions.DELETE_FOLDER,
-      });
+    await axios.delete(`${BACKEND_URL}/folders/` + id);
+    dispatch({
+      type: actions.DELETE_FOLDER,
+    });
   };
 }
 
 export function updateFolder(idFolder, idRecruiter) {
   return async (dispatch) => {
-      const updatedFolder = await axios.put (`${BACKEND_URL}/folders/`+idFolder+`?recruiterId=`+idRecruiter.recruiterId);
-      dispatch({
-          type: actions.UPDATE_FOLDER,
-          payload: updatedFolder.data
-      })
-  }
+    const updatedFolder = await axios.put(
+      `${BACKEND_URL}/folders/${idFolder}?recruiterId=${idRecruiter.recruiterId}`
+    );
+    dispatch({
+      type: actions.UPDATE_FOLDER,
+      payload: updatedFolder.data,
+    });
+  };
 }
 
 export function addToFolder() {
