@@ -12,6 +12,7 @@ export default (sequelize) => {
       this.belongsToMany(models.Folder, {
         through: 'folder_candidates',
       });
+      this.belongsTo(models.Cohort);
     }
   }
   Candidate.init(
@@ -42,10 +43,6 @@ export default (sequelize) => {
         validate: {
           isUrl: true,
         },
-      },
-      cohort: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       miniBio: {
         type: DataTypes.TEXT,
