@@ -38,11 +38,11 @@ function SkillsTable() {
 
 
   const handleOpen = async (id) => {
-    const resp = await axios.get(`${BACKEND_URL}/skills/${id}`);
+    const skill = skills.filter(item => item.id === id);
     await setSkill({
-      id: resp.data.id,
-      name: resp.data.name,
-      type: resp.data.type
+      id: skill.id,
+      name: skill.name,
+      type: skill.type
     })
     setOpen(true);
   };
