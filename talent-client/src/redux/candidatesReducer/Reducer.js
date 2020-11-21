@@ -4,6 +4,7 @@ const initialState = {
   allCandidates: [],
   candidate: {},
   bulkedCandidates: [],
+  filterCandidates: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -36,6 +37,13 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         bulkedCandidates: action.payload,
+      };
+    case actions.GET_CANDIDATE_FILTER:
+      return {
+        ...state,
+        filterCandidates: !action.payload.length ? ['Candidatos no encontrados'] : state.allCandidates.filter(
+          (candidate) => action.payload.includes(candidate.id)
+        ),
       };
     default:
       return state;

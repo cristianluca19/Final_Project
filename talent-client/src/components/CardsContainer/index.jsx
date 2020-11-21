@@ -15,10 +15,16 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
+  const filterDataCandidates = useSelector(
+    (store) => store.CandidateReducer.filterCandidates
+  );
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const cardsMaxLimit = 30;
-
+  console.log('filterCards: ', filterDataCandidates);
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
     if (!uuid) {
@@ -49,39 +55,47 @@ function CardsContainer(props) {
 
   // CONSIDER IMPLENTING A LOADING COMPONENT HERE WHILE FETCH RESOLVES....
 
-  return (
-    <Container className={classes.container} maxWidth="xl">
-      <Grid
-        className={classes.paddingCandidates}
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-      >
-        {/* props.user.map((candidate,index) */}{' '}
-        {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
-        {candidates &&
-          candidates.map(
-            (candidate, index) =>
-              index < cardsMaxLimit &&
-              candidate.visibility === 'listed' && (
-                <div key={index} className={classes.CandidateCard}>
-                  <CandidateCard
-                    candidate={candidate}
-                    handleCandidate={handleCandidate}
-                    includes={includesCandidate(candidate.id)}
-                  />
-                </div>
-              )
-          )}
-      </Grid>
-      {candidates.length && (
-        <Grid>
-          <Paginator />
+  if (filterDataCandidates[0] === 'Candidatos no encontrados') {
+    return (
+      <div className={classes.candidatesNotFound}>
+        <h1>Candidato no Encontrado, vuelva a intentar su busqueda!!!</h1>
+      </div>
+    );
+  } else {
+    return (
+      <Container className={classes.container} maxWidth="xl">
+        <Grid
+          className={classes.paddingCandidates}
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          {/* props.user.map((candidate,index) */}{' '}
+          {/* to test change line below for this line and remove user prop in CandidateCard (line28)*/}
+          {candidates &&
+            cardsCandidates.map(
+              (candidate, index) =>
+                index < cardsMaxLimit &&
+                candidate.visibility === 'listed' && (
+                  <div key={index} className={classes.CandidateCard}>
+                    <CandidateCard
+                      candidate={candidate}
+                      handleCandidate={handleCandidate}
+                      includes={includesCandidate(candidate.id)}
+                    />
+                  </div>
+                )
+            )}
         </Grid>
-      )}
-    </Container>
-  );
+        {candidates.length && (
+          <Grid>
+            <Paginator />
+          </Grid>
+        )}
+      </Container>
+    );
+  }
 }
 
 CardsContainer.propTypes = {

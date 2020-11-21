@@ -58,3 +58,19 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
     payload: bulkedCandidates.data,
   });
 };
+
+export function getFilterCandidates(filter) {
+  return async (dispatch) => {
+    const candidates = await axios.get(
+      `${BACKEND_URL}/candidates/filter?${filter}`
+    );
+    const idCandidates =
+      candidates.data === ''
+        ? ''
+        : candidates.data.map((dataIdCandidates) => dataIdCandidates.id);
+    dispatch({
+      type: actions.GET_CANDIDATE_FILTER,
+      payload: idCandidates,
+    });
+  };
+}

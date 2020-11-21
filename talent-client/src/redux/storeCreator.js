@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import ExampleReducer from './exampleReducer/Reducer';
 import CandidateReducer from './candidatesReducer/Reducer';
 import FolderReducer from './foldersReducer/Reducer';
+import SkillsReducer from './skillsReducer/Reducer';
 
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   ExampleReducer,
   CandidateReducer,
   FolderReducer,
+  SkillsReducer,
 });
 
 export const store = createStore(

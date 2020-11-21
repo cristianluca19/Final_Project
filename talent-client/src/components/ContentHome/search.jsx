@@ -1,123 +1,185 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './style.css';
-import { makeStyles } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
+import { useStyle } from './Styles/search.css.js';
+import {
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  Input,
+  InputLabel,
+  FormControl,
+  Select,
+  Button,
+} from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
+import { getAllSkills } from '../../redux/skillsReducer/Action';
+import { getFilterCandidates } from '../../redux/candidatesReducer/Action';
 
-const useStyle = makeStyles((theme) => ({
-  contentSearch: {
-    background: '#000000',
-    width: '480px',
-    margin: '55px 0px 55px 0px',
-    padding: '30px 0px',
-    border: '5px solid #000000',
-  },
-  selectStyle: {
-    width: '250px',
-    height: '60px',
-    padding: '0px 32px 0px 0px',
-    '&:hover': {
-      background: '#f5f5f5',
-    },
-    marginLeft: '34px',
-  },
-  inputLabelSearch: {
-    color: '#ffff00',
-    paddingLeft: 10,
-    '&$focused': {
-      background: '#ffda00',
-      color: '#ffff00',
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      height: ITEM_HEIGHT * 7.5 + ITEM_PADDING_TOP,
+      width: 250,
     },
   },
-  button: {
-    backgroundColor: '#ffff00',
-    width: '78%',
-    color: '#000000',
-    '&:hover': {
-      background: '#ffda00',
-    },
-    button: {
-      backgroundColor: '#ffff00',
-      width: '78%',
-      color: '#000000',
-      '&:hover': {
-        background: '#ffda00',
-      },
-    },
-    formControl: {
-      minWidth: 120,
-      margin: '0px 8px',
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-    selectInput: {
-      backgroundColor: '#ffffff1f',
-      paddingRight: '24px',
-      width: '280px',
-    },
-  },
-}));
+};
 
 function Search() {
+  const candidates = useSelector(
+    (store) => store.CandidateReducer.allCandidates
+  );
+  const allSkills = useSelector((store) => store.SkillsReducer.allSkills);
+  const dispatch = useDispatch();
   const classes = useStyle();
-  //Location - Features - Skills
-  return (
-    <div className={classes.contentSearch}>
+  const [statusFilter, setStatusFilter] = React.useState({
+    skills: [],
+    cohorts: [],
+    locations: [],
+  });
+  const skills =
+    allSkills &&
+    Array.from(new Set(allSkills.map((dataSkill) => dataSkill.name)));
+  const locations = Array.from(
+    new Set(candidates.map((dataCandidate) => dataCandidate.country))
+  );
+  const cohorts = Array.from(
+    new Set(candidates.map((dataCohort) => dataCohort.cohort))
+  );
+
+  
+  useEffect(() => {
+    if (!allSkills.length) dispatch(getAllSkills());
+  }, [candidates, allSkills]);
+
+  const handleChange = (e, statusName) => {
+    setStatusFilter({
+      ...statusFilter,
+      [statusName]: e.target.value,
+    });
+  };
+
+  const onClickFilter = (e) => {
+    e.preventDefault();
+    let filter = '';
+    if (statusFilter.locations.length > 1) {
+      filter +=
+        'locations=' + statusFilter.locations.join().replace(/,/g, '%2C') + '&';
+    } else {
+      if (statusFilter.locations.length) {
+        filter += 'locations=' + statusFilter.locations.join() + '&';
+      }
+    }
+    if (statusFilter.skills.length > 1) {
+      filter +=
+        'skills=' + statusFilter.skills.join().replace(/,/g, '%2C') + '&';
+    } else {
+      if (statusFilter.skills.length) {
+        filter += 'skills=' + statusFilter.skills.join() + '&';
+      }
+    }
+    if (statusFilter.cohorts.length > 1) {
+      filter += 'cohorts=' + statusFilter.cohorts.join().replace(/,/g, '%2C');
+    } else {
+      if (statusFilter.cohorts.length) {
+        filter += 'cohorts=' + statusFilter.cohorts.join();
+      }
+    }
+    dispatch(getFilterCandidates(filter));
+  };
+
+  const formSelectFilter = () => (
+    <div className={classes.formSelectFilter}>
       <FormControl className={classes.formControl}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
-          Location
+        <InputLabel id="label-locations" className={classes.inputLabel}>
+          Locations
         </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+        <Select
+          labelId="select-label-locatios"
+          id="select-id-locations"
+          className={classes.inputSelectData}
+          multiple
+          value={statusFilter.locations}
+          onChange={(e) => handleChange(e, 'locations')}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {locations.length &&
+            locations.sort().map((location) => (
+              <MenuItem key={location} value={location}>
+                <Checkbox
+                  checked={statusFilter.locations.indexOf(location) > -1}
+                />
+                <ListItemText primary={location} />
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
-          Features
-        </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
+        <InputLabel id="label-skills" className={classes.inputLabel}>
           Skills
         </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+        <Select
+          labelId="select-label-skills"
+          id="select-id-skills"
+          className={classes.inputSelectData}
+          multiple
+          value={statusFilter.skills}
+          onChange={(e) => handleChange(e, 'skills')}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {skills.length &&
+            skills.sort().map((skill) => (
+              <MenuItem key={skill} value={skill}>
+                <Checkbox checked={statusFilter.skills.indexOf(skill) > -1} />
+                <ListItemText primary={skill} />
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
-      <br />
-      <br />
+      <FormControl className={classes.formControl}>
+        <InputLabel id="label-cohorts" className={classes.inputLabel}>
+          Cohort
+        </InputLabel>
+        <Select
+          labelId="select-label-cohorts"
+          id="select-id-cohort"
+          className={classes.inputSelectData}
+          multiple
+          value={statusFilter.cohorts}
+          onChange={(e) => handleChange(e, 'cohorts')}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {cohorts.length &&
+            cohorts.sort().map((cohort) => (
+              <MenuItem key={cohort} value={cohort}>
+                <Checkbox checked={statusFilter.cohorts.indexOf(cohort) > -1} />
+                <ListItemText primary={cohort} />
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
+
+  return (
+    <div>
+      {formSelectFilter()}
       <Button
         variant="contained"
         color="secondary"
         className={classes.button}
         startIcon={<SearchIcon />}
+        onClick={onClickFilter}
       >
-        Select Candidates
+        Buscar
       </Button>
     </div>
   );
