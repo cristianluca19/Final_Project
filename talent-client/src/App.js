@@ -11,6 +11,7 @@ import Dashboard from './components/Dashboard';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import TechSkillsFilter from './components/TechSkillsFilter/TechSkillsFilter';
 
 function App() {
   //==============================================================

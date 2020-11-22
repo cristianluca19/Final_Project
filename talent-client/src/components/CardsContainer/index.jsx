@@ -24,7 +24,7 @@ function CardsContainer(props) {
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const cardsMaxLimit = 30;
-  console.log('filterCards: ', filterDataCandidates);
+
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
     if (!uuid) {

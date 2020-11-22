@@ -15,9 +15,7 @@ export function getAllCandidates() {
 
 export function deleteCandidate(id) {
   return async (dispatch) => {
-    const deleteCandidate = await axios.delete(
-      `${BACKEND_URL}/candidates/${id}/delete`
-    );
+    await axios.delete(`${BACKEND_URL}/candidates/${id}/delete`);
     dispatch({
       type: actions.DELETE_CANDIDATE,
       payload: id,
@@ -37,7 +35,7 @@ export function getCandidateById(id) {
 
 export function updateCandidate(candidateData) {
   return async (dispatch) => {
-    const candidate = await axios.put(
+    await axios.put(
       `${BACKEND_URL}/candidates/${candidateData.id}/update`,
       candidateData
     );

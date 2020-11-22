@@ -8,7 +8,9 @@ function Menu() {
 
   return (
     <div className={classes.dashboardSidebar}>
-      <Link to="/"><img className={classes.logo} src={logo} /></Link>
+      <Link to="/">
+        <img className={classes.logo} src={logo} />
+      </Link>
       <ul className={classes.ulMenu}>
         <Link to="/panel/candidates" className={classes.linkCandidate}>
           <li className={classes.liMenu}>Candidates</li>

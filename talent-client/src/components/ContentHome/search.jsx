@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.css';
-import { useStyle } from './Styles/search.css.js';
+import { useStyle, getModalStyle } from './Styles/search.css';
 import {
   MenuItem,
   Checkbox,
@@ -11,8 +11,11 @@ import {
   FormControl,
   Select,
   Button,
+  Modal,
 } from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
+import CheckIcon from '@material-ui/icons/Check';
+import OfflinePinIcon from '@material-ui/icons/OfflinePin';
 import { getAllSkills } from '../../redux/skillsReducer/Action';
 import { getFilterCandidates } from '../../redux/candidatesReducer/Action';
 
@@ -34,14 +37,19 @@ function Search() {
   const allSkills = useSelector((store) => store.SkillsReducer.allSkills);
   const dispatch = useDispatch();
   const classes = useStyle();
-  const [statusFilter, setStatusFilter] = React.useState({
+  const [statusFilter, setStatusFilter] = useState({
     skills: [],
     cohorts: [],
     locations: [],
   });
-  const skills =
-    allSkills &&
-    Array.from(new Set(allSkills.map((dataSkill) => dataSkill.name)));
+  const [allSkillsData, setAllSkillsData] = useState([]);
+  const [skillsSelected, setSkillsSelected] = useState([]);
+  const [filteredSkills, setFilteredSkills] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [modalStyle] = useState(getModalStyle);
+
+  const techSkills = allSkills.filter((dataSkill) => dataSkill.type === 'tech');
+
   const locations = Array.from(
     new Set(candidates.map((dataCandidate) => dataCandidate.country))
   );
@@ -49,10 +57,11 @@ function Search() {
     new Set(candidates.map((dataCohort) => dataCohort.cohort))
   );
 
-  
   useEffect(() => {
-    if (!allSkills.length) dispatch(getAllSkills());
-  }, [candidates, allSkills]);
+    if (!allSkills.length) {
+      dispatch(getAllSkills());
+    }
+  }, [candidates, allSkills, dispatch]);
 
   const handleChange = (e, statusName) => {
     setStatusFilter({
@@ -88,12 +97,130 @@ function Search() {
       }
     }
     dispatch(getFilterCandidates(filter));
+    handleClose();
   };
 
-  const formSelectFilter = () => (
-    <div className={classes.formSelectFilter}>
+  const handleOpen = () => {
+    !allSkillsData.length &&
+      setAllSkillsData(
+        ...allSkillsData,
+        techSkills.map((dataSkills) => dataSkills.name)
+      );
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setStatusFilter({
+      ...statusFilter,
+      skills: skillsSelected,
+    });
+    setOpen(false);
+  };
+
+  const handleSearchSkill = (e) => {
+    setFilteredSkills(
+      allSkillsData.filter(
+        (skill) =>
+          skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
+      )
+    );
+  };
+
+  const addSkill = (e) => {
+    if (!skillsSelected.some((skill) => skill === e.target.value)) {
+      setSkillsSelected((oldSkills) => [...oldSkills, e.target.value]);
+      setAllSkillsData(
+        allSkillsData.filter((skill) => skill !== e.target.value)
+      );
+      setFilteredSkills(
+        filteredSkills.filter((skill) => skill !== e.target.value)
+      );
+    }
+  };
+
+  const removeSkill = (e) => {
+    setSkillsSelected(
+      skillsSelected.filter((skill) => skill !== e.target.value)
+    );
+    if (e.target.value) {
+      setAllSkillsData((oldSkills) => [e.target.value, ...oldSkills]);
+    }
+  };
+
+  const modalSkills = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id="simple-modal-title" className={classes.titleModalSkills}>
+        Select Skills Technologies
+      </h2>
+      <FormControl className={classes.searchBar}>
+        <InputLabel className={classes.inputLabel} htmlFor="my-input">
+          Search skill...
+        </InputLabel>
+        <Input
+          className={classes.input}
+          id="my-input"
+          aria-describedby="my-helper-text"
+          onChange={handleSearchSkill}
+        />
+      </FormControl>
+      <div className={classes.generalDiv}>
+        <div className={classes.marginTop}>
+          {skillsSelected &&
+            skillsSelected.map((skill, index) => (
+              <div key={index} className={classes.divSelectedSkills}>
+                <button
+                  className={classes.yellowButton}
+                  onClick={removeSkill}
+                  value={skill}
+                >
+                  <span className={classes.skillSelected}>{skill}</span>
+                  <CheckIcon className={classes.checkIcon} />
+                </button>
+              </div>
+            ))}
+        </div>
+        <div className={classes.divAllSkills}>
+          {filteredSkills.length > 0
+            ? filteredSkills.slice(0, 16).map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))
+            : allSkillsData.slice(0, 16).map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))}
+        </div>
+      </div>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.yellowButton}
+        startIcon={<SearchIcon />}
+        onClick={onClickFilter}
+      >
+        Search
+      </Button>
+    </div>
+  );
+
+  const selectForms = (
+    <div>
       <FormControl className={classes.formControl}>
-        <InputLabel id="label-locations" className={classes.inputLabel}>
+        <InputLabel id="label-locations" className={classes.inputLabelCheck}>
           Locations
         </InputLabel>
         <Select
@@ -119,31 +246,7 @@ function Search() {
         </Select>
       </FormControl>
       <FormControl className={classes.formControl}>
-        <InputLabel id="label-skills" className={classes.inputLabel}>
-          Skills
-        </InputLabel>
-        <Select
-          labelId="select-label-skills"
-          id="select-id-skills"
-          className={classes.inputSelectData}
-          multiple
-          value={statusFilter.skills}
-          onChange={(e) => handleChange(e, 'skills')}
-          input={<Input />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {skills.length &&
-            skills.sort().map((skill) => (
-              <MenuItem key={skill} value={skill}>
-                <Checkbox checked={statusFilter.skills.indexOf(skill) > -1} />
-                <ListItemText primary={skill} />
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="label-cohorts" className={classes.inputLabel}>
+        <InputLabel id="label-cohorts" className={classes.inputLabelCheck}>
           Cohort
         </InputLabel>
         <Select
@@ -169,6 +272,32 @@ function Search() {
     </div>
   );
 
+  const formSelectFilter = () => (
+    <div className={classes.formSelectFilter}>
+      {selectForms}
+      <div>
+        <Button
+          type="button"
+          className={classes.buttonTechSkills}
+          onClick={handleOpen}
+          startIcon={<OfflinePinIcon />}
+        >
+          {!skillsSelected.length
+            ? 'Select Technologies'
+            : skillsSelected.join()}
+        </Button>
+      </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {modalSkills}
+      </Modal>
+    </div>
+  );
+
   return (
     <div>
       {formSelectFilter()}
@@ -179,7 +308,7 @@ function Search() {
         startIcon={<SearchIcon />}
         onClick={onClickFilter}
       >
-        Buscar
+        Search
       </Button>
     </div>
   );

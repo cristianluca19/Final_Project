@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyle = makeStyles({
   contentSearch: {
-    padding: '50px 40px',
+    padding: '50px 40px 50px 11px',
     minHeight: 40,
   },
   contentSearchFluid: {
