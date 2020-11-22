@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import CsvToJson from './components/csvToJson/CsvToJson';
+import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import CsvToJson from './components/csvToJson/CsvToJson';
 import ContentHome from './components/ContentHome/index';
 import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
