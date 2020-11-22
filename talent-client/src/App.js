@@ -13,6 +13,7 @@ import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 import FoldersCrud from './components/Folders/index';
 import Folder from './components/Folders/folder';
 import { getAllFolders } from './redux/foldersReducer/Action';
+import { getAllRecruiters } from './redux/recruitersReducer/Action';
 
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
   // to lower loading times if candidate number is too high...
   dispatch(getAllCandidates());
   dispatch(getAllFolders());
+  dispatch(getAllRecruiters());
 
   return (
     <div className="App">

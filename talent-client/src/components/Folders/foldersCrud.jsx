@@ -11,7 +11,6 @@ import {
   deleteFolder,
   updateFolder,
 } from '../../redux/foldersReducer/Action';
-import { getAllRecruiters } from '../../redux/recruitersReducer/Action';
 import { useSelector } from 'react-redux';
 import {
   FormControl,
@@ -34,12 +33,11 @@ import {
   Modal,
   Backdrop,
   Fade,
-  TextField,
   Select,
 } from '@material-ui/core';
 
 function FoldersCrud() {
-  const [folderData, setFolderData] = React.useState({});
+
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [openSelect, setOpenSelect] = React.useState(false);
   const [idFolder, setIdFolder] = React.useState(0);
@@ -48,7 +46,8 @@ function FoldersCrud() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch();
   const classes = useStyles();
-  const folders = useSelector((store) => store.FolderReducer.allFolders);
+	const folders = useSelector((store) => store.FolderReducer.allFolders);
+  const [folderData, setFolderData] = React.useState({});
   const recruiters = useSelector(
     (store) => store.RecruitersReducer.allRecruiters
   );
@@ -67,6 +66,11 @@ function FoldersCrud() {
     { id: 'delete', label: '', minWidth: 50 },
   ];
   const rows = [];
+	
+	const findRecruiter = (recruiterId, searchFor) => {
+		const recruiter = recruiters.find((recruiter)=> recruiter.id === recruiterId)
+		return recruiter[searchFor];
+	}
 
   if (folders) {
     folders
@@ -77,16 +81,21 @@ function FoldersCrud() {
           uuid: folders.uuid,
           selector:
             folders.user &&
-            folders.user.firstName + ' ' + folders.user.lastName,
+            `${folders.user.firstName} ${folders.user.lastName}`,
           status: folders.status,
           opened: folders.opened.toString(),
-          recruiter: folders.recruiter && folders.recruiter.contactName,
-          email: folders.recruiter && folders.recruiter.email,
-          company: folders.recruiter && folders.recruiter.company,
+          recruiter: findRecruiter(folders.recruiterId, 'contactName'),
+          email: findRecruiter(folders.recruiterId, 'email'),
+          company: findRecruiter(folders.recruiterId, 'company'),
           key: folders.id,
         });
       });
   }
+
+	
+  useEffect(() => {
+  }, [folders]);
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,10 +109,9 @@ function FoldersCrud() {
     setIdFolder(id);
     setOpen(true);
   };
-  const onClickDelete = async (e) => {
+  const onClickDelete = (e) => {
     e.preventDefault();
-    await dispatch(deleteFolder(idFolder));
-    dispatch(getAllFolders());
+    dispatch(deleteFolder(idFolder));
     handleClose();
   };
 
@@ -132,11 +140,10 @@ function FoldersCrud() {
     setIdFolder(id);
   };
 
-  const onClickUpdate = async (e) => {
+  const onClickUpdate = (e) => {
     e.preventDefault();
-    await dispatch(updateFolder(idFolder, folderData));
-    dispatch(getAllFolders());
-    setOpenUpdate(false);
+		dispatch(updateFolder(idFolder, folderData));
+		setOpenUpdate(false);
   };
 
   const EditFolderModal = () => (
@@ -252,11 +259,6 @@ function FoldersCrud() {
       })}
     </TableRow>
   );
-
-  useEffect(() => {
-    dispatch(getAllFolders());
-    dispatch(getAllRecruiters());
-  }, []);
 
   return (
     <Paper>

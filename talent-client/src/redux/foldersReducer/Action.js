@@ -15,9 +15,10 @@ export function getAllFolders() {
 
 export function deleteFolder(id) {
   return async (dispatch) => {
-    await axios.delete(`${BACKEND_URL}/folders/` + id);
+    await axios.delete(`${BACKEND_URL}/folders/${id}`);
     dispatch({
       type: actions.DELETE_FOLDER,
+      payload: id,
     });
   };
 }
