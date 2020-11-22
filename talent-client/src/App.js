@@ -1,7 +1,8 @@
 import React from 'react';
-import CsvToJson from './components/csvToJson/CsvToJson';
+import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import CsvToJson from './components/csvToJson/CsvToJson';
 import ContentHome from './components/ContentHome/index';
 import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
@@ -10,6 +11,7 @@ import Dashboard from './components/Dashboard';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+<<<<<<< HEAD
 import FoldersCrud from './components/Folders/index';
 import Folder from './components/Folders/folder';
 import { getAllFolders } from './redux/foldersReducer/Action';
@@ -17,6 +19,8 @@ import { getAllRecruiters } from './redux/recruitersReducer/Action';
 import { getAllUsers } from './redux/usersReducer/Action';
 
 import './App.css';
+=======
+>>>>>>> main
 
 function App() {
   //==============================================================
