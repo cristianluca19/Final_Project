@@ -8,7 +8,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
 import { deleteFolder, updateFolder } from '../../redux/foldersReducer/Action';
 import { useSelector } from 'react-redux';
-import moment from "moment";
+import moment from 'moment';
 import {
   FormControl,
   MenuItem,
@@ -52,12 +52,12 @@ function FoldersCrud() {
   );
   const users = useSelector((store) => store.UsersReducer.allUsers);
   const UPDATE_CLICK_ACTION = 'update';
-	const DATE_FORMAT = "DD/MM/YYYY - HH:mm:ss";
+  const DATE_FORMAT = 'DD/MM/YYYY - HH:mm:ss';
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
     { id: 'selector', label: 'SELECTOR', minWidth: 100 },
-		{ id: 'status', label: 'STATUS', minWidth: 100 },
+    { id: 'status', label: 'STATUS', minWidth: 100 },
     { id: 'createAt', label: 'CREATE AT', minWidth: 100 },
     { id: 'lastUpdateAt', label: 'LAST UPDATE AT', minWidth: 100 },
     { id: 'opened', label: 'OPENED', minWidth: 100 },
@@ -93,9 +93,9 @@ function FoldersCrud() {
             folders.userId,
             'lastName'
           )}`,
-					status: folders.status,
-					createAt: moment(folders.createdAt).format(DATE_FORMAT),
-					lastUpdateAt: moment(folders.updatedAt).format(DATE_FORMAT),
+          status: folders.status,
+          createAt: moment(folders.createdAt).format(DATE_FORMAT),
+          lastUpdateAt: moment(folders.updatedAt).format(DATE_FORMAT),
           opened: folders.opened.toString(),
           recruiter: findRecruiter(folders.recruiterId, 'contactName'),
           email: findRecruiter(folders.recruiterId, 'email'),
@@ -267,7 +267,6 @@ function FoldersCrud() {
   );
 
   const FolderRow = (row) => (
-		
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
       {columns.map((column) => {
         const value = row[column.id];
@@ -287,9 +286,9 @@ function FoldersCrud() {
                   handleClickOpen(row.id, UPDATE_CLICK_ACTION);
                 }}
               />
-            ) :
-						<div> </div>
-						}
+            ) : (
+              <div> </div>
+            )}
             {column.id === 'delete' && (
               <DeleteIcon onClick={() => handleClickDelete(row.id)} />
             )}

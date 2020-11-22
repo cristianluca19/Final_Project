@@ -77,8 +77,8 @@ function Folder(props) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Presione en el boton eliminar para realizar la acción o de lo contrario en
-          cancelar.
+          Presione en el boton eliminar para realizar la acción o de lo
+          contrario en cancelar.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -122,18 +122,18 @@ function Folder(props) {
                 candidate.visibility === 'listed' && (
                   <div key={index} className={classes.CandidateCard}>
                     <CandidateCard candidate={candidate} />
-                    {findFolder && findFolder.status === 'sent' ?
+                    {findFolder && findFolder.status === 'sent' ? (
                       <div> </div>
-                      :
-                    <Button
-                      onClick={() => {
-                        handleClickOpen(candidate.id, DELETE_CLICK_ACTION);
-                      }}
-                    >
-                      {' '}
-                      Delete this Candidate{' '}
-                    </Button>
-                    }
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          handleClickOpen(candidate.id, DELETE_CLICK_ACTION);
+                        }}
+                      >
+                        {' '}
+                        Delete this Candidate{' '}
+                      </Button>
+                    )}
                   </div>
                 )
             )}
