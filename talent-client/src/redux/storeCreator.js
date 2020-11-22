@@ -4,6 +4,7 @@ import ExampleReducer from './exampleReducer/Reducer';
 import CandidateReducer from './candidatesReducer/Reducer';
 import FolderReducer from './foldersReducer/Reducer';
 import RecruitersReducer from './recruitersReducer/Reducer';
+import UsersReducer from './usersReducer/Reducer';
 
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   CandidateReducer,
   FolderReducer,
   RecruitersReducer,
+  UsersReducer,
 });
 
 export const store = createStore(

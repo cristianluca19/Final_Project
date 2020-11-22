@@ -23,11 +23,19 @@ export function deleteFolder(id) {
   };
 }
 
-export function updateFolder(idFolder, idRecruiter) {
-  return async (dispatch) => {
-    const updatedFolder = await axios.put(
-      `${BACKEND_URL}/folders/${idFolder}?recruiterId=${idRecruiter.recruiterId}`
+export function updateFolder(idFolder, idDatas) {
+  let URL = `${BACKEND_URL}/folders/${idFolder}`;
+  if (idDatas.recruiterId && idDatas.userId) {
+    URL = URL.concat(
+      `?recruiterId=${idDatas.recruiterId}&userId=${idDatas.userId}`
     );
+  } else if (idDatas.recruiterId && !idDatas.userId) {
+    URL = URL.concat(`?recruiterId=${idDatas.recruiterId}`);
+  } else if (!idDatas.recruiterId && idDatas.userId) {
+    URL = URL.concat(`?userId=${idDatas.userId}`);
+  }
+  return async (dispatch) => {
+    const updatedFolder = await axios.put(URL);
     dispatch({
       type: actions.UPDATE_FOLDER,
       payload: updatedFolder.data,
@@ -58,6 +66,18 @@ export function getDossierByUuid(uuid) {
     dispatch({
       type: actions.GET_DOSSIER,
       payload: dossier.data,
+    });
+  };
+}
+
+export function removeCandidateFromFolder(idFolder, idCandidate) {
+  return async (dispatch) => {
+    const removedCandidate = await axios.delete(
+      `${BACKEND_URL}/candidates/${idFolder}/removeCandidate/${idCandidate}`
+    );
+    dispatch({
+      type: actions.REMOVE_CANDIDATE_FROM_FOLDER,
+      payload: { idFolder: idFolder, idCandidate: idCandidate },
     });
   };
 }

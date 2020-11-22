@@ -14,6 +14,7 @@ import FoldersCrud from './components/Folders/index';
 import Folder from './components/Folders/folder';
 import { getAllFolders } from './redux/foldersReducer/Action';
 import { getAllRecruiters } from './redux/recruitersReducer/Action';
+import { getAllUsers } from './redux/usersReducer/Action';
 
 import './App.css';
 
@@ -27,6 +28,7 @@ function App() {
   dispatch(getAllCandidates());
   dispatch(getAllFolders());
   dispatch(getAllRecruiters());
+  dispatch(getAllUsers());
 
   return (
     <div className="App">

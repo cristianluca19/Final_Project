@@ -20,10 +20,6 @@ export default function Reducer(state = initialState, action) {
           (candidate) => candidate.id !== action.payload
         ),
       };
-    case actions.REMOVE_CANDIDATE_FROM_FOLDER:
-      return {
-        ...state,
-      };
     case actions.GET_CANDIDATE_BY_ID:
       return {
         ...state,

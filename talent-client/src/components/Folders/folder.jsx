@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Grid } from '@material-ui/core';
 import CandidateCard from '../CandidateCard';
 import { useSelector } from 'react-redux';
 import Paginator from '../Paginator';
 import { useStyles } from './styles.js';
 import { useDispatch } from 'react-redux';
-import { getAllFolders } from '../../redux/foldersReducer/Action';
-import { removeCandidateFromFolder } from '../../redux/candidatesReducer/Action';
+import {
+  getAllFolders,
+  removeCandidateFromFolder,
+} from '../../redux/foldersReducer/Action';
 import {
   Button,
   Dialog,
@@ -31,20 +33,22 @@ function Folder(props) {
   if (folders.length) {
     folderObject = {
       candidates: findFolder.candidates,
-      selector: `${findFolder.user.firstName} ${findFolder.user.lastName}`,
-      recruiter: findFolder.recruiter.contactName,
-      company: findFolder.recruiter.company,
-      email: findFolder.recruiter.email,
+      selector:
+        findFolder.user &&
+        `${findFolder.user.firstName} ${findFolder.user.lastName}`,
+      recruiter: findFolder.recruiter && findFolder.recruiter.contactName,
+      company: findFolder.recruiter && findFolder.recruiter.company,
+      email: findFolder.recruiter && findFolder.recruiter.email,
       idFolder: findFolder.id,
     };
   }
-
-  const onClickDelete = async (e) => {
-    e.preventDefault();
-    await dispatch(
-      removeCandidateFromFolder(folderObject.idFolder, idCandidate)
-    );
+  useEffect(() => {
     dispatch(getAllFolders());
+  }, []);
+
+  const onClickDelete = (e) => {
+    e.preventDefault();
+    dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
     handleClose(DELETE_CLICK_ACTION);
   };
 
@@ -73,7 +77,7 @@ function Folder(props) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Presione en el boton eliminar realizar la acción o de lo contrario en
+          Presione en el boton eliminar para realizar la acción o de lo contrario en
           cancelar.
         </DialogContentText>
       </DialogContent>
@@ -111,12 +115,16 @@ function Folder(props) {
           alignItems="center"
         >
           {folders.length &&
+            folderObject.candidates &&
             folderObject.candidates.map(
               (candidate, index) =>
                 index < DEFAULT_ROWS_PER_PAGE &&
                 candidate.visibility === 'listed' && (
                   <div key={index} className={classes.CandidateCard}>
                     <CandidateCard candidate={candidate} />
+                    {findFolder && findFolder.status === 'sent' ?
+                      <div> </div>
+                      :
                     <Button
                       onClick={() => {
                         handleClickOpen(candidate.id, DELETE_CLICK_ACTION);
@@ -125,6 +133,7 @@ function Folder(props) {
                       {' '}
                       Delete this Candidate{' '}
                     </Button>
+                    }
                   </div>
                 )
             )}

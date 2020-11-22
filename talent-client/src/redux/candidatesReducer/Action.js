@@ -25,18 +25,6 @@ export function deleteCandidate(id) {
   };
 }
 
-export function removeCandidateFromFolder(idFolder, idCandidate) {
-  return async (dispatch) => {
-    const removedCandidate = await axios.delete(
-      `${BACKEND_URL}/candidates/${idFolder}/removeCandidate/${idCandidate}`
-    );
-    dispatch({
-      type: actions.REMOVE_CANDIDATE_FROM_FOLDER,
-      payload: removedCandidate,
-    });
-  };
-}
-
 export function getCandidateById(id) {
   return async (dispatch) => {
     const candidate = await axios.get(`${BACKEND_URL}/candidates/${id}`);

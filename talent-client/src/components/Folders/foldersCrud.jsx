@@ -6,12 +6,9 @@ import ViewIcon from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
-import {
-  getAllFolders,
-  deleteFolder,
-  updateFolder,
-} from '../../redux/foldersReducer/Action';
+import { deleteFolder, updateFolder } from '../../redux/foldersReducer/Action';
 import { useSelector } from 'react-redux';
+import moment from "moment";
 import {
   FormControl,
   MenuItem,
@@ -37,26 +34,32 @@ import {
 } from '@material-ui/core';
 
 function FoldersCrud() {
-
   const [openUpdate, setOpenUpdate] = React.useState(false);
-  const [openSelect, setOpenSelect] = React.useState(false);
+  const [openSelect, setOpenSelect] = React.useState({
+    recruiter: false,
+    user: false,
+  });
   const [idFolder, setIdFolder] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch();
   const classes = useStyles();
-	const folders = useSelector((store) => store.FolderReducer.allFolders);
+  const folders = useSelector((store) => store.FolderReducer.allFolders);
   const [folderData, setFolderData] = React.useState({});
   const recruiters = useSelector(
     (store) => store.RecruitersReducer.allRecruiters
   );
+  const users = useSelector((store) => store.UsersReducer.allUsers);
   const UPDATE_CLICK_ACTION = 'update';
+	const DATE_FORMAT = "DD/MM/YYYY - HH:mm:ss";
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
     { id: 'selector', label: 'SELECTOR', minWidth: 100 },
-    { id: 'status', label: 'STATUS', minWidth: 100 },
+		{ id: 'status', label: 'STATUS', minWidth: 100 },
+    { id: 'createAt', label: 'CREATE AT', minWidth: 100 },
+    { id: 'lastUpdateAt', label: 'LAST UPDATE AT', minWidth: 100 },
     { id: 'opened', label: 'OPENED', minWidth: 100 },
     { id: 'recruiter', label: 'RECRUITER', minWidth: 100 },
     { id: 'email', label: 'EMAIL', minWidth: 100 },
@@ -66,11 +69,18 @@ function FoldersCrud() {
     { id: 'delete', label: '', minWidth: 50 },
   ];
   const rows = [];
-	
-	const findRecruiter = (recruiterId, searchFor) => {
-		const recruiter = recruiters.find((recruiter)=> recruiter.id === recruiterId)
-		return recruiter[searchFor];
-	}
+
+  const findRecruiter = (recruiterId, searchFor) => {
+    const recruiter =
+      recruiters &&
+      recruiters.find((recruiter) => recruiter.id === recruiterId);
+    return recruiter && recruiter[searchFor];
+  };
+
+  const findUser = (userId, searchFor) => {
+    const user = users && users.find((user) => user.id === userId);
+    return user && user[searchFor];
+  };
 
   if (folders) {
     folders
@@ -79,10 +89,13 @@ function FoldersCrud() {
         return rows.push({
           id: folders.id,
           uuid: folders.uuid,
-          selector:
-            folders.user &&
-            `${folders.user.firstName} ${folders.user.lastName}`,
-          status: folders.status,
+          selector: `${findUser(folders.userId, 'firstName')} ${findUser(
+            folders.userId,
+            'lastName'
+          )}`,
+					status: folders.status,
+					createAt: moment(folders.createdAt).format(DATE_FORMAT),
+					lastUpdateAt: moment(folders.updatedAt).format(DATE_FORMAT),
           opened: folders.opened.toString(),
           recruiter: findRecruiter(folders.recruiterId, 'contactName'),
           email: findRecruiter(folders.recruiterId, 'email'),
@@ -92,10 +105,7 @@ function FoldersCrud() {
       });
   }
 
-	
-  useEffect(() => {
-  }, [folders]);
-
+  useEffect(() => {}, [folders]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -119,11 +129,15 @@ function FoldersCrud() {
     setOpen(false);
     setOpenUpdate(false);
   };
-  const handleOpenSelect = () => {
-    setOpenSelect(true);
+  const handleOpenSelect = (open) => {
+    open === 'user'
+      ? setOpenSelect({ user: true })
+      : setOpenSelect({ recruiter: true });
   };
-  const handleCloseSelect = () => {
-    setOpenSelect(false);
+  const handleCloseSelect = (close) => {
+    close === 'user'
+      ? setOpenSelect({ user: false })
+      : setOpenSelect({ recruiter: false });
   };
 
   const handleChangeSelect = (e) => {
@@ -142,8 +156,9 @@ function FoldersCrud() {
 
   const onClickUpdate = (e) => {
     e.preventDefault();
-		dispatch(updateFolder(idFolder, folderData));
-		setOpenUpdate(false);
+    dispatch(updateFolder(idFolder, folderData));
+    setFolderData({});
+    setOpenUpdate(false);
   };
 
   const EditFolderModal = () => (
@@ -168,12 +183,33 @@ function FoldersCrud() {
             autoComplete="off"
           >
             <FormControl className={classes.formControl}>
+              <InputLabel>Selector</InputLabel>
+              <Select
+                name="userId"
+                open={openSelect.user}
+                onClose={() => handleCloseSelect('user')}
+                onOpen={() => handleOpenSelect('user')}
+                onChange={(e) => {
+                  handleChangeSelect(e);
+                }}
+              >
+                {users &&
+                  users.map((user, index) => {
+                    return (
+                      <MenuItem value={user.id}>
+                        {`${user.firstName} ${user.lastName}`}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
               <InputLabel>Recruiter</InputLabel>
               <Select
                 name="recruiterId"
-                open={openSelect}
-                onClose={handleCloseSelect}
-                onOpen={handleOpenSelect}
+                open={openSelect.recruiter}
+                onClose={() => handleCloseSelect('recruiter')}
+                onOpen={() => handleOpenSelect('recruiter')}
                 onChange={(e) => {
                   handleChangeSelect(e);
                 }}
@@ -231,6 +267,7 @@ function FoldersCrud() {
   );
 
   const FolderRow = (row) => (
+		
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
       {columns.map((column) => {
         const value = row[column.id];
@@ -244,13 +281,15 @@ function FoldersCrud() {
                 <ViewIcon />
               </Link>
             )}
-            {column.id === 'edit' && (
+            {column.id === 'edit' && row.status === 'created' ? (
               <EditIcon
                 onClick={() => {
                   handleClickOpen(row.id, UPDATE_CLICK_ACTION);
                 }}
               />
-            )}
+            ) :
+						<div> </div>
+						}
             {column.id === 'delete' && (
               <DeleteIcon onClick={() => handleClickDelete(row.id)} />
             )}

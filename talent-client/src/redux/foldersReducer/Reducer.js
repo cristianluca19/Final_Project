@@ -4,7 +4,6 @@ const initialState = {
   dossier: [],
   newFolder: [],
   allFolders: [],
-  findFolder:{}
 };
 
 export default function Reducer(state = initialState, action) {
@@ -27,14 +26,33 @@ export default function Reducer(state = initialState, action) {
     case actions.DELETE_FOLDER:
       return {
         ...state,
-        allFolders: state.allFolders.filter((folder) => folder.id !== action.payload),
+        allFolders: state.allFolders.filter(
+          (folder) => folder.id !== action.payload
+        ),
       };
     case actions.UPDATE_FOLDER:
       return {
         ...state,
         allFolders: state.allFolders
-              .filter((folder) => folder.id !== action.payload.id)
-              .concat(action.payload),
+          .filter((folder) => folder.id !== action.payload.id)
+          .concat(action.payload),
+      };
+    case actions.REMOVE_CANDIDATE_FROM_FOLDER:
+      const findFolder = state.allFolders.find(
+        (folder) => folder.id === action.payload.idFolder
+      );
+      const candidatesFolder = state.allFolders.find(
+        (folder) => folder.id === action.payload.idFolder
+      ).candidates;
+      const filterCandidtesFolder = candidatesFolder.filter(
+        (candidate) => candidate.id !== action.payload.idCandidate
+      );
+      findFolder.candidates = filterCandidtesFolder;
+      return {
+        ...state,
+        allFolders: state.allFolders
+          .filter((folder) => folder.id !== action.payload.idFolder)
+          .concat(findFolder),
       };
     default:
       return state;
