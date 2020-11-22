@@ -18,10 +18,5 @@ export class usersController {
     const users = await db.User.findAll();
     res.status(200).json(users);
   }
-
 }
-
-
-
-
 export default new usersController();
