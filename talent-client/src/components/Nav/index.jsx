@@ -23,14 +23,12 @@ const useStyle = makeStyles({
     justifyContent: 'flex-end',
   },
   link: {
-      textDecoration: 'none',
-      color: '#ffff00',
-  }
+    textDecoration: 'none',
+    color: '#ffff00',
+  },
 });
 
 function Nav({ location }) {
-
-
   const dispatch = useDispatch();
   const classes = useStyle();
 
@@ -51,49 +49,53 @@ function Nav({ location }) {
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid container item xs={3} sm={3} spacing={3}>
-            <img className={classes.logo} alt='Henry Logo' src={logo} />
+            <img className={classes.logo} alt="Henry Logo" src={logo} />
           </Grid>
-          {!checkDossierRoute(location) && <Grid container item xs={6} sm={6} spacing={3}>
-            <Menu />
-          </Grid>}
-          {!checkDossierRoute(location) && 
-          <Grid
-            className={classes.containerIcons}
-            container
-            item
-            xs={3}
-            sm={3}
-            spacing={1}
-          >
-            <IconButton
-              className={classes.icons}
-              label="Acount Circle"
-              value="folder"
+          {!checkDossierRoute(location) && (
+            <Grid container item xs={6} sm={6} spacing={3}>
+              <Menu />
+            </Grid>
+          )}
+          {!checkDossierRoute(location) && (
+            <Grid
+              className={classes.containerIcons}
+              container
+              item
+              xs={3}
+              sm={3}
+              spacing={1}
             >
-              <AcountCircle />
-            </IconButton>
-            <IconButton
-              className={classes.icons}
-              label="Folder"
-              value="folder"
-              onClick={HandleAddFolder}
-            >
-              <FolderIcon />
-            </IconButton>
-            <IconButton
-              className={classes.icons}
-              label="Setting"
-              value="folder"
-            >
-              <Link to='/panel' className={classes.link}><Settings /></Link>
-            </IconButton>
-          </Grid>}
+              <IconButton
+                className={classes.icons}
+                label="Acount Circle"
+                value="folder"
+              >
+                <AcountCircle />
+              </IconButton>
+              <IconButton
+                className={classes.icons}
+                label="Folder"
+                value="folder"
+                onClick={HandleAddFolder}
+              >
+                <FolderIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icons}
+                label="Setting"
+                value="folder"
+              >
+                <Link to="/panel" className={classes.link}>
+                  <Settings />
+                </Link>
+              </IconButton>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </nav>
   );
 }
-
 
 const checkDossierRoute = (url) => {
   if (url.slice(0, 9).toLowerCase() === '/dossier/') {
@@ -101,6 +103,6 @@ const checkDossierRoute = (url) => {
   } else {
     return false;
   }
-}
+};
 
 export default Nav;

@@ -24,7 +24,7 @@ const useStyle = makeStyles({
   font: {
     fontWeight: 600,
     paddingTop: 22,
-  }
+  },
 });
 
 function ContentHome() {
@@ -36,9 +36,9 @@ function ContentHome() {
         <Grid container spacing={1}>
           <Grid container item xs={12} sm={8} spacing={3}>
             <div className={classes.textLeftSearch}>
-              <Typography className={classes.font} variant='h5' align='left'>
+              <Typography className={classes.font} variant="h5" align="left">
                 Henry Talent helps you find your ideal candidate
-                </Typography>
+              </Typography>
             </div>
           </Grid>
           <Grid container item xs={12} sm={4} spacing={3}>

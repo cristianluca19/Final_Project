@@ -11,11 +11,10 @@ import Menu from './components/Dashboard/menu';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
-import { getAllSkills } from './redux/skillsReducer/Action'
+import { getAllSkills } from './redux/skillsReducer/Action';
 import './App.css';
 
 function App() {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,15 +30,15 @@ function App() {
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
         />
-        <Route
-          path="/panel/candidates"
-          render={() => <Dashboard/>}
-        />
+        <Route path="/panel/candidates" render={() => <Dashboard />} />
         <Route
           path="/panel/skills"
           render={() => <Dashboard componentToRender={'skills'} />}
         />
-        <Route path="/" render={({ location }) => <Nav location={location.pathname} />} />
+        <Route
+          path="/"
+          render={({ location }) => <Nav location={location.pathname} />}
+        />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
       <Route exact path="/" render={() => <CardsContainer />} />

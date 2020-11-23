@@ -14,14 +14,22 @@ describe('Candidates', () => {
 
   describe('GET all candidates', () => {
     it('should get all candidates', async () => {
-      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      const candidato1 = await db.Candidate.create({
+        email: 'leo@gmail.com',
+        cohort: '4',
+      });
+      const candidato2 = await db.Candidate.create({
+        email: 'mati@gmail.com',
+        cohort: '4',
+      });
       const response = await request(Server).get('/api/v1/candidates');
+      const foundCandidate1 = await db.Candidate.findByPk(candidato1.id);
+      const foundCandidate2 = await db.Candidate.findByPk(candidato2.id);
       expect(response.body).to.have.lengthOf(2);
-      expect(response.body[0])
+      expect(foundCandidate1)
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
-      expect(response.body[1])
+      expect(foundCandidate2)
         .to.have.property('email')
         .to.be.equal('mati@gmail.com');
     });
@@ -414,7 +422,6 @@ describe('Candidates', () => {
       expect(candidateUpdated)
         .to.have.property('email')
         .to.be.equal('DiegoSoyHenry@gmail.com');
-
     });
   });
 
@@ -440,9 +447,9 @@ describe('Candidates', () => {
       const candidatesList = await db.Candidate.bulkCreate(candidates);
       const response = await request(Server).delete(
         `/api/v1/candidates/${candidatesList[2].dataValues.id}/delete`
-      );  
+      );
       const candidateCreated = await db.Candidate.findAll();
-      expect(candidateCreated).to.have.lengthOf(2)     
+      expect(candidateCreated).to.have.lengthOf(2);
     });
   });
 
@@ -454,9 +461,11 @@ describe('Candidates', () => {
           email: 'cristianL@gmail.com',
           cohort: '5',
         });
-        expect(response.status).to.be.equal(200);
-        const candidateCreated = await db.Candidate.findByPk(response.body.id);
-      expect(candidateCreated).to.have.property('email').to.be.equal('cristianL@gmail.com');
+      expect(response.status).to.be.equal(200);
+      const candidateCreated = await db.Candidate.findByPk(response.body.id);
+      expect(candidateCreated)
+        .to.have.property('email')
+        .to.be.equal('cristianL@gmail.com');
       expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
     });
   });

@@ -12,8 +12,8 @@ export const useStyles = makeStyles((theme) => ({
     borderRadious: 10,
   },
   newFolderButton: {
-    '&:hover' : {
-      backgroundColor: '#FFF001'
-    }
+    '&:hover': {
+      backgroundColor: '#FFF001',
+    },
   },
 }));

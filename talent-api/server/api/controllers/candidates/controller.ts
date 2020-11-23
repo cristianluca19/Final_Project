@@ -54,7 +54,6 @@ export class CandidatesController {
   async bulkCreateCandidate(req: Request, res: Response): Promise<void> {
     try {
       const bulkCandidates = await db.Candidate.bulkCreate(req.body);
-      console.log('bulk', bulkCandidates);
       res.status(200).json(bulkCandidates);
     } catch (error) {
       console.log(error.message);

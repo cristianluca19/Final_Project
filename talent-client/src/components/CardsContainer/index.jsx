@@ -34,9 +34,21 @@ function CardsContainer(props) {
     event.preventDefault();
     if (!uuid) {
       if (!includes) {
-        AddCandidateToFolder(candidate, folder, selectedCandidates, setSelectedCandidates, setNotify)
+        AddCandidateToFolder(
+          candidate,
+          folder,
+          selectedCandidates,
+          setSelectedCandidates,
+          setNotify
+        );
       } else {
-        RemoveCandidateFromFolder(candidate, folder, selectedCandidates, setSelectedCandidates, setNotify)
+        RemoveCandidateFromFolder(
+          candidate,
+          folder,
+          selectedCandidates,
+          setSelectedCandidates,
+          setNotify
+        );
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -52,13 +64,15 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      { folder &&
+      {folder && (
         <ThemeProvider theme={henryTheme}>
-          <Typography color='primary'>
-            {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' '}`}
+          <Typography color="primary">
+            {`Carpeta N°: ${folder.id} - ${
+              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
+            }`}
           </Typography>
         </ThemeProvider>
-      }
+      )}
       <Grid
         className={classes.paddingCandidates}
         container
@@ -100,31 +114,42 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
-
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
     .post(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+        folder ? folder.id : 1
       }/addCandidate/${candidate}`
     )
     .then((response) => {
       setHook([...hook, candidate]);
       AlertCandidate.fire({
         icon: 'success',
-        title: 'Candidato agregado...'
-      })
+        title: 'Candidato agregado...',
+      });
       return;
     })
     .catch((error) => {
-      setNotify({ isOpen: true, message: 'Oops... ocurrió un error', type: 'error' })
+      setNotify({
+        isOpen: true,
+        message: 'Oops... ocurrió un error',
+        type: 'error',
+      });
       return;
     });
-}
+};
 
-const RemoveCandidateFromFolder = (candidate, folder, hook, setHook, setNotify) => {
+const RemoveCandidateFromFolder = (
+  candidate,
+  folder,
+  hook,
+  setHook,
+  setNotify
+) => {
   axios
     .delete(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
+        folder ? folder.id : 1
       }/removeCandidate/${candidate}`
     )
     .then((response) => {
@@ -134,15 +159,19 @@ const RemoveCandidateFromFolder = (candidate, folder, hook, setHook, setNotify) 
       setHook(newSelectedCandidates);
       AlertCandidate.fire({
         icon: 'error',
-        title: 'Candidato removido...'
-      })
+        title: 'Candidato removido...',
+      });
       return;
     })
     .catch((error) => {
-      setNotify({ isOpen: true, message: 'Oops... ocurrió un error', type: 'error' })
+      setNotify({
+        isOpen: true,
+        message: 'Oops... ocurrió un error',
+        type: 'error',
+      });
       return;
     });
-}
+};
 
 const AlertCandidate = Swal.mixin({
   toast: true,
@@ -151,10 +180,10 @@ const AlertCandidate = Swal.mixin({
   timer: 1500,
   timerProgressBar: true,
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
-})
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
 
 // const noActiveFolder = (dispatch) => {
 //   Swal.fire({
