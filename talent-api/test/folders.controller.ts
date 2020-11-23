@@ -105,7 +105,8 @@ describe('Folders', () => {
       const response = await request(Server).put(
         `/api/v1/folders/state/${folder1.id}?status=created`
       );
-      console.log(folder1, '---', response.body);
+      expect(response.body).to.have.property('status').to.be.equal('created');
+      expect(response.body).to.have.property('id').to.be.equal(folder1.id);
     });
     it('should update state to sent', async () => {
       const folder2 = await db.Folder.create({ uuid });
@@ -113,8 +114,8 @@ describe('Folders', () => {
       const response = await request(Server).put(
         `/api/v1/folders/state/${folder2.id}?status=sent`
       );
-      // expect(folder2.status).to.be.equal(200);
-      console.log(folder2, response.body);
+      expect(response.body).to.have.property('status').to.be.equal('sent');
+      expect(response.body).to.have.property('id').to.be.equal(folder2.id);
     });
   });
 });

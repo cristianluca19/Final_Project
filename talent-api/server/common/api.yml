@@ -519,26 +519,26 @@ paths:
         200:
           description: a JSON object with the dossier important details and candidates
           content: {}  
-  # /folders/state/{folderId}:
-  #   put:
-  #     tags:
-  #     - Folders
-  #     summary: Update status folder by folder id.
-  #     description: The new status is passed throught query params and updates the folder.
-  #     parameters:
-  #       - in: path
-  #         name: folderId
-  #         required: true
-  #         schema:
-  #          type: integer 
-  #       - in: query
-  #         name: status
-  #         required: true
-  #         schema:
-  #           type: string
-  #     responses:
-  #       200:
-  #         description: a JSON object with folder updated details.
+  /folders/state/{folderId}:
+    put:
+      tags:
+      - Folders
+      summary: Update status folder by folder id.
+      description: The new status is passed throught query params and updates the folder.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer 
+        - in: query
+          name: status
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: a JSON object with folder updated details.
   /folders/{folderId}:
     get:
       tags:
