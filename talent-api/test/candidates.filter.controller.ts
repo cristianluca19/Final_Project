@@ -176,7 +176,7 @@ describe('Filter', () => {
       const filterOne = await request(Server)
         .get('/api/v1/candidates/filter')
         .query(bodyFilterOne);
-        await console.log(filterOne.body);
+      await console.log(filterOne.body);
       expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterOne.body[0].id).to.be.equal(1);
       expect(filterOne.body[0].firstName).to.be.equal('Jarrod');

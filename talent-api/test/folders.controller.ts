@@ -34,7 +34,7 @@ describe('Folders', () => {
       const response = await request(Server).get(
         `/api/v1/folders/${foldersCreated[0].id}`
       );
-      await console.log(response.body)
+      await console.log(response.body);
       expect(response.body)
         .to.be.an('object')
         .to.deep.include({ id: foldersCreated[0].id });
