@@ -66,11 +66,11 @@ const useStyle = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
     selectInput: {
-      backgroundColor: '#111111 !important',
-      paddingRight: '24px',
-      width: '280px',
-    },
-  },
+        backgroundColor: '#ffffff1f',
+        paddingRight: '24px',
+        width: '280px'
+    }
+  }
 }));
 
 function Search() {
