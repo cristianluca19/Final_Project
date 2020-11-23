@@ -3,8 +3,9 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
-import { response } from 'express';
 import path from 'path';
+import { getMaxListeners } from 'process';
+import { response } from 'express';
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -380,7 +381,6 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
-
   describe('PUT update candidate', () => {
     it('should update one candidate', async () => {
       const candidates = [
@@ -414,23 +414,35 @@ describe('Candidates', () => {
       expect(candidateUpdated)
         .to.have.property('email')
         .to.be.equal('DiegoSoyHenry@gmail.com');
+
     });
   });
 
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
-      const candidate1 = await db.Candidate.create({
-        email: 'cristianL@gmail.com',
-        cohort: '5',
-      });
+      const candidates = [
+        {
+          firstName: 'Matias',
+          email: 'matifu@gmail.com',
+          cohort: 'wft-07',
+        },
+        {
+          firstName: 'Diego',
+          email: 'diego@gmail.com',
+          cohort: 'wft-05',
+        },
+        {
+          firstName: 'Cristian',
+          email: 'cristian@gmail.com',
+          cohort: 'wft-04',
+        },
+      ];
+      const candidatesList = await db.Candidate.bulkCreate(candidates);
       const response = await request(Server).delete(
-        `/api/v1/candidates/${candidate1.id}/delete`
-      );
-      const candidate = await db.Candidate.findOne({
-        where: { email: 'cristianL@gmail.com', cohort: '5' },
-      });
-      expect(response.status).to.be.equal(204);
-      expect(candidate).to.be.equal(null);
+        `/api/v1/candidates/${candidatesList[2].dataValues.id}/delete`
+      );  
+      const candidateCreated = await db.Candidate.findAll();
+      expect(candidateCreated).to.have.lengthOf(2)     
     });
   });
 
@@ -442,7 +454,10 @@ describe('Candidates', () => {
           email: 'cristianL@gmail.com',
           cohort: '5',
         });
-      expect(response.status).to.be.equal(200);
+        expect(response.status).to.be.equal(200);
+        const candidateCreated = await db.Candidate.findByPk(response.body.id);
+      expect(candidateCreated).to.have.property('email').to.be.equal('cristianL@gmail.com');
+      expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
     });
   });
 });
