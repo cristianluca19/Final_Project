@@ -72,31 +72,7 @@ function Search() {
 
   const onClickFilter = (e) => {
     e.preventDefault();
-    let filter = '';
-    if (statusFilter.locations.length > 1) {
-      filter +=
-        'locations=' + statusFilter.locations.join().replace(/,/g, '%2C') + '&';
-    } else {
-      if (statusFilter.locations.length) {
-        filter += 'locations=' + statusFilter.locations.join() + '&';
-      }
-    }
-    if (statusFilter.skills.length > 1) {
-      filter +=
-        'skills=' + statusFilter.skills.join().replace(/,/g, '%2C') + '&';
-    } else {
-      if (statusFilter.skills.length) {
-        filter += 'skills=' + statusFilter.skills.join() + '&';
-      }
-    }
-    if (statusFilter.cohorts.length > 1) {
-      filter += 'cohorts=' + statusFilter.cohorts.join().replace(/,/g, '%2C');
-    } else {
-      if (statusFilter.cohorts.length) {
-        filter += 'cohorts=' + statusFilter.cohorts.join();
-      }
-    }
-    dispatch(getFilterCandidates(filter));
+    dispatch(getFilterCandidates(statusFilter));
     handleClose();
   };
 
@@ -181,7 +157,7 @@ function Search() {
         </div>
         <div className={classes.divAllSkills}>
           {filteredSkills.length > 0
-            ? filteredSkills.slice(0, 16).map((skill, index) => (
+            ? filteredSkills.map((skill, index) => (
                 <div key={index} className={classes.divBlackButton}>
                   <button
                     className={classes.blackButton}
@@ -192,7 +168,7 @@ function Search() {
                   </button>
                 </div>
               ))
-            : allSkillsData.slice(0, 16).map((skill, index) => (
+            : allSkillsData.map((skill, index) => (
                 <div key={index} className={classes.divBlackButton}>
                   <button
                     className={classes.blackButton}
@@ -224,7 +200,7 @@ function Search() {
           Locations
         </InputLabel>
         <Select
-          labelId="select-label-locatios"
+          labelId="select-label-locations"
           id="select-id-locations"
           className={classes.inputSelectData}
           multiple

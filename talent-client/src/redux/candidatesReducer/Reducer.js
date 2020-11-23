@@ -42,7 +42,7 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         filterCandidates: !action.payload.length
-          ? ['Candidatos no encontrados']
+          ? []
           : state.allCandidates.filter((candidate) =>
               action.payload.includes(candidate.id)
             ),

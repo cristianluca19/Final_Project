@@ -58,14 +58,17 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 };
 
 export function getFilterCandidates(filter) {
+  const queryString = Object.keys(filter)
+    .filter((key) => filter[key].length)
+    .map((key) => filter[key].length && key + '=' + filter[key])
+    .join('&');
   return async (dispatch) => {
     const candidates = await axios.get(
-      `${BACKEND_URL}/candidates/filter?${filter}`
+      `${BACKEND_URL}/candidates/filter?${queryString.replace(/,/g, '%2C')}`
     );
-    const idCandidates =
-      candidates.data === ''
-        ? ''
-        : candidates.data.map((dataIdCandidates) => dataIdCandidates.id);
+    const idCandidates = !candidates.data.length
+      ? []
+      : candidates.data.map((dataIdCandidates) => dataIdCandidates.id);
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,
