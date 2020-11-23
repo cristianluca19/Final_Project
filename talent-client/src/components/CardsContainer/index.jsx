@@ -51,8 +51,8 @@ function CardsContainer(props) {
   };
 
 
-  console.log(folder)
-  if (!candidates.length) return loadingAnimation();
+  
+  // if (!candidates.length) return loadingAnimation();
 
   return (
     <Container className={classes.container} maxWidth="xl">

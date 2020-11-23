@@ -138,7 +138,7 @@ function CandidateCard(props) {
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
-                {skills.length ? skills.map(
+                {skills ? skills.map(
                   (objSkill, index) =>
                   
                     index < labelsMaxLimit && (
