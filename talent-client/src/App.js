@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import CsvToJson from './components/csvToJson/CsvToJson';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import CsvToJson from './components/csvToJson/CsvToJson';
 import ContentHome from './components/ContentHome/index';
 import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
@@ -11,16 +11,16 @@ import Dashboard from './components/Dashboard';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
-import TechSkillsFilter from './components/TechSkillsFilter/TechSkillsFilter';
+import { getAllSkills } from './redux/skillsReducer/Action';
+import './App.css';
 
 function App() {
-  //==============================================================
   const dispatch = useDispatch();
-  //===============================================================
 
-  // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
-  // to lower loading times if candidate number is too high...
-  dispatch(getAllCandidates());
+  useEffect(() => {
+    dispatch(getAllCandidates());
+    dispatch(getAllSkills());
+  });
 
   return (
     <div className="App">
@@ -29,6 +29,10 @@ function App() {
         <Route
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
+        />
+        <Route
+          path="/panel/skills"
+          render={() => <Dashboard componentToRender={'skills'} />}
         />
         <Route path="/" render={() => <Nav />} />
       </Switch>
@@ -44,6 +48,7 @@ function App() {
         <Route path="/panel" />
         <Route path="/" render={() => <Footer />} />
       </Switch>
+      {/* <Route path="/panel" render={() => <Menu />} /> */}
     </div>
   );
 }

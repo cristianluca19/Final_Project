@@ -11,6 +11,10 @@ export default function Reducer(state = initialState, action) {
         ...state,
         allSkills: action.payload,
       };
+    case actions.EDIT_SKILL:
+      return state;
+    case actions.DELETE_SKILL:
+      return state;
     default:
       return state;
   }
