@@ -111,22 +111,36 @@ export class CandidatesController {
     const skillsArray = skills ? skills.toString().split(',') : [];
     const cohortArray = cohorts ? cohorts.toString().split(',') : [];
     const locationArray = location ? location.toString().split(',') : [];
-    console.log('esto llega', req.query);
+    // console.log('esto llega', req.query);
     const query = {
       where: {
-        cohort_id: cohortArray,
-        country: locationArray,
-      },
-      include: {
-        model: db.Skill,
-        where: {
-          name: skillsArray,
-        },
+        // cohort_id: cohortArray,
+        [Op.and]: [
+          {
+            country: locationArray,
+          },
+          {
+            include: {
+              model: db.Skill,
+              where: {
+                name: skillsArray,
+              },
+            },
+          },
+          {
+            include: {
+              model: db.Cohort,
+              where: {
+                name: cohortArray,
+              },
+            },
+          },
+        ],
       },
     };
-    if (!skillsArray.length) delete query.include;
-    if (!cohortArray.length) delete query.where.cohort_id;
-    if (!locationArray.length) delete query.where.country;
+    // if (!skillsArray.length) delete query.where[Op.and][0];
+    // if (!locationArray.length) delete query.where[Op.and][1];
+    // if (!cohortArray.length) delete query.where[Op.and][2];
     if (!skillsArray.length && !cohortArray.length && !locationArray.length) {
       res.sendStatus(204);
     } else {

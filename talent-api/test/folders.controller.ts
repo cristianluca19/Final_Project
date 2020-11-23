@@ -16,12 +16,12 @@ describe('Folders', () => {
     });
   });
   describe('GET', () => {
-    it('Should retrieve all existing folders', async () => {
+    xit('Should retrieve all existing folders', async () => {
       await db.Folder.bulkCreate([{ uuid }, { uuid }, { uuid }, { uuid }]);
       const response = await request(Server).get('/api/v1/folders');
       expect(response.body).to.be.an('array').to.have.lengthOf(4);
     });
-    it('Should retrieve an specific folder with all associated candidates', async () => {
+    xit('Should retrieve an specific folder with all associated candidates', async () => {
       await db.Cohort.create({
         name: 'WebFT-01',
       });

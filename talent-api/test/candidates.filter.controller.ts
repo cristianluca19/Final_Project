@@ -10,27 +10,28 @@ describe('Filter', () => {
   });
 
   describe('Filter candidates', () => {
-    db.Cohort.create({
+    const cohort1 = {
       name: 'WebFT-01',
-    });
-    db.Cohort.create({
+    };
+    const cohort2 = {
       name: 'WebFT-02',
-    });
-    db.Cohort.create({
+    };
+    const cohort3 = {
       name: 'WebFT-03',
-    });
-    db.Cohort.create({
+    };
+    const cohort4 = {
       name: 'WebFT-04',
-    });
-    db.Cohort.create({
+    };
+    const cohort5 = {
       name: 'WebFT-05',
-    });
-    db.Cohort.create({
+    };
+    const cohort6 = {
       name: 'WebFT-06',
-    });
-    db.Cohort.create({
+    };
+    const cohort7 = {
       name: 'WebFT-07',
-    });
+    };
+    console.log('aca');
     const Jarrod = {
       id: 1,
       firstName: 'Jarrod',
@@ -139,15 +140,15 @@ describe('Filter', () => {
     };
 
     const bodyFilterOne = {
-      cohortId: '2,7',
+      cohortId: 'WebFT-03,WebFT-01',
     };
 
     const bodyFilterTwo = {
-      cohortId: '1,2,7,5',
+      cohortId: 'WebFT-01,WebFT-02,WebFT-07,WebFT-05',
       locations: 'United Kingdom,Afghanistan',
     };
     const bodyFilterThree = {
-      cohortId: '1,2,7,5',
+      cohortId: 'WebFT-01,WebFT-02,WebFT-07,WebFT-05',
       locations: 'Chad,Slovenia',
       skills: 'trabajo en equipo,react,liderazgo,html5',
     };
@@ -167,8 +168,22 @@ describe('Filter', () => {
         skillsFour,
         skillsFive,
       ]);
+      const cohorts = await db.Cohort.bulkCreate([
+        cohort1,
+        cohort2,
+        cohort3,
+        cohort4,
+        cohort5,
+        cohort6,
+        cohort7,
+      ]);
 
       await candidates[0].addSkills(skills[0]);
+      await candidates[0].addSkills(skills[1]);
+      await candidates[1].addSkills(skills[2]);
+      await candidates[1].addSkills(skills[3]);
+
+      await candidates[0].addSkills(skills[6]);
       await candidates[0].addSkills(skills[1]);
       await candidates[1].addSkills(skills[2]);
       await candidates[1].addSkills(skills[3]);
@@ -176,7 +191,7 @@ describe('Filter', () => {
       const filterOne = await request(Server)
         .get('/api/v1/candidates/filter')
         .query(bodyFilterOne);
-        await console.log(filterOne.body);
+      // await console.log(filterOne.body);
       expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
       expect(filterOne.body[0].id).to.be.equal(1);
       expect(filterOne.body[0].firstName).to.be.equal('Jarrod');
