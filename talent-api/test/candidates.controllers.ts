@@ -17,17 +17,22 @@ describe('Candidates', () => {
       const cohort1 = await db.Cohort.create({
         name: 'WebFT-01',
       });
-      await db.Candidate.create({ email: 'leo@gmail.com', cohort: cohort1.id });
-      await db.Candidate.create({
+      const candidato1 = await db.Candidate.create({
+        email: 'leo@gmail.com',
+        cohort: cohort1.id,
+      });
+      const candidato2 = await db.Candidate.create({
         email: 'mati@gmail.com',
         cohort: cohort1.id,
       });
       const response = await request(Server).get('/api/v1/candidates');
+      const foundCandidate1 = await db.Candidate.findByPk(candidato1.id);
+      const foundCandidate2 = await db.Candidate.findByPk(candidato2.id);
       expect(response.body).to.have.lengthOf(2);
-      expect(response.body[0])
+      expect(foundCandidate1)
         .to.have.property('email')
         .to.be.equal('leo@gmail.com');
-      expect(response.body[1])
+      expect(foundCandidate2)
         .to.have.property('email')
         .to.be.equal('mati@gmail.com');
     });
