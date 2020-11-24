@@ -13,6 +13,18 @@ export function getAllCandidates() {
   };
 }
 
+export function getCandidatesPage(page,limit) {
+  return async (dispatch) => {
+    const candidates = await axios.get(`${BACKEND_URL}/candidates/pages?limit=${limit || 10}&page=${page || 0}`);
+    console.log(candidates.data)
+    dispatch({
+      type: actions.GET_CANDIDATES_PAGE,
+      payload: candidates.data.candidates.rows,
+      data: candidates.data,
+    });
+  };
+}
+
 export function deleteCandidate(id) {
   return async (dispatch) => {
     const deleteCandidate = await axios.delete(

@@ -5,15 +5,19 @@ import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
 import { useSelector, useDispatch } from 'react-redux';
 import Paginator from '../Paginator';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import { newFolder, getFolderById } from '../../redux/foldersReducer/Action.js';
+import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [page, setPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
@@ -24,11 +28,20 @@ function CardsContainer(props) {
 
   // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
   const candidates = useSelector(
-    (store) => store.CandidateReducer.allCandidates
+    (store) => store.CandidateReducer.pagedCandidates
+  );
+  const pageData = useSelector(
+    (store) => store.CandidateReducer.pageStats
   );
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const cardsMaxLimit = 30;
+
+  useEffect(()=>{
+    dispatch(getCandidatesPage())
+  },[])
+
+  console.log(pageData)
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
@@ -55,12 +68,13 @@ function CardsContainer(props) {
       return;
     }
   };
+  
 
   const includesCandidate = (id) => {
     return selectedCandidates.includes(id);
   };
 
-  if (!candidates.length) return <h1>Loading...</h1>;
+  // if (!candidates.length) return <h1>Loading...</h1>;
 
   return (
     <Container className={classes.container} maxWidth="xl">
@@ -97,9 +111,9 @@ function CardsContainer(props) {
               )
           )}
       </Grid>
-      {candidates.length && (
+      {candidates && (
         <Grid>
-          <Paginator />
+          <Paginator pages={page} current={currentPage} setCurrentPage={setCurrentPage}/>
         </Grid>
       )}
       <Notification notify={notify} setNotify={setNotify} />
