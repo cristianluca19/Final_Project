@@ -89,6 +89,16 @@ export class foldersController {
     res.status(200).json(folder);
   }
 
+  async updateStatusById(req: Request, res: Response): Promise<void> {
+    const { status } = req.body;
+    await db.Folder.update(
+      { status: status },
+      { where: { id: req.params.folderId } }
+    );
+    const folder = await db.Folder.findByPk(req.params.folderId);
+    res.status(200).json(folder);
+  }
+
   async deleteById(req: Request, res: Response): Promise<void> {
     await db.Folder.destroy({ where: { id: req.params.folderId } });
     res.sendStatus(204);

@@ -54,7 +54,7 @@ describe('Folders', () => {
       expect(foundFolder).to.be.null;
     });
   });
-  describe('PUT', () => {
+  describe('PUT recruiter', () => {
     it('Should update an specific add relation user/recruiter relation to folder', async () => {
       const folders = await db.Folder.bulkCreate([
         { uuid },
@@ -98,6 +98,28 @@ describe('Folders', () => {
         userId: user.id,
         recruiterId: recruiter.id,
       });
+    });
+  });
+
+  describe('PUT status', () => {
+    it('should update status to created', async () => {
+      const folder1 = await db.Folder.create({ uuid });
+      await db.Folder.create({ uuid });
+      const response = await request(Server)
+        .put(`/api/v1/folders/status/${folder1.id}`)
+        .send({ status: 'created' });
+      console.log(response.body);
+      expect(response.body).to.have.property('status').to.be.equal('created');
+      expect(response.body).to.have.property('id').to.be.equal(folder1.id);
+    });
+    it('should update status to sent', async () => {
+      const folder2 = await db.Folder.create({ uuid });
+      await db.Folder.create({ uuid });
+      const response = await request(Server)
+        .put(`/api/v1/folders/status/${folder2.id}`)
+        .send({ status: 'sent' });
+      expect(response.body).to.have.property('status').to.be.equal('sent');
+      expect(response.body).to.have.property('id').to.be.equal(folder2.id);
     });
   });
 });
