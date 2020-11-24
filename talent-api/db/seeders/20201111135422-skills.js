@@ -61,7 +61,7 @@ function mixer(skills) {
 function relationCandidateSkills() {
   let candidate_skills = [];
   let count = 0;
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 21; i++) {
     if (i % 5 === 0) {
       count = i;
     }

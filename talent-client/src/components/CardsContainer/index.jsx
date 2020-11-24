@@ -12,6 +12,7 @@ import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
+import { setActiveFolder } from '../../redux/foldersReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -39,9 +40,15 @@ function CardsContainer(props) {
     dispatch(getCandidatesPage(currentPage));
   }, [bool]);
 
-
-  const handleCandidate = (event, candidate, folder, uuid, includes) => {
+  const handleCandidate = async (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
+
+    console.log('folder :', folder)
+    if (!folder) {
+      folder = await createDraftFolder();
+      dispatch(setActiveFolder(folder.id));
+      console.log(folder);
+    }
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
@@ -49,7 +56,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify
+          setNotify,
         );
       } else {
         RemoveCandidateFromFolder(
@@ -83,13 +90,12 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      <div style={{backgroundColor: 'white'}}><ActiveFolder /></div>
+      <div style={{ backgroundColor: 'white' }}><ActiveFolder /></div>
       {folder && (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
-            {`Carpeta N°: ${folder.id} - ${
-              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
-            }`}
+            {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' '
+              }`}
           </Typography>
         </ThemeProvider>
       )}
@@ -140,12 +146,24 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
+const createDraftFolder = async () => {
+  try {
+    const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+    AlertCandidate.fire({
+      icon: 'info',
+      title: 'Nueva carpeta creada...',
+    });
+    return newFolder.data.folder
+  } catch (error) {
+    console.log(error.message)
+    throw error
+  }
+}
+
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
     .post(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
-      }/addCandidate/${candidate}`
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder.id}/addCandidate/${candidate}`
     )
     .then((response) => {
       setHook([...hook, candidate]);
@@ -174,9 +192,7 @@ const RemoveCandidateFromFolder = (
 ) => {
   axios
     .delete(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
-      }/removeCandidate/${candidate}`
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder.id}/removeCandidate/${candidate}`
     )
     .then((response) => {
       let newSelectedCandidates = hook.filter(

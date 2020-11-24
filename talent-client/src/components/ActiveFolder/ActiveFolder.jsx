@@ -61,6 +61,7 @@ export default function ActiveFolder() {
 
   const handleChangeFolder = (event) => {
     setFolder(event.target.value);
+    console.log(event.target.value)
     dispatch(setActiveFolder(event.target.value));
   };
 
@@ -89,7 +90,7 @@ export default function ActiveFolder() {
             <em>None</em>
           </MenuItem>
           {recruitersData.map((element, index) => (
-            <MenuItem key={element.company} value={element.company}>
+            <MenuItem key={index} value={element.company}>
               <ListItemText primary={element.company} />
             </MenuItem>
           ))}

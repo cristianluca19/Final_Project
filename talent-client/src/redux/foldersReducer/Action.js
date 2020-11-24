@@ -48,10 +48,17 @@ export function getAllFolders() {
 }
 
 export function setActiveFolder(idActiveFolder) {
+  console.log(idActiveFolder)
   return async (dispatch) => {
+    let folder;
+    if (idActiveFolder) {
+      folder = await axios.get(`${BACKEND_URL}/folders/${idActiveFolder}`);
+    } else {
+      // TODO llamar una folder draft?
+    }
     dispatch({
       type: actions.SET_ACTIVE_FOLDER,
-      payload: idActiveFolder,
+      payload: folder ? folder.data : null,
     });
   };
 }

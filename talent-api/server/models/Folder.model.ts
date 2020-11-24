@@ -27,7 +27,7 @@ export default (sequelize) => {
       status: {
         type: DataTypes.ENUM,
         values: Object.values(FOLDER_STATUS),
-        defaultValue: FOLDER_STATUS.Created,
+        defaultValue: FOLDER_STATUS.Draft,
       },
     },
     {
