@@ -525,7 +525,9 @@ describe('Candidates', () => {
       expect(candidateCreated)
         .to.have.property('email')
         .to.be.equal('cristianL@gmail.com');
-      expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
+      expect(candidateCreated)
+        .to.have.property('cohortId')
+        .to.be.equal(cohort1.id);
     });
   });
 });

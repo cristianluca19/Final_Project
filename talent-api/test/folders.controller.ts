@@ -108,7 +108,6 @@ describe('Folders', () => {
       const response = await request(Server)
         .put(`/api/v1/folders/status/${folder1.id}`)
         .send({ status: 'created' });
-      console.log(response.body);
       expect(response.body).to.have.property('status').to.be.equal('created');
       expect(response.body).to.have.property('id').to.be.equal(folder1.id);
     });
