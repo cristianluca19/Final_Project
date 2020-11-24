@@ -7,6 +7,7 @@ export default express
   .post('/csv', upload.single('file'), candidatesController.csvToJson)
   .post('/', candidatesController.bulkCreateCandidate)
   .get('/', candidatesController.all)
+  .get('/pages', candidatesController.paginate)
   .get('/filterBy/:visibility', candidatesController.byFilter)
   .get('/filter', candidatesController.filter)
   .get('/search', candidatesController.searchByProp)

@@ -15,7 +15,7 @@ const comment = [
 
 function fill() {
   let candidates = [];
-  for (let candidate = 1; candidate <= 22; candidate++) {
+  for (let candidate = 1; candidate <= 50; candidate++) {
     const randomStatus = status[Math.floor(Math.random() * status.length)];
     const randomVisbilty =
       visibility[Math.floor(Math.random() * visibility.length)];
@@ -28,7 +28,7 @@ function fill() {
       email: faker.internet.email(),
       cohort: `${Math.floor(Math.random() * 7) + 1}`,
       mini_bio: bio,
-      profile_picture: faker.internet.avatar(),
+      profile_picture: faker.image.people(),
       linkedin: faker.internet.url(),
       github: faker.internet.url(),
       status: randomStatus,

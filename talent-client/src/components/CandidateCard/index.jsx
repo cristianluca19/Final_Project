@@ -53,7 +53,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={imgtest} // add "candidate.profilePicture" when seed works again
+            image={candidate.profilePicture || imgtest} // add "candidate.profilePicture" when seed works again
             title="Henry Candidate"
           />
         </Grid>
@@ -150,7 +150,7 @@ function CandidateCard(props) {
             >
               {`${candidate.country}  -  WebFT0${candidate.cohort}`}
             </Typography>
-            <Divider variant="middle" style={{ marginBottom: '8px' }}/>
+            <Divider variant="middle" style={{ marginBottom: '8px' }} />
             <ThemeProvider theme={theme}>
               {/* Label mapping with TechSkills */}
               <Grid
@@ -234,7 +234,11 @@ function CandidateCard(props) {
                   title={candidate.comment ? candidate.comment : false}
                   placement="top-end"
                 >
-                  <Badge color="secondary" badgeContent={candidate.comment ? 1 : 0} variant="dot">
+                  <Badge
+                    color="secondary"
+                    badgeContent={candidate.comment ? 1 : 0}
+                    variant="dot"
+                  >
                     <Chip
                       className={classes.scoring}
                       size="small"
@@ -253,10 +257,19 @@ function CandidateCard(props) {
 }
 
 const randomComment = () => {
-  let array = [longText,undefined,null,shortText,null,'Mucha experiencia previa','Experiencia en gestion de equipos','Praesent non nunc mollis, fermentum neque at, semper arcuNullam eget est sed sem iaculis gravida eget vitae justo.']
-  let random = Math.round(Math.random()*(0,array.length))
-  return array[random]
-}
+  let array = [
+    longText,
+    undefined,
+    null,
+    shortText,
+    null,
+    'Mucha experiencia previa',
+    'Experiencia en gestion de equipos',
+    'Praesent non nunc mollis, fermentum neque at, semper arcuNullam eget est sed sem iaculis gravida eget vitae justo.',
+  ];
+  let random = Math.round(Math.random() * (0, array.length));
+  return array[random];
+};
 
 const longText = `
 Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
