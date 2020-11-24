@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { yellow } from '@material-ui/core/colors';
+import { yellow, grey } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 
 export const useStyles = makeStyles((theme) => ({
@@ -19,8 +19,8 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
   miniBioBody: {
-    marginTop: '10px', 
-    minHeight: 100
+    marginTop: '10px',
+    minHeight: 100,
   },
   skillsContainer: {
     minHeight: 60,
@@ -30,49 +30,59 @@ export const useStyles = makeStyles((theme) => ({
     left: 0,
     top: 0,
     fontWeight: 900,
-    backgroundColor: '#FFF001'
+    backgroundColor: '#FFF001',
   },
   skillsText: {
-  fontWeight: 900,
-  fontSize: 12,
-},
-  tooltip: {
-  position: 'absolute',
-  right: '5px',
-  bottom: '5px',
-},
-  media: {
-  minHeight: 350,
-  height: '100%',
-  width: '100%',
-  objectFit: 'contain',
-},
-  chips: {
-  borderRadius: 50,
-  maxHeight: 5,
-  marginTop: 20,
-  marginRight: 20,
-  fontSize: 16,
-  '&:hover': {
-    backgroundColor: yellow['A500'],
-    fontWeight: 1000,
+    fontWeight: 900,
+    fontSize: 12,
   },
-  paddingBottom: '7px !important',
-},
+  tooltip: {
+    position: 'absolute',
+    right: '5px',
+    bottom: '5px',
+  },
+  media: {
+    minHeight: 350,
+    height: '100%',
+    width: '100%',
+    objectFit: 'contain',
+  },
+  techSkills: {
+    borderRadius: 50,
+    maxHeight: 16,
+    // marginTop: 10,
+    // marginRight: 20,
+    fontSize: 14,
+    fontWeight: 500,
+    '&:hover': {
+      backgroundColor: grey[300],
+    },
+  },
+  softSkills: {
+    borderRadius: 50,
+    maxHeight: 16,
+    // marginTop: 20,
+    // marginRight: 20,
+    fontSize: 14,
+    fontWeight: 500,
+    '&:hover': {
+      backgroundColor: '#fff001',
+    },
+    // paddingBottom: '7px !important',
+  },
   contactButton: {
-  maxHeight: 20,
-  marginBottom: -20,
-  border: 1,
-  borderStyle: 'solid',
-},
+    maxHeight: 20,
+    marginBottom: -20,
+    border: 1,
+    borderStyle: 'solid',
+  },
   contactButtonView: {
-  display: 'none',
-},
+    display: 'none',
+  },
   nameHeader: {
-  minHeight: 50,
-  maxHeight: 50,
-
-}
+    minHeight: 50,
+    maxHeight: 50,
+  },
 }));
 
 export const PersonalizedTooltip = withStyles((theme) => ({

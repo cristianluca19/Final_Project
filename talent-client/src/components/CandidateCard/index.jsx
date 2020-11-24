@@ -24,7 +24,15 @@ import Zoom from '@material-ui/core/Zoom';
 import GradeIcon from '@material-ui/icons/Grade';
 
 function CandidateCard(props) {
-  const { includes, candidate, uuid, folder, handleCandidate, location } = props; // TODO: hacer que le llegue el folder.id por props...
+  const {
+    includes,
+    candidate,
+    uuid,
+    folder,
+    handleCandidate,
+    location,
+  } = props; 
+  candidate.comment || (candidate.comment = randomComment()) // TODO: comments need to be passed as props
   const { skills } = candidate;
   const labelsMaxLimit = 8;
 
@@ -55,22 +63,35 @@ function CandidateCard(props) {
           style={{ position: 'relative' }}
         >
           <ThemeProvider theme={theme}>
-            <Grid container justify="space-between" alignItems="center" style={{ marginTop: 5 }}>
+            <Grid
+              container
+              justify="space-between"
+              alignItems="center"
+              style={{ marginTop: 5 }}
+            >
               <Grid item xs={8} className={classes.nameHeader}>
                 {/*FullName*/}
-                <Typography align='center' variant="h5" component="h2" style={{ marginTop: 7 }} >
+                <Typography
+                  align="center"
+                  variant="h5"
+                  component="h2"
+                  style={{ marginTop: 7 }}
+                >
                   {`${candidate.firstName} ${candidate.lastName}`}
                 </Typography>
                 {/*Top-right Icons*/}
               </Grid>
-              <Grid item xs={2} >
+              <Grid item xs={2}>
                 <Link
                   color="inherit"
                   target="_blank"
                   rel="noopener"
                   href={candidate.github}
                 >
-                  <GitHubIcon name="GitHub" style={{ fontSize: 20, marginBottom: 3, marginLeft: 20 }} />
+                  <GitHubIcon
+                    name="GitHub"
+                    style={{ fontSize: 20, marginBottom: 3, marginLeft: 20 }}
+                  />
                 </Link>
                 <Link
                   color="inherit"
@@ -89,12 +110,12 @@ function CandidateCard(props) {
                   onClick={(event) => {
                     handleCandidate
                       ? handleCandidate(
-                        event,
-                        candidate.id,
-                        folder,
-                        uuid,
-                        includes
-                      )
+                          event,
+                          candidate.id,
+                          folder,
+                          uuid,
+                          includes
+                        )
                       : handleContactCandidate(event);
                   }}
                 >
@@ -104,11 +125,11 @@ function CandidateCard(props) {
                         <FolderIcon />
                       </Badge>
                     ) : (
-                        <CreateNewFolderIcon />
-                      )
+                      <CreateNewFolderIcon />
+                    )
                   ) : (
-                      <EmailIcon />
-                    )}
+                    <EmailIcon />
+                  )}
                 </IconButton>
               </Grid>
             </Grid>
@@ -125,7 +146,7 @@ function CandidateCard(props) {
             >
               {`${candidate.country}  -  WebFT0${candidate.cohort}`}
             </Typography>
-            <Divider variant="middle" />
+            <Divider variant="middle" style={{ marginBottom: '8px' }}/>
             <ThemeProvider theme={theme}>
               {/* Label mapping with TechSkills */}
               <Grid
@@ -139,23 +160,25 @@ function CandidateCard(props) {
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
                 {skills
                   ? skills.map(
-                    (objSkill, index) =>
-                      index < labelsMaxLimit && (
-                        <Chip
-                          key={index}
-                          className={classes.chips}
-                          size="small"
-                          color="primary"
-                          label={
-                            (objSkill.name.length > 3) ? objSkill.name.charAt(0).toUpperCase() +
-                              objSkill.name.slice(1) : objSkill.name.toUpperCase()
-                          }
-                        />
-                      )
-                  )
+                      (objSkill, index) =>
+                        index < labelsMaxLimit && (
+                          <Chip
+                            key={index}
+                            className={classes.techSkills}
+                            size="small"
+                            color="primary"
+                            label={
+                              objSkill.name.length > 3
+                                ? objSkill.name.charAt(0).toUpperCase() +
+                                  objSkill.name.slice(1)
+                                : objSkill.name.toUpperCase()
+                            }
+                          />
+                        )
+                    )
                   : null}
               </Grid>
-              <Divider style={{ marginTop: '10px' }} variant="fullWidth" />
+              <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" />
               <Grid
                 container
                 justify="space-evenly"
@@ -164,23 +187,31 @@ function CandidateCard(props) {
                 className={classes.skillsContainer}
               >
                 {skills
-                  ? ['Leader', 'Partnership', 'Fast Learner', 'English', 'Portuguese'].map(
-                    (objSkill, index) =>
-                      index < labelsMaxLimit && (
-                        <Chip
-                          key={index}
-                          className={classes.chips}
-                          size="small"
-                          label={
-                            (objSkill.length > 3) ? objSkill.charAt(0).toUpperCase() +
-                              objSkill.slice(1) : objSkill.toUpperCase()
-                          }
-                        />
-                      )
-                  )
+                  ? [
+                      'Leader',
+                      'Partnership',
+                      'Fast Learner',
+                      'English',
+                      'Portuguese',
+                    ].map(
+                      (objSkill, index) =>
+                        index < labelsMaxLimit && (
+                          <Chip
+                            key={index}
+                            className={classes.softSkills}
+                            size="small"
+                            label={
+                              objSkill.length > 3
+                                ? objSkill.charAt(0).toUpperCase() +
+                                  objSkill.slice(1)
+                                : objSkill.toUpperCase()
+                            }
+                          />
+                        )
+                    )
                   : null}
               </Grid>
-              <Divider style={{ marginTop: '10px' }} variant="fullWidth" />
+              <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" />
               {/* Mini-Bio */}
               <Typography
                 className={classes.miniBioBody}
@@ -194,16 +225,25 @@ function CandidateCard(props) {
             </ThemeProvider>
           </CardContent>
           <Box className={classes.tooltip} component="span" display="flex">
-            {/* <MessageIcon /> */}
-            {location === '/' &&
+            {location === '/' && (
               <ThemeProvider theme={theme}>
-                <PersonalizedTooltip TransitionComponent={Zoom} title={randomText([longText, shortText])} placement='top-end'>
-                  <Badge color="secondary" badgeContent={1} variant="dot">
-                    <Chip className={classes.scoring} size='small' label='5' icon={<GradeIcon />} />
+                <PersonalizedTooltip
+                  TransitionComponent={Zoom}
+                  disableHoverListener={candidate.comment ? false : true}
+                  title={candidate.comment ? candidate.comment : false}
+                  placement="top-end"
+                >
+                  <Badge color="secondary" badgeContent={candidate.comment ? 1 : 0} variant="dot">
+                    <Chip
+                      className={classes.scoring}
+                      size="small"
+                      label="5"
+                      icon={<GradeIcon />}
+                    />
                   </Badge>
                 </PersonalizedTooltip>
               </ThemeProvider>
-            }
+            )}
           </Box>
         </Grid>
       </Grid>
@@ -211,8 +251,10 @@ function CandidateCard(props) {
   );
 }
 
-const randomText = (array) => {
-  return array[Math.round(Math.random() * (0, 1))]
+const randomComment = () => {
+  let array = [longText,undefined,null,shortText,null,'Mucha experiencia previa','Experiencia en gestion de equipos','Praesent non nunc mollis, fermentum neque at, semper arcuNullam eget est sed sem iaculis gravida eget vitae justo.']
+  let random = Math.round(Math.random()*(0,array.length))
+  return array[random]
 }
 
 const longText = `
@@ -220,7 +262,7 @@ Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel al
 Praesent non nunc mollis, fermentum neque at, semper arcu.
 Nullam eget est sed sem iaculis gravida eget vitae justo.
 `;
-const shortText = 'Muy buenas habilidades de liderazgo'
+const shortText = 'Muy buenas habilidades de liderazgo';
 
 CandidateCard.propTypes = {
   candidate: PropTypes.exact({

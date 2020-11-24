@@ -41,7 +41,13 @@ function App() {
         />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
-      <Route exact path="/" render={({ location }) => <CardsContainer location={location.pathname} />} />
+      <Route
+        exact
+        path="/"
+        render={({ location }) => (
+          <CardsContainer location={location.pathname} />
+        )}
+      />
       <Route exact path="/csv" component={CsvToJson} />
       <Route exact path="/recruiters/add" render={() => <RecruiterCreate />} />
       <Route exact path="/dossier/:uuid">
