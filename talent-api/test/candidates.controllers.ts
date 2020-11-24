@@ -3,8 +3,9 @@ import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
 import db from '../server/models';
-import { response } from 'express';
 import path from 'path';
+import { getMaxListeners } from 'process';
+import { response } from 'express';
 
 describe('Candidates', () => {
   beforeEach(function () {
@@ -452,7 +453,6 @@ describe('Candidates', () => {
       expect(relationDeleted.dataValues.candidates).to.have.lengthOf(0);
     });
   });
-
   describe('PUT update candidate', () => {
     it('should update one candidate', async () => {
       const candidates = [
@@ -521,6 +521,11 @@ describe('Candidates', () => {
           cohortId: cohort1.id,
         });
       expect(response.status).to.be.equal(200);
+      const candidateCreated = await db.Candidate.findByPk(response.body.id);
+      expect(candidateCreated)
+        .to.have.property('email')
+        .to.be.equal('cristianL@gmail.com');
+      expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
     });
   });
 });
