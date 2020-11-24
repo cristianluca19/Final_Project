@@ -49,7 +49,7 @@ export class foldersController {
             'lastName',
             'email',
             'country',
-            'cohort',
+            'cohort', // TODO: pendiente incluir como modelo si se cambia a modelo: cohort
             'profilePicture',
             'visibility',
             'status',
@@ -58,6 +58,11 @@ export class foldersController {
             'github',
           ],
           through: { attributes: [] }, // This avoids eager loading of intermediate table useless createdAt/updatedAt data. Shows a cleaner API response.
+          include: {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
         },
       ],
     });
@@ -91,6 +96,11 @@ export class foldersController {
               'github',
             ],
             through: { attributes: [] },
+            include: {
+              model: db.Skill,
+              attributes: ['id', 'name', 'type'],
+              through: { attributes: [] },
+            },
           },
         ],
       });

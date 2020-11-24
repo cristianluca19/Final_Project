@@ -5,6 +5,7 @@ const initialState = {
   newFolder: [],
   allFolders: [],
   activeFolder: null,
+  folderById: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -28,6 +29,11 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         activeFolder: action.payload,
+        };
+    case actions.FOLDER_BY_ID:
+      return {
+        ...state,
+        newFolder: action.payload,
       };
     default:
       return state;

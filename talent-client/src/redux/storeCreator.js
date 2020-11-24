@@ -6,7 +6,6 @@ import FolderReducer from './foldersReducer/Reducer';
 import SkillsReducer from './skillsReducer/Reducer';
 import RecruitersReducer from './recruitersReducer/Reducer';
 
-
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 
 // Adding of REDUX DEVTOOLS

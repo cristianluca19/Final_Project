@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-import './App.css';
+import CsvToJson from './components/csvToJson/CsvToJson';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import CsvToJson from './components/csvToJson/CsvToJson';
 import ContentHome from './components/ContentHome/index';
 import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
 import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
-import Menu from './components/Dashboard/menu';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
@@ -18,7 +16,6 @@ import { getAllRecruiters } from './redux/recruitersReducer/Actions';
 import './App.css';
 
 function App() {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,18 +33,27 @@ function App() {
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
         />
+        <Route path="/panel/candidates" render={() => <Dashboard />} />
         <Route
           path="/panel/skills"
           render={() => <Dashboard componentToRender={'skills'} />}
         />
-        <Route path="/" render={() => <Nav />} />
+        <Route
+          path="/"
+          render={({ location }) => <Nav location={location.pathname.slice(0,9)} />}
+        />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
-      <Route exact path="/" render={() => <CardsContainer />} />
+      <Route
+        exact
+        path="/"
+        render={({ location }) => (
+          <CardsContainer location={location.pathname} />
+        )}
+      />
       <Route exact path="/csv" component={CsvToJson} />
       <Route exact path="/recruiters/add" render={() => <RecruiterCreate />} />
       <Route exact path="/dossier/:uuid">
-        <ContentHome />
         <RecruiterFolder render={({ match }) => match.params.uuid} />
       </Route>
       <Switch>

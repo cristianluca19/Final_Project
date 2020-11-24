@@ -7,7 +7,15 @@ import { parse } from '@fast-csv/parse';
 
 export class CandidatesController {
   async all(req: Request, res: Response): Promise<void> {
-    const candidates = await db.Candidate.findAll();
+    const candidates = await db.Candidate.findAll({
+      include: [
+        {
+          model: db.Skill,
+          attributes: ['id', 'name', 'type'],
+          through: { attributes: [] },
+        },
+      ],
+    });
     res.status(200).json(candidates);
   }
 
@@ -24,6 +32,8 @@ export class CandidatesController {
           throw error.message;
         })
         .on('data', async (row) => {
+          row.status = row.status.toLowerCase();
+          row.visibility = row.visibility.toLowerCase();
           const newUser = new db.Candidate(row);
           //const userValidated = await newUser.validate(); //TODO: print more informative error
           candidates.push(newUser);
@@ -46,7 +56,8 @@ export class CandidatesController {
       const bulkCandidates = await db.Candidate.bulkCreate(req.body);
       res.status(200).json(bulkCandidates);
     } catch (error) {
-      res.status(400).send('An error has ocurred while creating candidates');
+      console.log(error.message);
+      res.status(400).json({ error: "Couldn't parse candidates CSV" });
     }
   }
 
