@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -26,10 +26,12 @@ function App() {
 
   // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
   // to lower loading times if candidate number is too high...
-  dispatch(getAllCandidates());
-  dispatch(getAllFolders());
-  dispatch(getAllRecruiters());
-  dispatch(getAllUsers());
+  useEffect(() => {
+    dispatch(getAllCandidates());
+    dispatch(getAllFolders());
+    dispatch(getAllRecruiters());
+    dispatch(getAllUsers());
+  });
 
   return (
     <div className="App">
