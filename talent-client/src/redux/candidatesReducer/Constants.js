@@ -1,3 +1,4 @@
+export const candidatesPerPage = 10;
 export const GET_ALL_CANDIDATES = 'GET_ALL_CANDIDATES';
 export const DELETE_CANDIDATE = 'DELETE_CANDIDATE';
 export const GET_CANDIDATE_BY_ID = 'GET_CANDIDATE_BY_ID';

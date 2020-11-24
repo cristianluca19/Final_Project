@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
-import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
+import { Grid, Container, makeStyles, IconButton, Box } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
@@ -51,9 +51,9 @@ function Nav({ location }) {
           <Grid container item xs={3} sm={3} spacing={3}>
             <img className={classes.logo} alt="Henry Logo" src={logo} />
           </Grid>
-          {(!(location === '/dossier/')) && (
-            <div>
-              <Grid container item xs={6} sm={6} spacing={3}>
+          {location !== '/dossier/' && (
+            <Grid container item xs={9}>
+              <Grid container item xs={9} sm={9} spacing={3}>
                 <Menu />
               </Grid>
               <Grid
@@ -89,8 +89,7 @@ function Nav({ location }) {
                   </Link>
                 </IconButton>
               </Grid>
-            </div>
-          )}
+            </Grid>)}
         </Grid>
       </Container>
     </nav>

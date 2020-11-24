@@ -6,6 +6,13 @@ const visibility = ['unlisted', 'listed'];
 
 const status = ['unemployed', 'employed'];
 
+const comment = [
+  faker.lorem.paragraph().slice(0, 80),
+  faker.lorem.paragraph().slice(0, 170),
+  null,
+  faker.lorem.paragraph().slice(0, 30),
+];
+
 function fill() {
   let candidates = [];
   for (let candidate = 1; candidate <= 50; candidate++) {
@@ -13,6 +20,7 @@ function fill() {
     const randomVisbilty =
       visibility[Math.floor(Math.random() * visibility.length)];
     const bio = faker.lorem.paragraph().slice(0, 200);
+    const randomComment = comment[Math.round(Math.random() * comment.length)];
     candidates.push({
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
@@ -26,6 +34,7 @@ function fill() {
       status: randomStatus,
       visibility: randomVisbilty,
       score: faker.random.number(5),
+      comment: randomComment,
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     });

@@ -32,7 +32,6 @@ function CandidateCard(props) {
     handleCandidate,
     location,
   } = props; 
-  candidate.comment || (candidate.comment = randomComment()) // TODO: comments need to be passed as props
   const tech = candidate.skills.filter(skill => (
     skill.type === 'tech'
   ));
@@ -243,7 +242,7 @@ function CandidateCard(props) {
                     <Chip
                       className={classes.scoring}
                       size="small"
-                      label={candidate.score}
+                      label={candidate.score || 'N/A'}
                       icon={<GradeIcon />}
                     />
                   </Badge>
@@ -273,12 +272,6 @@ const randomComment = () => {
 };
 
 const longText = `
-Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
-Praesent non nunc mollis, fermentum neque at, semper arcu.
-Nullam eget est sed sem iaculis gravida eget vitae justo.
-Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
-Praesent non nunc mollis, fermentum neque at, semper arcu.
-Nullam eget est sed sem iaculis gravida eget vitae justo.
 Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
 Praesent non nunc mollis, fermentum neque at, semper arcu.
 Nullam eget est sed sem iaculis gravida eget vitae justo.

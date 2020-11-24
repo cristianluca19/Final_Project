@@ -70,12 +70,16 @@ export default (sequelize) => {
         allowNull: true,
       },
       score: {
-        type: DataTypes.INTEGER(),
+        type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
           min: 0,
           max: 5,
         },
+      },
+      comment: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
     },
     {

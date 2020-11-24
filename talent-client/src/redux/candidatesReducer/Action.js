@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as actions from './Constants.js';
+import {candidatesPerPage} from './Constants.js';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -16,7 +17,7 @@ export function getAllCandidates() {
 export function getCandidatesPage(currentPage, limit) {
   return async (dispatch) => {
     const candidates = await axios.get(
-      `${BACKEND_URL}/candidates/pages?limit=${limit || 10}&page=${
+      `${BACKEND_URL}/candidates/pages?limit=${limit || candidatesPerPage}&page=${
         currentPage - 1 || 0
       }`
     );
