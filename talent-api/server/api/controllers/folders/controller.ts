@@ -15,6 +15,9 @@ export class foldersController {
         {
           model: db.Candidate,
         },
+        {
+          model: db.Comment,
+        },
       ],
     });
     res.status(200).json(folders);
@@ -95,9 +98,11 @@ export class foldersController {
   // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.
   async updateById(req: Request, res: Response): Promise<void> {
     const { recruiterId, userId } = req.query; // add associations
+    const { sentAt } = req.body;
     const folder = await db.Folder.findByPk(req.params.folderId);
     if (recruiterId) await folder.setRecruiter(recruiterId);
     if (userId) await folder.setUser(userId);
+    if (sentAt) await folder.update({ sentAt: sentAt });
     res.status(200).json(folder);
   }
 

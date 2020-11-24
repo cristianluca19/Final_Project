@@ -15,7 +15,13 @@ export class usersController {
   }
 
   async all(req: Request, res: Response): Promise<void> {
-    const users = await db.User.findAll();
+    const users = await db.User.findAll({
+      include: [
+        {
+          model: db.Comment,
+        },
+      ],
+    });
     res.status(200).json(users);
   }
 }

@@ -6,6 +6,7 @@ export default (sequelize) => {
     static associate(models) {
       // define associations here, e.g.
       this.hasMany(models.Folder);
+      this.hasMany(models.Comment);
     }
   }
 

@@ -2,12 +2,12 @@
 // /* eslint-disable */
 import Sequelize from 'sequelize';
 import { url as DB_URL } from '../../db/config.cjs';
-
 import Candidate from './Candidate.model';
 import Folder from './Folder.model';
 import Recruiter from './Recruiter.model';
 import Skill from './Skill.model';
 import User from './User.model';
+import Comment from './Comment.model';
 
 interface DB {
   sequelize: any;
@@ -17,6 +17,7 @@ interface DB {
   Skill: any;
   Folder: any;
   User: any;
+  Comment: any;
 }
 
 // Set up Sequelize connection
@@ -35,6 +36,7 @@ const db: DB = {
   Folder: Folder(sequelize),
   Candidate: Candidate(sequelize),
   Recruiter: Recruiter(sequelize),
+  Comment: Comment(sequelize),
 };
 
 // ...and all associations

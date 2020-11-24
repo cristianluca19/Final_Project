@@ -96,5 +96,27 @@ describe('Folders', () => {
         recruiterId: recruiter.id,
       });
     });
+    it('Should update sentAt to folder', async () => {
+      const date = new Date();
+      const folders = await db.Folder.bulkCreate([
+        { uuid },
+        { uuid },
+        { uuid },
+      ]);
+      const response = await request(Server)
+        .put(`/api/v1/folders/${folders[0].id}`)
+        .send({ sentAt: date })
+      expect(response.status).to.be.equal(200);
+      const foundFolder = await db.Folder.findByPk(folders[0].id);
+      expect(foundFolder).to.be.an('object').to.deep.include({ sentAt: date });
+      const responseTow = await request(Server)
+        .put(`/api/v1/folders/${folders[1].id}`)
+        .send({ sentAt: date })
+      expect(responseTow.status).to.be.equal(200);
+      const foundFolderTwo = await db.Folder.findByPk(folders[1].id);
+      expect(foundFolderTwo)
+        .to.be.an('object')
+        .to.deep.include({ sentAt: date });
+    });
   });
 });

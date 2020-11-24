@@ -3,7 +3,13 @@ import db from '../../../models';
 
 export class RecruitersController {
   async all(req: Request, res: Response): Promise<void> {
-    const recruiters = await db.Recruiter.findAll();
+    const recruiters = await db.Recruiter.findAll({
+      include: [
+        {
+          model: db.Comment,
+        },
+      ],
+    });
     res.status(200).json(recruiters);
   }
 
