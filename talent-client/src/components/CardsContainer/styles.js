@@ -12,8 +12,9 @@ export const useStyles = makeStyles((theme) => ({
     margin: 25,
     borderRadious: 10,
   },
-  candidatesNotFound: {
-    padding: '180px 50px 487px',
-    color: 'white',
+  newFolderButton: {
+    '&:hover': {
+      backgroundColor: '#FFF001',
+    },
   },
 }));

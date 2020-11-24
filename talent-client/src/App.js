@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import CsvToJson from './components/csvToJson/CsvToJson';
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ContentHome from './components/ContentHome/index';
@@ -30,18 +29,27 @@ function App() {
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
         />
+        <Route path="/panel/candidates" render={() => <Dashboard />} />
         <Route
           path="/panel/skills"
           render={() => <Dashboard componentToRender={'skills'} />}
         />
-        <Route path="/" render={() => <Nav />} />
+        <Route
+          path="/"
+          render={({ location }) => <Nav location={location.pathname.slice(0,9)} />}
+        />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
-      <Route exact path="/" render={() => <CardsContainer />} />
+      <Route
+        exact
+        path="/"
+        render={({ location }) => (
+          <CardsContainer location={location.pathname} />
+        )}
+      />
       <Route exact path="/csv" component={CsvToJson} />
       <Route exact path="/recruiters/add" render={() => <RecruiterCreate />} />
       <Route exact path="/dossier/:uuid">
-        <ContentHome />
         <RecruiterFolder render={({ match }) => match.params.uuid} />
       </Route>
       <Switch>
