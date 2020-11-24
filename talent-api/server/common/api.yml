@@ -519,7 +519,7 @@ paths:
         200:
           description: a JSON object with the dossier important details and candidates
           content: {}  
-  /folders/state/{folderId}:
+  /folders/status/{folderId}:
     put:
       tags:
       - Folders
@@ -530,12 +530,16 @@ paths:
           name: folderId
           required: true
           schema:
-           type: integer 
-        - in: query
-          name: status
-          required: true
-          schema:
-            type: string
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string 
       responses:
         200:
           description: a JSON object with folder updated details.

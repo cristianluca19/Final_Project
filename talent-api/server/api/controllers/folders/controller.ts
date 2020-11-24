@@ -89,8 +89,8 @@ export class foldersController {
     res.status(200).json(folder);
   }
 
-  async updateStateById(req: Request, res: Response): Promise<void> {
-    const { status } = req.query;
+  async updateStatusById(req: Request, res: Response): Promise<void> {
+    const { status } = req.body;
     await db.Folder.update(
       { status: status },
       { where: { id: req.params.folderId } }

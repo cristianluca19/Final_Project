@@ -3,14 +3,13 @@ const faker = require('faker');
 const uuid = require('uuidv4');
 function fill() {
   const folders = [];
-  const status = ['draft', 'sent', 'created'];
+  const statuses = ['draft', 'sent', 'created'];
   let id = 1;
   for (let folder = 14; folder >= 1; folder--) {
-    const random = faker.random.number(2);
     folders.push({
       uuid: uuid.uuid(),
       opened: faker.random.boolean(),
-      status: status[random],
+      status: faker.random.arrayElement(statuses),
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
       user_id: folder,
