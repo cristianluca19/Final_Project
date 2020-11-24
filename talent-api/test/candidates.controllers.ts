@@ -380,11 +380,11 @@ describe('Candidates', () => {
       });
       const candidate1 = await db.Candidate.create({
         email: 'leo10@gmail.com',
-        cohortId: cohort1.Id,
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         email: 'mati10@gmail.com',
-        cohortId: cohort1.Id,
+        cohortId: cohort1.id,
       });
       const response = await request(Server)
         .put(`/api/v1/candidates/${candidate1.id}/visibility`)
