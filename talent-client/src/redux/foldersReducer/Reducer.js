@@ -44,10 +44,10 @@ export default function Reducer(state = initialState, action) {
       const candidatesFolder = state.allFolders.find(
         (folder) => folder.id === action.payload.idFolder
       ).candidates;
-      const filterCandidtesFolder = candidatesFolder.filter(
+      const filterCandidatesFolder = candidatesFolder.filter(
         (candidate) => candidate.id !== action.payload.idCandidate
       );
-      findFolder.candidates = filterCandidtesFolder;
+      findFolder.candidates = filterCandidatesFolder;
       return {
         ...state,
         allFolders: state.allFolders
