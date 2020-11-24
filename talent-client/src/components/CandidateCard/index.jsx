@@ -224,7 +224,7 @@ function CandidateCard(props) {
                 component="p"
                 align="justify"
               >
-                {candidate.miniBio.substring(0, 240) + '...'}
+                {longText || candidate.miniBio}
               </Typography>
             </ThemeProvider>
           </CardContent>
@@ -262,6 +262,12 @@ const randomComment = () => {
 }
 
 const longText = `
+Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
+Praesent non nunc mollis, fermentum neque at, semper arcu.
+Nullam eget est sed sem iaculis gravida eget vitae justo.
+Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
+Praesent non nunc mollis, fermentum neque at, semper arcu.
+Nullam eget est sed sem iaculis gravida eget vitae justo.
 Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
 Praesent non nunc mollis, fermentum neque at, semper arcu.
 Nullam eget est sed sem iaculis gravida eget vitae justo.
