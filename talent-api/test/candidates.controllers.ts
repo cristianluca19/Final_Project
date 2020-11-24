@@ -74,48 +74,43 @@ describe('Candidates', () => {
 
   describe('POST route transform csv file to json', () => {
     it('should transform all candidates correctly', async () => {
-      const cohort1 = await db.Cohort.create({
-        name: 'WebFT-01',
-      });
       const csvFile = path.join(__dirname + '/test_files/csvFileExample.csv');
       const response = await request(Server)
         .post(`/api/v1/candidates/csv`)
         .set('Content-Type', 'multipart/form-data')
         .attach('file', csvFile);
-      console.log(response.body)
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(4);
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('bryan@gmail.com');
-      expect(response.body[1])
-        .to.have.property('cohortId')
-        .to.be.equal(cohort1.id);
+      expect(response.body[1]).to.have.property('cohortId').to.be.equal('1');
     });
   });
 
   describe('POST route bulk candidates to database', () => {
     it('should create all candidates correctly', async () => {
-      const cohorts = [];
-      for (let i = 1; i <= 3; i++) {
-        cohorts.push(
-          db.Cohort.create({
-            name: `WebFT-0${i}`,
-          })
-        );
-      }
+      const cohorts = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-02',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-03',
+      });
       const candidates = [
         {
           email: 'leo@gmail.com',
-          cohortId: cohorts[1].id,
+          cohortId: 1,
         },
         {
           email: 'mati@gmail.com',
-          cohortId: cohorts[2].id,
+          cohortId: 2,
         },
         {
           email: 'bryan@gmail.com',
-          cohortId: cohorts[3].id,
+          cohortId: 3,
         },
       ];
       const response = await request(Server)
