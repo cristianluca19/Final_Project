@@ -175,6 +175,39 @@ export class CandidatesController {
       res.status(404).send(err.message);
     }
   }
+
+  async paginate(req: Request, res: Response): Promise<void> {
+    const limit = Number(req.query.limit);
+    const page = Number(req.query.page);
+    const offset = page ? page * limit : 0;
+
+
+    try {
+      const candidatesBatch = await db.Candidate.findAndCountAll({
+        where: {visibility: 'listed'},
+        include: [
+          {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
+        ],
+        limit,
+        offset,
+        distinct: true,
+      });
+      const totalPages = Math.ceil(candidatesBatch.count / limit)
+
+      res.status(200).json({
+        candidatesInPage: candidatesBatch.rows.length,
+        totalPages: totalPages,
+        candidates: candidatesBatch,
+      });
+    } catch (error) {
+      res.send(error.message);
+      throw error;
+    }
+  }
 }
 
 export default new CandidatesController();
