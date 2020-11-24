@@ -20,7 +20,14 @@ export const useStyles = makeStyles((theme) => ({
   },
   miniBioBody: {
     marginTop: '10px',
+    marginBottom: 10,
     minHeight: 100,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    '-webkit-line-clamp': 6,
+    '-webkit-box-orient': 'vertical',
+    width: 368,
   },
   skillsContainer: {
     minHeight: 60,
