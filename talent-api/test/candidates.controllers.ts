@@ -414,7 +414,6 @@ describe('Candidates', () => {
       expect(candidateUpdated)
         .to.have.property('email')
         .to.be.equal('DiegoSoyHenry@gmail.com');
-
     });
   });
 
@@ -440,9 +439,9 @@ describe('Candidates', () => {
       const candidatesList = await db.Candidate.bulkCreate(candidates);
       const response = await request(Server).delete(
         `/api/v1/candidates/${candidatesList[2].dataValues.id}/delete`
-      );  
+      );
       const candidateCreated = await db.Candidate.findAll();
-      expect(candidateCreated).to.have.lengthOf(2)     
+      expect(candidateCreated).to.have.lengthOf(2);
     });
   });
 
@@ -454,9 +453,11 @@ describe('Candidates', () => {
           email: 'cristianL@gmail.com',
           cohort: '5',
         });
-        expect(response.status).to.be.equal(200);
-        const candidateCreated = await db.Candidate.findByPk(response.body.id);
-      expect(candidateCreated).to.have.property('email').to.be.equal('cristianL@gmail.com');
+      expect(response.status).to.be.equal(200);
+      const candidateCreated = await db.Candidate.findByPk(response.body.id);
+      expect(candidateCreated)
+        .to.have.property('email')
+        .to.be.equal('cristianL@gmail.com');
       expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
     });
   });

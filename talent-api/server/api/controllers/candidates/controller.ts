@@ -108,7 +108,6 @@ export class CandidatesController {
     const skillsArray = skills ? skills.toString().split(',') : [];
     const cohortArray = cohorts ? cohorts.toString().split(',') : [];
     const locationArray = location ? location.toString().split(',') : [];
-    console.log('skills[]', skills);
 
     const query = {
       where: {
