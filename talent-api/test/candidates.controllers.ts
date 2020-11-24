@@ -14,13 +14,16 @@ describe('Candidates', () => {
 
   describe('GET all candidates', () => {
     it('should get all candidates', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidato1 = await db.Candidate.create({
         email: 'leo@gmail.com',
-        cohort: '4',
+        cohort: cohort1.id,
       });
       const candidato2 = await db.Candidate.create({
         email: 'mati@gmail.com',
-        cohort: '4',
+        cohort: cohort1.id,
       });
       const response = await request(Server).get('/api/v1/candidates');
       const foundCandidate1 = await db.Candidate.findByPk(candidato1.id);
@@ -35,8 +38,14 @@ describe('Candidates', () => {
     });
 
     it('should be an array', async () => {
-      await db.Candidate.create({ email: 'leo@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Candidate.create({ email: 'leo@gmail.com', cohort: cohort1.id });
+      await db.Candidate.create({
+        email: 'mati@gmail.com',
+        cohort: cohort1.id,
+      });
       const response = await request(Server).get('/api/v1/candidates');
       expect(response.body).to.be.an('array');
     });
@@ -44,12 +53,21 @@ describe('Candidates', () => {
 
   describe('GET specific candidate', () => {
     it('should get a specific candidate', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati@gmail.com', cohort: '4' });
-      await db.Candidate.create({ email: 'martin@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati@gmail.com',
+        cohortId: cohort1.id,
+      });
+      await db.Candidate.create({
+        email: 'martin@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server).get(
         `/api/v1/candidates/${candidate1.id}`
       );
@@ -72,24 +90,33 @@ describe('Candidates', () => {
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('bryan@gmail.com');
-      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-04');
+      expect(response.body[1]).to.have.property('cohortId').to.be.equal('1');
     });
   });
 
   describe('POST route bulk candidates to database', () => {
     it('should create all candidates correctly', async () => {
+      const cohorts = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-02',
+      });
+      await db.Cohort.create({
+        name: 'WebFT-03',
+      });
       const candidates = [
         {
           email: 'leo@gmail.com',
-          cohort: 'wft-05',
+          cohortId: 1,
         },
         {
           email: 'mati@gmail.com',
-          cohort: 'wft-05',
+          cohortId: 2,
         },
         {
           email: 'bryan@gmail.com',
-          cohort: 'wft-04',
+          cohortId: 3,
         },
       ];
       const response = await request(Server)
@@ -100,7 +127,7 @@ describe('Candidates', () => {
       expect(response.body[1])
         .to.have.property('email')
         .to.be.equal('mati@gmail.com');
-      expect(response.body[1]).to.have.property('cohort').to.be.equal('wft-05');
+      expect(response.body[1]).to.have.property('cohortId').to.be.equal(2);
     });
   });
 
@@ -108,17 +135,17 @@ describe('Candidates', () => {
     it('should filter candidates by their visibility property as listed', async () => {
       await db.Candidate.create({
         email: 'leo12@gmail.com',
-        cohort: '4',
+        cohortId: 4,
         visibility: 'listed',
       });
       await db.Candidate.create({
         email: 'seba@gmail.com',
-        cohort: '5',
+        cohortId: 5,
         visibility: 'listed',
       });
       await db.Candidate.create({
         email: 'fabi@gmail.com',
-        cohort: '5',
+        cohortId: 5,
         visibility: 'unlisted',
       });
       const response = await request(Server).get(
@@ -138,19 +165,22 @@ describe('Candidates', () => {
     });
 
     it('should filter candidates by their visibility property as unlisted', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       await db.Candidate.create({
         email: 'leo12@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
         visibility: 'unlisted',
       });
       await db.Candidate.create({
         email: 'seba@gmail.com',
-        cohort: '5',
+        cohortId: cohort1.id,
         visibility: 'unlisted',
       });
       await db.Candidate.create({
         email: 'fabi@gmail.com',
-        cohort: '5',
+        cohortId: cohort1.id,
         visibility: 'listed',
       });
       const response = await request(Server).get(
@@ -172,35 +202,38 @@ describe('Candidates', () => {
 
   describe('GET search candidates by specific props', () => {
     it('should filter all candidates that match the query "firstName" property', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate = await db.Candidate.create({
         firstName: 'Leonardo',
         lastName: 'Sbaraglia',
         email: 'leosbar@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Leo',
         lastName: 'Messi',
         email: 'mesidiez@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Leonidas',
         lastName: 'Spartano',
         email: 'threehundred@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Luke',
         lastName: 'Skywalker',
         email: 'lastjedi@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Indian',
         lastName: 'Jones',
         email: 'indijones@gmail.com',
-        cohort: '5',
+        cohortId: cohort1.id,
       });
       const response = await request(Server)
         .get(`/api/v1/candidates/search`)
@@ -216,29 +249,32 @@ describe('Candidates', () => {
     });
 
     it('should filter all candidates that match the query "lastName" property', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate = await db.Candidate.create({
         firstName: 'Leonardo',
         lastName: 'Sbaraglia',
         email: 'leosbar@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Luke',
         lastName: 'Skywalker',
         email: 'lastjedi@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Leah',
         lastName: 'Sky',
         email: 'princessleah@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Indian',
         lastName: 'Jones',
         email: 'indijones@gmail.com',
-        cohort: '5',
+        cohortId: cohort1.id,
       });
       const response = await request(Server)
         .get(`/api/v1/candidates/search`)
@@ -251,23 +287,26 @@ describe('Candidates', () => {
     });
 
     it('should filter an specific candidate by his "email" property', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate = await db.Candidate.create({
         firstName: 'Leonardo',
         lastName: 'Sbaraglia',
         email: 'leosbar@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Luke',
         lastName: 'Skywalker',
         email: 'lastjedi@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
       await db.Candidate.create({
         firstName: 'Indian',
         lastName: 'Jones',
         email: 'indijones@gmail.com',
-        cohort: '5',
+        cohortId: cohort1.id,
       });
       const response = await request(Server)
         .get(`/api/v1/candidates/search`)
@@ -281,11 +320,17 @@ describe('Candidates', () => {
 
   describe('PUT update visibility', () => {
     it('should update the visibility of the candidate to "listed"', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo12@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati12@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati12@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server)
         .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
@@ -295,11 +340,17 @@ describe('Candidates', () => {
     });
 
     it('should update the visibility of the candidate to "unlisted"', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo15@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati15@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati15@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server)
         .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'unlisted' });
@@ -309,11 +360,17 @@ describe('Candidates', () => {
     });
 
     it('should update the visibility of the candidate to "private"', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo16@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati16@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati16@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server)
         .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'private' });
@@ -323,11 +380,17 @@ describe('Candidates', () => {
     });
 
     it('response should have same id as the one sent in params', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo10@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati10@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server)
         .put(`/api/v1/candidates/${candidate1.id}/visibility`)
         .send({ visibility: 'listed' });
@@ -336,11 +399,17 @@ describe('Candidates', () => {
   });
   describe('POST add candidate to folder', () => {
     it('should add a candidate to a specific folder', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
-        cohort: '4',
+        cohortId: cohort1.id,
       });
-      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      await db.Candidate.create({
+        email: 'mati10@gmail.com',
+        cohortId: cohort1.id,
+      });
       const folder1 = await db.Folder.create();
       await db.Folder.create();
       const response = await request(Server).post(
@@ -359,9 +428,9 @@ describe('Candidates', () => {
     it('should delete a candidate from a specific folder', async () => {
       const candidate1 = await db.Candidate.create({
         email: 'leo@gmail.com',
-        cohort: '4',
+        cohortId: 1,
       });
-      await db.Candidate.create({ email: 'mati10@gmail.com', cohort: '4' });
+      await db.Candidate.create({ email: 'mati10@gmail.com', cohortId: 4 });
       const folder1 = await db.Folder.create();
       await db.Folder.create();
       await folder1.addCandidate(candidate1);
@@ -395,17 +464,17 @@ describe('Candidates', () => {
         {
           firstName: 'Matias',
           email: 'matifu@gmail.com',
-          cohort: 'wft-07',
+          cohortId: 1,
         },
         {
           firstName: 'Diego',
           email: 'diego@gmail.com',
-          cohort: 'wft-05',
+          cohortId: 2,
         },
         {
           firstName: 'Cristian',
           email: 'cristian@gmail.com',
-          cohort: 'wft-04',
+          cohortId: 3,
         },
       ];
       const candidatesList = await db.Candidate.bulkCreate(candidates);
@@ -414,7 +483,7 @@ describe('Candidates', () => {
         .send({
           firstName: 'Dieguito',
           email: 'DiegoSoyHenry@gmail.com',
-          cohort: 'wft-04',
+          cohortId: 2,
         });
       const candidateUpdated = await db.Candidate.findByPk(
         candidatesList[1].dataValues.id
@@ -427,46 +496,43 @@ describe('Candidates', () => {
 
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
-      const candidates = [
-        {
-          firstName: 'Matias',
-          email: 'matifu@gmail.com',
-          cohort: 'wft-07',
-        },
-        {
-          firstName: 'Diego',
-          email: 'diego@gmail.com',
-          cohort: 'wft-05',
-        },
-        {
-          firstName: 'Cristian',
-          email: 'cristian@gmail.com',
-          cohort: 'wft-04',
-        },
-      ];
-      const candidatesList = await db.Candidate.bulkCreate(candidates);
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
+      const candidate1 = await db.Candidate.create({
+        email: 'cristianL@gmail.com',
+        cohortId: cohort1.id,
+      });
       const response = await request(Server).delete(
-        `/api/v1/candidates/${candidatesList[2].dataValues.id}/delete`
+        `/api/v1/candidates/${candidate1.id}/delete`
       );
-      const candidateCreated = await db.Candidate.findAll();
-      expect(candidateCreated).to.have.lengthOf(2);
+      const candidate = await db.Candidate.findOne({
+        where: { email: 'cristianL@gmail.com', cohortId: cohort1.id },
+      });
+      expect(response.status).to.be.equal(204);
+      expect(candidate).to.be.equal(null);
     });
   });
 
   describe('POST candidate', () => {
     it('should create a new candidate', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const response = await request(Server)
         .post('/api/v1/candidates/addCandidate')
         .send({
           email: 'cristianL@gmail.com',
-          cohort: '5',
+          cohortId: cohort1.id,
         });
       expect(response.status).to.be.equal(200);
       const candidateCreated = await db.Candidate.findByPk(response.body.id);
       expect(candidateCreated)
         .to.have.property('email')
         .to.be.equal('cristianL@gmail.com');
-      expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
+      expect(candidateCreated)
+        .to.have.property('cohortId')
+        .to.be.equal(cohort1.id);
     });
   });
 });

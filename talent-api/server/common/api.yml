@@ -233,7 +233,7 @@ paths:
       description: returns a list with candidates whose skills, cohorts and location was specify by query
       parameters: 
         - in: query
-          name: cohorts
+          name: cohortId
           required: false
           schema:
             type: string

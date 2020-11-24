@@ -19,7 +19,7 @@ export class foldersController {
             'lastName',
             'email',
             'country',
-            'cohort', // TODO: pendiente incluir como modelo si se cambia a modelo: cohort
+            'cohortId',
             'profilePicture',
             'visibility',
             'status',
@@ -57,7 +57,7 @@ export class foldersController {
               'lastName',
               'email',
               'country',
-              'cohort',
+              'cohortId',
               'profilePicture',
               'visibility',
               'status',
