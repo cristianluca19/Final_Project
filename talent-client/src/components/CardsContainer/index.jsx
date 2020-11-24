@@ -37,8 +37,6 @@ function CardsContainer(props) {
     dispatch(getCandidatesPage(currentPage));
   }, [newPageSelected]);
 
-  console.log(window.pageYOffset);
-
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
     if (!uuid) {
