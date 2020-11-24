@@ -33,7 +33,6 @@ function CandidateCard(props) {
     location,
   } = props; 
   candidate.comment || (candidate.comment = randomComment()) // TODO: comments need to be passed as props
-  const {skills} = candidate
   const tech = candidate.skills.filter(skill => (
     skill.type === 'tech'
   ));
@@ -41,7 +40,6 @@ function CandidateCard(props) {
     (skill.type === 'soft') ? skill.type : null
   ))
 
-  console.log(soft)
   const labelsMaxLimit = 10;
 
   const classes = useStyles();

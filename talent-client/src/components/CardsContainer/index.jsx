@@ -9,7 +9,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
-// import { newFolder, getFolderById } from '../../redux/foldersReducer/Action.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 
@@ -210,25 +209,5 @@ const AlertCandidate = Swal.mixin({
     toast.addEventListener('mouseleave', Swal.resumeTimer);
   },
 });
-
-// const noActiveFolder = (dispatch) => {
-//   Swal.fire({
-//     title: 'No tienes niguna carpeta activa, quieres crearla?',
-//     showDenyButton: true,
-//     confirmButtonText: `Crear`,
-//     denyButtonText: `Cancelar`,
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
-//         .then((response) => {
-//           dispatch(newFolder(response.data));
-//           localStorage.setItem('activeFolderId', response.data.folder.id)
-//           Swal.fire('Carpeta Creada!', `id: ${response.data.folder.id} - ${response.data.folder.uuid}`, 'success')
-//         })
-//     } else if (result.isDenied) {
-//       return
-//     }
-//   })
-// }
 
 export default CardsContainer;

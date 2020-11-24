@@ -7,7 +7,6 @@ import Footer from './components/Footer/index';
 import Nav from './components/Nav/index';
 import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
-import Menu from './components/Dashboard/menu';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
@@ -37,7 +36,7 @@ function App() {
         />
         <Route
           path="/"
-          render={({ location }) => <Nav location={location.pathname} />}
+          render={({ location }) => <Nav location={location.pathname.slice(0,9)} />}
         />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />
