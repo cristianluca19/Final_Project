@@ -19,7 +19,7 @@ export class foldersController {
             'lastName',
             'email',
             'country',
-            'cohort',
+            'cohortId',
             'profilePicture',
             'visibility',
             'status',
