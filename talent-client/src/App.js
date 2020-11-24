@@ -17,11 +17,10 @@ import Folder from './components/Folders/folder';
 import { getAllFolders } from './redux/foldersReducer/Action';
 import { getAllRecruiters } from './redux/recruitersReducer/Action';
 import { getAllUsers } from './redux/usersReducer/Action';
-import { getAllSkills } from './redux/skillsReducer/Action'
+import { getAllSkills } from './redux/skillsReducer/Action';
 import './App.css';
 
 function App() {
-
   const dispatch = useDispatch();
 
   // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
