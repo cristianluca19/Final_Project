@@ -17,7 +17,7 @@ function fill() {
       last_name: faker.name.lastName(),
       country: faker.address.country(),
       email: faker.internet.email(),
-      cohort: `${Math.floor(Math.random() * 7) + 1}`,
+      cohort_id: candidate,
       mini_bio: bio,
       profile_picture: faker.internet.avatar(),
       linkedin: faker.internet.url(),
