@@ -29,3 +29,22 @@ export function getDossierByUuid(uuid) {
     });
   };
 }
+
+export function getAllFolders() {
+  return async (dispatch) => {
+    const folders = await axios.get(`${BACKEND_URL}/folders`);
+    dispatch({
+      type: actions.GET_ALL_FOLDERS,
+      payload: folders.data,
+    });
+  };
+}
+
+export function setActiveFolder(idActiveFolder) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.SET_ACTIVE_FOLDER,
+      payload: idActiveFolder,
+    });
+  };
+}

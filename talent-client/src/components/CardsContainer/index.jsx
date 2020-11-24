@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Paginator from '../Paginator';
 import React, { useState } from 'react';
 import axios from 'axios';
+import ActiveFolder from '../ActiveFolder/ActiveFolder';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -15,8 +16,8 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
-
+  const folder = useSelector((store) => store.FolderReducer.activeFolder);  //Antes estaba newFolder
+  
   const cardsMaxLimit = 30;
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
@@ -51,6 +52,7 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
+      <div style={{backgroundColor: 'white'}}><ActiveFolder /></div>
       <Grid
         className={classes.paddingCandidates}
         container

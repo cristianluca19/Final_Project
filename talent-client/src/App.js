@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import CsvToJson from './components/csvToJson/CsvToJson';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -13,7 +12,9 @@ import Menu from './components/Dashboard/menu';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
-import { getAllSkills } from './redux/skillsReducer/Action'
+import { getAllSkills } from './redux/skillsReducer/Action';
+import { getAllFolders } from './redux/foldersReducer/Action';
+import { getAllRecruiters } from './redux/recruitersReducer/Actions';
 import './App.css';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
   useEffect(() => {
     dispatch(getAllCandidates());
     dispatch(getAllSkills());
+    dispatch(getAllFolders());
+    dispatch(getAllRecruiters());
   });
 
   return (

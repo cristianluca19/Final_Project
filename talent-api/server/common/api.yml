@@ -429,6 +429,33 @@ paths:
             application/json:
               schema:
                   type: object
+  /recruiters/search/company:
+    get:
+      tags:
+      - Recruiters
+      summary: Fetch a recruiter by email.
+      description: Returns the list of folders that belongs to the recruiter.
+      parameters: 
+        - in: query
+          name: company
+          required: false
+          schema:
+            type: string
+      responses: 
+        200:
+          description: a JSON array of folders which the recruiter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
   /recruiters/{recruiterId}:
     get:
       tags:
@@ -472,7 +499,7 @@ paths:
            type: integer
       responses:
         200:
-          description: An empty response is sent with a 200 status if update succeded.
+          description: An empty response is sent with a 200 status if update succeded. 
   /folders:
     get:
       tags:
@@ -494,6 +521,7 @@ paths:
                 type: array
                 items:
                   type: object
+
     post:
       tags:
       - Folders
@@ -518,7 +546,8 @@ paths:
       responses:
         200:
           description: a JSON object with the dossier important details and candidates
-          content: {}  
+          content: {}
+  
   /folders/{folderId}:
     get:
       tags:
@@ -574,6 +603,21 @@ paths:
       responses:
         204:
           description: An empty response with status 204 is sent if deletion succeded.
+  # /folders/models:
+  # get:
+  #   tags:
+  #   - Folders
+  #   summary: Fetch all folders including models.
+  #   description: Returns all existing folders with recruiter´s model and candidate´s model.
+  #   responses:
+  #     200:
+  #       description: a JSON array of folders.
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: array
+  #             items:
+  #               type: object   
   /users:
     post:
       tags:
