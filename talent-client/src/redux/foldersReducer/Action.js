@@ -46,8 +46,15 @@ export function addToFolder() {
   return;
 }
 
-export function getFolder() {}
-
+export function getFolderById(id) {
+  return async (dispatch) => {
+    const folder = await axios.get(`${BACKEND_URL}/folders/${id}`);
+    dispatch({
+      type: actions.FOLDER_BY_ID,
+      payload: folder.data,
+    });
+  };
+}
 export function newFolder(newFolder) {
   return {
     type: actions.NEW_FOLDER,

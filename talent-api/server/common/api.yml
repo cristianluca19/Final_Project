@@ -519,6 +519,30 @@ paths:
         200:
           description: a JSON object with the dossier important details and candidates
           content: {}  
+  /folders/status/{folderId}:
+    put:
+      tags:
+      - Folders
+      summary: Update status folder by folder id.
+      description: The new status is passed throught query params and updates the folder.
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+           type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string 
+      responses:
+        200:
+          description: a JSON object with folder updated details.
   /folders/{folderId}:
     get:
       tags:
@@ -560,6 +584,7 @@ paths:
         200:
           description: a JSON object with folder updated details.
           content: {}
+      
     delete:
       tags:
       - Folders

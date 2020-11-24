@@ -4,6 +4,7 @@ const initialState = {
   dossier: [],
   newFolder: [],
   allFolders: [],
+  folderById: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -53,6 +54,11 @@ export default function Reducer(state = initialState, action) {
         allFolders: state.allFolders
           .filter((folder) => folder.id !== action.payload.idFolder)
           .concat(findFolder),
+      };
+    case actions.FOLDER_BY_ID:
+      return {
+        ...state,
+        newFolder: action.payload,
       };
     default:
       return state;
