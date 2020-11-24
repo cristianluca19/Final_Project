@@ -10,27 +10,13 @@ describe('Filter', () => {
   });
 
   describe('Filter candidates', () => {
-    const cohort1 = {
-      name: 'WebFT-01',
-    };
-    const cohort2 = {
-      name: 'WebFT-02',
-    };
-    const cohort3 = {
-      name: 'WebFT-03',
-    };
-    const cohort4 = {
-      name: 'WebFT-04',
-    };
-    const cohort5 = {
-      name: 'WebFT-05',
-    };
-    const cohort6 = {
-      name: 'WebFT-06',
-    };
-    const cohort7 = {
-      name: 'WebFT-07',
-    };
+    const arrayCohorts = [];
+
+    for (let i = 1; i <= 7; i++) {
+      arrayCohorts.push({
+        name: `WebFT-0${i}`,
+      });
+    }
     const Jarrod = {
       id: 1,
       firstName: 'Jarrod',
@@ -167,15 +153,7 @@ describe('Filter', () => {
         skillsFour,
         skillsFive,
       ]);
-      const cohorts = await db.Cohort.bulkCreate([
-        cohort1,
-        cohort2,
-        cohort3,
-        cohort4,
-        cohort5,
-        cohort6,
-        cohort7,
-      ]);
+      const cohorts = await db.Cohort.bulkCreate(arrayCohorts);
 
       await candidates[0].addSkills(skills[0]);
       await candidates[0].addSkills(skills[1]);
