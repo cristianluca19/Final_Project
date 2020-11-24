@@ -2,7 +2,6 @@ import { Container, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { henryTheme } from '../../henryMuiTheme';
 import Divider from '@material-ui/core/Divider';
-import { useStyles } from './styles.js';
 import { RecruiterForm } from './form';
 
 function RecruiterCreate() {

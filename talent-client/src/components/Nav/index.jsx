@@ -9,7 +9,6 @@ import Menu from './menu.jsx';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
 import { Link } from 'react-router-dom';
-import Modal from '@material-ui/core/Modal';
 
 const useStyle = makeStyles({
   logo: {
@@ -51,58 +50,50 @@ function Nav({ location }) {
           <Grid container item xs={3} sm={3} spacing={3}>
             <img className={classes.logo} alt="Henry Logo" src={logo} />
           </Grid>
-          {!checkDossierRoute(location) && (
-            <Grid container item xs={6} sm={6} spacing={3}>
-              <Menu />
-            </Grid>
-          )}
-          {!checkDossierRoute(location) && (
-            <Grid
-              className={classes.containerIcons}
-              container
-              item
-              xs={3}
-              sm={3}
-              spacing={1}
-            >
-              <IconButton
-                className={classes.icons}
-                label="Acount Circle"
-                value="folder"
+          {(!location === '/dossier/') && (
+            <div>
+              <Grid container item xs={6} sm={6} spacing={3}>
+                <Menu />
+              </Grid>
+              <Grid
+                className={classes.containerIcons}
+                container
+                item
+                xs={3}
+                sm={3}
+                spacing={1}
               >
-                <AcountCircle />
-              </IconButton>
-              <IconButton
-                className={classes.icons}
-                label="Folder"
-                value="folder"
-                onClick={HandleAddFolder}
-              >
-                <FolderIcon />
-              </IconButton>
-              <IconButton
-                className={classes.icons}
-                label="Setting"
-                value="folder"
-              >
-                <Link to="/panel" className={classes.link}>
-                  <Settings />
-                </Link>
-              </IconButton>
-            </Grid>
+                <IconButton
+                  className={classes.icons}
+                  label="Acount Circle"
+                  value="folder"
+                >
+                  <AcountCircle />
+                </IconButton>
+                <IconButton
+                  className={classes.icons}
+                  label="Folder"
+                  value="folder"
+                  onClick={HandleAddFolder}
+                >
+                  <FolderIcon />
+                </IconButton>
+                <IconButton
+                  className={classes.icons}
+                  label="Setting"
+                  value="folder"
+                >
+                  <Link to="/panel" className={classes.link}>
+                    <Settings />
+                  </Link>
+                </IconButton>
+              </Grid>
+            </div>
           )}
         </Grid>
       </Container>
     </nav>
   );
 }
-
-const checkDossierRoute = (url) => {
-  if (url.slice(0, 9).toLowerCase() === '/dossier/') {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 export default Nav;

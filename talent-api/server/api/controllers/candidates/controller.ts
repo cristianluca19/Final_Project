@@ -57,7 +57,7 @@ export class CandidatesController {
       res.status(200).json(bulkCandidates);
     } catch (error) {
       console.log(error.message);
-      res.status(400).send('An error   has ocurred while creating candidates');
+      res.status(400).json({ error: "Couldn't parse candidates CSV" });
     }
   }
 
