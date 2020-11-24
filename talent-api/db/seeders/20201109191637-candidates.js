@@ -20,7 +20,7 @@ function fill() {
       email: faker.internet.email(),
       cohort: `${Math.floor(Math.random() * 7) + 1}`,
       mini_bio: bio,
-      profile_picture: faker.internet.avatar(),
+      profile_picture: faker.image.people(),
       linkedin: faker.internet.url(),
       github: faker.internet.url(),
       status: randomStatus,
