@@ -74,4 +74,11 @@ export const useStyles = makeStyles((theme) => ({
   selectOptions: {
     minWidth: 196,
   },
+  filterContainer: {
+    display: 'flex',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));

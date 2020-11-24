@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
 import {
   deleteCandidate,
   getCandidateById,
@@ -37,11 +40,12 @@ import {
 const DEFAULT_ROWS_PER_PAGE = 30;
 
 function Candidates() {
-  const candidates = useSelector(
+  let allCandidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
   const classes = useStyles();
+  const [candidates, setCandidates] = React.useState([]);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
@@ -68,7 +72,8 @@ function Candidates() {
 
   useEffect(() => {
     Object.keys(candidate).length !== 0 && setCandidateData(candidate);
-  }, [candidates, candidate]);
+    setCandidates(allCandidates);
+  }, [allCandidates, candidate]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 10 },
@@ -150,6 +155,16 @@ function Candidates() {
     dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
   };
+
+  const handleListed = (e) => {
+    const listedSelect = allCandidates.filter(item => item.visibility === e.target.value)
+    setCandidates(listedSelect);
+  };
+
+  const handleEmployed = (e) => {
+    const employedSelect = allCandidates.filter(item => item.status === e.target.value)
+    setCandidates(employedSelect);
+  }
 
   const dialogDeleteCandidate = () => (
     <Dialog
@@ -311,10 +326,33 @@ function Candidates() {
     </Modal>
   );
 
+  const Selected = (props) => {
+    return (
+      <select onChange={props.handle}>
+        <option value='' disabled selected >{props.value}</option>
+        {props.options.map(item => <option value={item} >{item}</option>)};
+      </select>
+    )
+  }
+
   return (
     <Paper className={classes.root}>
       <h1>CANDIDATOS</h1>
       <br />
+      <div className={classes.filterContainer}>
+        <Paper component="form" >
+          <InputBase
+            className={classes.input}
+            placeholder="Search by name, lastname or email..."
+            inputProps={{ 'aria-label': 'search google maps' }}
+          />
+          <IconButton type="submit" aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        <Selected value='Visibility' options={['listed', 'unlisted']} handle={handleListed} />
+        <Selected value='Status' options={['employed', 'unemployed']} handle={handleEmployed} /> 
+      </div>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
