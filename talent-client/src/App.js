@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import CsvToJson from './components/csvToJson/CsvToJson';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
