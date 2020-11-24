@@ -237,7 +237,7 @@ function CandidateCard(props) {
                     <Chip
                       className={classes.scoring}
                       size="small"
-                      label="5"
+                      label={candidate.score}
                       icon={<GradeIcon />}
                     />
                   </Badge>
