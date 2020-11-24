@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   miniBioBody: {
     marginTop: '10px',
-    paddingBottom: 4,
+    marginBottom: 10,
     minHeight: 100,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
