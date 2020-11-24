@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   miniBioBody: {
     marginTop: '10px',
+    paddingBottom: 4,
     minHeight: 100,
   },
   skillsContainer: {

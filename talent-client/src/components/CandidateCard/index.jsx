@@ -33,15 +33,22 @@ function CandidateCard(props) {
     location,
   } = props; 
   candidate.comment || (candidate.comment = randomComment()) // TODO: comments need to be passed as props
-  const { skills } = candidate;
-  const labelsMaxLimit = 8;
+  const {skills} = candidate
+  const tech = candidate.skills.filter(skill => (
+    skill.type === 'tech'
+  ));
+  let soft = candidate.skills.filter(skill => (
+    (skill.type === 'soft') ? skill.type : null
+  ))
+
+  console.log(soft)
+  const labelsMaxLimit = 10;
 
   const classes = useStyles();
   // HANDLERS //
   const handleContactCandidate = () => {
     //TODO: add function to send :mailto
   };
-
   return (
     <Card className={classes.root}>
       <Grid container>
@@ -134,7 +141,7 @@ function CandidateCard(props) {
               </Grid>
             </Grid>
           </ThemeProvider>
-          <CardContent style={{ paddingTop: 0 }}>
+          <CardContent style={{ paddingTop: 0, flexGrow: 1 }}>
             {/*Location && Cohort*/}
             <Typography
               align="left"
@@ -158,8 +165,8 @@ function CandidateCard(props) {
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
-                {skills
-                  ? skills.map(
+                {tech.length
+                  ? tech.map(
                       (objSkill, index) =>
                         index < labelsMaxLimit && (
                           <Chip
@@ -178,7 +185,8 @@ function CandidateCard(props) {
                     )
                   : null}
               </Grid>
-              <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" />
+              {soft.length ? <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" /> : null}
+              {soft.length ? 
               <Grid
                 container
                 justify="space-evenly"
@@ -186,14 +194,7 @@ function CandidateCard(props) {
                 spacing={1}
                 className={classes.skillsContainer}
               >
-                {skills
-                  ? [
-                      'Leader',
-                      'Partnership',
-                      'Fast Learner',
-                      'English',
-                      'Portuguese',
-                    ].map(
+                {soft.map(
                       (objSkill, index) =>
                         index < labelsMaxLimit && (
                           <Chip
@@ -201,16 +202,19 @@ function CandidateCard(props) {
                             className={classes.softSkills}
                             size="small"
                             label={
-                              objSkill.length > 3
-                                ? objSkill.charAt(0).toUpperCase() +
-                                  objSkill.slice(1)
-                                : objSkill.toUpperCase()
+                              objSkill.name.length > 3
+                                ? objSkill.name.charAt(0).toUpperCase() +
+                                  objSkill.name.slice(1)
+                                : objSkill.name.toUpperCase()
                             }
                           />
                         )
                     )
-                  : null}
+                }
               </Grid>
+              :
+              null
+              }  
               <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" />
               {/* Mini-Bio */}
               <Typography
