@@ -73,20 +73,6 @@ describe('Users', () => {
         .to.have.property('lastName')
         .to.be.equal('Nardo');
       expect(response.body[1]).to.have.property('role').to.be.equal('selector');
-    });
-
-    it('should be an array', async () => {
-      await db.User.create({
-        firstName: 'Martin',
-        lastName: 'Cura',
-        role: 'admin',
-      });
-      await db.User.create({
-        firstName: 'Leo',
-        lastName: 'Nardo',
-        role: 'selector',
-      });
-      const response = await request(Server).get('/api/v1/users');
       expect(response.body).to.be.an('array');
     });
   });

@@ -64,12 +64,6 @@ function Nav() {
             >
               <AcountCircle />
             </IconButton>
-
-            {/*<IconButton className={classes.icons} label="Folder" value="folder">
-            <Link to={"/folders/"}>
-                <FolderIcon  />
-            </Link>*/}
-
             <IconButton className={classes.icons} label="Folder" value="folder">
               <Link to={'/folders/'}>
                 <FolderIcon />

@@ -25,15 +25,14 @@ export function deleteFolder(id) {
 
 export function updateFolder(idFolder, idDatas) {
   let URL = `${BACKEND_URL}/folders/${idFolder}`;
-  if (idDatas.recruiterId && idDatas.userId) {
+  if (idDatas.recruiterId && idDatas.userId)
     URL = URL.concat(
       `?recruiterId=${idDatas.recruiterId}&userId=${idDatas.userId}`
     );
-  } else if (idDatas.recruiterId && !idDatas.userId) {
+  if (idDatas.recruiterId && !idDatas.userId)
     URL = URL.concat(`?recruiterId=${idDatas.recruiterId}`);
-  } else if (!idDatas.recruiterId && idDatas.userId) {
+  if (!idDatas.recruiterId && idDatas.userId)
     URL = URL.concat(`?userId=${idDatas.userId}`);
-  }
   return async (dispatch) => {
     const updatedFolder = await axios.put(URL);
     dispatch({
