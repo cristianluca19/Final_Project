@@ -39,8 +39,7 @@ function CardsContainer(props) {
     dispatch(getCandidatesPage(currentPage));
   }, [bool]);
 
-  console.log(candidates);
-  console.log(pageData);
+  console.log(window.pageYOffset);
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();

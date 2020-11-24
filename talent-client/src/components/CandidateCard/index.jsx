@@ -49,7 +49,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={imgtest} // add "candidate.profilePicture" when seed works again
+            image={candidate.profilePicture || imgtest} // add "candidate.profilePicture" when seed works again
             title="Henry Candidate"
           />
         </Grid>
