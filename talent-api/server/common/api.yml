@@ -81,6 +81,23 @@ paths:
       responses:
         200:
           description: a JSON object with the candidate details
+  /candidates/{candidateId}/delete:       
+    delete:
+      tags:
+      - Candidates
+      summary: Removes candidate by id.
+      description: folderId and candidateId needs to be passed through params.
+      parameters:
+        - in: path
+          name: candidateId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with the candidate details
+
   /candidates/filterBy/{visibility}:
     get:
       tags:
@@ -183,6 +200,27 @@ paths:
       - Candidates
       summary: csv
       description: TODO
+      responses:
+        200:
+          description: A JSON array of objects... TODO
+          content: {}
+  /candidates/addCandidate:
+    post:
+      tags:
+      - Candidates
+      summary: Add new candidate
+      description: TODO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                cohort:
+                  type: string
       responses:
         200:
           description: A JSON array of objects... TODO
@@ -603,41 +641,5 @@ paths:
             application/json:
               schema:
                   type: object
-  /candidates/{candidateId}/delete:
-    delete:
-      tags:
-      - Candidates
-      summary: removes candidate by id.
-      description: candidateId needs to be passed through params.
-      parameters:
-      - in: path
-        name: candidateId
-        required: true
-        schema:
-          type: integer
-          minimum: 1
-      responses:
-        200:
-          description: An empty body is sent with the status code 200 if the removal succeded.
-          content: {}
-  /candidates/addCandidate:
-    post:
-      tags:
-      - Candidates
-      summary: create a candidate.
-      description: email and cohort needs to be passed through body.      
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                cohort:
-                  type: string
-      responses:
-        200:
-          description: a JSON object with the folderId and candidateId associated.
-          content: {}
+
+ 

@@ -82,20 +82,17 @@ export class CandidatesController {
     const reply = await folder.removeCandidate(candidate);
     res.status(200).json(reply);
   }
-
+  async addCandidate(req: Request, res: Response): Promise<void> {
+    const userData = req.body;
+    const candidate = await db.Candidate.create(userData);
+    res.status(200).json(candidate);
+  }
   async deleteCandidate(req: Request, res: Response): Promise<void> {
     await db.Candidate.destroy({
       where: { id: req.params.candidateId },
     });
     res.status(204).end();
   }
-
-  async addCandidate(req: Request, res: Response): Promise<void> {
-    const candidateData = req.body;
-    const candidate = await db.Candidate.create(candidateData);
-    res.status(200).json(candidate);
-  }
-
   async byFilter(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll({
       where: {
