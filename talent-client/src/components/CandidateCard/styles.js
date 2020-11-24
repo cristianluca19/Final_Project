@@ -7,8 +7,8 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 600,
     minWidth: 600,
-    maxHeigth: 350,
-    minHeight: 350,
+    maxHeigth: 364,
+    minHeight: 364,
     borderStyle: 'solid',
     borderColor: '#111',
     border: 2,
@@ -42,7 +42,7 @@ export const useStyles = makeStyles((theme) => ({
     bottom: '5px',
   },
   media: {
-    minHeight: 350,
+    minHeight: 364,
     height: '100%',
     width: '100%',
     objectFit: 'contain',

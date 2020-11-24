@@ -11,10 +11,10 @@ const defaultPagesToShow = 10;
 function Paginator(props) {
   const classes = useStyles();
 
-
-  const handlePageChange = (event,value) => {
-    props.setCurrentPage(value)
-  }
+  const handlePageChange = (event, value) => {
+    props.setCurrentPage(value);
+    props.setBool(!props.bool);
+  };
 
   return (
     <Grid
@@ -27,11 +27,13 @@ function Paginator(props) {
       <ThemeProvider theme={henryTheme}>
         <Pagination
           color="primary"
-          count={props.pages} // total pages
+          count={props.maxPages} // total pages
           page={props.current} // current page
           variant="outlined"
           shape="rounded"
-          onChange={(e,value) => {handlePageChange(e,value)}}
+          onChange={(e, value) => {
+            handlePageChange(e, value);
+          }}
         />
       </ThemeProvider>
     </Grid>

@@ -181,10 +181,9 @@ export class CandidatesController {
     const page = Number(req.query.page);
     const offset = page ? page * limit : 0;
 
-
     try {
       const candidatesBatch = await db.Candidate.findAndCountAll({
-        where: {visibility: 'listed'},
+        where: { visibility: 'listed' },
         include: [
           {
             model: db.Skill,
@@ -196,7 +195,7 @@ export class CandidatesController {
         offset,
         distinct: true,
       });
-      const totalPages = Math.ceil(candidatesBatch.count / limit)
+      const totalPages = Math.ceil(candidatesBatch.count / limit);
 
       res.status(200).json({
         candidatesInPage: candidatesBatch.rows.length,

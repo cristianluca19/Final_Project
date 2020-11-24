@@ -12,7 +12,7 @@ export default function Reducer(state = initialState, action) {
   switch (action.type) {
     case actions.GET_CANDIDATES_PAGE:
       return {
-        ...state, 
+        ...state,
         pagedCandidates: action.payload,
         pageStats: action.data,
       };

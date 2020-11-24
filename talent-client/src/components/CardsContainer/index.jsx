@@ -9,15 +9,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
-import { newFolder, getFolderById } from '../../redux/foldersReducer/Action.js';
+// import { newFolder, getFolderById } from '../../redux/foldersReducer/Action.js';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [page, setPage] = useState(3);
+  // const [maxPages, setMaxPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
+  const [bool, setBool] = useState(false);
 
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
@@ -30,18 +32,15 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
-  const pageData = useSelector(
-    (store) => store.CandidateReducer.pageStats
-  );
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
-  const cardsMaxLimit = 30;
+  useEffect(() => {
+    dispatch(getCandidatesPage(currentPage));
+  }, [bool]);
 
-  useEffect(()=>{
-    dispatch(getCandidatesPage())
-  },[])
-
-  console.log(pageData)
+  console.log(candidates);
+  console.log(pageData);
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
@@ -68,13 +67,21 @@ function CardsContainer(props) {
       return;
     }
   };
-  
 
   const includesCandidate = (id) => {
     return selectedCandidates.includes(id);
   };
-
-  // if (!candidates.length) return <h1>Loading...</h1>;
+  if (!candidates.length) {
+    return (
+      <ThemeProvider theme={henryTheme}>
+        <CircularProgress
+          color="primary"
+          style={{ marginTop: 100, marginBottom: 100 }}
+          size={80}
+        />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <Container className={classes.container} maxWidth="xl">
@@ -97,7 +104,6 @@ function CardsContainer(props) {
         {candidates &&
           candidates.map(
             (candidate, index) =>
-              index < cardsMaxLimit &&
               candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
                   <CandidateCard
@@ -111,9 +117,15 @@ function CardsContainer(props) {
               )
           )}
       </Grid>
-      {candidates && (
+      {pageData.totalPages && (
         <Grid>
-          <Paginator pages={page} current={currentPage} setCurrentPage={setCurrentPage}/>
+          <Paginator
+            maxPages={pageData.totalPages}
+            current={currentPage}
+            setCurrentPage={setCurrentPage}
+            setBool={setBool}
+            bool={bool}
+          />
         </Grid>
       )}
       <Notification notify={notify} setNotify={setNotify} />

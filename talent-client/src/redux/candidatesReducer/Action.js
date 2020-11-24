@@ -13,10 +13,13 @@ export function getAllCandidates() {
   };
 }
 
-export function getCandidatesPage(page,limit) {
+export function getCandidatesPage(currentPage, limit) {
   return async (dispatch) => {
-    const candidates = await axios.get(`${BACKEND_URL}/candidates/pages?limit=${limit || 10}&page=${page || 0}`);
-    console.log(candidates.data)
+    const candidates = await axios.get(
+      `${BACKEND_URL}/candidates/pages?limit=${limit || 10}&page=${
+        currentPage - 1 || 0
+      }`
+    );
     dispatch({
       type: actions.GET_CANDIDATES_PAGE,
       payload: candidates.data.candidates.rows,
