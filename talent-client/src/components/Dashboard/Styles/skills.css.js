@@ -4,15 +4,15 @@ export const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'space-around',
-    width: '100%'
+    width: '100%',
   },
   list: {
     width: '17vw',
     height: 'min-content',
-    marginTop: '30vh'
+    marginTop: '30vh',
   },
   title: {
-    textAlign: 'left'
+    textAlign: 'left',
   },
   techListItems: {
     backgroundColor: '#ebebeb',
@@ -46,7 +46,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   listItem: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   text: {
     marginLeft: '0.5vw',
@@ -68,19 +68,19 @@ export const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
   },
   label: {
-    margin: '0 1vw 1vh 0'
+    margin: '0 1vw 1vh 0',
   },
   input: {
-    marginBottom: '1vh'
+    marginBottom: '1vh',
   },
   form: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   button: {
     padding: '0.25vw',
     width: 'min-content',
     margin: 'auto',
-    marginTop: '1vh'
+    marginTop: '1vh',
   },
 }));
