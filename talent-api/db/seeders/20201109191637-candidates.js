@@ -8,9 +8,10 @@ const status = ['unemployed', 'employed'];
 
 function fill() {
   let candidates = [];
-  for (let candidate = 1; candidate <= 22; candidate++){
+  for (let candidate = 1; candidate <= 22; candidate++) {
     const randomStatus = status[Math.floor(Math.random() * status.length)];
-    const randomVisbilty = visibility[Math.floor(Math.random() * visibility.length)];
+    const randomVisbilty =
+      visibility[Math.floor(Math.random() * visibility.length)];
     const bio = faker.lorem.paragraph().slice(0, 200);
     candidates.push({
       first_name: faker.name.firstName(),
@@ -24,6 +25,7 @@ function fill() {
       github: faker.internet.url(),
       status: randomStatus,
       visibility: randomVisbilty,
+      score: faker.random.number(5),
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     });

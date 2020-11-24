@@ -69,6 +69,14 @@ export default (sequelize) => {
         values: [STATUS.Unemployed, STATUS.Employed],
         allowNull: true,
       },
+      score: {
+        type: DataTypes.INTEGER(),
+        allowNull: true,
+        validate: {
+          min: 0,
+          max: 5,
+        },
+      },
     },
     {
       sequelize,
