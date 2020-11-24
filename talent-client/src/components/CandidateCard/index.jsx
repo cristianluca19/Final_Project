@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStyles, theme } from './styles.js';
+import { useStyles, theme, PersonalizedTooltip } from './styles.js';
 
 // MUI Components
 import Link from '@material-ui/core/Link';
@@ -10,7 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { IconButton } from '@material-ui/core/';
+import { IconButton, Box } from '@material-ui/core/';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -20,9 +20,11 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Divider from '@material-ui/core/Divider';
 import EmailIcon from '@material-ui/icons/Email';
 import imgtest from '../../images/cvtest.png';
+import Zoom from '@material-ui/core/Zoom';
+import GradeIcon from '@material-ui/icons/Grade';
 
 function CandidateCard(props) {
-  const { includes, candidate, uuid, folder, handleCandidate } = props; // TODO: hacer que le llegue el folder.id por props...
+  const { includes, candidate, uuid, folder, handleCandidate, location } = props; // TODO: hacer que le llegue el folder.id por props...
   const { skills } = candidate;
   const labelsMaxLimit = 8;
 
@@ -35,7 +37,7 @@ function CandidateCard(props) {
   return (
     <Card className={classes.root}>
       <Grid container>
-        <Grid item xs={4}>
+        <Grid item xs={4} display={{ position: 'relative' }}>
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
@@ -48,74 +50,70 @@ function CandidateCard(props) {
           xs={8}
           container
           direction="column"
-          justify="space-evenly"
+          justify="space-between"
           alignItems="stretch"
+          style={{ position: 'relative' }}
         >
-          <CardContent>
-            <ThemeProvider theme={theme}>
-              <Grid container justify="space-between" alignItems="center">
-                <Grid item xs={9}>
-                  {/*FullName*/}
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {`${candidate.firstName} ${candidate.lastName}`}
-                  </Typography>
-                  {/*Top-right Icons*/}
-                </Grid>
-                <Grid item xs={1}>
-                  <Link
-                    color="inherit"
-                    target="_blank"
-                    rel="noopener"
-                    href={candidate.github}
-                  >
-                    <GitHubIcon name="GitHub" fontSize="small" />
-                  </Link>
-                </Grid>
-                <Grid
-                  style={{ paddingRight: '5px', marginBottom: '-2px' }}
-                  item
-                  xs={1}
+          <ThemeProvider theme={theme}>
+            <Grid container justify="space-between" alignItems="center" style={{ marginTop: 5 }}>
+              <Grid item xs={8} className={classes.nameHeader}>
+                {/*FullName*/}
+                <Typography align='center' variant="h5" component="h2" style={{ marginTop: 7 }} >
+                  {`${candidate.firstName} ${candidate.lastName}`}
+                </Typography>
+                {/*Top-right Icons*/}
+              </Grid>
+              <Grid item xs={2} >
+                <Link
+                  color="inherit"
+                  target="_blank"
+                  rel="noopener"
+                  href={candidate.github}
                 >
-                  <Link
-                    color="inherit"
-                    target="_blank"
-                    rel="noopener"
-                    href={candidate.linkedin}
-                  >
-                    <LinkedInIcon name="LinkedIn" />
-                  </Link>
-                </Grid>
-                <Grid item xs={1} style={{ paddingLeft: '5px' }}>
-                  <IconButton
-                    color="secondary"
-                    edge="start"
-                    onClick={(event) => {
-                      handleCandidate
-                        ? handleCandidate(
-                            event,
-                            candidate.id,
-                            folder,
-                            uuid,
-                            includes
-                          )
-                        : handleContactCandidate(event);
-                    }}
-                  >
-                    {!uuid ? (
-                      includes ? (
-                        <Badge badgeContent="✔" color="primary">
-                          <FolderIcon />
-                        </Badge>
-                      ) : (
+                  <GitHubIcon name="GitHub" style={{ fontSize: 20, marginBottom: 3, marginLeft: 20 }} />
+                </Link>
+                <Link
+                  color="inherit"
+                  target="_blank"
+                  rel="noopener"
+                  href={candidate.linkedin}
+                >
+                  <LinkedInIcon name="LinkedIn" />
+                </Link>
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                  style={{ marginLeft: 20 }}
+                  color="secondary"
+                  edge="start"
+                  onClick={(event) => {
+                    handleCandidate
+                      ? handleCandidate(
+                        event,
+                        candidate.id,
+                        folder,
+                        uuid,
+                        includes
+                      )
+                      : handleContactCandidate(event);
+                  }}
+                >
+                  {!uuid ? (
+                    includes ? (
+                      <Badge badgeContent="✔" color="primary">
+                        <FolderIcon />
+                      </Badge>
+                    ) : (
                         <CreateNewFolderIcon />
                       )
-                    ) : (
+                  ) : (
                       <EmailIcon />
                     )}
-                  </IconButton>
-                </Grid>
+                </IconButton>
               </Grid>
-            </ThemeProvider>
+            </Grid>
+          </ThemeProvider>
+          <CardContent style={{ paddingTop: 0 }}>
             {/*Location && Cohort*/}
             <Typography
               align="left"
@@ -127,7 +125,7 @@ function CandidateCard(props) {
             >
               {`${candidate.country}  -  WebFT0${candidate.cohort}`}
             </Typography>
-            <Divider variant="middle" style={{ marginBottom: 10 }} />
+            <Divider variant="middle" />
             <ThemeProvider theme={theme}>
               {/* Label mapping with TechSkills */}
               <Grid
@@ -135,32 +133,58 @@ function CandidateCard(props) {
                 justify="space-evenly"
                 alignItems="center"
                 spacing={1}
+                className={classes.skillsContainer}
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
                 {skills
                   ? skills.map(
-                      (objSkill, index) =>
-                        index < labelsMaxLimit && (
-                          <Chip
-                            key={index}
-                            className={classes.chips}
-                            size="small"
-                            color="primary"
-                            label={
-                              objSkill.name.charAt(0).toUpperCase() +
-                              objSkill.name.slice(1)
-                            }
-                          />
-                        )
-                    )
+                    (objSkill, index) =>
+                      index < labelsMaxLimit && (
+                        <Chip
+                          key={index}
+                          className={classes.chips}
+                          size="small"
+                          color="primary"
+                          label={
+                            (objSkill.name.length > 3) ? objSkill.name.charAt(0).toUpperCase() +
+                              objSkill.name.slice(1) : objSkill.name.toUpperCase()
+                          }
+                        />
+                      )
+                  )
                   : null}
               </Grid>
-              <Divider style={{ marginTop: '20px' }} variant="fullWidth" />
+              <Divider style={{ marginTop: '10px' }} variant="fullWidth" />
+              <Grid
+                container
+                justify="space-evenly"
+                alignItems="center"
+                spacing={1}
+                className={classes.skillsContainer}
+              >
+                {skills
+                  ? ['Leader', 'Partnership', 'Fast Learner', 'English', 'Portuguese'].map(
+                    (objSkill, index) =>
+                      index < labelsMaxLimit && (
+                        <Chip
+                          key={index}
+                          className={classes.chips}
+                          size="small"
+                          label={
+                            (objSkill.length > 3) ? objSkill.charAt(0).toUpperCase() +
+                              objSkill.slice(1) : objSkill.toUpperCase()
+                          }
+                        />
+                      )
+                  )
+                  : null}
+              </Grid>
+              <Divider style={{ marginTop: '10px' }} variant="fullWidth" />
               {/* Mini-Bio */}
               <Typography
-                style={{ marginTop: '20px' }}
-                variant="body2"
+                className={classes.miniBioBody}
+                variant="body1"
                 color="textPrimary"
                 component="p"
                 align="justify"
@@ -169,11 +193,34 @@ function CandidateCard(props) {
               </Typography>
             </ThemeProvider>
           </CardContent>
+          <Box className={classes.tooltip} component="span" display="flex">
+            {/* <MessageIcon /> */}
+            {location === '/' &&
+              <ThemeProvider theme={theme}>
+                <PersonalizedTooltip TransitionComponent={Zoom} title={randomText([longText, shortText])} placement='top-end'>
+                  <Badge color="secondary" badgeContent={1} variant="dot">
+                    <Chip className={classes.scoring} size='small' label='5' icon={<GradeIcon />} />
+                  </Badge>
+                </PersonalizedTooltip>
+              </ThemeProvider>
+            }
+          </Box>
         </Grid>
       </Grid>
     </Card>
   );
 }
+
+const randomText = (array) => {
+  return array[Math.round(Math.random() * (0, 1))]
+}
+
+const longText = `
+Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
+Praesent non nunc mollis, fermentum neque at, semper arcu.
+Nullam eget est sed sem iaculis gravida eget vitae justo.
+`;
+const shortText = 'Muy buenas habilidades de liderazgo'
 
 CandidateCard.propTypes = {
   candidate: PropTypes.exact({
@@ -190,6 +237,8 @@ CandidateCard.propTypes = {
     github: PropTypes.string,
     visibility: PropTypes.string,
     status: PropTypes.string,
+    score: PropTypes.number,
+    comment: PropTypes.string,
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
   }),
@@ -215,9 +264,11 @@ CandidateCard.defaultProps = {
         'Node',
         'PHP',
       ],
-      soft: ['Leadership', 'English', 'Portuguese'],
+      soft: ['Leader', 'Partnership', 'Fast Learner', 'English', 'Portuguese'],
     },
     profilePicture: null,
+    score: 4,
+    comment: 'Muy buenas habilidades para el trabajo en equipo',
     miniBio: `
     I'm a software engineer who believes that out-of-the-box thinking is what
      separates a great project from a good one. I do most of mine in Javascript, 

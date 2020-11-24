@@ -91,6 +91,7 @@ function CardsContainer(props) {
                     handleCandidate={handleCandidate}
                     includes={includesCandidate(candidate.id)}
                     folder={folder}
+                    location={props.location}
                   />
                 </div>
               )

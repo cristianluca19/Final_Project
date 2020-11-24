@@ -1,13 +1,14 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { yellow } from '@material-ui/core/colors';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 550,
-    minWidth: 550,
-    maxHeigth: 300,
-    minHeight: 300,
+    maxWidth: 600,
+    minWidth: 600,
+    maxHeigth: 350,
+    minHeight: 350,
     borderStyle: 'solid',
     borderColor: '#111',
     border: 2,
@@ -17,34 +18,76 @@ export const useStyles = makeStyles((theme) => ({
       borderColor: '#87868A',
     },
   },
+  miniBioBody: {
+    marginTop: '10px', 
+    minHeight: 100
+  },
+  skillsContainer: {
+    minHeight: 60,
+  },
+  scoring: {
+    position: 'relative',
+    left: 0,
+    top: 0,
+    fontWeight: 900,
+    backgroundColor: '#FFF001'
+  },
+  skillsText: {
+  fontWeight: 900,
+  fontSize: 12,
+},
+  tooltip: {
+  position: 'absolute',
+  right: '5px',
+  bottom: '5px',
+},
   media: {
-    minHeight: 300,
-    height: '100%',
-    width: '100%',
-    objectFit: 'contain',
-  },
+  minHeight: 350,
+  height: '100%',
+  width: '100%',
+  objectFit: 'contain',
+},
   chips: {
-    borderRadius: 50,
-    maxHeight: 5,
-    marginTop: 10,
-    marginRight: 20,
-    fontSize: 14,
-    '&:hover': {
-      backgroundColor: yellow['A500'],
-      fontWeight: 1000,
-    },
-    paddingBottom: '7px !important',
+  borderRadius: 50,
+  maxHeight: 5,
+  marginTop: 20,
+  marginRight: 20,
+  fontSize: 16,
+  '&:hover': {
+    backgroundColor: yellow['A500'],
+    fontWeight: 1000,
   },
+  paddingBottom: '7px !important',
+},
   contactButton: {
-    maxHeight: 20,
-    marginBottom: -20,
-    border: 1,
-    borderStyle: 'solid',
-  },
+  maxHeight: 20,
+  marginBottom: -20,
+  border: 1,
+  borderStyle: 'solid',
+},
   contactButtonView: {
-    display: 'none',
-  },
+  display: 'none',
+},
+  nameHeader: {
+  minHeight: 50,
+  maxHeight: 50,
+
+}
 }));
+
+export const PersonalizedTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.black,
+    marginRight: '8px',
+    color: '#FFFFFF',
+    boxShadow: theme.shadows[1],
+    border: '1px solid #87868A',
+    fontSize: 16,
+    minWidth: 360,
+    maxWidth: 360,
+    textAlign: 'center',
+  },
+}))(Tooltip);
 
 export const theme = createMuiTheme({
   palette: {
