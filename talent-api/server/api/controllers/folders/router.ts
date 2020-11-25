@@ -4,7 +4,7 @@ import folderController from './controller';
 export default express
   .Router()
   .get('/', folderController.all)
-  .get('/models', folderController.allFoldersIncludingModels)
+  // .get('/models', folderController.allFoldersIncludingModels)
   .post('/', folderController.postFolder)
   .get('/dossier/:uuid', folderController.byUuid)
   .get('/:folderId', folderController.byId)

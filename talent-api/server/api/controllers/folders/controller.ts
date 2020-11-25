@@ -20,35 +20,35 @@ export class foldersController {
     res.status(200).json(folders);
   }
 
-  async allFoldersIncludingModels(req: Request, res: Response): Promise<void> {
-    const folders = await db.Folder.findAll({
-      include: [
-        {
-          model: db.Recruiter,
-          attributes: ['company', 'contactName', 'email'],
-        },
-        {
-          model: db.Candidate,
-          attributes: [
-            'id',
-            'firstName',
-            'lastName',
-            'email',
-            'country',
-            'cohort',
-            'profilePicture',
-            'visibility',
-            'status',
-            'miniBio',
-            'linkedin',
-            'github',
-          ],
-          through: { attributes: [] },
-        },
-      ],
-    });
-    res.status(200).json(folders);
-  }
+  // async allFoldersIncludingModels(req: Request, res: Response): Promise<void> {
+  //   const folders = await db.Folder.findAll({
+  //     include: [
+  //       {
+  //         model: db.Recruiter,
+  //         attributes: ['company', 'contactName', 'email'],
+  //       },
+  //       {
+  //         model: db.Candidate,
+  //         attributes: [
+  //           'id',
+  //           'firstName',
+  //           'lastName',
+  //           'email',
+  //           'country',
+  //           'cohort',
+  //           'profilePicture',
+  //           'visibility',
+  //           'status',
+  //           'miniBio',
+  //           'linkedin',
+  //           'github',
+  //         ],
+  //         through: { attributes: [] },
+  //       },
+  //     ],
+  //   });
+  //   res.status(200).json(folders);
+  // }
 
   async byId(req: Request, res: Response): Promise<void> {
     const folder = await db.Folder.findByPk(req.params.folderId, {

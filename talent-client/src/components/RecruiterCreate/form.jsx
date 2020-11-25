@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useStyles } from './styles.js';
@@ -7,14 +8,19 @@ import { ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
 
-const initialValues = {
-  contactName: '',
-  email: '',
-  company: '',
+export function RecruiterForm({ handleClose }) {
+
+  const recruiterData = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+
+  const initialValues = {
+  contactName: recruiterData ? recruiterData.contactName : '',
+  email: recruiterData ? recruiterData.email : '',
+  company: recruiterData ? recruiterData.company : '',
   siteUrl: '',
 };
 
-export function RecruiterForm() {
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(true);
@@ -36,8 +42,10 @@ export function RecruiterForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     createRecruiter(values, setValues, setErrors, notify, setNotify);
+    handleClose();
     return;
   };
+
 
   return (
     <form className={classes.root} onSubmit={handleSubmit} autoComplete="off">
@@ -114,7 +122,13 @@ export function RecruiterForm() {
 
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
+const createRecruiter = (hook, setHook, setErrors, notify, setNotify, handleClose) => {
+  const initialValues = {
+    contactName: '',
+    email: '',
+    company: '',
+    siteUrl: '',
+  };
   axios
     .post(`${process.env.REACT_APP_BACKEND_URL}/recruiters`, hook)
     .then((response) => {

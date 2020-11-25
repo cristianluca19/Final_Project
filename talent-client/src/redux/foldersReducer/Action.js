@@ -91,6 +91,7 @@ export function setActiveFolder(idActiveFolder) {
     });
   };
 }
+
 export function removeCandidateFromFolder(idFolder, idCandidate) {
   return async (dispatch) => {
     const removedCandidate = await axios.delete(

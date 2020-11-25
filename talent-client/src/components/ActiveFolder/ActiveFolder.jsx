@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getModalStyle, useStyles } from './styles';
+import moment from 'moment';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getFoldersByCompany } from '../../redux/recruitersReducer/Action';
-import { setActiveFolder } from '../../redux/foldersReducer/Action';
+import { setActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
+import CreateRecruiter from '../RecruiterCreate/Modal';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 export default function ActiveFolder() {
   const dispatch = useDispatch();
@@ -24,11 +37,20 @@ export default function ActiveFolder() {
 
   const allFolders = useSelector((store) => store.FolderReducer.allFolders);
 
-  const [company, setCompany] = React.useState([]);
-  const [folder, setFolder] = React.useState([]);
-  const [foldersFromRecruiter, setFoldersFromRecruiter] = React.useState([]);
-  const [openCompany, setOpenCompany] = React.useState(false);
-  const [openFolder, setOpenFolder] = React.useState(false);
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const recruiterData = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+  
+  const [company, setCompany] = useState([]);
+  const [folder, setFolder] = useState([]);
+  const [foldersFromRecruiter, setFoldersFromRecruiter] = useState([]);
+  const [openCompany, setOpenCompany] = useState(false);
+  const [openFolder, setOpenFolder] = useState(false);
+  const [state, setState] = useState(null);
+
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
   const handleCloseCompany = () => {
     setOpenCompany(false);
@@ -43,17 +65,17 @@ export default function ActiveFolder() {
   };
 
   const handleOpenFolder = () => {
-    if(foldersFromRecruiter === "no valor") {
-      setFoldersFromRecruiter([])  
+    if (foldersFromRecruiter === 'no valor') {
+      setFoldersFromRecruiter([]);
     } else {
-      setFoldersFromRecruiter(foldersFromRecruiterData)
+      setFoldersFromRecruiter(foldersFromRecruiterData);
     }
     setOpenFolder(true);
   };
 
   const handleChangeCompany = (event) => {
-    if(event.target.value === "") {
-      setFoldersFromRecruiter("no valor")
+    if (event.target.value === '') {
+      setFoldersFromRecruiter('no valor');
     }
     setCompany(event.target.value);
     dispatch(getFoldersByCompany(event.target.value));
@@ -63,16 +85,23 @@ export default function ActiveFolder() {
     setFolder(event.target.value);
     console.log(event.target.value)
     dispatch(setActiveFolder(event.target.value));
+    dispatch(getDossierByUuid(event.target.value.uuid));
   };
 
-  // const RedirectToFolderPreview = () => {
-  //   <Redirect to="/previw/${folder.id}" />
-  // }
+  const RedirectToFolderPreview = () => {
+    if(activeFolder !== null) return setState(`/dossier/${activeFolder.uuid}`);
+  };
+
+  if (state) {
+    return <Redirect to={state} />;
+  }
 
   return (
     <div>
-      {/* onClick={RedirectToFolderPreview} */}
-      <Button> 
+      <Button
+        className={classes.folderPreview}
+        onClick={RedirectToFolderPreview}
+      >
         Folder Preview
       </Button>
       <FormControl className={classes.formControl}>
@@ -83,8 +112,10 @@ export default function ActiveFolder() {
           open={openCompany}
           onClose={handleCloseCompany}
           onOpen={handleOpenCompany}
-          value={company || ''}
+          value={company.length ? company : recruiterData ? recruiterData.company : ''}
           onChange={handleChangeCompany}
+          MenuProps={MenuProps}
+          style={{ color: 'white' }}
         >
           <MenuItem value="">
             <em>None</em>
@@ -104,29 +135,34 @@ export default function ActiveFolder() {
           open={openFolder}
           onClose={handleCloseFolder}
           onOpen={handleOpenFolder}
-          value={folder || ''}
+          value={folder.length ? folder : recruiterData ? recruiterData.createdAt : ''}
           onChange={handleChangeFolder}
+          MenuProps={MenuProps}
+          style={{ color: 'white' }}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {foldersFromRecruiter.id ?
-          foldersFromRecruiter.folders.map((element, index) => (
-            <MenuItem key={index} value={element.id}>
-              <ListItemText primary={element.createdAt} />
-            </MenuItem>
-          ))
-          :
-          allFolders && allFolders.map((element, index) => (
-            <MenuItem key={index} value={element.id}>
-              <ListItemText primary={element.createdAt} />
-            </MenuItem>
-          ))
-        }
+          {foldersFromRecruiter.id
+            ? foldersFromRecruiter.folders.map((element, index) => (
+                <MenuItem key={index} value={element}>
+                  <ListItemText
+                    primary={moment(element.createdAt).format(DATE_FORMAT)}
+                  />
+                </MenuItem>
+              ))
+            : allFolders &&
+              allFolders.map((element, index) => (
+                <MenuItem key={index} value={element}>
+                  <ListItemText
+                    primary={moment(element.createdAt).format(DATE_FORMAT)}
+                  />
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <Button>
-        Edit recruiter fields
+        <CreateRecruiter />
       </Button>
     </div>
   );

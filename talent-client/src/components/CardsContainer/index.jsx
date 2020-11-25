@@ -34,10 +34,16 @@ function CardsContainer(props) {
   );
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
   const folder = useSelector((store) => store.FolderReducer.activeFolder);
+  const recruiterData = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+  
 
   useEffect(() => {
     dispatch(getCandidatesPage(currentPage));
   }, [newPageSelected]);
+
+  const cardsMaxLimit = 30;
 
   const handleCandidate = async (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
@@ -88,12 +94,13 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      <div style={{ backgroundColor: 'white' }}><ActiveFolder /></div>
+      <div><ActiveFolder /></div>
       {folder && (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
-            {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' '
-              }`}
+            {`Carpeta N°: ${folder.id} - ${
+              recruiterData && recruiterData.company ? `${recruiterData.contactName} - ${recruiterData.company}` : ' '
+            }`}
           </Typography>
         </ThemeProvider>
       )}
