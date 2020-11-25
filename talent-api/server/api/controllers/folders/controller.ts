@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
-const mailCreator = require('../../../mail/config.ts');
+import mailCreator from '../../../mail/config';
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {

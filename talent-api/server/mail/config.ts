@@ -1,8 +1,8 @@
 const DOMAIN = 'sandbox07c054a06bec41c19432905517039fb3.mailgun.org';
 const APIKEY = '3570c64af40cfc0c128270f779aebe71-360a0b2c-9076c742';
 const LINK = 'http://localhost:3000/dossier/';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const mailGun = require('mailgun-js')({
+import mail from 'mailgun-js';
+const mailGun = mail({
   apiKey: APIKEY,
   domain: DOMAIN,
 });
@@ -37,4 +37,4 @@ function mailCreator(to, uuid) {
     }
   });
 }
-module.exports = mailCreator;
+export default mailCreator;
