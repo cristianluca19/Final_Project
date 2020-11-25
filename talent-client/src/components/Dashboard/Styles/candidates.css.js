@@ -73,5 +73,10 @@ export const useStyles = makeStyles((theme) => ({
   },
   selectOptions: {
     minWidth: 196,
+    maxWidth: 215,
+  },
+  selectOptionsStatus: {
+    minWidth: 50,
+    maxWidth: 215,
   },
 }));

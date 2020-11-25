@@ -63,7 +63,11 @@ function Candidates() {
     I'm a software engineer who believes that out-of-the-box thinking is what
      separates a great project from a good one. I do most of mine in Javascript, 
      React, Node.js and Python.`,
+    comment: 'Buenas habilidades de liderazgo y trabajo en equipo...',
     github: 'https://github.com/henry-labs/talent',
+    cohort: {
+      name: 'WebFT-01',
+    },
   });
 
   useEffect(() => {
@@ -76,7 +80,7 @@ function Candidates() {
     { id: 'lastName', label: 'LAST NAME', minWidth: 60 },
     { id: 'country', label: 'COUNTRY', minWidth: 180 },
     { id: 'email', label: 'EMAIL', minWidth: 180 },
-    { id: 'cohort', label: 'COHORTE', minWidth: 30, align: 'center' },
+    { id: 'cohortName', label: 'COHORTE', minWidth: 30, align: 'center' },
     { id: 'visibility', label: 'VISIBILITY', minWidth: 90 },
     { id: 'status', label: 'STATUS', minWidth: 90 },
     { id: 'iconUpdateDelete', label: '', minWidth: 60 },
@@ -93,9 +97,11 @@ function Candidates() {
           lastName: candidate.lastName,
           country: candidate.country,
           email: candidate.email,
-          cohort: candidate.cohort.name,
+          cohortId: candidate.cohortId,
+          cohortName: candidate.cohort.name,
           visibility: candidate.visibility,
           status: candidate.status,
+          score: candidate.score,
           iconUpdateDelete: '',
           key: candidate.id,
         });
@@ -278,9 +284,28 @@ function Candidates() {
             <TextField
               id="cohort"
               label="Cohorte"
-              value={candidateData.cohort}
+              value={
+                candidateData.cohort
+                  ? candidateData.cohort.name
+                  : candidateData.cohortId
+              }
               onChange={(e) => handleInputCandidate(e)}
             />
+            <br />
+            <InputLabel id="visibilityLabel">Score</InputLabel>
+            <Select
+              labelId="Score"
+              id="score"
+              value={candidateData.score}
+              onChange={(e) => handleSelectCandidate(e, 'score')}
+              className={classes.selectOptionsStatus}
+            >
+              <MenuItem value={'5'}>5</MenuItem>
+              <MenuItem value={'4'}>4</MenuItem>
+              <MenuItem value={'3'}>3</MenuItem>
+              <MenuItem value={'2'}>2</MenuItem>
+              <MenuItem value={'1'}>1</MenuItem>
+            </Select>
             <br />
             <br />
             <TextField
@@ -294,6 +319,16 @@ function Candidates() {
               onChange={(e) => handleInputCandidate(e)}
             />
             <br />
+            <TextField
+              id="comment"
+              label="Comentario"
+              multiline
+              rows={1}
+              value={candidateData.comment}
+              variant="outlined"
+              className={classes.miniBio}
+              onChange={(e) => handleInputCandidate(e)}
+            />
             <br />
             <Button
               variant="contained"
