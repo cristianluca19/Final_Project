@@ -1,9 +1,10 @@
+'use strict';
 const faker = require('faker');
 
 function fill() {
   let cohorts = [];
   let j;
-  for (let id = 1; id <= 50; id++) {
+  for (let id = 1; id <= 22; id++) {
     if (id < 10) j = `0${id}`;
     else j = id;
     cohorts.push({
