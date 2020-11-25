@@ -8,10 +8,24 @@ import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyle = makeStyles((theme) => ({
+  root: {
+    '& .MuiInputBase-input': {},
+    '& .MuiSelect-select': {
+      backgroundColor: '#111111',
+      color: '#FFFFFF',
+      '&:focus': {
+        backgroundColor: '#111111',
+      },
+    },
+  },
+  testing: {
+    color: 'red !important',
+    backgroundColor: '#FFF001 !important',
+  },
   contentSearch: {
     background: '#000000',
     width: '480px',
-    margin: '55px 0px 55px 0px',
+    margin: '20px 0px 20px 0px',
     padding: '30px 0px',
     border: '5px solid #000000',
   },
@@ -47,19 +61,15 @@ const useStyle = makeStyles((theme) => ({
         background: '#ffda00',
       },
     },
-    formControl: {
-      minWidth: 120,
-      margin: '0px 8px',
-    },
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
     selectInput: {
-        backgroundColor: '#ffffff1f',
-        paddingRight: '24px',
-        width: '280px'
-    }
-  }
+      backgroundColor: '#ffffff1f',
+      paddingRight: '24px',
+      width: '280px',
+    },
+  },
 }));
 
 function Search() {
@@ -67,7 +77,7 @@ function Search() {
   //Location - Features - Skills
   return (
     <div className={classes.contentSearch}>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.root}>
         <InputLabel
           className={classes.inputLabelSearch}
           htmlFor="age-native-simple"
@@ -81,7 +91,7 @@ function Search() {
           <option value={30}>Thirty</option>
         </Select>
       </FormControl>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.root}>
         <InputLabel
           className={classes.inputLabelSearch}
           htmlFor="age-native-simple"
@@ -95,7 +105,7 @@ function Search() {
           <option value={30}>Thirty</option>
         </Select>
       </FormControl>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.root}>
         <InputLabel
           className={classes.inputLabelSearch}
           htmlFor="age-native-simple"

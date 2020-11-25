@@ -21,11 +21,11 @@ const TechSkillsFilter = () => {
   useEffect(() => {
     const getAllSkills = async (techSkills) => {
       const skills = await axios.get(`${BACKEND_URL}/skills/`);
-      techSkills = skills.data.filter(skill => skill.type === "tech")
-      setAllSkills(techSkills.map(skill => skill.name))
-    }
+      techSkills = skills.data.filter((skill) => skill.type === 'tech');
+      setAllSkills(techSkills.map((skill) => skill.name));
+    };
     getAllSkills();
-  }, [BACKEND_URL])
+  }, [BACKEND_URL]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -36,16 +36,21 @@ const TechSkillsFilter = () => {
   };
 
   const handleSearchSkill = (e) => {
-    setFilteredSkills(allSkills.filter(
-        (skill) => skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
-    ));
+    setFilteredSkills(
+      allSkills.filter(
+        (skill) =>
+          skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
+      )
+    );
   };
-  
+
   const addSkill = (e) => {
     if (!skillsSelected.some((skill) => skill === e.target.value)) {
       setSkillsSelected((oldSkills) => [...oldSkills, e.target.value]);
       setAllSkills(allSkills.filter((skill) => skill !== e.target.value));
-      setFilteredSkills(filteredSkills.filter((skill) => skill !== e.target.value))
+      setFilteredSkills(
+        filteredSkills.filter((skill) => skill !== e.target.value)
+      );
     }
   };
 
@@ -62,7 +67,9 @@ const TechSkillsFilter = () => {
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Technologies</h2>
       <FormControl className={classes.searchBar}>
-        <InputLabel className={classes.inputLabel} htmlFor="my-input">Search skill...</InputLabel>
+        <InputLabel className={classes.inputLabel} htmlFor="my-input">
+          Search skill...
+        </InputLabel>
         <Input
           className={classes.input}
           id="my-input"
@@ -81,42 +88,35 @@ const TechSkillsFilter = () => {
                   value={skill}
                 >
                   <span className={classes.skillSelected}>{skill}</span>
-                    <CheckIcon className={classes.checkIcon}/>
+                  <CheckIcon className={classes.checkIcon} />
                 </button>
               </div>
             ))}
         </div>
-        <div className={classes.divAllSkills} >
-          {filteredSkills.length > 0 ?
-          filteredSkills.slice(0, 10).map((skill, index) => (
-            <div
-              key={index}
-              className={classes.divBlackButton}
-            >
-              <button
-                className={classes.blackButton}
-                onClick={addSkill}
-                value={skill}
-              >
-                {skill}
-              </button>
-            </div>
-            ))
-          :
-          allSkills.slice(0, 10).map((skill, index) => (
-            <div
-              key={index}
-              className={classes.divBlackButton}
-            >
-              <button
-                className={classes.blackButton}
-                onClick={addSkill}
-                value={skill}
-              >
-                {skill}
-              </button>
-            </div>
-          ))}
+        <div className={classes.divAllSkills}>
+          {filteredSkills.length > 0
+            ? filteredSkills.slice(0, 10).map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))
+            : allSkills.slice(0, 10).map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
       <button className={classes.yellowButton}>Add skill</button>

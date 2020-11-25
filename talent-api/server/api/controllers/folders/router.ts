@@ -9,4 +9,5 @@ export default express
   .get('/dossier/:uuid', folderController.byUuid)
   .get('/:folderId', folderController.byId)
   .put('/:folderId', folderController.updateById)
+  .put('/status/:folderId', folderController.updateStatusById)
   .delete('/:folderId', folderController.deleteById);

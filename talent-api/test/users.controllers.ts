@@ -50,4 +50,30 @@ describe('Users', () => {
       expect(dbCreated.dataValues.role).to.be.equal('admin');
     });
   });
+
+  describe('GET all users', () => {
+    it('should get all users', async () => {
+      await db.User.create({
+        firstName: 'Martin',
+        lastName: 'Cura',
+        role: 'admin',
+      });
+      await db.User.create({
+        firstName: 'Leo',
+        lastName: 'Nardo',
+        role: 'selector',
+      });
+      const response = await request(Server).get('/api/v1/users');
+      expect(response.body).to.have.lengthOf(2);
+      expect(response.body[0])
+        .to.have.property('firstName')
+        .to.be.equal('Martin');
+      expect(response.body[1]).to.have.property('firstName').to.be.equal('Leo');
+      expect(response.body[1])
+        .to.have.property('lastName')
+        .to.be.equal('Nardo');
+      expect(response.body[1]).to.have.property('role').to.be.equal('selector');
+      expect(response.body).to.be.an('array');
+    });
+  });
 });

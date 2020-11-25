@@ -24,4 +24,5 @@ export enum STATUS {
 export enum FOLDER_STATUS {
   Created = 'created',
   Sent = 'sent',
+  Draft = 'draft',
 }

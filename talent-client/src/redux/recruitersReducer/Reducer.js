@@ -17,6 +17,7 @@ export default function Reducer(state = initialState, action) {
         ...state,
         foldersFromRecruiter: action.payload,
       };
+
     default:
       return state;
   }

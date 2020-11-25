@@ -12,6 +12,7 @@ export default (sequelize) => {
       this.belongsToMany(models.Folder, {
         through: 'folder_candidates',
       });
+      this.belongsTo(models.Cohort);
     }
   }
   Candidate.init(
@@ -43,10 +44,6 @@ export default (sequelize) => {
           isUrl: true,
         },
       },
-      cohort: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       miniBio: {
         type: DataTypes.TEXT,
         allowNull: true,
@@ -67,6 +64,18 @@ export default (sequelize) => {
       status: {
         type: DataTypes.ENUM,
         values: [STATUS.Unemployed, STATUS.Employed],
+        allowNull: true,
+      },
+      score: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+          min: 0,
+          max: 5,
+        },
+      },
+      comment: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     },

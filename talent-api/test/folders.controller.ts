@@ -22,10 +22,13 @@ describe('Folders', () => {
       expect(response.body).to.be.an('array').to.have.lengthOf(4);
     });
     it('Should retrieve an specific folder with all associated candidates', async () => {
+      const cohort1 = await db.Cohort.create({
+        name: 'WebFT-01',
+      });
       const foldersCreated = await db.Folder.bulkCreate([{ uuid }, { uuid }]);
       const candidate = await db.Candidate.create({
         email: 'taniamg@gmail.com',
-        cohort: 'WebFT06',
+        cohortId: cohort1.id,
       });
       await foldersCreated[0].addCandidate(candidate.id);
       const response = await request(Server).get(
@@ -37,7 +40,7 @@ describe('Folders', () => {
       expect(response.body).to.have.property('candidates').to.be.an('array');
       expect(response.body).to.have.nested.property('candidates[0].id');
       expect(response.body.candidates[0].email).to.equal('taniamg@gmail.com');
-      expect(response.body.candidates[0].cohort).to.equal('WebFT06');
+      expect(response.body.candidates[0].cohortId).to.equal(cohort1.id);
     });
   });
   describe('DELETE', () => {
@@ -51,7 +54,7 @@ describe('Folders', () => {
       expect(foundFolder).to.be.null;
     });
   });
-  describe('PUT', () => {
+  describe('PUT recruiter', () => {
     it('Should update an specific add relation user/recruiter relation to folder', async () => {
       const folders = await db.Folder.bulkCreate([
         { uuid },
@@ -95,6 +98,27 @@ describe('Folders', () => {
         userId: user.id,
         recruiterId: recruiter.id,
       });
+    });
+  });
+
+  describe('PUT status', () => {
+    it('should update status to created', async () => {
+      const folder1 = await db.Folder.create({ uuid });
+      await db.Folder.create({ uuid });
+      const response = await request(Server)
+        .put(`/api/v1/folders/status/${folder1.id}`)
+        .send({ status: 'created' });
+      expect(response.body).to.have.property('status').to.be.equal('created');
+      expect(response.body).to.have.property('id').to.be.equal(folder1.id);
+    });
+    it('should update status to sent', async () => {
+      const folder2 = await db.Folder.create({ uuid });
+      await db.Folder.create({ uuid });
+      const response = await request(Server)
+        .put(`/api/v1/folders/status/${folder2.id}`)
+        .send({ status: 'sent' });
+      expect(response.body).to.have.property('status').to.be.equal('sent');
+      expect(response.body).to.have.property('id').to.be.equal(folder2.id);
     });
   });
 });
