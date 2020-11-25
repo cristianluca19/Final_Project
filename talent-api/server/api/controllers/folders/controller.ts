@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mailCreator = require('../../../mail/config.ts');
 
 export class foldersController {
