@@ -14,6 +14,10 @@ export class CandidatesController {
           attributes: ['id', 'name', 'type'],
           through: { attributes: [] },
         },
+        {
+          model: db.Cohort,
+          attributes: ['name'],
+        },
       ],
     });
     res.status(200).json(candidates);
@@ -133,19 +137,24 @@ export class CandidatesController {
         country: locationArray,
         visibility: 'listed',
       },
-      include: {
-        model: db.Skill,
-        attributes: ['id', 'name', 'type'],
-        through: { attributes: [] },
-        where: {
-          name: skillsArray,
+      include: [
+        {
+          model: db.Skill,
+          attributes: ['id', 'name', 'type'],
+          through: { attributes: [] },
+          where: {
+            name: skillsArray,
+          },
+        }, {
+          model: db.Cohort,
+          attributes: ['name'],
         },
-      },
+      ],
       limit,
       offset,
       distinct: true,
     };
-    if (!skillsArray.length) delete query.include;
+    if (!skillsArray.length) delete query.include[0].where;
     if (!cohortArray.length) delete query.where.cohortId;
     if (!locationArray.length) delete query.where.country;
     if (!skillsArray.length && !cohortArray.length && !locationArray.length) {
@@ -209,6 +218,10 @@ export class CandidatesController {
             model: db.Skill,
             attributes: ['id', 'name', 'type'],
             through: { attributes: [] },
+          },
+          {
+            model: db.Cohort,
+            attributes: ['name'],
           },
         ],
         limit,
