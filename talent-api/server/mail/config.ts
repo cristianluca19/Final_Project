@@ -6,23 +6,22 @@ const mailGun = require('mailgun-js')({
   domain: DOMAIN,
 });
 
-function mailCreator(to, dataFront) {
-  // if (type === "Register"){
+function mailCreator(to, link) {
   const mailOptions = {
     from: 'talenthenry2020@gmail.com',
     to: to,
-    subject: 'Test de mail',
+    subject: 'Talent Support',
     html: `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Talent mail Test</title>
     </head>
     <body>
         <div>
-            <h3>Mail de prueba</h3>
-            <p>Henry Talent es una plataforma para conseguir empleo</p>
+            <h3>Folder with candidates</h3>
+            <p>click here: ${link}</p>
+            <p>thanks for doing business with us</p>
         </div>
     </body>
     </html>`,
@@ -37,6 +36,4 @@ function mailCreator(to, dataFront) {
     }
   });
 }
-mailCreator('fede4872@gmail.com', null);
-// mailCreator('sebalevin@hotmail.com.ar');
 module.exports = mailCreator;

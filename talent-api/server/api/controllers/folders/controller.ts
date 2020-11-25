@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
+const mailCreator = require('../../../mail/config.ts');
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
@@ -124,6 +125,16 @@ export class foldersController {
   async deleteById(req: Request, res: Response): Promise<void> {
     await db.Folder.destroy({ where: { id: req.params.folderId } });
     res.sendStatus(204);
+  }
+  async postEmail(req: Request, res: Response): Promise<void> {
+    const { email, link } = await req.body;
+    console.log(mailCreator);
+    if (req.body == {} || !req.body.email || !req.body.link) {
+      res.sendStatus(204);
+    } else {
+      mailCreator(email, link);
+      res.sendStatus(200);
+    }
   }
 }
 export default new foldersController();
