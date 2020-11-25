@@ -31,13 +31,15 @@ function CandidateCard(props) {
     folder,
     handleCandidate,
     location,
-  } = props; 
-  const tech = candidate.skills.filter(skill => (
-    skill.type === 'tech'
-  ));
-  let soft = candidate.skills.filter(skill => (
-    (skill.type === 'soft') ? skill.type : null
-  ))
+  } = props;
+  const tech =
+    candidate.skills &&
+    candidate.skills.filter((skill) => skill.type === 'tech');
+  let soft =
+    candidate.skills &&
+    candidate.skills.filter((skill) =>
+      skill.type === 'soft' ? skill.type : null
+    );
 
   const labelsMaxLimit = 10;
 
@@ -162,7 +164,7 @@ function CandidateCard(props) {
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
-                {tech.length
+                {tech && tech.length
                   ? tech.map(
                       (objSkill, index) =>
                         index < labelsMaxLimit && (
@@ -182,16 +184,22 @@ function CandidateCard(props) {
                     )
                   : null}
               </Grid>
-              {soft.length ? <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" /> : null}
-              {soft.length ? 
-              <Grid
-                container
-                justify="space-evenly"
-                alignItems="center"
-                spacing={1}
-                className={classes.skillsContainer}
-              >
-                {soft.map(
+              {soft && soft.length ? (
+                <Divider
+                  style={{ marginTop: '8px', marginBottom: '8px' }}
+                  variant="fullWidth"
+                />
+              ) : null}
+              {soft && soft.length ? (
+                <Grid
+                  container
+                  justify="space-evenly"
+                  alignItems="center"
+                  spacing={1}
+                  className={classes.skillsContainer}
+                >
+                  {soft &&
+                    soft.map(
                       (objSkill, index) =>
                         index < labelsMaxLimit && (
                           <Chip
@@ -206,13 +214,13 @@ function CandidateCard(props) {
                             }
                           />
                         )
-                    )
-                }
-              </Grid>
-              :
-              null
-              }  
-              <Divider style={{ marginTop: '8px', marginBottom: '8px' }} variant="fullWidth" />
+                    )}
+                </Grid>
+              ) : null}
+              <Divider
+                style={{ marginTop: '8px', marginBottom: '8px' }}
+                variant="fullWidth"
+              />
               {/* Mini-Bio */}
               <Typography
                 className={classes.miniBioBody}

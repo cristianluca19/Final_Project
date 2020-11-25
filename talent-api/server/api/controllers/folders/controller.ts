@@ -4,7 +4,19 @@ import uuid from 'uuidv4';
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
-    const folders = await db.Folder.findAll();
+    const folders = await db.Folder.findAll({
+      include: [
+        {
+          model: db.User,
+        },
+        {
+          model: db.Recruiter,
+        },
+        {
+          model: db.Candidate,
+        },
+      ],
+    });
     res.status(200).json(folders);
   }
 
@@ -19,7 +31,7 @@ export class foldersController {
             'lastName',
             'email',
             'country',
-            'cohort', // TODO: pendiente incluir como modelo si se cambia a modelo: cohort
+            'cohortId',
             'profilePicture',
             'visibility',
             'status',
@@ -57,7 +69,7 @@ export class foldersController {
               'lastName',
               'email',
               'country',
-              'cohort',
+              'cohortId',
               'profilePicture',
               'visibility',
               'status',
@@ -96,6 +108,16 @@ export class foldersController {
     const folder = await db.Folder.findByPk(req.params.folderId);
     if (recruiterId) await folder.setRecruiter(recruiterId);
     if (userId) await folder.setUser(userId);
+    res.status(200).json(folder);
+  }
+
+  async updateStatusById(req: Request, res: Response): Promise<void> {
+    const { status } = req.body;
+    await db.Folder.update(
+      { status: status },
+      { where: { id: req.params.folderId } }
+    );
+    const folder = await db.Folder.findByPk(req.params.folderId);
     res.status(200).json(folder);
   }
 
