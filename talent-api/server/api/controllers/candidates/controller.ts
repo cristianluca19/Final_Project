@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import db from '../../../models';
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
@@ -7,7 +7,15 @@ import { parse } from '@fast-csv/parse';
 
 export class CandidatesController {
   async all(req: Request, res: Response): Promise<void> {
-    const candidates = await db.Candidate.findAll();
+    const candidates = await db.Candidate.findAll({
+      include: [
+        {
+          model: db.Skill,
+          attributes: ['id', 'name', 'type'],
+          through: { attributes: [] },
+        },
+      ],
+    });
     res.status(200).json(candidates);
   }
 
@@ -24,6 +32,8 @@ export class CandidatesController {
           throw error.message;
         })
         .on('data', async (row) => {
+          row.status = row.status.toLowerCase();
+          row.visibility = row.visibility.toLowerCase();
           const newUser = new db.Candidate(row);
           //const userValidated = await newUser.validate(); //TODO: print more informative error
           candidates.push(newUser);
@@ -46,7 +56,8 @@ export class CandidatesController {
       const bulkCandidates = await db.Candidate.bulkCreate(req.body);
       res.status(200).json(bulkCandidates);
     } catch (error) {
-      res.status(400).send('An error has ocurred while creating candidates');
+      console.log(error.message);
+      res.status(400).json({ error: "Couldn't parse candidates CSV" });
     }
   }
 
@@ -82,17 +93,20 @@ export class CandidatesController {
     const reply = await folder.removeCandidate(candidate);
     res.status(200).json(reply);
   }
-  async addCandidate(req: Request, res: Response): Promise<void> {
-    const userData = req.body;
-    const candidate = await db.Candidate.create(userData);
-    res.status(200).json(candidate);
-  }
+
   async deleteCandidate(req: Request, res: Response): Promise<void> {
-    const candidate = await db.Candidate.destroy({
+    await db.Candidate.destroy({
       where: { id: req.params.candidateId },
     });
     res.status(204).end();
   }
+
+  async addCandidate(req: Request, res: Response): Promise<void> {
+    const candidateData = req.body;
+    const candidate = await db.Candidate.create(candidateData);
+    res.status(200).json(candidate);
+  }
+
   async byFilter(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll({
       where: {
@@ -103,14 +117,16 @@ export class CandidatesController {
   }
   async filter(req: Request, res: Response): Promise<void> {
     const skills = req.query.skills || '';
-    const cohorts = req.query.cohorts || '';
+    const cohorts = req.query.cohortId || '';
     const location = req.query.locations || '';
     const skillsArray = skills ? skills.toString().split(',') : [];
-    const cohortArray = cohorts ? cohorts.toString().split(',') : [];
+    const cohortsArr = cohorts ? cohorts.toString().split(',') : [];
     const locationArray = location ? location.toString().split(',') : [];
+    const cohortArray = cohortsArr.map((x) => Number(x));
+
     const query = {
       where: {
-        cohort: cohortArray,
+        cohortId: cohortArray,
         country: locationArray,
       },
       include: {
@@ -121,7 +137,7 @@ export class CandidatesController {
       },
     };
     if (!skillsArray.length) delete query.include;
-    if (!cohortArray.length) delete query.where.cohort;
+    if (!cohortArray.length) delete query.where.cohortId;
     if (!locationArray.length) delete query.where.country;
     if (!skillsArray.length && !cohortArray.length && !locationArray.length) {
       res.sendStatus(204);

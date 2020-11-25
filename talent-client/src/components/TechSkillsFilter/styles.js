@@ -51,7 +51,7 @@ export const useStyles = makeStyles((theme) => ({
     border: '1px yellow solid',
     '&:focus': {
       border: '1px yellow solid',
-    }
+    },
   },
   checkIcon: {
     marginLeft: '10px',
@@ -62,7 +62,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   generalDiv: {
     display: 'flex',
-    flexDirection: "column",
+    flexDirection: 'column',
     marginBottom: '40px',
   },
   inputLabel: {
@@ -71,11 +71,11 @@ export const useStyles = makeStyles((theme) => ({
   input: {
     marginTop: '10px',
     borderRadius: '30px',
-    color: 'white'
+    color: 'white',
   },
   skillSelected: {
-    position: "relative",
-    bottom: '5px'
+    position: 'relative',
+    bottom: '5px',
   },
   divBlackButton: {
     margin: '10px',
@@ -85,6 +85,6 @@ export const useStyles = makeStyles((theme) => ({
     float: 'left',
   },
   marginTop: {
-    marginTop: '20px'
-  }
+    marginTop: '20px',
+  },
 }));
