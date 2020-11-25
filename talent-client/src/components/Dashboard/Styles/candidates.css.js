@@ -83,7 +83,8 @@ export const useStyles = makeStyles((theme) => ({
   filter: {
     display: 'flex',
     width: '35vw',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    height: '40px'
   },
   text: {
     alignSelf: 'center',

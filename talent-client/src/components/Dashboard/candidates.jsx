@@ -51,6 +51,7 @@ function Candidates() {
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
   const [page, setPage] = React.useState(0);
+  const [search, setSearch] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
   const dispatch = useDispatch();
   const [candidateData, setCandidateData] = React.useState({
@@ -164,6 +165,11 @@ function Candidates() {
 
   const handleFilter = (e, property, setState) => {
     const filtered = allCandidates.filter(item => item[property] === e.target.value)
+    setCandidates(filtered);
+  };
+
+  const handleSearch = (e) => {
+    const filtered = allCandidates.filter(item => item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) || item.lastName.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.country.toLowerCase().includes(e.target.value.toLowerCase()));
     setCandidates(filtered);
   };
 
@@ -327,19 +333,6 @@ function Candidates() {
     </Modal>
   );
 
-  const Selected = (props) => {
-    return (
-      <select
-        onChange={(e) => {
-          handleFilter(e, props.handle);
-        }}
-      >
-        <option value='' disabled selected >{props.value}</option>
-        {props.options.map(item => <option value={item} >{item}</option>)};
-      </select>
-    )
-  }
-
   return (
     <Paper className={classes.root}>
       <div className={classes.filterContainer}>
@@ -348,12 +341,10 @@ function Candidates() {
           <Paper component="form" className={classes.search}>
             <InputBase
               className={classes.input}
-              placeholder="Search by name or email..."
+              placeholder="Name, country or email..."
               inputProps={{ 'aria-label': 'search google maps' }}
+              onChange={handleSearch}
             />
-            <IconButton type="submit" aria-label="search">
-              <SearchIcon />
-            </IconButton>
           </Paper>
           <select
             onChange={(e) => {
