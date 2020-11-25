@@ -145,7 +145,8 @@ export class CandidatesController {
           where: {
             name: skillsArray,
           },
-        }, {
+        },
+        {
           model: db.Cohort,
           attributes: ['name'],
         },
