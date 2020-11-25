@@ -9,7 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getFoldersByCompany } from '../../redux/recruitersReducer/Actions';
-import { setActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
+import { setActiveFolder, deleteActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiter from '../RecruiterCreate/Modal';
 
@@ -38,10 +38,6 @@ export default function ActiveFolder() {
   const allFolders = useSelector((store) => store.FolderReducer.allFolders);
 
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
-
-  const recruiterData = useSelector(
-    (store) => store.FolderReducer.dossier.recruiter
-  );
   
   const [company, setCompany] = useState([]);
   const [folder, setFolder] = useState([]);
@@ -76,6 +72,8 @@ export default function ActiveFolder() {
   const handleChangeCompany = (event) => {
     if (event.target.value === '') {
       setFoldersFromRecruiter('no valor');
+      dispatch(deleteActiveFolder());
+      return;
     }
     setCompany(event.target.value);
     dispatch(getFoldersByCompany(event.target.value));
@@ -111,7 +109,7 @@ export default function ActiveFolder() {
           open={openCompany}
           onClose={handleCloseCompany}
           onOpen={handleOpenCompany}
-          value={company.length ? company : recruiterData ? recruiterData.company : ''}
+          value={company || ''}
           onChange={handleChangeCompany}
           MenuProps={MenuProps}
           style={{ color: 'white' }}
@@ -134,7 +132,7 @@ export default function ActiveFolder() {
           open={openFolder}
           onClose={handleCloseFolder}
           onOpen={handleOpenFolder}
-          value={folder.length ? folder : recruiterData ? recruiterData.createdAt : ''}
+          value={folder || ''}
           onChange={handleChangeFolder}
           MenuProps={MenuProps}
           style={{ color: 'white' }}

@@ -5,6 +5,7 @@ const initialState = {
   newFolder: [],
   allFolders: [],
   activeFolder: null,
+  draftFolder: null,
   folderById: [],
 };
 
@@ -29,7 +30,17 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         activeFolder: action.payload,
-      }
+      };
+    case actions.GET_DRAFT_FOLDER:
+      return {
+        ...state,
+        draftFolder: action.payload,
+      };
+    case actions.DELETE_ACTIVE_FOLDER:
+      return {
+        ...state,
+        activeFolder: null,
+      };
     case actions.DELETE_FOLDER:
       return {
         ...state,

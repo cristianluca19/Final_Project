@@ -17,6 +17,7 @@ import { getAllFolders } from './redux/foldersReducer/Action';
 import { getAllRecruiters } from './redux/recruitersReducer/Action';
 import { getAllUsers } from './redux/usersReducer/Action';
 import { getAllSkills } from './redux/skillsReducer/Action';
+import { getDraftFolder } from './redux/foldersReducer/Action';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function App() {
     dispatch(getAllSkills());
     dispatch(getAllFolders());
     dispatch(getAllRecruiters());
+    dispatch(getDraftFolder());
   });
 
   return (

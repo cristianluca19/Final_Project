@@ -10,6 +10,8 @@ import axios from 'axios';
 import ActiveFolder from '../ActiveFolder/ActiveFolder';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
+import moment from 'moment';
+
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -30,11 +32,20 @@ function CardsContainer(props) {
   const recruiterData = useSelector(
     (store) => store.FolderReducer.dossier.recruiter
   );
+
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
+
+  const formatedDateFolder = folder && moment(folder.createdAt).format(DATE_FORMAT);
   
   const cardsMaxLimit = 30;
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
+    // if (!folder) {
+    //   folder = await createDraftFolder();
+    //   dispatch(setActiveFolder(folder.id));
+    //   console.log(folder);
+    // }
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
@@ -68,15 +79,22 @@ function CardsContainer(props) {
   return (
     <Container className={classes.container} maxWidth="xl">
       <div><ActiveFolder /></div>
-      {folder && (
+      {folder ? (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
             {`Carpeta N°: ${folder.id} - ${
-              recruiterData && recruiterData.company ? `${recruiterData.contactName} - ${recruiterData.company}` : ' '
+              recruiterData && recruiterData.company ? `${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}` : ' '
             }`}
           </Typography>
         </ThemeProvider>
-      )}
+      )
+      :
+      <ThemeProvider theme={henryTheme}>
+          <Typography color="primary">
+            {'Carpeta: Draft'}
+          </Typography>
+        </ThemeProvider>
+      }
       <Grid
         className={classes.paddingCandidates}
         container
