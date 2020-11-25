@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useStyles } from './styles.js';
-import { Container, Grid, Typography, Link } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
-import { getFolderById, getDraftFolder } from '../../redux/foldersReducer/Action';
+import {
+  getFolderById,
+  getDraftFolder,
+} from '../../redux/foldersReducer/Action';
 
 function PreviewFolderActive() {
   const { id } = useParams();
@@ -27,14 +30,14 @@ function PreviewFolderActive() {
       return dispatch(getFolderById(activeFolder.id));
     }
     dispatch(getDraftFolder());
-  }, []);
+  }, [activeFolder, dispatch]);
 
   return (
     <Container className={classes.container} maxWidth="xl">
       <ThemeProvider theme={henryTheme}>
         <Typography color="primary" gutterBottom variant="h5" component="h2">
           Candidatos Seleccionados{' '}
-          {recruiterData && Object.keys(recruiterData).length
+          {activeFolder && recruiterData && Object.keys(recruiterData).length
             ? ` para: ${recruiterData.contactName} - ${recruiterData.company}`
             : `: Draft Folder`}
         </Typography>
@@ -54,7 +57,8 @@ function PreviewFolderActive() {
                     </div>
                   )
               )
-            : draftFolder.candidates.map(
+            : draftFolder &&
+              draftFolder.candidates.map(
                 (candidate, index) =>
                   index < cardsMaxLimit && (
                     <div key={index} className={classes.CandidateCard}>

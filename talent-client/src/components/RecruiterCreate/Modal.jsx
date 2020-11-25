@@ -24,15 +24,21 @@ export default function SimpleModal() {
 
   const body = (
     <div className={classes.paper}>
-      <RecruiterCreate handleClose={handleClose}/>
+      <RecruiterCreate handleClose={handleClose} />
     </div>
   );
 
   return (
     <div>
-        <Button className={classes.addRecruiter} type="button" onClick={handleOpen}>
-          {!Object.keys(recruiterData).length ? 'Add Recruiter' : 'Edit Recruiter'}
-        </Button>
+      <Button
+        className={classes.addRecruiter}
+        type="button"
+        onClick={handleOpen}
+      >
+        {!Object.keys(recruiterData).length
+          ? 'Add Recruiter'
+          : 'Edit Recruiter'}
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

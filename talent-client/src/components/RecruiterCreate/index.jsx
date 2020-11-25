@@ -12,7 +12,7 @@ function RecruiterCreate({ handleClose }) {
           Agregar Recruiter
         </Typography>
         <Divider variant="middle" style={{ marginBottom: 10 }} />
-        <RecruiterForm handleClose={handleClose}/>
+        <RecruiterForm handleClose={handleClose} />
       </Container>
     </ThemeProvider>
   );

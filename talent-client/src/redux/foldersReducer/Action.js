@@ -90,7 +90,9 @@ export function setActiveFolder(idActiveFolder) {
 
 export function getDraftFolder() {
   return async (dispatch) => {
-    const draftFolder = await axios.get(`${BACKEND_URL}/folders/getDraftFolder`);
+    const draftFolder = await axios.get(
+      `${BACKEND_URL}/folders/getDraftFolder`
+    );
     dispatch({
       type: actions.GET_DRAFT_FOLDER,
       payload: draftFolder.data,
@@ -108,7 +110,7 @@ export function deleteActiveFolder() {
 
 export function removeCandidateFromFolder(idFolder, idCandidate) {
   return async (dispatch) => {
-    const removedCandidate = await axios.delete(
+    await axios.delete(
       `${BACKEND_URL}/candidates/${idFolder}/removeCandidate/${idCandidate}`
     );
     dispatch({
@@ -117,12 +119,3 @@ export function removeCandidateFromFolder(idFolder, idCandidate) {
     });
   };
 }
-
-// export function pushCandidateToActiveFolder(idFolder, idCandidate) {
-//   return async (dispatch) => {
-//     dispatch({
-//       type: actions.REMOVE_CANDIDATE_FROM_FOLDER,
-//       payload: { idFolder: idFolder, idCandidate: idCandidate },
-//     });
-//   };
-// }

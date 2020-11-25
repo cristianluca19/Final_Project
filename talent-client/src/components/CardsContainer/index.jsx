@@ -33,15 +33,17 @@ function CardsContainer(props) {
     (store) => store.CandidateReducer.pagedCandidates
   );
 
-  const recruiterData = useSelector((store) => store.RecruitersReducer.recruiter);
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
 
   const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
 
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
   let folder = useSelector((store) => store.FolderReducer.activeFolder);
-  if(!folder) {
-    folder = draftFolder
+  if (!folder) {
+    folder = draftFolder;
   }
 
   // const recruiterData = useSelector(
@@ -53,7 +55,6 @@ function CardsContainer(props) {
   const formatedDateFolder =
     folder && moment(folder.createdAt).format(DATE_FORMAT);
 
-  const cardsMaxLimit = 30;
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify,
+          setNotify
         );
       } else {
         RemoveCandidateFromFolder(
@@ -84,7 +85,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify,
+          setNotify
         );
       }
     } else {
@@ -113,13 +114,13 @@ function CardsContainer(props) {
       <div>
         <ActiveFolder />
       </div>
-        <ThemeProvider theme={henryTheme}>
-          <Typography color="primary">
-            {activeFolder
-              ? `Carpeta N°: ${folder.id} - ${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
-              : `Carpeta N°: ${draftFolder && draftFolder.id} - Draft`}
-          </Typography>
-        </ThemeProvider>
+      <ThemeProvider theme={henryTheme}>
+        <Typography color="primary">
+          {activeFolder
+            ? `Carpeta N°: ${folder.id} - ${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
+            : `Carpeta N°: ${draftFolder && draftFolder.id} - Draft`}
+        </Typography>
+      </ThemeProvider>
       <Grid
         className={classes.paddingCandidates}
         container

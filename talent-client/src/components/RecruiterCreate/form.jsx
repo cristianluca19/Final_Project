@@ -9,17 +9,16 @@ import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
 
 export function RecruiterForm({ handleClose }) {
-
   const recruiterData = useSelector(
     (store) => store.RecruitersReducer.recruiter
   );
 
   const initialValues = {
-  contactName: recruiterData ? recruiterData.contactName : '',
-  email: recruiterData ? recruiterData.email : '',
-  company: recruiterData ? recruiterData.company : '',
-  siteUrl: recruiterData ? recruiterData.siteUrl : '',
-};
+    contactName: recruiterData ? recruiterData.contactName : '',
+    email: recruiterData ? recruiterData.email : '',
+    company: recruiterData ? recruiterData.company : '',
+    siteUrl: recruiterData ? recruiterData.siteUrl : '',
+  };
 
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
@@ -45,7 +44,6 @@ export function RecruiterForm({ handleClose }) {
     handleClose();
     return;
   };
-
 
   return (
     <form className={classes.root} onSubmit={handleSubmit} autoComplete="off">
@@ -122,7 +120,14 @@ export function RecruiterForm({ handleClose }) {
 
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook, setHook, setErrors, notify, setNotify, handleClose) => {
+const createRecruiter = (
+  hook,
+  setHook,
+  setErrors,
+  notify,
+  setNotify,
+  handleClose
+) => {
   const initialValues = {
     contactName: '',
     email: '',

@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getModalStyle, useStyles } from './styles';
+import { useStyles } from './styles';
 import moment from 'moment';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
-import { getFoldersByCompany, getRecruiterById } from '../../redux/recruitersReducer/Action';
-import { setActiveFolder, deleteActiveFolder } from '../../redux/foldersReducer/Action';
+import {
+  getFoldersByCompany,
+  getRecruiterById,
+} from '../../redux/recruitersReducer/Action';
+import {
+  setActiveFolder,
+  deleteActiveFolder,
+} from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
 
@@ -40,7 +46,7 @@ export default function ActiveFolder() {
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
   const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
-  
+
   const [company, setCompany] = useState([]);
   const [folder, setFolder] = useState([]);
   const [foldersFromRecruiter, setFoldersFromRecruiter] = useState([]);
@@ -65,7 +71,7 @@ export default function ActiveFolder() {
   const handleOpenFolder = () => {
     if (foldersFromRecruiter === 'no valor') {
       setFoldersFromRecruiter([]);
-      dispatch(getRecruiterById())
+      dispatch(getRecruiterById());
     } else {
       setFoldersFromRecruiter(foldersFromRecruiterData);
     }
@@ -84,13 +90,13 @@ export default function ActiveFolder() {
 
   const handleChangeFolder = (event) => {
     setFolder(event.target.value);
-    dispatch(getRecruiterById(event.target.value.recruiterId))
+    dispatch(getRecruiterById(event.target.value.recruiterId));
     dispatch(setActiveFolder(event.target.value));
   };
 
   const RedirectToFolderPreview = () => {
-    if(activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
-    else return setState(`/preview/${draftFolder.id}`)
+    if (activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
+    else return setState(`/preview/${draftFolder.id}`);
   };
 
   if (state) {
