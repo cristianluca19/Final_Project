@@ -70,7 +70,7 @@ export class CandidatesController {
       include: {
         model: db.Cohort,
         attributes: ['name'],
-      }
+      },
     });
     res.status(200).json(candidate);
   }
