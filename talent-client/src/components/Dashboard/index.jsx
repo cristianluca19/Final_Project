@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from './menu';
 import Candidates from './candidates';
-import Skills from './skills'
+import Skills from './skills';
 import { useStyle } from './Styles/index.css.js';
 import { Grid } from '@material-ui/core';
 
