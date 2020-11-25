@@ -21,7 +21,7 @@ function mailCreator(to, uuid) {
     <body>
         <div>
             <h3>Folder with candidates</h3>
-            <p>click here: ${LINK}${uuid}</p>
+            <a href=${LINK}${uuid}> Open folder here </a>
             <p>thanks for doing business with us</p>
         </div>
     </body>

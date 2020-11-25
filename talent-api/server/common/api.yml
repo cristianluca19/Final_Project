@@ -632,7 +632,7 @@ paths:
       responses:
         204:
           description: An empty response with status 204 is sent if deletion succeded.
-  /folders/sendEmail:
+  /folders/send:
     post:
       tags:
       - Folders
