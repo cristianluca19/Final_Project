@@ -10,4 +10,4 @@ export default express
   .put('/:folderId', folderController.updateById)
   .put('/status/:folderId', folderController.updateStatusById)
   .delete('/:folderId', folderController.deleteById)
-  .post('/dossier/email', folderController.postEmail);
+  .post('/sendEmail', folderController.postEmail);

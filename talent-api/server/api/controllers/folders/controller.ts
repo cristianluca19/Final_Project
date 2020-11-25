@@ -127,12 +127,16 @@ export class foldersController {
     res.sendStatus(204);
   }
   async postEmail(req: Request, res: Response): Promise<void> {
-    const { email, link } = await req.body;
-    console.log(mailCreator);
-    if (req.body == {} || !req.body.email || !req.body.link) {
-      res.sendStatus(204);
+    const { email, uuid } = await req.body;
+    // await console.log('Body');
+    // await console.log(req.body);
+    // await console.log('mailCreator');
+    // await console.log(mailCreator);
+    if (!email && !uuid) {
+      res.sendStatus(404);
     } else {
-      mailCreator(email, link);
+      console.log('mando mail');
+      mailCreator(email, uuid);
       res.sendStatus(200);
     }
   }
