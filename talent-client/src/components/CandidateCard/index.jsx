@@ -32,12 +32,6 @@ function CandidateCard(props) {
     handleCandidate,
     location,
   } = props;
-<<<<<<< HEAD
-  const tech = candidate.skills.filter((skill) => skill.type === 'tech');
-  let soft = candidate.skills.filter((skill) =>
-    skill.type === 'soft' ? skill.type : null
-  );
-=======
   const tech =
     candidate.skills &&
     candidate.skills.filter((skill) => skill.type === 'tech');
@@ -46,7 +40,6 @@ function CandidateCard(props) {
     candidate.skills.filter((skill) =>
       skill.type === 'soft' ? skill.type : null
     );
->>>>>>> main
 
   const labelsMaxLimit = 10;
 
@@ -191,21 +184,13 @@ function CandidateCard(props) {
                     )
                   : null}
               </Grid>
-<<<<<<< HEAD
-              {soft.length ? (
-=======
               {soft && soft.length ? (
->>>>>>> main
                 <Divider
                   style={{ marginTop: '8px', marginBottom: '8px' }}
                   variant="fullWidth"
                 />
               ) : null}
-<<<<<<< HEAD
-              {soft.length ? (
-=======
               {soft && soft.length ? (
->>>>>>> main
                 <Grid
                   container
                   justify="space-evenly"
@@ -213,24 +198,6 @@ function CandidateCard(props) {
                   spacing={1}
                   className={classes.skillsContainer}
                 >
-<<<<<<< HEAD
-                  {soft.map(
-                    (objSkill, index) =>
-                      index < labelsMaxLimit && (
-                        <Chip
-                          key={index}
-                          className={classes.softSkills}
-                          size="small"
-                          label={
-                            objSkill.name.length > 3
-                              ? objSkill.name.charAt(0).toUpperCase() +
-                                objSkill.name.slice(1)
-                              : objSkill.name.toUpperCase()
-                          }
-                        />
-                      )
-                  )}
-=======
                   {soft &&
                     soft.map(
                       (objSkill, index) =>
@@ -248,7 +215,6 @@ function CandidateCard(props) {
                           />
                         )
                     )}
->>>>>>> main
                 </Grid>
               ) : null}
               <Divider
