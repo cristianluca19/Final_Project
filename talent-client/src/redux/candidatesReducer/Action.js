@@ -31,9 +31,7 @@ export function getCandidatesPage(currentPage, limit) {
 
 export function deleteCandidate(id) {
   return async (dispatch) => {
-    const deleteCandidate = await axios.delete(
-      `${BACKEND_URL}/candidates/${id}/delete`
-    );
+    await axios.delete(`${BACKEND_URL}/candidates/${id}/delete`);
     dispatch({
       type: actions.DELETE_CANDIDATE,
       payload: id,
@@ -53,7 +51,7 @@ export function getCandidateById(id) {
 
 export function updateCandidate(candidateData) {
   return async (dispatch) => {
-    const candidate = await axios.put(
+    await axios.put(
       `${BACKEND_URL}/candidates/${candidateData.id}/update`,
       candidateData
     );
@@ -74,3 +72,26 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
     payload: bulkedCandidates.data,
   });
 };
+
+export function getFilterCandidates(filter) {
+  const query_params = Object.keys(filter)
+    .filter((key) => filter[key].length)
+    .map((key) => key + '=' + filter[key])
+    .join('&');
+  return async (dispatch) => {
+    const candidates = await axios.get(
+      `${BACKEND_URL}/candidates/filter${
+        query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
+      }`
+    );
+    const idCandidates = !candidates.data.candidates
+      ? []
+      : candidates.data.candidates.map(
+          (dataIdCandidates) => dataIdCandidates.id
+        );
+    dispatch({
+      type: actions.GET_CANDIDATE_FILTER,
+      payload: idCandidates,
+    });
+  };
+}
