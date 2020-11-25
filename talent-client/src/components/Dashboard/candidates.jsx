@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import InputBase from '@material-ui/core/InputBase';
 import {
   deleteCandidate,
   getCandidateById,
@@ -37,11 +38,13 @@ import {
 const DEFAULT_ROWS_PER_PAGE = 30;
 
 function Candidates() {
-  const candidates = useSelector(
+  let allCandidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
   const classes = useStyles();
+  const [cohorts, setCohorts] = React.useState([]);
+  const [candidates, setCandidates] = React.useState([]);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
@@ -54,7 +57,7 @@ function Candidates() {
     country: 'Sarasota, TX, USA',
     email: 'Anissa_Wisozk65@yahoo.com',
     linkedin: 'https://hazle.com',
-    cohort: '5',
+    cohortId: '5',
     status: 'unemployed',
     visibility: 'listed',
     profilePicture:
@@ -63,12 +66,22 @@ function Candidates() {
     I'm a software engineer who believes that out-of-the-box thinking is what
      separates a great project from a good one. I do most of mine in Javascript, 
      React, Node.js and Python.`,
+    comment: 'Buenas habilidades de liderazgo y trabajo en equipo...',
     github: 'https://github.com/henry-labs/talent',
+    cohort: {
+      name: 'WebFT-01',
+    },
   });
 
   useEffect(() => {
     Object.keys(candidate).length !== 0 && setCandidateData(candidate);
-  }, [candidates, candidate]);
+    setCandidates(allCandidates);
+    allCandidates.forEach(item => {
+      if (!(cohorts.includes(item.cohort))) {
+        setCohorts([...cohorts, item.cohort])
+      };
+    })
+  }, [allCandidates, candidate, cohorts]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 10 },
@@ -76,7 +89,7 @@ function Candidates() {
     { id: 'lastName', label: 'LAST NAME', minWidth: 60 },
     { id: 'country', label: 'COUNTRY', minWidth: 180 },
     { id: 'email', label: 'EMAIL', minWidth: 180 },
-    { id: 'cohort', label: 'COHORTE', minWidth: 30, align: 'center' },
+    { id: 'cohortName', label: 'COHORTE', minWidth: 30, align: 'center' },
     { id: 'visibility', label: 'VISIBILITY', minWidth: 90 },
     { id: 'status', label: 'STATUS', minWidth: 90 },
     { id: 'iconUpdateDelete', label: '', minWidth: 60 },
@@ -93,9 +106,11 @@ function Candidates() {
           lastName: candidate.lastName,
           country: candidate.country,
           email: candidate.email,
-          cohort: candidate.cohort,
+          cohortId: candidate.cohortId,
+          cohortName: candidate.cohort.name,
           visibility: candidate.visibility,
           status: candidate.status,
+          score: candidate.score,
           iconUpdateDelete: '',
           key: candidate.id,
         });
@@ -149,6 +164,16 @@ function Candidates() {
     e.preventDefault();
     dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
+  };
+
+  const handleFilter = (e, property) => {
+    const filtered = allCandidates.filter(item => item[property] === e.target.value)
+    setCandidates(filtered);
+  };
+
+  const handleSearch = (e) => {
+    const filtered = allCandidates.filter(item => item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) || item.lastName.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.country.toLowerCase().includes(e.target.value.toLowerCase()));
+    setCandidates(filtered);
   };
 
   const dialogDeleteCandidate = () => (
@@ -278,9 +303,28 @@ function Candidates() {
             <TextField
               id="cohort"
               label="Cohorte"
-              value={candidateData.cohort}
+              value={
+                candidateData.cohort
+                  ? candidateData.cohort.name
+                  : candidateData.cohortId
+              }
               onChange={(e) => handleInputCandidate(e)}
             />
+            <br />
+            <InputLabel id="visibilityLabel">Score</InputLabel>
+            <Select
+              labelId="Score"
+              id="score"
+              value={candidateData.score}
+              onChange={(e) => handleSelectCandidate(e, 'score')}
+              className={classes.selectOptionsStatus}
+            >
+              <MenuItem value={'5'}>5</MenuItem>
+              <MenuItem value={'4'}>4</MenuItem>
+              <MenuItem value={'3'}>3</MenuItem>
+              <MenuItem value={'2'}>2</MenuItem>
+              <MenuItem value={'1'}>1</MenuItem>
+            </Select>
             <br />
             <br />
             <TextField
@@ -294,6 +338,16 @@ function Candidates() {
               onChange={(e) => handleInputCandidate(e)}
             />
             <br />
+            <TextField
+              id="comment"
+              label="Comentario"
+              multiline
+              rows={1}
+              value={candidateData.comment}
+              variant="outlined"
+              className={classes.miniBio}
+              onChange={(e) => handleInputCandidate(e)}
+            />
             <br />
             <Button
               variant="contained"
@@ -313,8 +367,45 @@ function Candidates() {
 
   return (
     <Paper className={classes.root}>
-      <h1>CANDIDATOS</h1>
-      <br />
+      <div className={classes.filterContainer}>
+        <h1 className={classes.text}>CANDIDATOS</h1>
+        <div className={classes.filter}>
+          <Paper component="form" className={classes.search}>
+            <InputBase
+              className={classes.input}
+              placeholder="Name, country or email..."
+              inputProps={{ 'aria-label': 'search google maps' }}
+              onChange={handleSearch}
+            />
+          </Paper>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'cohort');
+            }}
+          >
+            <option value='' disabled selected >Cohort</option>
+            {(cohorts.sort(function (a, b) { return a - b })).map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'visibility');
+            }}
+          >
+            <option value='' disabled selected>Visibility</option>
+            {['listed', 'unlisted'].map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'status');
+            }}
+          >
+            <option value='' disabled selected>Status</option>
+            {['employed', 'unemployed'].map(item => <option value={item} >{item}</option>)};
+          </select>
+
+          <button onClick={() => setCandidates(allCandidates)}>View all candidates</button>
+        </div>
+      </div>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

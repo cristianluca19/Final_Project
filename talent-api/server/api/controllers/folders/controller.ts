@@ -41,11 +41,17 @@ export class foldersController {
             'github',
           ],
           through: { attributes: [] }, // This avoids eager loading of intermediate table useless createdAt/updatedAt data. Shows a cleaner API response.
-          include: {
-            model: db.Skill,
-            attributes: ['id', 'name', 'type'],
-            through: { attributes: [] },
-          },
+          include: [
+            {
+              model: db.Skill,
+              attributes: ['id', 'name', 'type'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Cohort,
+              attributes: ['name'],
+            },
+          ],
         },
       ],
     });
@@ -79,11 +85,17 @@ export class foldersController {
               'github',
             ],
             through: { attributes: [] },
-            include: {
-              model: db.Skill,
-              attributes: ['id', 'name', 'type'],
-              through: { attributes: [] },
-            },
+            include: [
+              {
+                model: db.Skill,
+                attributes: ['id', 'name', 'type'],
+                through: { attributes: [] },
+              },
+              {
+                model: db.Cohort,
+                attributes: ['name'],
+              },
+            ],
           },
         ],
       });

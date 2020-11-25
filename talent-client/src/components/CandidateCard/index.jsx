@@ -40,6 +40,7 @@ function CandidateCard(props) {
     candidate.skills.filter((skill) =>
       skill.type === 'soft' ? skill.type : null
     );
+  console.log(candidate);
 
   const labelsMaxLimit = 10;
 
@@ -55,7 +56,7 @@ function CandidateCard(props) {
           {/*Profile Picture*/}
           <CardMedia
             className={classes.media}
-            image={imgtest} // add "candidate.profilePicture" when seed works again
+            image={candidate.profilePicture || imgtest} // add "candidate.profilePicture" when seed works again
             title="Henry Candidate"
           />
         </Grid>
@@ -150,7 +151,7 @@ function CandidateCard(props) {
               component="p"
               style={{ paddingLeft: 15 }}
             >
-              {`${candidate.country}  -  WebFT0${candidate.cohort}`}
+              {`${candidate.country}  -  ${candidate.cohort.name}`}
             </Typography>
             <Divider variant="middle" style={{ marginBottom: '8px' }} />
             <ThemeProvider theme={theme}>
@@ -250,7 +251,7 @@ function CandidateCard(props) {
                     <Chip
                       className={classes.scoring}
                       size="small"
-                      label={candidate.score || 'N/A'}
+                      label={candidate.score || '-'}
                       icon={<GradeIcon />}
                     />
                   </Badge>
