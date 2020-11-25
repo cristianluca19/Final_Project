@@ -117,6 +117,35 @@ export class foldersController {
   async getDraftFolder(req: Request, res: Response): Promise<void> {
     const draftFolder = await db.Folder.findOrCreate({
       where: { status: 'draft' },
+      include: {
+        model: db.Candidate,
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'country',
+          'cohortId',
+          'profilePicture',
+          'visibility',
+          'status',
+          'miniBio',
+          'linkedin',
+          'github',
+        ],
+        through: { attributes: [] },
+        include: [
+          {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.Cohort,
+            attributes: ['name'],
+          },
+        ],
+      },
     });
     res.status(200).json(draftFolder[0]);
     return;

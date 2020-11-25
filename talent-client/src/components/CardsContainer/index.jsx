@@ -13,8 +13,6 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
-import { getAllCandidates } from '../../redux/candidatesReducer/Action';
-import { setActiveFolder } from '../../redux/foldersReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -35,16 +33,20 @@ function CardsContainer(props) {
     (store) => store.CandidateReducer.pagedCandidates
   );
 
+  const recruiterData = useSelector((store) => store.RecruitersReducer.recruiter);
+
   const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
 
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
   let folder = useSelector((store) => store.FolderReducer.activeFolder);
-  if (!folder) {
-    folder = draftFolder;
+  if(!folder) {
+    folder = draftFolder
   }
 
-  const recruiterData = useSelector(
-    (store) => store.FolderReducer.dossier.recruiter
-  );
+  // const recruiterData = useSelector(
+  //   (store) => store.FolderReducer.dossier.recruiter
+  // );
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -82,7 +84,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify
+          setNotify,
         );
       }
     } else {
@@ -111,21 +113,13 @@ function CardsContainer(props) {
       <div>
         <ActiveFolder />
       </div>
-      {folder ? (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
-            {`Carpeta N°: ${folder.id} - ${
-              recruiterData && recruiterData.company
-                ? `${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
-                : folder.status
-            }`}
+            {activeFolder
+              ? `Carpeta N°: ${folder.id} - ${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
+              : `Carpeta N°: ${draftFolder && draftFolder.id} - Draft`}
           </Typography>
         </ThemeProvider>
-      ) : (
-        <ThemeProvider theme={henryTheme}>
-          <Typography color="primary">{'Carpeta: Draft'}</Typography>
-        </ThemeProvider>
-      )}
       <Grid
         className={classes.paddingCandidates}
         container
@@ -173,19 +167,19 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
-const createDraftFolder = async () => {
-  try {
-    const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
-    AlertCandidate.fire({
-      icon: 'info',
-      title: 'Nueva carpeta creada...',
-    });
-    return newFolder.data.folder
-  } catch (error) {
-    console.log(error.message)
-    throw error
-  }
-}
+// const createDraftFolder = async () => {
+//   try {
+//     const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+//     AlertCandidate.fire({
+//       icon: 'info',
+//       title: 'Nueva carpeta creada...',
+//     });
+//     return newFolder.data.folder
+//   } catch (error) {
+//     console.log(error.message)
+//     throw error
+//   }
+// }
 
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios

@@ -9,7 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getFoldersByCompany, getRecruiterById } from '../../redux/recruitersReducer/Action';
-import { setActiveFolder, deleteActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
+import { setActiveFolder, deleteActiveFolder } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
 
@@ -39,9 +39,7 @@ export default function ActiveFolder() {
 
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
-  const recruiterData = useSelector(
-    (store) => store.RecruitersReducer.recruiter
-  );
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
   
   const [company, setCompany] = useState([]);
   const [folder, setFolder] = useState([]);
@@ -88,11 +86,11 @@ export default function ActiveFolder() {
     setFolder(event.target.value);
     dispatch(getRecruiterById(event.target.value.recruiterId))
     dispatch(setActiveFolder(event.target.value));
-    dispatch(getDossierByUuid(event.target.value.uuid)); //sera por esto?
   };
 
   const RedirectToFolderPreview = () => {
     if(activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
+    else return setState(`/preview/${draftFolder.id}`)
   };
 
   if (state) {
@@ -130,7 +128,6 @@ export default function ActiveFolder() {
           ))}
         </Select>
       </FormControl>
-      {/*FOLDER INPUT*/}
       <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Folders</InputLabel>
         <Select

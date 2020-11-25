@@ -78,9 +78,12 @@ export function getDossierByUuid(uuid) {
 
 export function setActiveFolder(idActiveFolder) {
   return async (dispatch) => {
+    const folder = await axios.get(
+      `${BACKEND_URL}/folders/${idActiveFolder.id}`
+    );
     dispatch({
       type: actions.SET_ACTIVE_FOLDER,
-      payload: idActiveFolder,
+      payload: folder.data,
     });
   };
 }

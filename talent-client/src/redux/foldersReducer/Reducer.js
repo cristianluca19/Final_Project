@@ -78,6 +78,7 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         newFolder: action.payload,
+        activeFolder: action.payload,
       };
     default:
       return state;

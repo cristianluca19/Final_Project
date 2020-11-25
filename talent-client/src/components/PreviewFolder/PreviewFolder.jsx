@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useStyles } from './styles.js';
 import { Container, Grid, Typography, Link } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
+import { getFolderById, getDraftFolder } from '../../redux/foldersReducer/Action';
 
 function PreviewFolderActive() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const classes = useStyles();
   const cardsMaxLimit = 10;
 
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
-    console.log("soyactivefolder", activeFolder)
+
   const recruiterData = useSelector(
     (store) => store.RecruitersReducer.recruiter
   );
+
+  useEffect(() => {
+    if (activeFolder) {
+      return dispatch(getFolderById(activeFolder.id));
+    }
+    dispatch(getDraftFolder());
+  }, []);
 
   return (
     <Container className={classes.container} maxWidth="xl">
@@ -25,7 +36,7 @@ function PreviewFolderActive() {
           Candidatos Seleccionados{' '}
           {recruiterData && Object.keys(recruiterData).length
             ? ` para: ${recruiterData.contactName} - ${recruiterData.company}`
-            : `:`}
+            : `: Draft Folder`}
         </Typography>
         <Grid
           className={classes.paddingCandidates}
@@ -34,16 +45,23 @@ function PreviewFolderActive() {
           justify="center"
           alignItems="center"
         >
-          {activeFolder &&
-            activeFolder.candidates.map(
-              (candidate, index) =>
-                index < cardsMaxLimit && (
-                  // candidate.visibility == 'listed' &&
-                  <div key={index} className={classes.CandidateCard}>
-                    <CandidateCard id={id} candidate={candidate} />
-                  </div>
-                )
-            )}
+          {activeFolder
+            ? activeFolder.candidates.map(
+                (candidate, index) =>
+                  index < cardsMaxLimit && (
+                    <div key={index} className={classes.CandidateCard}>
+                      <CandidateCard id={id} candidate={candidate} />
+                    </div>
+                  )
+              )
+            : draftFolder.candidates.map(
+                (candidate, index) =>
+                  index < cardsMaxLimit && (
+                    <div key={index} className={classes.CandidateCard}>
+                      <CandidateCard id={id} candidate={candidate} />
+                    </div>
+                  )
+              )}
         </Grid>
       </ThemeProvider>
     </Container>
