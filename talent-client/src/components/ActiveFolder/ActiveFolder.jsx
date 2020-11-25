@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
-import { getFoldersByCompany } from '../../redux/recruitersReducer/Actions';
+import { getFoldersByCompany } from '../../redux/recruitersReducer/Action';
 import { setActiveFolder } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 

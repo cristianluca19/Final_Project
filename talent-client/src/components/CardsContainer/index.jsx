@@ -18,9 +18,8 @@ function CardsContainer(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // const [maxPages, setMaxPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
-  const [bool, setBool] = useState(false);
+  const [newPageSelected, setNewPageSelected] = useState(false);
 
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
@@ -38,11 +37,10 @@ function CardsContainer(props) {
 
   useEffect(() => {
     dispatch(getCandidatesPage(currentPage));
-  }, [bool]);
+  }, [newPageSelected]);
 
   const handleCandidate = async (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
-
     console.log('folder :', folder)
     if (!folder) {
       folder = await createDraftFolder();
@@ -128,8 +126,8 @@ function CardsContainer(props) {
             maxPages={pageData.totalPages}
             current={currentPage}
             setCurrentPage={setCurrentPage}
-            setBool={setBool}
-            bool={bool}
+            setPager={setNewPageSelected}
+            newPage={newPageSelected}
           />
         </Grid>
       )}

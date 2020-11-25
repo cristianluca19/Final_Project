@@ -26,7 +26,7 @@ function fill() {
       last_name: faker.name.lastName(),
       country: faker.address.country(),
       email: faker.internet.email(),
-      cohort: `${Math.floor(Math.random() * 7) + 1}`,
+      cohort_id: candidate,
       mini_bio: bio,
       profile_picture: faker.image.people(),
       linkedin: faker.internet.url(),
@@ -43,11 +43,11 @@ function fill() {
 }
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     await queryInterface.bulkInsert('candidates', fill(), {});
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.bulkDelete('candidates', null, {});
   },
 };

@@ -13,10 +13,10 @@ function Paginator(props) {
 
   const handlePageChange = (event, value) => {
     props.setCurrentPage(value);
-    props.setBool(!props.bool);
+    props.setPager(!props.newPage);
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: 'smooth',
     });
   };
 

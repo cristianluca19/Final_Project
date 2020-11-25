@@ -3,14 +3,13 @@ const faker = require('faker');
 const uuid = require('uuidv4');
 function fill() {
   const folders = [];
-  const status = ['created', 'sent'];
+  const statuses = ['draft', 'sent', 'created'];
   let id = 1;
   for (let folder = 14; folder >= 1; folder--) {
-    const random = faker.random.number(1);
     folders.push({
       uuid: uuid.uuid(),
       opened: faker.random.boolean(),
-      status: status[random],
+      status: faker.random.arrayElement(statuses),
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
       user_id: folder,
@@ -31,8 +30,8 @@ function relationCandidatesFolders() {
       let candidate = {
         created_at: faker.date.past(),
         updated_at: faker.date.recent(),
-        candidate_id: j + count,
         folder_id: i,
+        candidate_id: j + count,
       };
       folder_candidates.push(candidate);
     }
