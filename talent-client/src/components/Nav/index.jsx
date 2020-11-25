@@ -1,7 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
-import { Grid, Container, makeStyles, IconButton, Box } from '@material-ui/core';
+import {
+  Grid,
+  Container,
+  makeStyles,
+  IconButton,
+  Box,
+} from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
@@ -42,7 +48,7 @@ function Nav({ location }) {
       return window.alert(error.message);
     }
   };
-  console.log(location)
+  console.log(location);
 
   return (
     <nav>
@@ -89,7 +95,8 @@ function Nav({ location }) {
                   </Link>
                 </IconButton>
               </Grid>
-            </Grid>)}
+            </Grid>
+          )}
         </Grid>
       </Container>
     </nav>

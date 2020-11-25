@@ -58,17 +58,14 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 };
 
 export function getFilterCandidates(filter) {
-  const queryFilter = {};
+  const params = new URLSearchParams();
   for (const key in filter) {
-    if (filter[key].length) queryFilter[key] = filter[key];
+    if (filter[key].length) params.append(key, filter[key]);
   }
-  const params = new URLSearchParams(queryFilter);
   return async (dispatch) => {
-    const candidates = await axios.get(
-      `${BACKEND_URL}/candidates/filter?${params
-        .toString()
-        .replace(/\+/g, '%20')}`
-    );
+    const candidates = await axios.get(`${BACKEND_URL}/candidates/filter?`, {
+      params,
+    });
     const idCandidates = !candidates.data.length
       ? []
       : candidates.data.map((dataIdCandidates) => dataIdCandidates.id);

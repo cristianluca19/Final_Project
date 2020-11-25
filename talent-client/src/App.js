@@ -36,7 +36,9 @@ function App() {
         />
         <Route
           path="/"
-          render={({ location }) => <Nav location={location.pathname.slice(0,9)} />}
+          render={({ location }) => (
+            <Nav location={location.pathname.slice(0, 9)} />
+          )}
         />
       </Switch>
       <Route exact path="/" render={() => <ContentHome />} />

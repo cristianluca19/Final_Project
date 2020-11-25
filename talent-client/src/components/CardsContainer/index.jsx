@@ -84,8 +84,9 @@ function CardsContainer(props) {
         justify="center"
         alignItems="center"
       >
-        {candidates &&
-          candidates.map(
+        {cardsCandidates &&
+          candidates &&
+          cardsCandidates.map(
             (candidate, index) =>
               index < cardsMaxLimit &&
               candidate.visibility === 'listed' && (
