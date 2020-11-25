@@ -30,16 +30,13 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
-<<<<<<< HEAD
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
   const cardsCandidates = !filterDataCandidates.length
     ? candidates
     : filterDataCandidates;
-=======
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
->>>>>>> main
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   useEffect(() => {
