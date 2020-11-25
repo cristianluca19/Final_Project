@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import db from '../../../models';
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
@@ -99,7 +99,7 @@ export class CandidatesController {
     res.status(200).json(candidate);
   }
   async deleteCandidate(req: Request, res: Response): Promise<void> {
-    const candidate = await db.Candidate.destroy({
+    await db.Candidate.destroy({
       where: { id: req.params.candidateId },
     });
     res.status(204).end();
