@@ -118,7 +118,7 @@ export class foldersController {
     const draftFolder = await db.Folder.findOrCreate({
       where: { status: 'draft' },
     });
-    res.status(200).json(draftFolder);
+    res.status(200).json(draftFolder[0]);
     return;
   }
 

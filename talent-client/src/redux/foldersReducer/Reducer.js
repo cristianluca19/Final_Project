@@ -7,6 +7,8 @@ const initialState = {
   activeFolder: null,
   draftFolder: null,
   folderById: [],
+  // candidatesInActiveFolder: [],
+  // candidatesInDraftFolder: [],
 };
 
 export default function Reducer(state = initialState, action) {

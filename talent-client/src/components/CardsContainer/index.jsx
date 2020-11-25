@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
+import { getAllCandidates } from '../../redux/candidatesReducer/Action';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -32,7 +33,13 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
-  const folder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
+  let folder = useSelector((store) => store.FolderReducer.activeFolder);
+  if (!folder) {
+    folder = draftFolder;
+  }
 
   const recruiterData = useSelector(
     (store) => store.FolderReducer.dossier.recruiter
@@ -40,14 +47,16 @@ function CardsContainer(props) {
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
-  const formatedDateFolder = folder && moment(folder.createdAt).format(DATE_FORMAT);
-  
+  const formatedDateFolder =
+    folder && moment(folder.createdAt).format(DATE_FORMAT);
+
   const cardsMaxLimit = 30;
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
+    // dispatch(getAllCandidates());
     dispatch(getCandidatesPage(currentPage));
-  }, [newPageSelected]);
+  }, [newPageSelected, folder, currentPage, dispatch]); // ocnsiderar quitar currentPage y dispatch
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
@@ -97,23 +106,24 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      <div><ActiveFolder /></div>
+      <div>
+        <ActiveFolder />
+      </div>
       {folder ? (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
             {`Carpeta N°: ${folder.id} - ${
-              recruiterData && recruiterData.company ? `${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}` : ' '
+              recruiterData && recruiterData.company
+                ? `${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
+                : folder.status
             }`}
           </Typography>
         </ThemeProvider>
-      )
-      :
-      <ThemeProvider theme={henryTheme}>
-          <Typography color="primary">
-            {'Carpeta: Draft'}
-          </Typography>
+      ) : (
+        <ThemeProvider theme={henryTheme}>
+          <Typography color="primary">{'Carpeta: Draft'}</Typography>
         </ThemeProvider>
-      }
+      )}
       <Grid
         className={classes.paddingCandidates}
         container
@@ -165,7 +175,7 @@ const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
     .post(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+        folder && folder.id
       }/addCandidate/${candidate}`
     )
     .then((response) => {
@@ -196,7 +206,7 @@ const RemoveCandidateFromFolder = (
   axios
     .delete(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+        folder && folder.id
       }/removeCandidate/${candidate}`
     )
     .then((response) => {
