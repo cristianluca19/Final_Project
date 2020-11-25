@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Pagination } from '@material-ui/lab';
@@ -11,6 +11,15 @@ const defaultPagesToShow = 10;
 function Paginator(props) {
   const classes = useStyles();
 
+  const handlePageChange = (event, value) => {
+    props.setCurrentPage(value);
+    props.setPager(!props.newPage);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <Grid
       className={classes.root}
@@ -22,9 +31,13 @@ function Paginator(props) {
       <ThemeProvider theme={henryTheme}>
         <Pagination
           color="primary"
-          count={props.pages}
+          count={props.maxPages} // total pages
+          page={props.current} // current page
           variant="outlined"
           shape="rounded"
+          onChange={(e, value) => {
+            handlePageChange(e, value);
+          }}
         />
       </ThemeProvider>
     </Grid>

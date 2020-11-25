@@ -26,7 +26,7 @@ const skills = {
 function mixer(skills) {
   const skillsRandom = [];
   let j = 0;
-  for (let i = 0; i <= 21; i++) {
+  for (let i = 0; i <= 50; i++) {
     if (i <= 15) {
       skillsRandom.push({
         name: skills.tech[i],
@@ -61,7 +61,7 @@ function mixer(skills) {
 function relationCandidateSkills() {
   let candidate_skills = [];
   let count = 0;
-  for (let i = 1; i <= 21; i++) {
+  for (let i = 1; i <= 50; i++) {
     if (i % 5 === 0) {
       count = i;
     }
