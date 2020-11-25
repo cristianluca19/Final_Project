@@ -17,6 +17,8 @@ tags:
   description: list of folder endpoints
 - name: Users
   description: list of user endpoints
+- name: Cohorts
+  description: list of cohort endpoints  
 paths:
   /candidates:
     get:
@@ -666,5 +668,34 @@ paths:
             application/json:
               schema:
                   type: object
-
- 
+  /cohorts:
+    get:
+      tags:
+      - Cohorts
+      summary: Fetch all cohorts
+      description: returns a list of all cohorts and their details
+      responses:
+        200:
+          description: A JSON array of cohorts details
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /cohorts/{cohortsId}/delete:       
+    delete:
+      tags:
+      - Cohort
+      summary: Removes cohort by id.
+      description: It removes a cohort by his id.
+      parameters:
+        - in: path
+          name: cohortsId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with all cohorts less the one that was deleted

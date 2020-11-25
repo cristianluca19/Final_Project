@@ -102,7 +102,7 @@ export class CandidatesController {
     await db.Candidate.destroy({
       where: { id: req.params.candidateId },
     });
-    res.status(204).end();
+    res.status(200).end();
   }
   async byFilter(req: Request, res: Response): Promise<void> {
     const candidates = await db.Candidate.findAll({
