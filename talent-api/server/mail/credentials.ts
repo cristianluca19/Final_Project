@@ -1,6 +1,6 @@
 const Credentials = {
-  user: 'ariellevin13@gmail.com',
-  pass: 'BenjaminPepe2020',
+  user: 'fede4872@gmail.com',
+  pass: 'Pupi42477944',
 };
 
 module.exports = Credentials;
