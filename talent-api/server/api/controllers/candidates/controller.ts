@@ -113,6 +113,9 @@ export class CandidatesController {
     res.status(200).json(candidates);
   }
   async filter(req: Request, res: Response): Promise<void> {
+    const limit = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 0;
+    const offset = page ? page * limit : 0;
     const skills = req.query.skills || '';
     const cohorts = req.query.cohortId || '';
     const location = req.query.locations || '';
@@ -125,13 +128,19 @@ export class CandidatesController {
       where: {
         cohortId: cohortArray,
         country: locationArray,
+        visibility: 'listed',
       },
       include: {
         model: db.Skill,
+        attributes: ['id', 'name', 'type'],
+        through: { attributes: [] },
         where: {
           name: skillsArray,
         },
       },
+      limit,
+      offset,
+      distinct: true,
     };
     if (!skillsArray.length) delete query.include;
     if (!cohortArray.length) delete query.where.cohortId;
@@ -140,8 +149,13 @@ export class CandidatesController {
       res.sendStatus(204);
     } else {
       try {
-        const candidatesFiltered = await db.Candidate.findAll(query);
-        res.status(200).json(candidatesFiltered);
+        const candidatesFiltered = await db.Candidate.findAndCountAll(query);
+        const totalPages = Math.ceil(candidatesFiltered.count / limit);
+        res.status(200).json({
+          candidatesInPage: candidatesFiltered.rows.length,
+          totalPages: totalPages,
+          candidates: candidatesFiltered,
+        });
       } catch (err) {
         res.sendStatus(400);
         throw err;
@@ -212,3 +226,5 @@ export class CandidatesController {
 }
 
 export default new CandidatesController();
+
+

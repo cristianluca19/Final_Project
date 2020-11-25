@@ -16,7 +16,7 @@ function Paginator(props) {
     props.setPager(!props.newPage);
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: 'smooth',
     });
   };
 
