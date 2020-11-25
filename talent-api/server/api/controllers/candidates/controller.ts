@@ -154,7 +154,8 @@ export class CandidatesController {
         res.status(200).json({
           candidatesInPage: candidatesFiltered.rows.length,
           totalPages: totalPages,
-          candidates: candidatesFiltered,
+          count: candidatesFiltered.count,
+          candidates: candidatesFiltered.rows,
         });
       } catch (err) {
         res.sendStatus(400);
@@ -226,5 +227,3 @@ export class CandidatesController {
 }
 
 export default new CandidatesController();
-
-
