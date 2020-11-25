@@ -10,20 +10,32 @@ import Dashboard from './components/Dashboard';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
 import { getAllCandidates } from './redux/candidatesReducer/Action.js';
+import FoldersCrud from './components/Folders/index';
+import Folder from './components/Folders/folder';
+import { getAllFolders } from './redux/foldersReducer/Action';
+import { getAllRecruiters } from './redux/recruitersReducer/Action';
+import { getAllUsers } from './redux/usersReducer/Action';
 import { getAllSkills } from './redux/skillsReducer/Action';
 import './App.css';
 
 function App() {
   const dispatch = useDispatch();
 
+  // ===  FETCH ALL CANDIDATES FROM DB TO SAVE THEM ON REDUX STORE === future implementation may consider paginating
+  // to lower loading times if candidate number is too high...
   useEffect(() => {
     dispatch(getAllCandidates());
+    dispatch(getAllFolders());
+    dispatch(getAllRecruiters());
+    dispatch(getAllUsers());
     dispatch(getAllSkills());
   });
 
   return (
     <div className="App">
       <Switch>
+        <Route path="/folder/:id" render={() => <Folder />} />
+        <Route path="/folders" render={() => <FoldersCrud />} />
         <Route exact path="/panel" render={() => <Dashboard />} />
         <Route
           path="/panel/candidates"

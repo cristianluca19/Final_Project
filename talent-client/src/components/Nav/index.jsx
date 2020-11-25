@@ -12,9 +12,9 @@ import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
 import Menu from './menu.jsx';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
-import { Link } from 'react-router-dom';
 
 const useStyle = makeStyles({
   logo: {

@@ -32,10 +32,21 @@ function CandidateCard(props) {
     handleCandidate,
     location,
   } = props;
+<<<<<<< HEAD
   const tech = candidate.skills.filter((skill) => skill.type === 'tech');
   let soft = candidate.skills.filter((skill) =>
     skill.type === 'soft' ? skill.type : null
   );
+=======
+  const tech =
+    candidate.skills &&
+    candidate.skills.filter((skill) => skill.type === 'tech');
+  let soft =
+    candidate.skills &&
+    candidate.skills.filter((skill) =>
+      skill.type === 'soft' ? skill.type : null
+    );
+>>>>>>> main
 
   const labelsMaxLimit = 10;
 
@@ -160,7 +171,7 @@ function CandidateCard(props) {
               >
                 {/*skills.hard && skills.hard.map*/}
                 {/* Arreglar esto cuando este listo el endpoint con skills..*/}
-                {tech.length
+                {tech && tech.length
                   ? tech.map(
                       (objSkill, index) =>
                         index < labelsMaxLimit && (
@@ -180,13 +191,21 @@ function CandidateCard(props) {
                     )
                   : null}
               </Grid>
+<<<<<<< HEAD
               {soft.length ? (
+=======
+              {soft && soft.length ? (
+>>>>>>> main
                 <Divider
                   style={{ marginTop: '8px', marginBottom: '8px' }}
                   variant="fullWidth"
                 />
               ) : null}
+<<<<<<< HEAD
               {soft.length ? (
+=======
+              {soft && soft.length ? (
+>>>>>>> main
                 <Grid
                   container
                   justify="space-evenly"
@@ -194,6 +213,7 @@ function CandidateCard(props) {
                   spacing={1}
                   className={classes.skillsContainer}
                 >
+<<<<<<< HEAD
                   {soft.map(
                     (objSkill, index) =>
                       index < labelsMaxLimit && (
@@ -210,6 +230,25 @@ function CandidateCard(props) {
                         />
                       )
                   )}
+=======
+                  {soft &&
+                    soft.map(
+                      (objSkill, index) =>
+                        index < labelsMaxLimit && (
+                          <Chip
+                            key={index}
+                            className={classes.softSkills}
+                            size="small"
+                            label={
+                              objSkill.name.length > 3
+                                ? objSkill.name.charAt(0).toUpperCase() +
+                                  objSkill.name.slice(1)
+                                : objSkill.name.toUpperCase()
+                            }
+                          />
+                        )
+                    )}
+>>>>>>> main
                 </Grid>
               ) : null}
               <Divider
