@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import {
   deleteCandidate,
@@ -51,7 +49,6 @@ function Candidates() {
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
   const [page, setPage] = React.useState(0);
-  const [search, setSearch] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
   const dispatch = useDispatch();
   const [candidateData, setCandidateData] = React.useState({
@@ -163,7 +160,7 @@ function Candidates() {
     setOpenUpdate(false);
   };
 
-  const handleFilter = (e, property, setState) => {
+  const handleFilter = (e, property) => {
     const filtered = allCandidates.filter(item => item[property] === e.target.value)
     setCandidates(filtered);
   };

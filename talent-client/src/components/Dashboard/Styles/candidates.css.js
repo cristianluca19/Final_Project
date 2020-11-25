@@ -93,8 +93,4 @@ export const useStyles = makeStyles((theme) => ({
   search: {
     padding: '5px'
   },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
 }));
