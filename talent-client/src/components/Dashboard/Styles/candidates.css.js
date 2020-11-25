@@ -79,4 +79,23 @@ export const useStyles = makeStyles((theme) => ({
     minWidth: 50,
     maxWidth: 215,
   },
+  filterContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    height: 50,
+    margin: '50px 5px 50px 0' ,
+  },
+  filter: {
+    display: 'flex',
+    width: '35vw',
+    justifyContent: 'space-around',
+    height: '40px'
+  },
+  text: {
+    alignSelf: 'center',
+    marginLeft: '20px'
+  },
+  search: {
+    padding: '5px'
+  },
 }));

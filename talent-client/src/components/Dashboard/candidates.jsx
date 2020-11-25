@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import InputBase from '@material-ui/core/InputBase';
 import {
   deleteCandidate,
   getCandidateById,
@@ -37,11 +38,13 @@ import {
 const DEFAULT_ROWS_PER_PAGE = 30;
 
 function Candidates() {
-  const candidates = useSelector(
+  let allCandidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
   const classes = useStyles();
+  const [cohorts, setCohorts] = React.useState([]);
+  const [candidates, setCandidates] = React.useState([]);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [idCandidate, setIdCandidate] = React.useState(0);
@@ -72,7 +75,13 @@ function Candidates() {
 
   useEffect(() => {
     Object.keys(candidate).length !== 0 && setCandidateData(candidate);
-  }, [candidates, candidate]);
+    setCandidates(allCandidates);
+    allCandidates.forEach(item => {
+      if (!(cohorts.includes(item.cohort))) {
+        setCohorts([...cohorts, item.cohort])
+      };
+    })
+  }, [allCandidates, candidate, cohorts]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 10 },
@@ -155,6 +164,16 @@ function Candidates() {
     e.preventDefault();
     dispatch(updateCandidate(candidateData));
     setOpenUpdate(false);
+  };
+
+  const handleFilter = (e, property) => {
+    const filtered = allCandidates.filter(item => item[property] === e.target.value)
+    setCandidates(filtered);
+  };
+
+  const handleSearch = (e) => {
+    const filtered = allCandidates.filter(item => item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) || item.lastName.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.country.toLowerCase().includes(e.target.value.toLowerCase()));
+    setCandidates(filtered);
   };
 
   const dialogDeleteCandidate = () => (
@@ -348,8 +367,45 @@ function Candidates() {
 
   return (
     <Paper className={classes.root}>
-      <h1>CANDIDATOS</h1>
-      <br />
+      <div className={classes.filterContainer}>
+        <h1 className={classes.text}>CANDIDATOS</h1>
+        <div className={classes.filter}>
+          <Paper component="form" className={classes.search}>
+            <InputBase
+              className={classes.input}
+              placeholder="Name, country or email..."
+              inputProps={{ 'aria-label': 'search google maps' }}
+              onChange={handleSearch}
+            />
+          </Paper>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'cohort');
+            }}
+          >
+            <option value='' disabled selected >Cohort</option>
+            {(cohorts.sort(function (a, b) { return a - b })).map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'visibility');
+            }}
+          >
+            <option value='' disabled selected>Visibility</option>
+            {['listed', 'unlisted'].map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'status');
+            }}
+          >
+            <option value='' disabled selected>Status</option>
+            {['employed', 'unemployed'].map(item => <option value={item} >{item}</option>)};
+          </select>
+
+          <button onClick={() => setCandidates(allCandidates)}>View all candidates</button>
+        </div>
+      </div>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
