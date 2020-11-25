@@ -60,10 +60,11 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 export function getFilterCandidates(filter) {
   const params = new URLSearchParams();
   for (const key in filter) {
-    if (filter[key].length) params.append(key, filter[key]);
+    if (filter[key].length) params.append(key, filter[key].toString());
   }
+  //TODO: It remains to be resolved that '% 20' has a sign of '+' in parameters with spaces
   return async (dispatch) => {
-    const candidates = await axios.get(`${BACKEND_URL}/candidates/filter?`, {
+    const candidates = await axios.get(`${BACKEND_URL}/candidates/filter`, {
       params,
     });
     const idCandidates = !candidates.data.length
