@@ -37,11 +37,14 @@ export default function ActiveFolder() {
 
   const allFolders = useSelector((store) => store.FolderReducer.allFolders);
 
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
   const [company, setCompany] = React.useState([]);
   const [folder, setFolder] = React.useState([]);
   const [foldersFromRecruiter, setFoldersFromRecruiter] = React.useState([]);
   const [openCompany, setOpenCompany] = React.useState(false);
   const [openFolder, setOpenFolder] = React.useState(false);
+  const [state, setState] = React.useState(null);
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -58,17 +61,17 @@ export default function ActiveFolder() {
   };
 
   const handleOpenFolder = () => {
-    if(foldersFromRecruiter === "no valor") {
-      setFoldersFromRecruiter([])  
+    if (foldersFromRecruiter === 'no valor') {
+      setFoldersFromRecruiter([]);
     } else {
-      setFoldersFromRecruiter(foldersFromRecruiterData)
+      setFoldersFromRecruiter(foldersFromRecruiterData);
     }
     setOpenFolder(true);
   };
 
   const handleChangeCompany = (event) => {
-    if(event.target.value === "") {
-      setFoldersFromRecruiter("no valor")
+    if (event.target.value === '') {
+      setFoldersFromRecruiter('no valor');
     }
     setCompany(event.target.value);
     dispatch(getFoldersByCompany(event.target.value));
@@ -80,14 +83,20 @@ export default function ActiveFolder() {
     dispatch(getDossierByUuid(event.target.value.uuid));
   };
 
-  // const RedirectToFolderPreview = () => {
-  //   <Redirect to="/previw/${folder.id}" />
-  // }
+  const RedirectToFolderPreview = () => {
+    if(activeFolder !== null) return setState(`/dossier/${activeFolder.uuid}`);
+  };
+
+  if (state) {
+    return <Redirect to={state} />;
+  }
 
   return (
     <div>
-      {/* onClick={RedirectToFolderPreview} */}
-      <Button className={classes.folderPreview}> 
+      <Button
+        className={classes.folderPreview}
+        onClick={RedirectToFolderPreview}
+      >
         Folder Preview
       </Button>
       <FormControl className={classes.formControl}>
@@ -101,7 +110,7 @@ export default function ActiveFolder() {
           value={company || ''}
           onChange={handleChangeCompany}
           MenuProps={MenuProps}
-          style={{color: 'white'}}
+          style={{ color: 'white' }}
         >
           <MenuItem value="">
             <em>None</em>
@@ -124,24 +133,27 @@ export default function ActiveFolder() {
           value={folder || ''}
           onChange={handleChangeFolder}
           MenuProps={MenuProps}
-          style={{color: 'white'}}
+          style={{ color: 'white' }}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {foldersFromRecruiter.id ?
-          foldersFromRecruiter.folders.map((element, index) => (
-            <MenuItem key={index} value={element}>
-              <ListItemText primary={moment(element.createdAt).format(DATE_FORMAT)} />
-            </MenuItem>
-          ))
-          :
-          allFolders && allFolders.map((element, index) => (
-            <MenuItem key={index} value={element}>
-              <ListItemText primary={moment(element.createdAt).format(DATE_FORMAT)} />
-            </MenuItem>
-          ))
-        }
+          {foldersFromRecruiter.id
+            ? foldersFromRecruiter.folders.map((element, index) => (
+                <MenuItem key={index} value={element}>
+                  <ListItemText
+                    primary={moment(element.createdAt).format(DATE_FORMAT)}
+                  />
+                </MenuItem>
+              ))
+            : allFolders &&
+              allFolders.map((element, index) => (
+                <MenuItem key={index} value={element}>
+                  <ListItemText
+                    primary={moment(element.createdAt).format(DATE_FORMAT)}
+                  />
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <Button>

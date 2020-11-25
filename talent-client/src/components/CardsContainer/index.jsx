@@ -25,7 +25,11 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
-  const folder = useSelector((store) => store.FolderReducer.activeFolder);  //Antes estaba newFolder
+  const folder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const recruiterData = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
   
   const cardsMaxLimit = 30;
 
@@ -68,7 +72,7 @@ function CardsContainer(props) {
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
             {`Carpeta N°: ${folder.id} - ${
-              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
+              recruiterData && recruiterData.company ? `${recruiterData.contactName} - ${recruiterData.company}` : ' '
             }`}
           </Typography>
         </ThemeProvider>

@@ -55,7 +55,9 @@ function Nav({ location }) {
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid container item xs={3} sm={3} spacing={3}>
-            <img className={classes.logo} alt="Henry Logo" src={logo} />
+            <Link to="/">
+              <img className={classes.logo} alt="Henry Logo" src={logo} />
+            </Link>
           </Grid>
           {location !== '/dossier/' && (
             <Grid container item xs={9}>
