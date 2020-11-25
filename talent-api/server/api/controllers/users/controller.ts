@@ -13,5 +13,10 @@ export class usersController {
     res.status(201).json(user);
     return;
   }
+
+  async all(req: Request, res: Response): Promise<void> {
+    const users = await db.User.findAll();
+    res.status(200).json(users);
+  }
 }
 export default new usersController();

@@ -125,6 +125,15 @@ const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
         message: 'Recruiter creado con éxito',
         type: 'success',
       });
+      return response.data;
+    })
+    .then((response) => {
+      console.log(response);
+      axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/folders/${localStorage.getItem(
+          'activeFolderId'
+        )}?recruiterId=${response.id}`
+      );
       return;
     })
     .catch((error) => {

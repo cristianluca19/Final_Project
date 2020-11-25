@@ -32,7 +32,6 @@ function RecruiterFolder() {
         setError(wrongPathError());
       });
   }, [uuid]);
-  console.log(recruiter);
 
   if (!folder.length) return error;
   return (
