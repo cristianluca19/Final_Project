@@ -1,4 +1,5 @@
 import mail from 'mailgun-js';
+import '../common/env';
 const mailGun = mail({
   apiKey: process.env.APIKEY,
   domain: process.env.DOMAIN,
