@@ -30,8 +30,8 @@ function relationCandidatesFolders() {
       let candidate = {
         created_at: faker.date.past(),
         updated_at: faker.date.recent(),
-        candidate_id: j + count,
         folder_id: i,
+        candidate_id: j + count,
       };
       folder_candidates.push(candidate);
     }
