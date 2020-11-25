@@ -45,6 +45,7 @@ function Candidates() {
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
   const classes = useStyles();
+  const [cohorts, setCohorts] = React.useState([]);
   const [candidates, setCandidates] = React.useState([]);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -73,7 +74,12 @@ function Candidates() {
   useEffect(() => {
     Object.keys(candidate).length !== 0 && setCandidateData(candidate);
     setCandidates(allCandidates);
-  }, [allCandidates, candidate]);
+    allCandidates.forEach(item => {
+      if (!(cohorts.includes(item.cohort))) {
+        setCohorts([...cohorts, item.cohort])
+      };
+    })
+  }, [allCandidates, candidate, cohorts]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 10 },
@@ -156,15 +162,10 @@ function Candidates() {
     setOpenUpdate(false);
   };
 
-  const handleListed = (e) => {
-    const listedSelect = allCandidates.filter(item => item.visibility === e.target.value)
-    setCandidates(listedSelect);
+  const handleFilter = (e, property, setState) => {
+    const filtered = allCandidates.filter(item => item[property] === e.target.value)
+    setCandidates(filtered);
   };
-
-  const handleEmployed = (e) => {
-    const employedSelect = allCandidates.filter(item => item.status === e.target.value)
-    setCandidates(employedSelect);
-  }
 
   const dialogDeleteCandidate = () => (
     <Dialog
@@ -328,7 +329,11 @@ function Candidates() {
 
   const Selected = (props) => {
     return (
-      <select onChange={props.handle}>
+      <select
+        onChange={(e) => {
+          handleFilter(e, props.handle);
+        }}
+      >
         <option value='' disabled selected >{props.value}</option>
         {props.options.map(item => <option value={item} >{item}</option>)};
       </select>
@@ -337,21 +342,46 @@ function Candidates() {
 
   return (
     <Paper className={classes.root}>
-      <h1>CANDIDATOS</h1>
-      <br />
       <div className={classes.filterContainer}>
-        <Paper component="form" >
-          <InputBase
-            className={classes.input}
-            placeholder="Search by name, lastname or email..."
-            inputProps={{ 'aria-label': 'search google maps' }}
-          />
-          <IconButton type="submit" aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </Paper>
-        <Selected value='Visibility' options={['listed', 'unlisted']} handle={handleListed} />
-        <Selected value='Status' options={['employed', 'unemployed']} handle={handleEmployed} /> 
+        <h1 className={classes.text}>CANDIDATOS</h1>
+        <div className={classes.filter}>
+          <Paper component="form" className={classes.search}>
+            <InputBase
+              className={classes.input}
+              placeholder="Search by name or email..."
+              inputProps={{ 'aria-label': 'search google maps' }}
+            />
+            <IconButton type="submit" aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'cohort');
+            }}
+          >
+            <option value='' disabled selected >Cohort</option>
+            {(cohorts.sort(function (a, b) { return a - b })).map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'visibility');
+            }}
+          >
+            <option value='' disabled selected>Visibility</option>
+            {['listed', 'unlisted'].map(item => <option value={item} >{item}</option>)};
+          </select>
+          <select
+            onChange={(e) => {
+              handleFilter(e, 'status');
+            }}
+          >
+            <option value='' disabled selected>Status</option>
+            {['employed', 'unemployed'].map(item => <option value={item} >{item}</option>)};
+          </select>
+
+          <button onClick={() => setCandidates(allCandidates)}>View all candidates</button>
+        </div>
       </div>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">

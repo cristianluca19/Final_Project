@@ -76,6 +76,21 @@ export const useStyles = makeStyles((theme) => ({
   },
   filterContainer: {
     display: 'flex',
+    justifyContent: 'space-between',
+    height: 50,
+    margin: '50px 5px 50px 0' ,
+  },
+  filter: {
+    display: 'flex',
+    width: '35vw',
+    justifyContent: 'space-around'
+  },
+  text: {
+    alignSelf: 'center',
+    marginLeft: '20px'
+  },
+  search: {
+    padding: '5px'
   },
   formControl: {
     margin: theme.spacing(1),
