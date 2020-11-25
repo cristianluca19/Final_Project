@@ -2,14 +2,27 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getModalStyle, useStyles } from './styles';
+import moment from 'moment';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getFoldersByCompany } from '../../redux/recruitersReducer/Actions';
-import { setActiveFolder } from '../../redux/foldersReducer/Action';
+import { setActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
+import CreateRecruiter from '../RecruiterCreate/Modal';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 export default function ActiveFolder() {
   const dispatch = useDispatch();
@@ -29,6 +42,8 @@ export default function ActiveFolder() {
   const [foldersFromRecruiter, setFoldersFromRecruiter] = React.useState([]);
   const [openCompany, setOpenCompany] = React.useState(false);
   const [openFolder, setOpenFolder] = React.useState(false);
+
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
   const handleCloseCompany = () => {
     setOpenCompany(false);
@@ -62,6 +77,7 @@ export default function ActiveFolder() {
   const handleChangeFolder = (event) => {
     setFolder(event.target.value);
     dispatch(setActiveFolder(event.target.value));
+    dispatch(getDossierByUuid(event.target.value.uuid));
   };
 
   // const RedirectToFolderPreview = () => {
@@ -71,7 +87,7 @@ export default function ActiveFolder() {
   return (
     <div>
       {/* onClick={RedirectToFolderPreview} */}
-      <Button> 
+      <Button className={classes.folderPreview}> 
         Folder Preview
       </Button>
       <FormControl className={classes.formControl}>
@@ -84,12 +100,14 @@ export default function ActiveFolder() {
           onOpen={handleOpenCompany}
           value={company || ''}
           onChange={handleChangeCompany}
+          MenuProps={MenuProps}
+          style={{color: 'white'}}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
           {recruitersData.map((element, index) => (
-            <MenuItem key={element.company} value={element.company}>
+            <MenuItem key={index} value={element.company}>
               <ListItemText primary={element.company} />
             </MenuItem>
           ))}
@@ -105,27 +123,29 @@ export default function ActiveFolder() {
           onOpen={handleOpenFolder}
           value={folder || ''}
           onChange={handleChangeFolder}
+          MenuProps={MenuProps}
+          style={{color: 'white'}}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
           {foldersFromRecruiter.id ?
           foldersFromRecruiter.folders.map((element, index) => (
-            <MenuItem key={index} value={element.id}>
-              <ListItemText primary={element.createdAt} />
+            <MenuItem key={index} value={element}>
+              <ListItemText primary={moment(element.createdAt).format(DATE_FORMAT)} />
             </MenuItem>
           ))
           :
           allFolders && allFolders.map((element, index) => (
-            <MenuItem key={index} value={element.id}>
-              <ListItemText primary={element.createdAt} />
+            <MenuItem key={index} value={element}>
+              <ListItemText primary={moment(element.createdAt).format(DATE_FORMAT)} />
             </MenuItem>
           ))
         }
         </Select>
       </FormControl>
       <Button>
-        Edit recruiter fields
+        <CreateRecruiter />
       </Button>
     </div>
   );

@@ -9,4 +9,13 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  folderPreview: {
+    position: 'relative',
+    top: '12px',
+    marginRight: '20px',
+    backgroundColor: 'yellow',
+    '&:hover': {
+      backgroundColor: 'yellow',
+    },
+  }
 }));

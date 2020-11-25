@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import { useStyles } from './styles.js';
 import { RecruiterForm } from './form';
 
-function RecruiterCreate() {
+function RecruiterCreate({ handleClose }) {
   return (
     <ThemeProvider theme={henryTheme}>
       <Container>
@@ -13,7 +13,7 @@ function RecruiterCreate() {
           Agregar Recruiter
         </Typography>
         <Divider variant="middle" style={{ marginBottom: 10 }} />
-        <RecruiterForm />
+        <RecruiterForm handleClose={handleClose}/>
       </Container>
     </ThemeProvider>
   );

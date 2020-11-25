@@ -52,7 +52,7 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      <div style={{backgroundColor: 'white'}}><ActiveFolder /></div>
+      <div><ActiveFolder /></div>
       <Grid
         className={classes.paddingCandidates}
         container
