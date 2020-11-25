@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './App.css';
 import CsvToJson from './components/csvToJson/CsvToJson';
 import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -18,6 +17,8 @@ import { getAllRecruiters } from './redux/recruitersReducer/Action';
 import { getAllUsers } from './redux/usersReducer/Action';
 import { getAllSkills } from './redux/skillsReducer/Action';
 import { getDraftFolder } from './redux/foldersReducer/Action';
+import './App.css';
+import PreviewFolderActive from './components/PreviewFolder/PreviewFolder';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,15 +32,12 @@ function App() {
     dispatch(getAllUsers());
     dispatch(getAllSkills());
     dispatch(getAllFolders());
-    dispatch(getAllRecruiters());
     dispatch(getDraftFolder());
   });
 
   return (
     <div className="App">
       <Switch>
-        <Route path="/folder/:id" render={() => <Folder />} />
-        <Route path="/folders" render={() => <FoldersCrud />} />
         <Route exact path="/panel" render={() => <Dashboard />} />
         <Route
           path="/panel/candidates"
@@ -57,6 +55,11 @@ function App() {
           )}
         />
       </Switch>
+      <Route exact path="/preview/:id">
+        <PreviewFolderActive render={({ match }) => match.params.id} />
+      </Route>
+      <Route path="/folder/:id" render={() => <Folder />} />
+      <Route path="/folders" render={() => <FoldersCrud />} />
       <Route exact path="/" render={() => <ContentHome />} />
       <Route
         exact

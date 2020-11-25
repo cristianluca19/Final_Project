@@ -1,43 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import RecruiterCreate from '.';
 import { Button } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    border: '2px solid black',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    backgroundColor: 'black',
-  },
-  addRecruiter: {
-    position: 'relative',
-    top: '12px',
-    marginLeft: '20px',
-    backgroundColor: 'yellow',
-    '&:hover': {
-      backgroundColor: 'yellow',
-    },
-  },
-  centerModal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-}));
+import { useStyles } from './modal.css.js';
 
 export default function SimpleModal() {
   const classes = useStyles();
 
   const recruiterData = useSelector(
-    (store) => store.FolderReducer.dossier.recruiter
+    (store) => store.RecruitersReducer.recruiter
   );
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -55,16 +30,9 @@ export default function SimpleModal() {
 
   return (
     <div>
-      {recruiterData && !recruiterData.length ? (
         <Button className={classes.addRecruiter} type="button" onClick={handleOpen}>
-          Edit Recruiter
+          {!Object.keys(recruiterData).length ? 'Add Recruiter' : 'Edit Recruiter'}
         </Button>
-      ) : (
-        <Button className={classes.addRecruiter} type="button" onClick={handleOpen}>
-          Add Recruiter
-        </Button>
-      )}
-
       <Modal
         open={open}
         onClose={handleClose}

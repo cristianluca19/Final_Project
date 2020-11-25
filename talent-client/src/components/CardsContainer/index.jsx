@@ -14,6 +14,7 @@ import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 import { getAllCandidates } from '../../redux/candidatesReducer/Action';
+import { setActiveFolder } from '../../redux/foldersReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -58,13 +59,14 @@ function CardsContainer(props) {
     dispatch(getCandidatesPage(currentPage));
   }, [newPageSelected, folder, currentPage, dispatch]); // ocnsiderar quitar currentPage y dispatch
 
-  const handleCandidate = (event, candidate, folder, uuid, includes) => {
+  const handleCandidate = async (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
     // if (!folder) {
     //   folder = await createDraftFolder();
     //   dispatch(setActiveFolder(folder.id));
     //   console.log(folder);
     // }
+
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
@@ -72,7 +74,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify
+          setNotify,
         );
       } else {
         RemoveCandidateFromFolder(
@@ -170,6 +172,20 @@ CardsContainer.propTypes = {
 CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
+
+const createDraftFolder = async () => {
+  try {
+    const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+    AlertCandidate.fire({
+      icon: 'info',
+      title: 'Nueva carpeta creada...',
+    });
+    return newFolder.data.folder
+  } catch (error) {
+    console.log(error.message)
+    throw error
+  }
+}
 
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
