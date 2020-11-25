@@ -40,7 +40,6 @@ function CandidateCard(props) {
     candidate.skills.filter((skill) =>
       skill.type === 'soft' ? skill.type : null
     );
-  console.log(candidate);
 
   const labelsMaxLimit = 10;
 

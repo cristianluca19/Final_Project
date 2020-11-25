@@ -13,6 +13,17 @@ export function getAllRecruiters() {
   };
 }
 
+export function getRecruiterById(id) {
+  let recruiter = {};
+  return async (dispatch) => {
+    if (id) recruiter = await axios.get(`${BACKEND_URL}/recruiters/${id}`);
+    dispatch({
+      type: actions.GET_RECRUITER,
+      payload: Object.keys(recruiter).length ? recruiter.data : recruiter,
+    });
+  };
+}
+
 export function getFoldersByCompany(company) {
   return async (dispatch) => {
     const recruiter = await axios.get(`${BACKEND_URL}/recruiters/search/company?company=${company}`);

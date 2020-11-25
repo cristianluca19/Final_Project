@@ -8,10 +8,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
-import { getFoldersByCompany } from '../../redux/recruitersReducer/Action';
+import { getFoldersByCompany, getRecruiterById } from '../../redux/recruitersReducer/Action';
 import { setActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
-import CreateRecruiter from '../RecruiterCreate/Modal';
+import CreateRecruiterModal from '../RecruiterCreate/Modal';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,7 +41,7 @@ export default function ActiveFolder() {
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
   const recruiterData = useSelector(
-    (store) => store.FolderReducer.dossier.recruiter
+    (store) => store.RecruitersReducer.recruiter
   );
   
   const [company, setCompany] = useState([]);
@@ -67,6 +68,7 @@ export default function ActiveFolder() {
   const handleOpenFolder = () => {
     if (foldersFromRecruiter === 'no valor') {
       setFoldersFromRecruiter([]);
+      dispatch(getRecruiterById())
     } else {
       setFoldersFromRecruiter(foldersFromRecruiterData);
     }
@@ -83,7 +85,7 @@ export default function ActiveFolder() {
 
   const handleChangeFolder = (event) => {
     setFolder(event.target.value);
-    console.log(event.target.value)
+    dispatch(getRecruiterById(event.target.value.recruiterId))
     dispatch(setActiveFolder(event.target.value));
     dispatch(getDossierByUuid(event.target.value.uuid));
   };
@@ -127,6 +129,7 @@ export default function ActiveFolder() {
           ))}
         </Select>
       </FormControl>
+      {/*FOLDER INPUT*/}
       <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Folders</InputLabel>
         <Select
@@ -162,7 +165,7 @@ export default function ActiveFolder() {
         </Select>
       </FormControl>
       <Button>
-        <CreateRecruiter />
+        <CreateRecruiterModal />
       </Button>
     </div>
   );

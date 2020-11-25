@@ -11,14 +11,14 @@ import Notification from './notification';
 export function RecruiterForm({ handleClose }) {
 
   const recruiterData = useSelector(
-    (store) => store.FolderReducer.dossier.recruiter
+    (store) => store.RecruitersReducer.recruiter
   );
 
   const initialValues = {
   contactName: recruiterData ? recruiterData.contactName : '',
   email: recruiterData ? recruiterData.email : '',
   company: recruiterData ? recruiterData.company : '',
-  siteUrl: '',
+  siteUrl: recruiterData ? recruiterData.siteUrl : '',
 };
 
   // ====== HOOKS ====== //
