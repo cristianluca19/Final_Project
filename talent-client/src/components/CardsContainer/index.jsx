@@ -18,7 +18,7 @@ function CardsContainer(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [newPageSelected, setNewPageSelected] = useState(false);
-
+  const [stateSearch, setStateSearch] = useState(false);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -30,6 +30,12 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
+  const filterDataCandidates = useSelector(
+    (store) => store.CandidateReducer.filterCandidates
+  );
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
@@ -96,8 +102,9 @@ function CardsContainer(props) {
         justify="center"
         alignItems="center"
       >
-        {candidates &&
-          candidates.map(
+        {cardsCandidates &&
+          candidates &&
+          cardsCandidates.map(
             (candidate, index) =>
               candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
