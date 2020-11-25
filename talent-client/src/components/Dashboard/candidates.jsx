@@ -54,7 +54,7 @@ function Candidates() {
     country: 'Sarasota, TX, USA',
     email: 'Anissa_Wisozk65@yahoo.com',
     linkedin: 'https://hazle.com',
-    cohort: '5',
+    cohortId: '5',
     status: 'unemployed',
     visibility: 'listed',
     profilePicture:
@@ -93,7 +93,7 @@ function Candidates() {
           lastName: candidate.lastName,
           country: candidate.country,
           email: candidate.email,
-          cohort: candidate.cohort,
+          cohort: candidate.cohort.name,
           visibility: candidate.visibility,
           status: candidate.status,
           iconUpdateDelete: '',

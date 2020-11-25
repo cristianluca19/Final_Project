@@ -40,6 +40,7 @@ function CandidateCard(props) {
     candidate.skills.filter((skill) =>
       skill.type === 'soft' ? skill.type : null
     );
+  console.log(candidate);
 
   const labelsMaxLimit = 10;
 
@@ -150,7 +151,7 @@ function CandidateCard(props) {
               component="p"
               style={{ paddingLeft: 15 }}
             >
-              {`${candidate.country}  -  WebFT0${candidate.cohort}`}
+              {`${candidate.country}  -  ${candidate.cohort.name}`}
             </Typography>
             <Divider variant="middle" style={{ marginBottom: '8px' }} />
             <ThemeProvider theme={theme}>
