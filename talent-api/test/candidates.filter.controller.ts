@@ -30,7 +30,7 @@ describe('Filter', () => {
         'Veniam quis a et suscipit consectetur accusantium libero. Aut suscipit qui numquam et in omnis nihil veritatis. Necessitatibus voluptas libero laborum necessitatibus. Quaerat unde ab et non dolor ea q',
       linkedin: 'http://laney.net',
       github: 'http://leo.com',
-      visibility: 'unlisted',
+      visibility: 'listed',
       status: 'employed',
     };
     const Laurence = {
@@ -78,7 +78,7 @@ describe('Filter', () => {
         'Hic explicabo dicta sint. Aut molestiae et repellat voluptatibus eveniet dolores ut. Harum consequatur molestias. Dolor et et magni modi voluptas perspiciatis facilis facere sed. Eius et eligendi aper',
       linkedin: 'http://alysson.com',
       github: 'http://vivien.info',
-      visibility: 'unlisted',
+      visibility: 'listed',
       status: 'unemployed',
     };
     const Andreanne = {
@@ -163,27 +163,27 @@ describe('Filter', () => {
       const filterOne = await request(Server)
         .get('/api/v1/candidates/filter')
         .query(bodyFilterOne);
-      expect(filterOne.body).to.be.an('array').to.have.lengthOf(2);
-      expect(filterOne.body[0].id).to.be.equal(1);
-      expect(filterOne.body[0].firstName).to.be.equal('Jarrod');
-      expect(filterOne.body[1].id).to.be.equal(4);
-      expect(filterOne.body[1].firstName).to.be.equal('Francesco');
+      expect(filterOne.body.candidates).to.be.an('array').to.have.lengthOf(2);
+      expect(filterOne.body.candidates[0].id).to.be.equal(1);
+      expect(filterOne.body.candidates[0].firstName).to.be.equal('Jarrod');
+      expect(filterOne.body.candidates[1].id).to.be.equal(4);
+      expect(filterOne.body.candidates[1].firstName).to.be.equal('Francesco');
 
       const filterTwo = await request(Server)
         .get('/api/v1/candidates/filter')
         .query(bodyFilterTwo);
-      expect(filterTwo.body).to.be.an('array').to.have.lengthOf(2);
-      expect(filterTwo.body[0].firstName).to.equal('Drake');
-      expect(filterTwo.body[1].firstName).to.equal('Andreanne');
+      expect(filterTwo.body.candidates).to.be.an('array').to.have.lengthOf(2);
+      expect(filterTwo.body.candidates[0].firstName).to.equal('Drake');
+      expect(filterTwo.body.candidates[1].firstName).to.equal('Andreanne');
 
       const filterThree = await request(Server)
         .get('/api/v1/candidates/filter')
         .query(bodyFilterThree);
-      expect(filterThree.body).to.be.an('array').to.have.lengthOf(2);
-      expect(filterThree.body[0].id).to.be.equal(1);
-      expect(filterThree.body[0].firstName).to.be.equal('Jarrod');
-      expect(filterThree.body[1].id).to.be.equal(2);
-      expect(filterThree.body[1].firstName).to.be.equal('Laurence');
+      expect(filterThree.body.candidates).to.be.an('array').to.have.lengthOf(2);
+      expect(filterThree.body.candidates[0].id).to.be.equal(1);
+      expect(filterThree.body.candidates[0].firstName).to.be.equal('Jarrod');
+      expect(filterThree.body.candidates[1].id).to.be.equal(2);
+      expect(filterThree.body.candidates[1].firstName).to.be.equal('Laurence');
     });
   });
 });

@@ -5,10 +5,18 @@ const initialState = {
   candidate: {},
   bulkedCandidates: [],
   filterCandidates: [],
+  pagedCandidates: [],
+  pageStats: {},
 };
 
 export default function Reducer(state = initialState, action) {
   switch (action.type) {
+    case actions.GET_CANDIDATES_PAGE:
+      return {
+        ...state,
+        pagedCandidates: action.payload,
+        pageStats: action.data,
+      };
     case actions.GET_ALL_CANDIDATES:
       return {
         ...state,
