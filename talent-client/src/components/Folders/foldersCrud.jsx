@@ -52,7 +52,7 @@ function FoldersCrud() {
   );
   const users = useSelector((store) => store.UsersReducer.allUsers);
   const UPDATE_CLICK_ACTION = 'update';
-  const DATE_FORMAT = 'DD/MM/YYYY - HH:mm:ss';
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
@@ -60,6 +60,7 @@ function FoldersCrud() {
     { id: 'status', label: 'STATUS', minWidth: 100 },
     { id: 'createAt', label: 'CREATE AT', minWidth: 100 },
     { id: 'lastUpdateAt', label: 'LAST UPDATE AT', minWidth: 100 },
+    { id: 'sentAt', label: 'SENT AT', minWidth: 100 },
     { id: 'opened', label: 'OPENED', minWidth: 100 },
     { id: 'recruiter', label: 'RECRUITER', minWidth: 100 },
     { id: 'email', label: 'EMAIL', minWidth: 100 },
@@ -96,6 +97,7 @@ function FoldersCrud() {
           status: folders.status,
           createAt: moment(folders.createdAt).format(DATE_FORMAT),
           lastUpdateAt: moment(folders.updatedAt).format(DATE_FORMAT),
+          sentAt: moment(folders.sentat).format(DATE_FORMAT),
           opened: folders.opened.toString(),
           recruiter: findRecruiter(folders.recruiterId, 'contactName'),
           email: findRecruiter(folders.recruiterId, 'email'),

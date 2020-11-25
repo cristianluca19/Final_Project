@@ -34,7 +34,7 @@ export class foldersController {
             'lastName',
             'email',
             'country',
-            'cohort',
+            'cohortId',
             'profilePicture',
             'visibility',
             'status',
@@ -43,6 +43,11 @@ export class foldersController {
             'github',
           ],
           through: { attributes: [] }, // This avoids eager loading of intermediate table useless createdAt/updatedAt data. Shows a cleaner API response.
+          include: {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
         },
       ],
     });
@@ -67,7 +72,7 @@ export class foldersController {
               'lastName',
               'email',
               'country',
-              'cohort',
+              'cohortId',
               'profilePicture',
               'visibility',
               'status',
@@ -76,6 +81,11 @@ export class foldersController {
               'github',
             ],
             through: { attributes: [] },
+            include: {
+              model: db.Skill,
+              attributes: ['id', 'name', 'type'],
+              through: { attributes: [] },
+            },
           },
         ],
       });
@@ -103,6 +113,16 @@ export class foldersController {
     if (recruiterId) await folder.setRecruiter(recruiterId);
     if (userId) await folder.setUser(userId);
     if (sentAt) await folder.update({ sentAt: sentAt });
+    res.status(200).json(folder);
+  }
+
+  async updateStatusById(req: Request, res: Response): Promise<void> {
+    const { status } = req.body;
+    await db.Folder.update(
+      { status: status },
+      { where: { id: req.params.folderId } }
+    );
+    const folder = await db.Folder.findByPk(req.params.folderId);
     res.status(200).json(folder);
   }
 

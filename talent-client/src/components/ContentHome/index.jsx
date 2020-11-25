@@ -1,12 +1,11 @@
 import React from 'react';
-import { Grid, Container, makeStyles } from '@material-ui/core';
+import { Grid, Container, makeStyles, Typography } from '@material-ui/core';
 import Search from './search.jsx';
 import bgHenry from '../../images/bg-henry-content.png';
 
 const useStyle = makeStyles({
   contentSearch: {
-    padding: '20px 90px 20px 80px',
-    minHeight: '250px',
+    // padding: '20px 90px 20px 80px',
   },
   contentSearchFluid: {
     backgroundColor: '#ffff00',
@@ -19,6 +18,12 @@ const useStyle = makeStyles({
     fontSize: '30px !important',
     border: '5px solid #000000',
     margin: '40px 0px',
+    marginTop: 70,
+    maxHeight: 120,
+  },
+  font: {
+    fontWeight: 600,
+    paddingTop: 22,
   },
 });
 
@@ -31,9 +36,9 @@ function ContentHome() {
         <Grid container spacing={1}>
           <Grid container item xs={12} sm={8} spacing={3}>
             <div className={classes.textLeftSearch}>
-              <h2>
-                Henry Talent helps you find the best profiles for your company.
-              </h2>
+              <Typography className={classes.font} variant="h5" align="left">
+                Henry Talent helps you find your ideal candidate
+              </Typography>
             </div>
           </Grid>
           <Grid container item xs={12} sm={4} spacing={3}>

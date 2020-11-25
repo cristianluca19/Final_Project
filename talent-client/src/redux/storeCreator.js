@@ -5,7 +5,7 @@ import CandidateReducer from './candidatesReducer/Reducer';
 import FolderReducer from './foldersReducer/Reducer';
 import RecruitersReducer from './recruitersReducer/Reducer';
 import UsersReducer from './usersReducer/Reducer';
-
+import SkillsReducer from './skillsReducer/Reducer';
 // IMPORT ALL YOUR CUSTOM REDUCERS TO THIS FILE AND ADD THEM TO THE rootReducer obj below.
 
 // Adding of REDUX DEVTOOLS
@@ -18,6 +18,7 @@ const rootReducer = combineReducers({
   FolderReducer,
   RecruitersReducer,
   UsersReducer,
+  SkillsReducer,
 });
 
 export const store = createStore(

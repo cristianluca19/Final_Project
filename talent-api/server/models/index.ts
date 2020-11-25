@@ -8,7 +8,7 @@ import Recruiter from './Recruiter.model';
 import Skill from './Skill.model';
 import User from './User.model';
 import Comment from './Comment.model';
-
+import Cohort from './Cohort.model';
 interface DB {
   sequelize: any;
   Sequelize: any;
@@ -18,6 +18,7 @@ interface DB {
   Folder: any;
   User: any;
   Comment: any;
+  Cohort: any;
 }
 
 // Set up Sequelize connection
@@ -37,6 +38,7 @@ const db: DB = {
   Candidate: Candidate(sequelize),
   Recruiter: Recruiter(sequelize),
   Comment: Comment(sequelize),
+  Cohort: Cohort(sequelize),
 };
 
 // ...and all associations
