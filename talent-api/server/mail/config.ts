@@ -1,10 +1,7 @@
-const DOMAIN = 'sandbox07c054a06bec41c19432905517039fb3.mailgun.org';
-const APIKEY = '3570c64af40cfc0c128270f779aebe71-360a0b2c-9076c742';
-const LINK = 'http://localhost:3000/dossier/';
 import mail from 'mailgun-js';
 const mailGun = mail({
-  apiKey: APIKEY,
-  domain: DOMAIN,
+  apiKey: process.env.APIKEY,
+  domain: process.env.DOMAIN,
 });
 
 function mailCreator(to, uuid) {
@@ -21,7 +18,7 @@ function mailCreator(to, uuid) {
     <body>
         <div>
             <h3>Folder with candidates</h3>
-            <a href=${LINK}${uuid}> Open folder here </a>
+            <a href=${process.env.LINK}${uuid}> Open folder here </a>
             <p>thanks for doing business with us</p>
         </div>
     </body>
