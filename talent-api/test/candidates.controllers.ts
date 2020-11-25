@@ -496,11 +496,7 @@ describe('Candidates', () => {
 
   describe('DELETE candidate', () => {
     it('should delete a candidate by id', async () => {
-<<<<<<< HEAD
       const cohort1 = await db.Cohort.create({
-=======
-      await db.Cohort.create({
->>>>>>> feat/cohort_seed
         name: 'WebFT-01',
       });
       const candidate1 = await db.Candidate.create({
@@ -534,13 +530,9 @@ describe('Candidates', () => {
       expect(candidateCreated)
         .to.have.property('email')
         .to.be.equal('cristianL@gmail.com');
-// <<<<<<< HEAD
-//       expect(candidateCreated)
-//         .to.have.property('cohortId')
-//         .to.be.equal(cohort1.id);
-// =======
-      expect(candidateCreated).to.have.property('cohort').to.be.equal('5');
-// >>>>>>> feat/cohort_seed
+      expect(candidateCreated)
+        .to.have.property('cohortId')
+        .to.be.equal(cohort1.id);
     });
   });
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getModalStyle, useStyles } from './styles';
@@ -39,12 +39,16 @@ export default function ActiveFolder() {
 
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
-  const [company, setCompany] = React.useState([]);
-  const [folder, setFolder] = React.useState([]);
-  const [foldersFromRecruiter, setFoldersFromRecruiter] = React.useState([]);
-  const [openCompany, setOpenCompany] = React.useState(false);
-  const [openFolder, setOpenFolder] = React.useState(false);
-  const [state, setState] = React.useState(null);
+  const recruiterData = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+  
+  const [company, setCompany] = useState([]);
+  const [folder, setFolder] = useState([]);
+  const [foldersFromRecruiter, setFoldersFromRecruiter] = useState([]);
+  const [openCompany, setOpenCompany] = useState(false);
+  const [openFolder, setOpenFolder] = useState(false);
+  const [state, setState] = useState(null);
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -107,7 +111,7 @@ export default function ActiveFolder() {
           open={openCompany}
           onClose={handleCloseCompany}
           onOpen={handleOpenCompany}
-          value={company || ''}
+          value={company.length ? company : recruiterData ? recruiterData.company : ''}
           onChange={handleChangeCompany}
           MenuProps={MenuProps}
           style={{ color: 'white' }}
@@ -130,7 +134,7 @@ export default function ActiveFolder() {
           open={openFolder}
           onClose={handleCloseFolder}
           onOpen={handleOpenFolder}
-          value={folder || ''}
+          value={folder.length ? folder : recruiterData ? recruiterData.createdAt : ''}
           onChange={handleChangeFolder}
           MenuProps={MenuProps}
           style={{ color: 'white' }}
