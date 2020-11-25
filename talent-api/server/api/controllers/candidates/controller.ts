@@ -66,7 +66,12 @@ export class CandidatesController {
   }
 
   async byId(req: Request, res: Response): Promise<void> {
-    const candidate = await db.Candidate.findByPk(req.params.candidateId);
+    const candidate = await db.Candidate.findByPk(req.params.candidateId, {
+      include: {
+        model: db.Cohort,
+        attributes: ['name'],
+      }
+    });
     res.status(200).json(candidate);
   }
 
