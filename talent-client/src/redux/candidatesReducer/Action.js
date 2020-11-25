@@ -74,18 +74,21 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 };
 
 export function getFilterCandidates(filter) {
-  const params = new URLSearchParams();
-  for (const key in filter) {
-    if (filter[key].length) params.append(key, filter[key].toString());
-  }
-  //TODO: It remains to be resolved that '% 20' has a sign of '+' in parameters with spaces
+  const query_params = Object.keys(filter)
+    .filter((key) => filter[key].length)
+    .map((key) => key + '=' + filter[key])
+    .join('&');
   return async (dispatch) => {
-    const candidates = await axios.get(`${BACKEND_URL}/candidates/filter`, {
-      params,
-    });
-    const idCandidates = !candidates.data.length
+    const candidates = await axios.get(
+      `${BACKEND_URL}/candidates/filter${
+        query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
+      }`
+    );
+    const idCandidates = !candidates.data.candidates
       ? []
-      : candidates.data.map((dataIdCandidates) => dataIdCandidates.id);
+      : candidates.data.candidates.map(
+          (dataIdCandidates) => dataIdCandidates.id
+        );
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,

@@ -18,7 +18,7 @@ function CardsContainer(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [newPageSelected, setNewPageSelected] = useState(false);
-
+  const [stateSearch, setStateSearch] = useState(false);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
