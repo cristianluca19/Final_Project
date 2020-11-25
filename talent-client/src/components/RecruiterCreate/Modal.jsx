@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import RecruiterCreate from '.';
-import henryMuiTheme from '../../henryMuiTheme';
 import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
