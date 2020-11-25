@@ -146,7 +146,6 @@ export class foldersController {
         uuid: uuid,
       },
     });
-    // console.log(folder);
     if (!email && !uuid) {
       res.sendStatus(404);
     } else if (!folder && !folder.userId) {
