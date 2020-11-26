@@ -125,7 +125,7 @@ export default function ActiveFolder() {
           style={{ color: 'white' }}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>Draft</em>
           </MenuItem>
           {recruitersData.map((element, index) => (
             <MenuItem key={index} value={element.company}>

@@ -12,11 +12,14 @@ import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 import {
   addCandidateToActiveFolder,
   removeCandidateFromActiveFolder,
 } from '../../redux/foldersReducer/Action';
+import {
+  getCandidatesPage,
+  getFilterCandidates,
+} from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -31,13 +34,20 @@ function CardsContainer(props) {
     type: '',
   });
 
-  // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
+  const lastFilteredData = useSelector(
+    (store) => store.CandidateReducer.lastFilteredData
+  );
+
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
 
   const recruiterData = useSelector(
     (store) => store.RecruitersReducer.recruiter
+  );
+
+  const recruiterDataFolderReducer = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
   );
 
   const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
@@ -57,14 +67,20 @@ function CardsContainer(props) {
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
+
   const cardsCandidates = !filterDataCandidates.length
     ? candidates
     : filterDataCandidates;
+
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
-    dispatch(getCandidatesPage(currentPage));
-  }, [newPageSelected, folder, currentPage, dispatch, activeFolder, draftFolder]);
+    if (filterDataCandidates.length) {
+      dispatch(getFilterCandidates(lastFilteredData, currentPage));
+    } else {
+      dispatch(getCandidatesPage(currentPage));
+    }
+  }, [newPageSelected, folder, currentPage, activeFolder, draftFolder]);
 
   const handleCandidate = async (
     event,
@@ -183,7 +199,7 @@ function CardsContainer(props) {
         <Grid>
           <Paginator
             maxPages={pageData.totalPages}
-            current={currentPage}
+            current={pageData.currentPage ? pageData.currentPage : currentPage}
             setCurrentPage={setCurrentPage}
             setPager={setNewPageSelected}
             newPage={newPageSelected}
