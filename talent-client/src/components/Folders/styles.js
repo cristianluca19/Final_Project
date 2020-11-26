@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   container: {
     maxHeight: 720,
+    paddingTop: '2rem',
   },
   ulEditCondidate: {
     listStyle: 'none',
@@ -70,9 +71,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   background: {
     backgroundColor: 'white',
-  },
-  container: {
-    paddingTop: '2rem',
   },
   paddingCandidate: {
     paddingTop: 10,

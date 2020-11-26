@@ -2,6 +2,7 @@ import React from 'react';
 import Menu from './menu';
 import Candidates from './candidates';
 import Skills from './skills';
+import FoldersCrud from '../Folders/index';
 import { useStyle } from './Styles/index.css.js';
 import { Grid } from '@material-ui/core';
 
@@ -23,6 +24,7 @@ function Dashboard({ componentToRender }) {
       >
         {componentToRender === 'candidates' && <Candidates />}
         {componentToRender === 'skills' && <Skills />}
+        {componentToRender === 'folders' && <FoldersCrud />}
       </Grid>
     </div>
   );

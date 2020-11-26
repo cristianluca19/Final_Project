@@ -6,7 +6,6 @@ import {
   Container,
   makeStyles,
   IconButton,
-  Box,
 } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
@@ -48,7 +47,6 @@ function Nav({ location }) {
       return window.alert(error.message);
     }
   };
-  console.log(location);
 
   return (
     <nav>
@@ -77,14 +75,14 @@ function Nav({ location }) {
                 >
                   <AcountCircle />
                 </IconButton>
-                <IconButton
+                {/* <IconButton
                   className={classes.icons}
                   label="Folder"
                   value="folder"
                   onClick={HandleAddFolder}
                 >
                   <FolderIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   className={classes.icons}
                   label="Setting"

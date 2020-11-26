@@ -264,27 +264,11 @@ function CandidateCard(props) {
   );
 }
 
-const randomComment = () => {
-  let array = [
-    longText,
-    undefined,
-    null,
-    shortText,
-    null,
-    'Mucha experiencia previa',
-    'Experiencia en gestion de equipos',
-    'Praesent non nunc mollis, fermentum neque at, semper arcuNullam eget est sed sem iaculis gravida eget vitae justo.',
-  ];
-  let random = Math.round(Math.random() * (0, array.length));
-  return array[random];
-};
-
 const longText = `
 Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
 Praesent non nunc mollis, fermentum neque at, semper arcu.
 Nullam eget est sed sem iaculis gravida eget vitae justo.
 `;
-const shortText = 'Muy buenas habilidades de liderazgo';
 
 CandidateCard.propTypes = {
   candidate: PropTypes.exact({
