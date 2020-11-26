@@ -76,10 +76,10 @@ function Search() {
       skills: [],
       cohorts: [],
       locations: [],
-    })
+    });
     dispatch(getFilterCandidates([]));
     return;
-  }
+  };
 
   const onClickFilter = (e) => {
     e.preventDefault();
@@ -292,7 +292,7 @@ function Search() {
         variant="contained"
         color="secondary"
         className={classes.button}
-        style={{maxWidth: 200}}
+        style={{ maxWidth: 200 }}
         startIcon={<SearchIcon />}
         onClick={onClickFilter}
       >
@@ -302,7 +302,7 @@ function Search() {
         variant="contained"
         color="secondary"
         className={classes.button}
-        style={{maxWidth: 40}}
+        style={{ maxWidth: 40 }}
         onClick={handleRemoveFilters}
       >
         Clear

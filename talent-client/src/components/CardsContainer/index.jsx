@@ -31,9 +31,9 @@ function CardsContainer(props) {
 
   const lastFilteredData = useSelector(
     (store) => store.CandidateReducer.lastFilteredData
-    );
-    const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-    const { folder } = useSelector((store) => store.FolderReducer.newFolder);
+  );
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
+  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates

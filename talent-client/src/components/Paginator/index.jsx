@@ -14,7 +14,7 @@ function Paginator(props) {
   //me pasa el 2 del total de paginas... no del filtrado
 
   const handlePageChange = (event, value, currentPage) => {
-    if(value === currentPage) return
+    if (value === currentPage) return;
     props.setCurrentPage(value);
     props.setPager(!props.newPage);
     window.scrollTo({

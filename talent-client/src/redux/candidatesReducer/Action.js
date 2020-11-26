@@ -79,7 +79,7 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 };
 
 export function getFilterCandidates(filter, page = 0) {
-  if (page !== 0) page = page-1
+  if (page !== 0) page = page - 1;
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
@@ -87,7 +87,9 @@ export function getFilterCandidates(filter, page = 0) {
   return async (dispatch) => {
     const candidates = await axios.get(
       `${BACKEND_URL}/candidates/filter${
-        query_params ? '?' + query_params.replace(/,/g, '%2C') + '&page=' + page : ''
+        query_params
+          ? '?' + query_params.replace(/,/g, '%2C') + '&page=' + page
+          : ''
       }`
     );
     const { candidatesInPage, currentPage, totalPages } = candidates.data;
