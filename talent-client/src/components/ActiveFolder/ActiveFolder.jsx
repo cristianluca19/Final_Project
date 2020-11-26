@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './styles';
@@ -15,6 +15,7 @@ import {
 import {
   setActiveFolder,
   deleteActiveFolder,
+  getAllFolders,
 } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
@@ -37,6 +38,11 @@ export default function ActiveFolder() {
   const recruitersData = useSelector(
     (store) => store.RecruitersReducer.allRecruiters
   );
+
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
   const foldersFromRecruiterData = useSelector(
     (store) => store.RecruitersReducer.foldersFromRecruiter
   );
@@ -53,6 +59,10 @@ export default function ActiveFolder() {
   const [openCompany, setOpenCompany] = useState(false);
   const [openFolder, setOpenFolder] = useState(false);
   const [state, setState] = useState(null);
+
+  // useEffect(() => {
+  //   dispatch(getAllFolders())
+  // }, [])
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -101,6 +111,12 @@ export default function ActiveFolder() {
 
   if (state) {
     return <Redirect to={state} />;
+  }
+
+  const handleSendEmail = () => {
+    // activeFolder datos de la carpeta activa
+    // recruiterData datos de la carpeta activa
+    console.log("enviar mail")
   }
 
   return (
@@ -171,6 +187,14 @@ export default function ActiveFolder() {
       <Button>
         <CreateRecruiterModal />
       </Button>
+      {activeFolder && (
+        <Button
+          className={classes.folderPreview}
+          onClick={handleSendEmail}
+        >
+          Send folder
+        </Button>
+      )}
     </div>
   );
 }

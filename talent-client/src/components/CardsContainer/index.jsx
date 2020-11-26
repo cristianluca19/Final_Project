@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   addCandidateToActiveFolder,
   removeCandidateFromActiveFolder,
+  getAllFolders,
 } from '../../redux/foldersReducer/Action';
 import {
   getCandidatesPage,
@@ -81,6 +82,10 @@ function CardsContainer(props) {
       dispatch(getCandidatesPage(currentPage));
     }
   }, [newPageSelected, folder, currentPage, activeFolder, draftFolder]);
+
+  useEffect(() => {
+    
+  })
 
   const handleCandidate = async (
     event,
