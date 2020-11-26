@@ -6,9 +6,7 @@ import { useStyles } from './styles.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useDispatch } from 'react-redux';
-import {
-  removeCandidateFromFolder,
-} from '../../redux/foldersReducer/Action';
+import { removeCandidateFromFolder } from '../../redux/foldersReducer/Action';
 import {
   addNewComment,
   editComment,
@@ -44,8 +42,6 @@ import {
 } from '@material-ui/core';
 
 function Folder(props) {
-  
-
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openAddComment, setOpenAddComment] = React.useState(false);
   const [openEditComment, setOpenEditComment] = React.useState(false);
@@ -95,8 +91,8 @@ function Folder(props) {
     (comment) => comment.recruiterId !== folderObject.recruiterId
   );
 
-  selectorComments.sort((a, b) => a.id - b.id)
-  
+  selectorComments.sort((a, b) => a.id - b.id);
+
   const createRows = (selectorComents, commentForRecruiter) => {
     return { selectorComents, commentForRecruiter };
   };
@@ -111,15 +107,14 @@ function Folder(props) {
   const onClickDelete = (e, action) => {
     e.preventDefault();
 
-    if(action === DELETE_CLICK_ACTION){
-    dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
-    handleClose(DELETE_CLICK_ACTION);
+    if (action === DELETE_CLICK_ACTION) {
+      dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
+      handleClose(DELETE_CLICK_ACTION);
     }
 
-    if(action === DELETE_COMMENT_CLICK_ACTION){
-      
-    dispatch(deleteComment(idComment));
-    handleClose(DELETE_COMMENT_CLICK_ACTION);
+    if (action === DELETE_COMMENT_CLICK_ACTION) {
+      dispatch(deleteComment(idComment));
+      handleClose(DELETE_COMMENT_CLICK_ACTION);
     }
   };
 
@@ -131,11 +126,11 @@ function Folder(props) {
     if (action === ADD_COMMENT_CLICK_ACTION) {
       setOpenAddComment(true);
     }
-    if (action === EDIT_COMMENT_CLICK_ACTION){
+    if (action === EDIT_COMMENT_CLICK_ACTION) {
       setIdComment(id);
       setOpenEditComment(true);
     }
-    if (action === DELETE_COMMENT_CLICK_ACTION){
+    if (action === DELETE_COMMENT_CLICK_ACTION) {
       setIdComment(id);
       setOpenDeleteComment(true);
     }
@@ -153,29 +148,28 @@ function Folder(props) {
     const selectorId = 1; //este es el ID del usuario autenticado que escribio el comentario por el momento se hardcodea
     const datas = {};
 
-    if(action === ADD_COMMENT_CLICK_ACTION){
-        if (selectValue === 'selector') datas.userId = selectorId;
-        if (selectValue === 'recruiter') {
-          datas.userId = selectorId;
-          datas.recruiterId = folderObject.recruiterId;
-        }
-        datas.folderId = findFolder.id;
-        datas.content = inputTextField;
+    if (action === ADD_COMMENT_CLICK_ACTION) {
+      if (selectValue === 'selector') datas.userId = selectorId;
+      if (selectValue === 'recruiter') {
+        datas.userId = selectorId;
+        datas.recruiterId = folderObject.recruiterId;
+      }
+      datas.folderId = findFolder.id;
+      datas.content = inputTextField;
 
-        dispatch(addNewComment(datas));
-        setSelectValue('selector');
-        setInputTextField('');
-        handleClose(ADD_COMMENT_CLICK_ACTION);
-  }
-
-    if(action === EDIT_COMMENT_CLICK_ACTION){
-        datas.commentId = idComment;
-        datas.content = inputTextField;
-        dispatch(editComment(datas));
-        handleClose(EDIT_COMMENT_CLICK_ACTION);
-        setInputTextField('');
+      dispatch(addNewComment(datas));
+      setSelectValue('selector');
+      setInputTextField('');
+      handleClose(ADD_COMMENT_CLICK_ACTION);
     }
 
+    if (action === EDIT_COMMENT_CLICK_ACTION) {
+      datas.commentId = idComment;
+      datas.content = inputTextField;
+      dispatch(editComment(datas));
+      handleClose(EDIT_COMMENT_CLICK_ACTION);
+      setInputTextField('');
+    }
   };
 
   const RemoveCandidateModal = () => (
@@ -258,29 +252,28 @@ function Folder(props) {
             </div>
             <div>
               <FormControl className={classes.formControl}>
-                    
-              { recruiterComment && recruiterComment ? 
-                <Select
-                  name="selectorOrRecruiter"
-                  defaultValue='selector'
-                  onChange={(e) => {
-                    setSelectValue(e.target.value);
-                  }}
-                >
-                  <MenuItem value="selector"> Selector </MenuItem>
-                </Select>
-                    :
-                    <Select
-                  name="selectorOrRecruiter"
-                  defaultValue='selector'
-                  onChange={(e) => {
-                    setSelectValue(e.target.value);
-                  }}
-                >
-                  <MenuItem value="selector"> Selector </MenuItem>
-                  <MenuItem value="recruiter"> Reclutador </MenuItem>
-                </Select>
-                    }
+                {recruiterComment && recruiterComment ? (
+                  <Select
+                    name="selectorOrRecruiter"
+                    defaultValue="selector"
+                    onChange={(e) => {
+                      setSelectValue(e.target.value);
+                    }}
+                  >
+                    <MenuItem value="selector"> Selector </MenuItem>
+                  </Select>
+                ) : (
+                  <Select
+                    name="selectorOrRecruiter"
+                    defaultValue="selector"
+                    onChange={(e) => {
+                      setSelectValue(e.target.value);
+                    }}
+                  >
+                    <MenuItem value="selector"> Selector </MenuItem>
+                    <MenuItem value="recruiter"> Reclutador </MenuItem>
+                  </Select>
+                )}
               </FormControl>
             </div>
             <div>
@@ -288,7 +281,10 @@ function Folder(props) {
                 {' '}
                 Cancelar{' '}
               </Button>
-              <Button onClick={(e) => handleSave(e, ADD_COMMENT_CLICK_ACTION)}> Guardar </Button>
+              <Button onClick={(e) => handleSave(e, ADD_COMMENT_CLICK_ACTION)}>
+                {' '}
+                Guardar{' '}
+              </Button>
             </div>
           </form>
         </div>
@@ -341,7 +337,10 @@ function Folder(props) {
                 {' '}
                 Cancelar{' '}
               </Button>
-              <Button onClick={(e) => handleSave(e, EDIT_COMMENT_CLICK_ACTION)}> Guardar </Button>
+              <Button onClick={(e) => handleSave(e, EDIT_COMMENT_CLICK_ACTION)}>
+                {' '}
+                Guardar{' '}
+              </Button>
             </div>
           </form>
         </div>
@@ -448,12 +447,24 @@ function Folder(props) {
                                 {' '}
                                 {campo && findUser(campo.userId)}{' '}
                               </h3>
-                              <TableRow >
-                                <label>
-                                    {campo && campo.content}
-                                </label>
-                                <EditIcon onClick={()=> handleClickOpen(campo.id, EDIT_COMMENT_CLICK_ACTION) }/>
-                                <DeleteIcon onClick={()=> handleClickOpen(campo.id, DELETE_COMMENT_CLICK_ACTION) }/>
+                              <TableRow>
+                                <label>{campo && campo.content}</label>
+                                <EditIcon
+                                  onClick={() =>
+                                    handleClickOpen(
+                                      campo.id,
+                                      EDIT_COMMENT_CLICK_ACTION
+                                    )
+                                  }
+                                />
+                                <DeleteIcon
+                                  onClick={() =>
+                                    handleClickOpen(
+                                      campo.id,
+                                      DELETE_COMMENT_CLICK_ACTION
+                                    )
+                                  }
+                                />
                               </TableRow>
                             </div>
                           ))}{' '}
@@ -464,18 +475,33 @@ function Folder(props) {
                           findUser(row.commentForRecruiter.userId)}{' '}
                       </h3>
 
-                        { row.commentForRecruiter && row.commentForRecruiter.content  ?    
-                            <div>
-                              <label>                    
-                                  {row.commentForRecruiter &&
-                                    row.commentForRecruiter.content}
-                              </label>
-                              <EditIcon onClick={()=> handleClickOpen(row.commentForRecruiter.id, EDIT_COMMENT_CLICK_ACTION) }/>
-                              <DeleteIcon onClick={()=> handleClickOpen(row.commentForRecruiter.id, DELETE_COMMENT_CLICK_ACTION) }/>
-                              </div>
-                              :
-                              <div> </div>
-                      }
+                      {row.commentForRecruiter &&
+                      row.commentForRecruiter.content ? (
+                        <div>
+                          <label>
+                            {row.commentForRecruiter &&
+                              row.commentForRecruiter.content}
+                          </label>
+                          <EditIcon
+                            onClick={() =>
+                              handleClickOpen(
+                                row.commentForRecruiter.id,
+                                EDIT_COMMENT_CLICK_ACTION
+                              )
+                            }
+                          />
+                          <DeleteIcon
+                            onClick={() =>
+                              handleClickOpen(
+                                row.commentForRecruiter.id,
+                                DELETE_COMMENT_CLICK_ACTION
+                              )
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <div> </div>
+                      )}
                     </TableRow>
                   ))}
               </TableBody>
@@ -485,10 +511,16 @@ function Folder(props) {
 
         <Grid>
           {' '}
-          <Button onClick={() => handleClickOpen(0, ADD_COMMENT_CLICK_ACTION)}>
-            {' '}
-            Agregar comentario{' '}
-          </Button>{' '}
+          {findFolder && findFolder.status === 'sent' ? (
+            <div> </div>
+          ) : (
+            <Button
+              onClick={() => handleClickOpen(0, ADD_COMMENT_CLICK_ACTION)}
+            >
+              {' '}
+              Agregar comentario{' '}
+            </Button>
+          )}
         </Grid>
       </Container>
       {addCommentModal()}

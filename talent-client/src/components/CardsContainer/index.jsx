@@ -3,16 +3,22 @@ import { Container, Grid, Typography, ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
 import { useStyles } from './styles.js';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Paginator from '../Paginator';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [newPageSelected, setNewPageSelected] = useState(false);
+  const [stateSearch, setStateSearch] = useState(false);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -22,11 +28,20 @@ function CardsContainer(props) {
 
   // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
   const candidates = useSelector(
-    (store) => store.CandidateReducer.allCandidates
+    (store) => store.CandidateReducer.pagedCandidates
   );
+  const filterDataCandidates = useSelector(
+    (store) => store.CandidateReducer.filterCandidates
+  );
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
   const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
-  const cardsMaxLimit = 30;
+  useEffect(() => {
+    dispatch(getCandidatesPage(currentPage));
+  }, [newPageSelected]);
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
@@ -57,8 +72,17 @@ function CardsContainer(props) {
   const includesCandidate = (id) => {
     return selectedCandidates.includes(id);
   };
-
-  if (!candidates.length) return <h1>Loading...</h1>;
+  if (!candidates.length) {
+    return (
+      <ThemeProvider theme={henryTheme}>
+        <CircularProgress
+          color="primary"
+          style={{ marginTop: 100, marginBottom: 100 }}
+          size={80}
+        />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <Container className={classes.container} maxWidth="xl">
@@ -78,10 +102,10 @@ function CardsContainer(props) {
         justify="center"
         alignItems="center"
       >
-        {candidates &&
-          candidates.map(
+        {cardsCandidates &&
+          candidates &&
+          cardsCandidates.map(
             (candidate, index) =>
-              index < cardsMaxLimit &&
               candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
                   <CandidateCard
@@ -95,9 +119,15 @@ function CardsContainer(props) {
               )
           )}
       </Grid>
-      {candidates.length && (
+      {pageData.totalPages && (
         <Grid>
-          <Paginator />
+          <Paginator
+            maxPages={pageData.totalPages}
+            current={currentPage}
+            setCurrentPage={setCurrentPage}
+            setPager={setNewPageSelected}
+            newPage={newPageSelected}
+          />
         </Grid>
       )}
       <Notification notify={notify} setNotify={setNotify} />

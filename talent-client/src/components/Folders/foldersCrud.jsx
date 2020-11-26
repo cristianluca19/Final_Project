@@ -92,7 +92,10 @@ function FoldersCrud() {
           )}`,
           status: folders.status,
           createAt: moment(folders.createdAt).format(DATE_FORMAT),
-          sentAt: folders.sentAt === null ? ' ' : moment(folders.sentAt).format(DATE_FORMAT),
+          sentAt:
+            folders.sentAt === null
+              ? ' '
+              : moment(folders.sentAt).format(DATE_FORMAT),
           opened: folders.opened.toString(),
           recruiter: findRecruiter(folders.recruiterId, 'contactName'),
           email: findRecruiter(folders.recruiterId, 'email'),
