@@ -14,6 +14,16 @@ export function getAllCandidates() {
   };
 }
 
+export function getAllListedCandidates() {
+  return async (dispatch) => {
+    const candidates = await axios.get(`${BACKEND_URL}/candidates?visibility=listed`);
+    dispatch({
+      type: actions.GET_ALL_LISTED_CANDIDATES,
+      payload: candidates.data,
+    });
+  };
+}
+
 export function getCandidatesPage(currentPage, limit) {
   return async (dispatch) => {
     const candidates = await axios.get(

@@ -32,7 +32,7 @@ const MenuProps = {
 
 function Search() {
   const candidates = useSelector(
-    (store) => store.CandidateReducer.allCandidates
+    (store) => store.CandidateReducer.allListedCandidates
   );
   const allSkills = useSelector((store) => store.SkillsReducer.allSkills);
   const dispatch = useDispatch();
@@ -72,6 +72,7 @@ function Search() {
 
   const onClickFilter = (e) => {
     e.preventDefault();
+    console.log(statusFilter)
     dispatch(getFilterCandidates(statusFilter));
     handleClose();
   };

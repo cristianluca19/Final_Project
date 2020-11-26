@@ -24,6 +24,12 @@ paths:
       - Candidates
       summary: Fetch all candidates
       description: returns a list with all candidates and their details
+      parameters: 
+        - in: query
+          name: visibility
+          required: false
+          schema:
+            type: string      
       responses:
         200:
           description: A JSON array of candidate details
