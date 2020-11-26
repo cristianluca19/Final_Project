@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useStyles } from './styles.js';
 import { Container, Grid, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { henryTheme } from '../../henryMuiTheme';
 import CandidateCard from '../CandidateCard';
-import {
-  getFolderById,
-  getDraftFolder,
-} from '../../redux/foldersReducer/Action';
 
 function PreviewFolderActive() {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const classes = useStyles();
   const cardsMaxLimit = 10;
 
@@ -25,17 +20,16 @@ function PreviewFolderActive() {
     (store) => store.RecruitersReducer.recruiter
   );
 
-  useEffect(() => {
-    if (activeFolder) {
-      return dispatch(getFolderById(activeFolder.id));
-    }
-    dispatch(getDraftFolder());
-  }, [activeFolder, dispatch]);
-
   return (
     <Container className={classes.container} maxWidth="xl">
       <ThemeProvider theme={henryTheme}>
-        <Typography color="primary" gutterBottom variant="h5" component="h2">
+        <Typography
+          color="primary"
+          style={{ color: 'yellow' }}
+          gutterBottom
+          variant="h5"
+          component="h2"
+        >
           Candidatos Seleccionados{' '}
           {activeFolder && recruiterData && Object.keys(recruiterData).length
             ? ` para: ${recruiterData.contactName} - ${recruiterData.company}`
@@ -58,6 +52,7 @@ function PreviewFolderActive() {
                   )
               )
             : draftFolder &&
+              draftFolder.candidates &&
               draftFolder.candidates.map(
                 (candidate, index) =>
                   index < cardsMaxLimit && (

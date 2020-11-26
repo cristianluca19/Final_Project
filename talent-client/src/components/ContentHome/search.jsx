@@ -1,133 +1,290 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './style.css';
-import { makeStyles } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
+import { useStyle, getModalStyle } from './Styles/search.css';
+import {
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  Input,
+  InputLabel,
+  FormControl,
+  Select,
+  Button,
+  Modal,
+} from '@material-ui/core/';
 import SearchIcon from '@material-ui/icons/Search';
+import CheckIcon from '@material-ui/icons/Check';
+import OfflinePinIcon from '@material-ui/icons/OfflinePin';
+import { getAllSkills } from '../../redux/skillsReducer/Action';
+import { getFilterCandidates } from '../../redux/candidatesReducer/Action';
 
-const useStyle = makeStyles((theme) => ({
-  root: {
-    '& .MuiInputBase-input': {},
-    '& .MuiSelect-select': {
-      backgroundColor: '#111111',
-      color: '#FFFFFF',
-      '&:focus': {
-        backgroundColor: '#111111',
-      },
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      height: ITEM_HEIGHT * 7.5 + ITEM_PADDING_TOP,
+      width: 250,
     },
   },
-  testing: {
-    color: 'red !important',
-    backgroundColor: '#FFF001 !important',
-  },
-  contentSearch: {
-    background: '#000000',
-    width: '480px',
-    margin: '20px 0px 20px 0px',
-    padding: '30px 0px',
-    border: '5px solid #000000',
-  },
-  selectStyle: {
-    width: '250px',
-    height: '60px',
-    padding: '0px 32px 0px 0px',
-    '&:hover': {
-      background: '#f5f5f5',
-    },
-    marginLeft: '34px',
-  },
-  inputLabelSearch: {
-    color: '#ffff00',
-    paddingLeft: 10,
-    '&$focused': {
-      background: '#ffda00',
-      color: '#ffff00',
-    },
-  },
-  button: {
-    backgroundColor: '#ffff00',
-    width: '78%',
-    color: '#000000',
-    '&:hover': {
-      background: '#ffda00',
-    },
-    button: {
-      backgroundColor: '#ffff00',
-      width: '78%',
-      color: '#000000',
-      '&:hover': {
-        background: '#ffda00',
-      },
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-    selectInput: {
-      backgroundColor: '#ffffff1f',
-      paddingRight: '24px',
-      width: '280px',
-    },
-  },
-}));
+};
 
 function Search() {
+  const candidates = useSelector(
+    (store) => store.CandidateReducer.allCandidates
+  );
+  const allSkills = useSelector((store) => store.SkillsReducer.allSkills);
+  const dispatch = useDispatch();
   const classes = useStyle();
-  //Location - Features - Skills
+  const [statusFilter, setStatusFilter] = useState({
+    skills: [],
+    cohorts: [],
+    locations: [],
+  });
+  const [allSkillsData, setAllSkillsData] = useState([]);
+  const [skillsSelected, setSkillsSelected] = useState([]);
+  const [filteredSkills, setFilteredSkills] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [modalStyle] = useState(getModalStyle);
+
+  const techSkills = allSkills.filter((dataSkill) => dataSkill.type === 'tech');
+
+  const locations = Array.from(
+    new Set(candidates.map((dataCandidate) => dataCandidate.country))
+  );
+  const cohorts = Array.from(
+    new Set(candidates.map((dataCohort) => dataCohort.cohort))
+  );
+
+  useEffect(() => {
+    if (!allSkills.length) {
+      dispatch(getAllSkills());
+    }
+  }, [candidates, allSkills, dispatch]);
+
+  const handleChange = (e, statusName) => {
+    setStatusFilter({
+      ...statusFilter,
+      [statusName]: e.target.value,
+    });
+  };
+
+  const onClickFilter = (e) => {
+    e.preventDefault();
+    dispatch(getFilterCandidates(statusFilter));
+    handleClose();
+  };
+
+  const handleOpen = () => {
+    !allSkillsData.length &&
+      setAllSkillsData(
+        ...allSkillsData,
+        techSkills.map((dataSkills) => dataSkills.name)
+      );
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setStatusFilter({
+      ...statusFilter,
+      skills: skillsSelected,
+    });
+    setOpen(false);
+  };
+
+  const handleSearchSkill = (e) => {
+    setFilteredSkills(
+      allSkillsData.filter(
+        (skill) =>
+          skill.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
+      )
+    );
+  };
+
+  const addSkill = (e) => {
+    if (!skillsSelected.some((skill) => skill === e.target.value)) {
+      setSkillsSelected((oldSkills) => [...oldSkills, e.target.value]);
+      setAllSkillsData(
+        allSkillsData.filter((skill) => skill !== e.target.value)
+      );
+      setFilteredSkills(
+        filteredSkills.filter((skill) => skill !== e.target.value)
+      );
+    }
+  };
+
+  const removeSkill = (e) => {
+    setSkillsSelected(
+      skillsSelected.filter((skill) => skill !== e.target.value)
+    );
+    if (e.target.value) {
+      setAllSkillsData((oldSkills) => [e.target.value, ...oldSkills]);
+    }
+  };
+
+  const modalSkills = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id="simple-modal-title" className={classes.titleModalSkills}>
+        Select Skills Technologies
+      </h2>
+      <FormControl className={classes.searchBar}>
+        <InputLabel className={classes.inputLabel} htmlFor="my-input">
+          Search skill...
+        </InputLabel>
+        <Input
+          className={classes.input}
+          id="my-input"
+          aria-describedby="my-helper-text"
+          onChange={handleSearchSkill}
+        />
+      </FormControl>
+      <div className={classes.generalDiv}>
+        <div className={classes.marginTop}>
+          {skillsSelected &&
+            skillsSelected.map((skill, index) => (
+              <div key={index} className={classes.divSelectedSkills}>
+                <button
+                  className={classes.yellowButton}
+                  onClick={removeSkill}
+                  value={skill}
+                >
+                  <span className={classes.skillSelected}>{skill}</span>
+                  <CheckIcon className={classes.checkIcon} />
+                </button>
+              </div>
+            ))}
+        </div>
+        <div className={classes.divAllSkills}>
+          {filteredSkills.length > 0
+            ? filteredSkills.map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))
+            : allSkillsData.map((skill, index) => (
+                <div key={index} className={classes.divBlackButton}>
+                  <button
+                    className={classes.blackButton}
+                    onClick={addSkill}
+                    value={skill}
+                  >
+                    {skill}
+                  </button>
+                </div>
+              ))}
+        </div>
+      </div>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.yellowButton}
+        startIcon={<SearchIcon />}
+        onClick={onClickFilter}
+      >
+        Search
+      </Button>
+    </div>
+  );
+
+  const selectForms = (
+    <div>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="label-locations" className={classes.inputLabelCheck}>
+          Locations
+        </InputLabel>
+        <Select
+          labelId="select-label-locations"
+          id="select-id-locations"
+          className={classes.inputSelectData}
+          multiple
+          value={statusFilter.locations}
+          onChange={(e) => handleChange(e, 'locations')}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {locations.length &&
+            locations.sort().map((location) => (
+              <MenuItem key={location} value={location}>
+                <Checkbox
+                  checked={statusFilter.locations.indexOf(location) > -1}
+                />
+                <ListItemText primary={location} />
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="label-cohorts" className={classes.inputLabelCheck}>
+          Cohort
+        </InputLabel>
+        <Select
+          labelId="select-label-cohorts"
+          id="select-id-cohort"
+          className={classes.inputSelectData}
+          multiple
+          value={statusFilter.cohorts}
+          onChange={(e) => handleChange(e, 'cohorts')}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {cohorts.length &&
+            cohorts.sort().map((cohort) => (
+              <MenuItem key={cohort} value={cohort}>
+                <Checkbox checked={statusFilter.cohorts.indexOf(cohort) > -1} />
+                <ListItemText primary={cohort} />
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
+
+  const formSelectFilter = () => (
+    <div className={classes.formSelectFilter}>
+      {selectForms}
+      <div>
+        <Button
+          type="button"
+          className={classes.buttonTechSkills}
+          onClick={handleOpen}
+          startIcon={<OfflinePinIcon />}
+        >
+          {!skillsSelected.length
+            ? 'Select Technologies'
+            : skillsSelected.join()}
+        </Button>
+      </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {modalSkills}
+      </Modal>
+    </div>
+  );
+
   return (
-    <div className={classes.contentSearch}>
-      <FormControl className={classes.root}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
-          Location
-        </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </Select>
-      </FormControl>
-      <FormControl className={classes.root}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
-          Features
-        </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </Select>
-      </FormControl>
-      <FormControl className={classes.root}>
-        <InputLabel
-          className={classes.inputLabelSearch}
-          htmlFor="age-native-simple"
-        >
-          Skills
-        </InputLabel>
-        <Select native className={classes.selectInput}>
-          <option aria-label="None" value="" />
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
-        </Select>
-      </FormControl>
-      <br />
-      <br />
+    <div>
+      {formSelectFilter()}
       <Button
         variant="contained"
         color="secondary"
         className={classes.button}
         startIcon={<SearchIcon />}
+        onClick={onClickFilter}
       >
-        Select Candidates
+        Search
       </Button>
     </div>
   );

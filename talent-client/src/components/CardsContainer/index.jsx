@@ -13,6 +13,10 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
+import {
+  addCandidateToActiveFolder,
+  removeCandidateFromActiveFolder,
+} from '../../redux/foldersReducer/Action';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -20,7 +24,6 @@ function CardsContainer(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [newPageSelected, setNewPageSelected] = useState(false);
-
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -46,47 +49,62 @@ function CardsContainer(props) {
     folder = draftFolder;
   }
 
-  // const recruiterData = useSelector(
-  //   (store) => store.FolderReducer.dossier.recruiter
-  // );
-
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
   const formatedDateFolder =
     folder && moment(folder.createdAt).format(DATE_FORMAT);
 
+  const filterDataCandidates = useSelector(
+    (store) => store.CandidateReducer.filterCandidates
+  );
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
   const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
-    // dispatch(getAllCandidates());
     dispatch(getCandidatesPage(currentPage));
-  }, [newPageSelected, folder, currentPage, dispatch]); // ocnsiderar quitar currentPage y dispatch
+  }, [newPageSelected, folder, currentPage, dispatch, activeFolder, draftFolder]);
 
-  const handleCandidate = async (event, candidate, folder, uuid, includes) => {
+  const handleCandidate = async (
+    event,
+    candidateId,
+    folder,
+    uuid,
+    includes,
+    candidate,
+    dispatch
+  ) => {
     event.preventDefault();
-    // if (!folder) {
-    //   folder = await createDraftFolder();
-    //   dispatch(setActiveFolder(folder.id));
-    //   console.log(folder);
-    // }
-
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
-          candidate,
+          candidateId,
           folder,
           selectedCandidates,
           setSelectedCandidates,
           setNotify
         );
+        activeFolder
+          ? dispatch(
+              addCandidateToActiveFolder(candidate, 'active')
+            )
+          : dispatch(
+              addCandidateToActiveFolder(candidate, 'draft')
+            );
       } else {
         RemoveCandidateFromFolder(
-          candidate,
+          candidateId,
           folder,
           selectedCandidates,
           setSelectedCandidates,
           setNotify
         );
+        activeFolder
+          ? dispatch(removeCandidateFromActiveFolder(candidate, 'active'))
+          : dispatch(
+            removeCandidateFromActiveFolder(candidate, 'draft')
+            );
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -94,9 +112,17 @@ function CardsContainer(props) {
     }
   };
 
-  const includesCandidate = (id) => {
-    return selectedCandidates.includes(id);
+  const candidatesInFolder = (activeFolder, candidateFromCatalogue) => {
+    const arrayCandidatesIds =
+      activeFolder &&
+      activeFolder.candidates &&
+      activeFolder.candidates.map((candidate) => candidate.id);
+    return (
+      arrayCandidatesIds &&
+      arrayCandidatesIds.includes(candidateFromCatalogue.id)
+    );
   };
+
   if (!candidates.length) {
     return (
       <ThemeProvider theme={henryTheme}>
@@ -115,7 +141,7 @@ function CardsContainer(props) {
         <ActiveFolder />
       </div>
       <ThemeProvider theme={henryTheme}>
-        <Typography color="primary">
+        <Typography color="primary" style={{ color: 'yellow' }}>
           {activeFolder
             ? `Carpeta N°: ${folder.id} - ${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
             : `Carpeta N°: ${draftFolder && draftFolder.id} - Draft`}
@@ -128,17 +154,26 @@ function CardsContainer(props) {
         justify="center"
         alignItems="center"
       >
-        {candidates &&
-          candidates.map(
+        {cardsCandidates &&
+          candidates &&
+          cardsCandidates.map(
             (candidate, index) =>
               candidate.visibility === 'listed' && (
                 <div key={index} className={classes.CandidateCard}>
                   <CandidateCard
                     candidate={candidate}
                     handleCandidate={handleCandidate}
-                    includes={includesCandidate(candidate.id)}
+                    includes={
+                      activeFolder
+                        ? candidatesInFolder(activeFolder, candidate)
+                        : candidatesInFolder(
+                            draftFolder,
+                            candidate && candidate
+                          )
+                    }
                     folder={folder}
                     location={props.location}
+                    dispatch={dispatch}
                   />
                 </div>
               )
@@ -168,34 +203,19 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
-// const createDraftFolder = async () => {
-//   try {
-//     const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
-//     AlertCandidate.fire({
-//       icon: 'info',
-//       title: 'Nueva carpeta creada...',
-//     });
-//     return newFolder.data.folder
-//   } catch (error) {
-//     console.log(error.message)
-//     throw error
-//   }
-// }
-
-const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
+const AddCandidateToFolder = (candidateId, folder, hook, setHook, setNotify) => {
   axios
     .post(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
         folder && folder.id
-      }/addCandidate/${candidate}`
+      }/addCandidate/${candidateId}`
     )
     .then((response) => {
-      setHook([...hook, candidate]);
+      setHook([...hook, candidateId]);
       AlertCandidate.fire({
         icon: 'success',
         title: 'Candidato agregado...',
       });
-      return;
     })
     .catch((error) => {
       setNotify({
@@ -208,7 +228,7 @@ const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
 };
 
 const RemoveCandidateFromFolder = (
-  candidate,
+  candidateId,
   folder,
   hook,
   setHook,
@@ -218,12 +238,13 @@ const RemoveCandidateFromFolder = (
     .delete(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
         folder && folder.id
-      }/removeCandidate/${candidate}`
+      }/removeCandidate/${candidateId}`
     )
     .then((response) => {
       let newSelectedCandidates = hook.filter(
-        (eachCandidate) => eachCandidate !== candidate
+        (eachCandidate) => eachCandidate !== candidateId
       );
+
       setHook(newSelectedCandidates);
       AlertCandidate.fire({
         icon: 'error',

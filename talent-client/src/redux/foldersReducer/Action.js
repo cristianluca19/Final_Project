@@ -119,3 +119,21 @@ export function removeCandidateFromFolder(idFolder, idCandidate) {
     });
   };
 }
+
+export function addCandidateToActiveFolder(candidate, string) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.ADD_CANDIDATE_TO_ACTIVE_FOLDER,
+      payload: { candidate: candidate, string: string },
+    });
+  };
+}
+
+export function removeCandidateFromActiveFolder(candidate, string) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.REMOVE_CANDIDATE_FROM_ACTIVE_FOLDER,
+      payload: { candidate: candidate, string: string },
+    });
+  };
+}
