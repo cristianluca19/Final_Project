@@ -174,6 +174,7 @@ export class CandidatesController {
         const totalPages = Math.ceil(candidatesFiltered.count / limit);
         res.status(200).json({
           candidatesInPage: candidatesFiltered.rows.length,
+          currentPage: page+1,
           totalPages: totalPages,
           count: candidatesFiltered.count,
           candidates: candidatesFiltered.rows,
