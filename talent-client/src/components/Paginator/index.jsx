@@ -11,8 +11,10 @@ const defaultPagesToShow = 10;
 function Paginator(props) {
   const classes = useStyles();
 
-  const handlePageChange = (event, value) => {
-    console.log(value);
+  //me pasa el 2 del total de paginas... no del filtrado
+
+  const handlePageChange = (event, value, currentPage) => {
+    if(value === currentPage) return
     props.setCurrentPage(value);
     props.setPager(!props.newPage);
     window.scrollTo({
@@ -37,7 +39,7 @@ function Paginator(props) {
           variant="outlined"
           shape="rounded"
           onChange={(e, value) => {
-            handlePageChange(e, value);
+            handlePageChange(e, value, props.current);
           }}
         />
       </ThemeProvider>

@@ -18,18 +18,6 @@ export function getAllCandidates() {
   };
 }
 
-export function getAllListedCandidates() {
-  return async (dispatch) => {
-    const candidates = await axios.get(
-      `${BACKEND_URL}/candidates?visibility=listed`
-    );
-    dispatch({
-      type: actions.GET_ALL_LISTED_CANDIDATES,
-      payload: candidates.data,
-    });
-  };
-}
-
 export function getCandidatesPage(currentPage, limit) {
   return async (dispatch) => {
     const candidates = await axios.get(
@@ -90,7 +78,8 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
   });
 };
 
-export function getFilterCandidates(filter, page) {
+export function getFilterCandidates(filter, page = 0) {
+  if (page !== 0) page = page-1
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
@@ -98,15 +87,13 @@ export function getFilterCandidates(filter, page) {
   return async (dispatch) => {
     const candidates = await axios.get(
       `${BACKEND_URL}/candidates/filter${
-        query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
+        query_params ? '?' + query_params.replace(/,/g, '%2C') + '&page=' + page : ''
       }`
     );
-    console.log('esto ', candidates);
     const { candidatesInPage, currentPage, totalPages } = candidates.data;
     const idCandidates = !candidates.data.candidates
       ? []
       : candidates.data.candidates;
-    console.log('idCandidates ', idCandidates);
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,

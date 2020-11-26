@@ -70,9 +70,19 @@ function Search() {
     });
   };
 
+  const handleRemoveFilters = (e) => {
+    e.preventDefault();
+    setStatusFilter({
+      skills: [],
+      cohorts: [],
+      locations: [],
+    })
+    dispatch(getFilterCandidates([]));
+    return;
+  }
+
   const onClickFilter = (e) => {
     e.preventDefault();
-    console.log(statusFilter);
     dispatch(getFilterCandidates(statusFilter));
     handleClose();
   };
@@ -282,10 +292,20 @@ function Search() {
         variant="contained"
         color="secondary"
         className={classes.button}
+        style={{maxWidth: 200}}
         startIcon={<SearchIcon />}
         onClick={onClickFilter}
       >
         Search
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        style={{maxWidth: 40}}
+        onClick={handleRemoveFilters}
+      >
+        Clear
       </Button>
     </div>
   );

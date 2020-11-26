@@ -31,11 +31,9 @@ function CardsContainer(props) {
 
   const lastFilteredData = useSelector(
     (store) => store.CandidateReducer.lastFilteredData
-  );
-  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
-
-  console.log('pageData', pageData);
+    );
+    const pageData = useSelector((store) => store.CandidateReducer.pageStats);
+    const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
@@ -44,16 +42,11 @@ function CardsContainer(props) {
     (store) => store.CandidateReducer.filterCandidates
   );
 
-  console.log('filtrados ', filterDataCandidates);
-
   let cardsCandidates = filterDataCandidates.length
     ? filterDataCandidates
     : candidates;
 
-  console.log('muestro', cardsCandidates);
-
   useEffect(() => {
-    console.log('entro?');
     if (filterDataCandidates.length) {
       dispatch(getFilterCandidates(lastFilteredData, currentPage));
     } else {
