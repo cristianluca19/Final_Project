@@ -509,7 +509,7 @@ describe('Candidates', () => {
       const candidate = await db.Candidate.findOne({
         where: { email: 'cristianL@gmail.com', cohortId: cohort1.id },
       });
-      expect(response.status).to.be.equal(204);
+      expect(response.status).to.be.equal(200);
       expect(candidate).to.be.equal(null);
     });
   });
