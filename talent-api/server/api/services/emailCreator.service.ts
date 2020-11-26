@@ -26,6 +26,8 @@ function mailCreator(to, uuid) {
     </html>`,
   };
   if (process.env.NODE_ENV !== 'ci') {
+    return false;
+  } else {
     mailGun.messages().send(mailOptions, (err, data) => {
       if (err) console.log('Error => ', err);
       else {
@@ -36,6 +38,6 @@ function mailCreator(to, uuid) {
       }
     });
     return true;
-  } else return false;
+  }
 }
 export default mailCreator;
