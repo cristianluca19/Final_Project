@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
-import mailCreator from '../../services/examples.service';
+import mailCreator from '../../services/emailCreator.service';
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
@@ -150,8 +150,7 @@ export class foldersController {
     } else if (!folder && !folder.userId) {
       res.sendStatus(404);
     } else {
-      mailCreator(email, uuid);
-      res.sendStatus(200);
+      if (mailCreator(email, uuid)) res.sendStatus(200);
     }
   }
 }

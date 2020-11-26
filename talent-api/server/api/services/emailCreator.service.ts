@@ -1,5 +1,5 @@
 import mail from 'mailgun-js';
-import '../common/env';
+import '../../common/env';
 const mailGun = mail({
   apiKey: process.env.MAILGUN_APIKEY,
   domain: process.env.MAILGUN_DOMAIN,
@@ -35,6 +35,7 @@ function mailCreator(to, uuid) {
         console.log(data);
       }
     });
-  }
+    return true;
+  } else return false;
 }
 export default mailCreator;
