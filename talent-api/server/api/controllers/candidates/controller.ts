@@ -107,7 +107,7 @@ export class CandidatesController {
     await db.Candidate.destroy({
       where: { id: req.params.candidateId },
     });
-    res.status(204).end();
+    res.status(200).end();
   }
 
   async addCandidate(req: Request, res: Response): Promise<void> {
