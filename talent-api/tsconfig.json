@@ -11,6 +11,6 @@
     "strict": false,
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["typings.d.ts", "server/**/*.ts", "server/mail/config.js", "server/mail/config.js"],
+  "include": ["typings.d.ts", "server/**/*.ts"],
   "exclude": ["node_modules"]
 }

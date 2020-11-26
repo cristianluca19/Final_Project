@@ -1,7 +1,7 @@
 import express from 'express';
-import cohortController from './controller';
+import cohortsController from './controller';
 
 export default express
   .Router()
-  .get('/', cohortController.all)
-  .delete('/:cohortsId/delete', cohortController.deleteCohort);
+  .get('/', cohortsController.all)
+  .delete('/:cohortId/delete', cohortsController.deleteCohort);

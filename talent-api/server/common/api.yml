@@ -683,7 +683,7 @@ paths:
                 type: array
                 items:
                   type: object
-  /cohorts/{cohortsId}/delete:       
+  /cohorts/{cohortId}/delete:       
     delete:
       tags:
       - Cohort
@@ -691,7 +691,7 @@ paths:
       description: It removes a cohort by his id.
       parameters:
         - in: path
-          name: cohortsId
+          name: cohortId
           required: true
           schema:
             type: integer

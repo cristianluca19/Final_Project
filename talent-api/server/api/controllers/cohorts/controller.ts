@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../../../models';
 
-export class CohortController {
+export class CohortsController {
   async all(req: Request, res: Response): Promise<void> {
     const cohorts = await db.Cohort.findAll();
     try {
@@ -14,10 +14,10 @@ export class CohortController {
 
   async deleteCohort(req: Request, res: Response): Promise<void> {
     await db.Cohort.destroy({
-      where: { id: req.params.cohortsId },
+      where: { id: req.params.cohortId },
     });
     res.status(200).end();
   }
 }
 
-export default new CohortController();
+export default new CohortsController();
