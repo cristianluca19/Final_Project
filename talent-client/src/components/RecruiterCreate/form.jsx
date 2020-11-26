@@ -13,6 +13,14 @@ export function RecruiterForm({ handleClose }) {
     (store) => store.RecruitersReducer.recruiter
   );
 
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
+  const recruitersData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
   const initialValues = {
     contactName: recruiterData ? recruiterData.contactName : '',
     email: recruiterData ? recruiterData.email : '',
@@ -40,7 +48,11 @@ export function RecruiterForm({ handleClose }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createRecruiter(values, setValues, setErrors, notify, setNotify);
+    if(activeFolder) {
+      editRecruiter(values, setValues, setErrors, notify, setNotify, recruiterData, activeFolder, recruitersData);
+    } else {
+      createRecruiter(values, setValues, setErrors, notify, setNotify, recruiterData, draftFolder);
+    }
     handleClose();
     return;
   };
@@ -126,7 +138,8 @@ const createRecruiter = (
   setErrors,
   notify,
   setNotify,
-  handleClose
+  handleClose,
+  draftFolder
 ) => {
   const initialValues = {
     contactName: '',
@@ -147,13 +160,58 @@ const createRecruiter = (
       return response.data;
     })
     .then((response) => {
-      console.log(response);
       axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/folders/${localStorage.getItem(
-          'activeFolderId'
-        )}?recruiterId=${response.id}`
+        `${process.env.REACT_APP_BACKEND_URL}/folders/${draftFolder.id}?recruiterId=${response.id}`
       );
       return;
+    })
+    .then(() => {
+      let body = {
+        status: 'created'
+      }
+      axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/folders/status/${draftFolder.id}`, body
+      );
+      return;
+    })
+    .catch((error) => {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: 'Oops... ocurrió un error.',
+        type: 'error',
+      });
+      return;
+    });
+};
+
+const editRecruiter = (
+  hook,
+  setHook,
+  setErrors,
+  notify,
+  setNotify,
+  handleClose,
+  activeFolder,
+  recruitersData
+) => {
+  const initialValues = {
+    contactName: '',
+    email: '',
+    company: '',
+    siteUrl: '',
+  };
+  axios
+    .put(`${process.env.REACT_APP_BACKEND_URL}/recruiters/${recruitersData.id}`, hook)
+    .then((response) => {
+      setHook(initialValues);
+      setErrors(true);
+      setNotify({
+        isOpen: true,
+        message: 'Recruiter creado con éxito',
+        type: 'success',
+      });
+      return response.data;
     })
     .catch((error) => {
       console.log(error);
