@@ -150,7 +150,8 @@ export class foldersController {
     } else if (!folder && !folder.userId) {
       res.sendStatus(404);
     } else {
-      if (mailCreator(email, uuid)) res.sendStatus(200);
+      mailCreator(email, uuid);
+      res.sendStatus(200);
     }
   }
 }
