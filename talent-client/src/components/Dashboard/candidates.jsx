@@ -86,11 +86,6 @@ function Candidates() {
   useEffect(() => {
     Object.keys(candidate).length && setCandidateData(candidate);
     setCandidates(allCandidates);
-    // allCandidates.forEach((item) => {
-    //   if (!cohorts.includes(item.cohort)) {
-    //     setCohorts([...cohorts, item.cohortId]);
-    //   }
-    // });
   }, [allCandidates, candidate]);
 
   const columns = [
