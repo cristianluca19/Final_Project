@@ -76,6 +76,33 @@ export function getDossierByUuid(uuid) {
   };
 }
 
+export function setActiveFolder(idActiveFolder) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.SET_ACTIVE_FOLDER,
+      payload: idActiveFolder,
+    });
+  };
+}
+
+export function getDraftFolder() {
+  return async (dispatch) => {
+    const draftFolder = await axios.get(`${BACKEND_URL}/folders/getDraftFolder`);
+    dispatch({
+      type: actions.GET_DRAFT_FOLDER,
+      payload: draftFolder.data,
+    });
+  };
+}
+
+export function deleteActiveFolder() {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.DELETE_ACTIVE_FOLDER,
+    });
+  };
+}
+
 export function removeCandidateFromFolder(idFolder, idCandidate) {
   return async (dispatch) => {
     const removedCandidate = await axios.delete(
@@ -87,3 +114,12 @@ export function removeCandidateFromFolder(idFolder, idCandidate) {
     });
   };
 }
+
+// export function pushCandidateToActiveFolder(idFolder, idCandidate) {
+//   return async (dispatch) => {
+//     dispatch({
+//       type: actions.REMOVE_CANDIDATE_FROM_FOLDER,
+//       payload: { idFolder: idFolder, idCandidate: idCandidate },
+//     });
+//   };
+// }

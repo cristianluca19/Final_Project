@@ -169,6 +169,11 @@ paths:
         schema:
           type: integer
           minimum: 1
+      - in: query
+        name: draftFolder
+        required: false
+        schema:
+          type: string
       responses:
         200:
           description: a JSON object with the folderId and candidateId associated.
@@ -464,6 +469,33 @@ paths:
             application/json:
               schema:
                   type: object
+  /recruiters/search/company:
+    get:
+      tags:
+      - Recruiters
+      summary: Fetch a recruiter by email.
+      description: Returns the list of folders that belongs to the recruiter.
+      parameters: 
+        - in: query
+          name: company
+          required: false
+          schema:
+            type: string
+      responses: 
+        200:
+          description: a JSON array of folders which the recruiter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        400:
+          description: a JSON object with the error description.
+          content:
+            application/json:
+              schema:
+                  type: object
   /recruiters/{recruiterId}:
     get:
       tags:
@@ -507,7 +539,7 @@ paths:
            type: integer
       responses:
         200:
-          description: An empty response is sent with a 200 status if update succeded.
+          description: An empty response is sent with a 200 status if update succeded. 
   /folders:
     get:
       tags:
@@ -529,6 +561,7 @@ paths:
                 type: array
                 items:
                   type: object
+
     post:
       tags:
       - Folders
@@ -553,7 +586,20 @@ paths:
       responses:
         200:
           description: a JSON object with the dossier important details and candidates
-          content: {}  
+          content: {}
+  /folders/getDraftFolder:
+    get:
+      tags:
+      - Folders
+      summary: Fetch the draft folder.
+      description: Find or creates the draft folder and sends it to the client.
+      responses:
+        200:
+          description: a JSON object with the folder draft details
+          content:
+              application/json:
+                schema:
+                  type: object
   /folders/status/{folderId}:
     put:
       tags:

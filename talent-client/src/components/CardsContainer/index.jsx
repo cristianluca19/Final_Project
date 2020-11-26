@@ -7,9 +7,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import Paginator from '../Paginator';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ActiveFolder from '../ActiveFolder/ActiveFolder';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
+import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+  addCandidateToActiveFolder,
+  removeCandidateFromActiveFolder,
+} from '../../redux/foldersReducer/Action';
 import {
   getCandidatesPage,
   getFilterCandidates,
@@ -21,7 +27,6 @@ function CardsContainer(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [newPageSelected, setNewPageSelected] = useState(false);
-  const [stateSearch, setStateSearch] = useState(false);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -32,19 +37,42 @@ function CardsContainer(props) {
   const lastFilteredData = useSelector(
     (store) => store.CandidateReducer.lastFilteredData
   );
-  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
+
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
+  const recruiterDataFolderReducer = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  let folder = useSelector((store) => store.FolderReducer.activeFolder);
+  if (!folder) {
+    folder = draftFolder;
+  }
+
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
+
+  const formatedDateFolder =
+    folder && moment(folder.createdAt).format(DATE_FORMAT);
+
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
 
-  let cardsCandidates = filterDataCandidates.length
-    ? filterDataCandidates
-    : candidates;
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
+
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
     if (filterDataCandidates.length) {
@@ -52,10 +80,16 @@ function CardsContainer(props) {
     } else {
       dispatch(getCandidatesPage(currentPage));
     }
-  }, [newPageSelected]);
+  }, [newPageSelected, folder, currentPage, activeFolder, draftFolder]);
 
-  const handleCandidate = (event, candidate, folder, uuid, includes) => {
+  const handleCandidate = async (event, candidate, folder, uuid, includes) => {
     event.preventDefault();
+    // if (!folder) {
+    //   folder = await createDraftFolder();
+    //   dispatch(setActiveFolder(folder.id));
+    //   console.log(folder);
+    // }
+
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
@@ -63,7 +97,7 @@ function CardsContainer(props) {
           folder,
           selectedCandidates,
           setSelectedCandidates,
-          setNotify
+          setNotify,
         );
       } else {
         RemoveCandidateFromFolder(
@@ -97,13 +131,22 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      {folder && (
+      <div>
+        <ActiveFolder />
+      </div>
+      {folder ? (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
             {`Carpeta N°: ${folder.id} - ${
-              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
+              recruiterData && recruiterData.company
+                ? `${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
+                : folder.status
             }`}
           </Typography>
+        </ThemeProvider>
+      ) : (
+        <ThemeProvider theme={henryTheme}>
+          <Typography color="primary">{'Carpeta: Draft'}</Typography>
         </ThemeProvider>
       )}
       <Grid
@@ -154,11 +197,25 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
+const createDraftFolder = async () => {
+  try {
+    const newFolder = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/folders`)
+    AlertCandidate.fire({
+      icon: 'info',
+      title: 'Nueva carpeta creada...',
+    });
+    return newFolder.data.folder
+  } catch (error) {
+    console.log(error.message)
+    throw error
+  }
+}
+
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
     .post(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+        folder && folder.id
       }/addCandidate/${candidate}`
     )
     .then((response) => {
@@ -189,7 +246,7 @@ const RemoveCandidateFromFolder = (
   axios
     .delete(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+        folder && folder.id
       }/removeCandidate/${candidate}`
     )
     .then((response) => {

@@ -115,6 +115,14 @@ export class foldersController {
     return;
   }
 
+  async getDraftFolder(req: Request, res: Response): Promise<void> {
+    const draftFolder = await db.Folder.findOrCreate({
+      where: { status: 'draft' },
+    });
+    res.status(200).json(draftFolder[0]);
+    return;
+  }
+
   // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.
   async updateById(req: Request, res: Response): Promise<void> {
     const { recruiterId, userId } = req.query; // add associations

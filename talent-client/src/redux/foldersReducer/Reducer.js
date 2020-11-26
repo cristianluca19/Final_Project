@@ -4,7 +4,11 @@ const initialState = {
   dossier: [],
   newFolder: [],
   allFolders: [],
+  activeFolder: null,
+  draftFolder: null,
   folderById: [],
+  // candidatesInActiveFolder: [],
+  // candidatesInDraftFolder: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -23,6 +27,21 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allFolders: action.payload,
+      };
+    case actions.SET_ACTIVE_FOLDER:
+      return {
+        ...state,
+        activeFolder: action.payload,
+      };
+    case actions.GET_DRAFT_FOLDER:
+      return {
+        ...state,
+        draftFolder: action.payload,
+      };
+    case actions.DELETE_ACTIVE_FOLDER:
+      return {
+        ...state,
+        activeFolder: null,
       };
     case actions.DELETE_FOLDER:
       return {
