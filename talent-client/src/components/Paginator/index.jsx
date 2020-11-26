@@ -12,6 +12,7 @@ function Paginator(props) {
   const classes = useStyles();
 
   const handlePageChange = (event, value) => {
+    console.log(value)
     props.setCurrentPage(value);
     props.setPager(!props.newPage);
     window.scrollTo({

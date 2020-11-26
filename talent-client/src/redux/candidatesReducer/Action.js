@@ -31,10 +31,11 @@ export function getCandidatesPage(currentPage, limit) {
         limit || candidatesPerPage
       }&page=${currentPage - 1 || 0}`
     );
+    const {candidatesInPage, totalPages} = candidates.data
     dispatch({
       type: actions.GET_CANDIDATES_PAGE,
       payload: candidates.data.candidates.rows,
-      data: candidates.data,
+      data: {candidatesInPage, totalPages}
     });
   };
 }
@@ -83,7 +84,7 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
   });
 };
 
-export function getFilterCandidates(filter) {
+export function getFilterCandidates(filter,page) {
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
@@ -94,14 +95,17 @@ export function getFilterCandidates(filter) {
         query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
       }`
     );
+    console.log('esto ', candidates)
+    const {candidatesInPage, currentPage ,totalPages} = candidates.data
     const idCandidates = !candidates.data.candidates
       ? []
-      : candidates.data.candidates.map(
-          (dataIdCandidates) => dataIdCandidates.id
-        );
+      : candidates.data.candidates
+    console.log('idCandidates ',idCandidates)
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,
+      data: {candidatesInPage, currentPage, totalPages},
+      filterData: filter,
     });
   };
 }

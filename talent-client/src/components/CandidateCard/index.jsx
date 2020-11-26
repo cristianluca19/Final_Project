@@ -40,7 +40,6 @@ function CandidateCard(props) {
     candidate.skills.filter((skill) =>
       skill.type === 'soft' ? skill.type : null
     );
-  console.log(candidate);
 
   const labelsMaxLimit = 10;
 
@@ -295,7 +294,7 @@ CandidateCard.propTypes = {
     email: PropTypes.string,
     country: PropTypes.string,
     skills: PropTypes.array,
-    cohort: PropTypes.string,
+    cohort: PropTypes.object,
     profilePicture: PropTypes.string,
     miniBio: PropTypes.string,
     linkedin: PropTypes.string,
@@ -306,6 +305,7 @@ CandidateCard.propTypes = {
     comment: PropTypes.string,
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
+    cohortId: PropTypes.number,
   }),
   folder: PropTypes.object,
   includes: PropTypes.bool,

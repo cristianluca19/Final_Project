@@ -10,7 +10,7 @@ import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
+import { getCandidatesPage, getFilterCandidates } from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -26,21 +26,35 @@ function CardsContainer(props) {
     type: '',
   });
 
-  // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
+  const lastFilteredData = useSelector((store) => store.CandidateReducer.lastFilteredData) 
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
+  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
+
+
+  console.log('pageData', pageData)
+
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
-  const cardsCandidates = !filterDataCandidates.length
-    ? candidates
-    : filterDataCandidates;
-  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
+
+  console.log('filtrados ',filterDataCandidates)
+
+  let cardsCandidates = filterDataCandidates.length
+    ? filterDataCandidates
+    : candidates;
+
+    console.log('muestro', cardsCandidates)
 
   useEffect(() => {
-    dispatch(getCandidatesPage(currentPage));
+    console.log('entro?')
+    if (filterDataCandidates.length) {
+      dispatch(getFilterCandidates(lastFilteredData,currentPage));
+    }else{
+      dispatch(getCandidatesPage(currentPage));
+    }
   }, [newPageSelected]);
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
@@ -89,9 +103,8 @@ function CardsContainer(props) {
       {folder && (
         <ThemeProvider theme={henryTheme}>
           <Typography color="primary">
-            {`Carpeta N°: ${folder.id} - ${
-              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
-            }`}
+            {`Carpeta N°: ${folder.id} - ${folder.company ? `${folder.contactName} - ${folder.company}` : ' '
+              }`}
           </Typography>
         </ThemeProvider>
       )}
@@ -123,7 +136,7 @@ function CardsContainer(props) {
         <Grid>
           <Paginator
             maxPages={pageData.totalPages}
-            current={currentPage}
+            current={pageData.currentPage ? pageData.currentPage : currentPage}
             setCurrentPage={setCurrentPage}
             setPager={setNewPageSelected}
             newPage={newPageSelected}
@@ -146,8 +159,7 @@ CardsContainer.defaultProps = {
 const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
   axios
     .post(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
       }/addCandidate/${candidate}`
     )
     .then((response) => {
@@ -177,8 +189,7 @@ const RemoveCandidateFromFolder = (
 ) => {
   axios
     .delete(
-      `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
+      `${process.env.REACT_APP_BACKEND_URL}/candidates/${folder ? folder.id : 1
       }/removeCandidate/${candidate}`
     )
     .then((response) => {
