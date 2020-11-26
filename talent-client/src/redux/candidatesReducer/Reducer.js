@@ -61,6 +61,3 @@ export default function Reducer(state = initialState, action) {
       return state;
   }
 }
-
-// : state.allCandidates.filter((candidate) =>
-// action.payload.includes(candidate.id))

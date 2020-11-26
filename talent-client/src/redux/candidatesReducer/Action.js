@@ -79,7 +79,7 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
 };
 
 export function getFilterCandidates(filter, page = 0) {
-  if (page !== 0) page = page - 1;
+  if (page !== 0) page -= 1;
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
