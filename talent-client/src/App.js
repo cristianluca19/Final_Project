@@ -9,7 +9,7 @@ import CardsContainer from './components/CardsContainer';
 import Dashboard from './components/Dashboard';
 import RecruiterFolder from './components/RecruiterFolder';
 import RecruiterCreate from './components/RecruiterCreate';
-import { getAllCandidates, getAllListedCandidates } from './redux/candidatesReducer/Action.js';
+import { getAllCandidates } from './redux/candidatesReducer/Action.js';
 import FoldersCrud from './components/Folders/index';
 import Folder from './components/Folders/folder';
 import { getAllFolders } from './redux/foldersReducer/Action';
@@ -29,7 +29,6 @@ function App() {
     dispatch(getAllRecruiters());
     dispatch(getAllUsers());
     dispatch(getAllSkills());
-    dispatch(getAllListedCandidates());
   });
 
   return (

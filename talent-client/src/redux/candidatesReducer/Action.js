@@ -7,9 +7,11 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export function getAllCandidates() {
   return async (dispatch) => {
     const candidates = await axios.get(`${BACKEND_URL}/candidates`);
+    const listedCandidates = candidates.data.filter(candidate => candidate.visibility === 'listed') 
     dispatch({
       type: actions.GET_ALL_CANDIDATES,
       payload: candidates.data,
+      listed: listedCandidates
     });
   };
 }

@@ -23,11 +23,7 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allCandidates: action.payload,
-      };
-    case actions.GET_ALL_LISTED_CANDIDATES:
-      return {
-        ...state,
-        allListedCandidates: action.payload,
+        allListedCandidates: action.listed,
       };
     case actions.DELETE_CANDIDATE:
       return {

@@ -7,10 +7,7 @@ import { parse } from '@fast-csv/parse';
 
 export class CandidatesController {
   async all(req: Request, res: Response): Promise<void> {
-    const array = [];
-    if (req.query.visibility) array.push(req.query);
     const candidates = await db.Candidate.findAll({
-      where: array,
       include: [
         {
           model: db.Skill,
