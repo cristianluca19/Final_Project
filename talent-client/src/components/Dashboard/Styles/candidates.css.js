@@ -83,19 +83,19 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     height: 50,
-    margin: '50px 5px 50px 0' ,
+    margin: '50px 5px 50px 0',
   },
   filter: {
     display: 'flex',
     width: '35vw',
     justifyContent: 'space-around',
-    height: '40px'
+    height: '40px',
   },
   text: {
     alignSelf: 'center',
-    marginLeft: '20px'
+    marginLeft: '20px',
   },
   search: {
-    padding: '5px'
+    padding: '5px',
   },
 }));

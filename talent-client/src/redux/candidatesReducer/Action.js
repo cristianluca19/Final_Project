@@ -7,9 +7,13 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export function getAllCandidates() {
   return async (dispatch) => {
     const candidates = await axios.get(`${BACKEND_URL}/candidates`);
+    const listedCandidates = candidates.data.filter(
+      (candidate) => candidate.visibility === 'listed'
+    );
     dispatch({
       type: actions.GET_ALL_CANDIDATES,
       payload: candidates.data,
+      listed: listedCandidates,
     });
   };
 }
@@ -21,10 +25,11 @@ export function getCandidatesPage(currentPage, limit) {
         limit || candidatesPerPage
       }&page=${currentPage - 1 || 0}`
     );
+    const { candidatesInPage, totalPages } = candidates.data;
     dispatch({
       type: actions.GET_CANDIDATES_PAGE,
       payload: candidates.data.candidates.rows,
-      data: candidates.data,
+      data: { candidatesInPage, totalPages },
     });
   };
 }
@@ -73,7 +78,8 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
   });
 };
 
-export function getFilterCandidates(filter) {
+export function getFilterCandidates(filter, page = 0) {
+  if (page !== 0) page = page - 1;
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
@@ -81,17 +87,20 @@ export function getFilterCandidates(filter) {
   return async (dispatch) => {
     const candidates = await axios.get(
       `${BACKEND_URL}/candidates/filter${
-        query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
+        query_params
+          ? '?' + query_params.replace(/,/g, '%2C') + '&page=' + page
+          : ''
       }`
     );
+    const { candidatesInPage, currentPage, totalPages } = candidates.data;
     const idCandidates = !candidates.data.candidates
       ? []
-      : candidates.data.candidates.map(
-          (dataIdCandidates) => dataIdCandidates.id
-        );
+      : candidates.data.candidates;
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,
+      data: { candidatesInPage, currentPage, totalPages },
+      filterData: filter,
     });
   };
 }
