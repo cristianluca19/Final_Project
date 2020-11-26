@@ -12,14 +12,22 @@ describe('Comments', (): void => {
   describe('POST Comments', (): void => {
     it('Should add a new Comment to the DB', async (): Promise<void> => {
       const newComment = {
-        comment: 'this is a new comment',
+        content: 'this is a new comment',
       };
+      const newFolder = await db.Folder.create();
+      const newUser = await db.User.create({
+        firstName: 'Federico',
+        lastName: 'Calderon',
+        profilePicture:
+          'https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg',
+        role: 'admin',
+      });
       const response = await request(Server)
-        .post('/api/v1/comments')
+        .post(`/api/v1/comments/folder/${newFolder.id}/${newUser.id}`)
         .send(newComment);
       expect(response.body)
         .to.be.an('object')
-        .to.have.property('comment', 'this is a new comment');
+        .to.have.property('content', 'this is a new comment');
     });
     it('Should add a new Comment to the DB with user, folder and recruiter Id', async (): Promise<void> => {
       const newRecruiter = await db.Recruiter.create({
@@ -37,67 +45,70 @@ describe('Comments', (): void => {
       });
       const newFolder = await db.Folder.create();
       const newComment = {
-        comment: 'this is a new comment',
+        content: 'this is a new comment',
       };
       const response = await request(Server)
         .post(
-          `/api/v1/comments/?recruiterId=${newRecruiter.id}&folderId=${newFolder.id}&userId=${newUser.id}`
+          `/api/v1/comments/folder/${newFolder.id}/${newUser.id}?recruiterId=${newRecruiter.id}`
         )
         .send(newComment);
-      expect(response.body).to.be.an('object').to.have.property('comment', 'this is a new comment')
-      expect(response.body).to.be.an('object').to.have.property('recruiterId', newRecruiter.id)
-      expect(response.body).to.be.an('object').to.have.property('folderId', newFolder.id)
-      expect(response.body).to.be.an('object').to.have.property('userId', newUser.id)
+      expect(response.body)
+        .to.be.an('object')
+        .to.have.property('content', 'this is a new comment');
+      expect(response.body)
+        .to.be.an('object')
+        .to.have.property('recruiterId', newRecruiter.id);
+      expect(response.body)
+        .to.be.an('object')
+        .to.have.property('folderId', newFolder.id);
+      expect(response.body)
+        .to.be.an('object')
+        .to.have.property('userId', newUser.id);
     });
   });
 
-  describe('GET Comments', (): void => {
-    it('Should return a list with all comments', async (): Promise<void> => {
-      await db.Comment.bulkCreate([{}, {}, {}]);
-      const response = await request(Server).get('/api/v1/comments');
-      expect(response.status).to.be.equal(200);
-      expect(response.body).to.have.lengthOf(3);
-    });
-  });
-
-  describe('GET specific Comment', (): void => {
-    it('Should return a specific comments', async (): Promise<void> => {
-      const newComment = await db.Comment.create({
-        comment: 'this is a new comment',
-      });
+  describe('GET specific Comment by Folder Id', (): void => {
+    it('Should return a specific comments from a folder', async (): Promise<void> => {
+      const newFolder = await db.Folder.create()
+      const newComment = await db.Comment.bulkCreate([
+        { content: 'new comment 1', folderId: newFolder.id },
+        { content: 'new comment 2', folderId: newFolder.id },
+        { content: 'new comment 3', folderId: newFolder.id },
+        { content: 'new comment 4', folderId: newFolder.id },
+      ]);
       const response = await request(Server).get(
-        `/api/v1/comments/${newComment.id}`
+        `/api/v1/comments/folder/${newFolder.id}`
       );
       expect(response.status).to.be.equal(200);
-      expect(response.body)
-        .to.an('object')
-        .to.have.property('comment', 'this is a new comment');
+      expect(response.body).to.an('array').to.have.lengthOf(4);
     });
   });
 
   describe('PUT Comments', (): void => {
-    it('Should update all the data in an specific comment', async (): Promise<void> => {
-      const bulk = await db.Comment.bulkCreate([{}, {}]);
-
+    it('Should update all the data in an specific comment', async (): Promise<
+      void
+    > => {
+      const comments = await db.Comment.bulkCreate([
+        { content: 'new comment 1'},
+        { content: 'new comment 2'},
+        { content: 'new comment 3'},
+        { content: 'new comment 4'},
+      ]);
       const newComment = {
-        comment: 'this is a new comment',
-      };
-
-      await db.Comment.update(newComment, {
-        where: { id: bulk[1].id },
-      });
-
-      const foundComment = await db.Comment.findOne({
-        where: { id: bulk[1].id },
-      });
-      expect(foundComment).to.deep.include(newComment);
+        content: 'new comment edited',
+      }
+      const response = await request(Server)
+      .put(`/api/v1/comments/${comments[1].id}`)
+      .send(newComment);
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.an('array').to.have.length(1);
     });
   });
 
   describe('DELETE Comments', (): void => {
     it('Should delete an specific comment', async (): Promise<void> => {
       const newComment = await db.Comment.create({
-        comment: 'this is a new comment',
+        content: 'this is a new comment',
       });
 
       const response = await request(Server).delete(

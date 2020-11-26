@@ -8,7 +8,6 @@ export default (sequelize) => {
   class User extends Model {
     static associate(models) {
       this.hasMany(models.Folder);
-      this.hasMany(models.Comment);
     }
   }
 

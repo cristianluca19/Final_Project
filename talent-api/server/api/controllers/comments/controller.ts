@@ -2,21 +2,21 @@ import { Request, Response } from 'express';
 import db from '../../../models';
 
 export class CommentsController {
-  async all(req: Request, res: Response): Promise<void> {
-    const comments = await db.Comment.findAll();
+  async byFolderId(req: Request, res: Response): Promise<void> {
+    const comments = await db.Comment.findAll({
+      where: {
+        folderId: req.params.folderId
+      }
+    });
     res.status(200).json(comments);
   }
 
-  async byId(req: Request, res: Response): Promise<void> {
-    const comment = await db.Comment.findByPk(req.params.commentId);
-    res.status(200).json(comment);
-  }
-
   async add(req: Request, res: Response): Promise<void> {
-    const { comment } = req.body;
-    const { recruiterId, folderId, userId } = req.query;
+    const { content } = req.body;
+    const { folderId, userId } = req.params;
+    const { recruiterId } = req.query;
     const response = await db.Comment.create({
-      comment: comment,
+      content: content,
       recruiterId: recruiterId,
       folderId: folderId,
       userId: userId,
@@ -25,10 +25,10 @@ export class CommentsController {
   }
 
   async updateById(req: Request, res: Response): Promise<void> {
-    await db.Comment.update(req.body, {
+    const response = await db.Comment.update(req.body, {
       where: { id: req.params.commentId },
     });
-    res.sendStatus(200);
+    res.status(200).json(response);
   }
 
   async delete(req: Request, res: Response): Promise<void> {

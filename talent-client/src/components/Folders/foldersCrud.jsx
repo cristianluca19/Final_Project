@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useStyles } from './styles.js';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ViewIcon from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
@@ -53,19 +52,16 @@ function FoldersCrud() {
   const users = useSelector((store) => store.UsersReducer.allUsers);
   const UPDATE_CLICK_ACTION = 'update';
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
-
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
     { id: 'selector', label: 'SELECTOR', minWidth: 100 },
     { id: 'status', label: 'STATUS', minWidth: 100 },
     { id: 'createAt', label: 'CREATE AT', minWidth: 100 },
-    { id: 'lastUpdateAt', label: 'LAST UPDATE AT', minWidth: 100 },
     { id: 'sentAt', label: 'SENT AT', minWidth: 100 },
     { id: 'opened', label: 'OPENED', minWidth: 100 },
     { id: 'recruiter', label: 'RECRUITER', minWidth: 100 },
     { id: 'email', label: 'EMAIL', minWidth: 100 },
     { id: 'company', label: 'COMPANY', minWidth: 100 },
-    { id: 'view', label: '', minWidth: 50 },
     { id: 'edit', label: '', minWidth: 50 },
     { id: 'delete', label: '', minWidth: 50 },
   ];
@@ -96,8 +92,7 @@ function FoldersCrud() {
           )}`,
           status: folders.status,
           createAt: moment(folders.createdAt).format(DATE_FORMAT),
-          lastUpdateAt: moment(folders.updatedAt).format(DATE_FORMAT),
-          sentAt: moment(folders.sentat).format(DATE_FORMAT),
+          sentAt: folders.sentAt === null ? ' ' : moment(folders.sentAt).format(DATE_FORMAT),
           opened: folders.opened.toString(),
           recruiter: findRecruiter(folders.recruiterId, 'contactName'),
           email: findRecruiter(folders.recruiterId, 'email'),
@@ -273,16 +268,27 @@ function FoldersCrud() {
       {columns.map((column) => {
         const value = row[column.id];
         return (
-          <TableCell key={column.id} align={column.align}>
-            {column.format && typeof value === 'number'
-              ? column.format(value)
-              : value}
-            {column.id === 'view' && (
-              <Link to={'/folder/' + row.uuid}>
-                <ViewIcon />
+          <TableCell
+            style={
+              row.status === 'sent'
+                ? { backgroundColor: '#cfd1d2' }
+                : { backgroundColor: 'none' }
+            }
+            key={column.id}
+            align={column.align}
+          >
+            {column.format && typeof value === 'number' ? (
+              column.format(value)
+            ) : (
+              <Link
+                style={{ textDecoration: 'none', color: 'black' }}
+                to={`/folder/${row.uuid}`}
+              >
+                {value}
               </Link>
             )}
-            {column.id === 'edit' && row.status === 'created' ? (
+            {column.id === 'edit' &&
+            (row.status === 'created' || row.status === 'draft') ? (
               <EditIcon
                 onClick={() => {
                   handleClickOpen(row.id, UPDATE_CLICK_ACTION);
