@@ -7,8 +7,6 @@ const initialState = {
   activeFolder: null,
   draftFolder: null,
   folderById: [],
-  // candidatesInActiveFolder: [],
-  // candidatesInDraftFolder: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -78,7 +76,52 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         newFolder: action.payload,
+        activeFolder: action.payload,
       };
+    case actions.ADD_CANDIDATE_TO_ACTIVE_FOLDER:
+      if (action.payload.string === 'active') {
+        return {
+          ...state,
+          activeFolder: {
+            ...state.activeFolder,
+            candidates: state.activeFolder.candidates.concat(
+              action.payload.candidate
+            ),
+          },
+        };
+      } else {
+        return {
+          ...state,
+          draftFolder: {
+            ...state.draftFolder,
+            candidates: state.draftFolder.candidates.concat(
+              action.payload.candidate
+            ),
+          },
+        };
+      }
+    case actions.REMOVE_CANDIDATE_FROM_ACTIVE_FOLDER:
+      if (action.payload.string === 'active') {
+        return {
+          ...state,
+          activeFolder: {
+            ...state.activeFolder,
+            candidates: state.activeFolder.candidates.filter(
+              (element) => element.id !== action.payload.candidate.id
+            ),
+          },
+        };
+      } else {
+        return {
+          ...state,
+          draftFolder: {
+            ...state.draftFolder,
+            candidates: state.draftFolder.candidates.filter(
+              (element) => element.id !== action.payload.candidate.id
+            ),
+          },
+        };
+      }
     default:
       return state;
   }

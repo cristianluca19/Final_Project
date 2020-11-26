@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getModalStyle, useStyles } from './styles';
+import { useStyles } from './styles';
 import moment from 'moment';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
-import { getFoldersByCompany, getRecruiterById } from '../../redux/recruitersReducer/Action';
-import { setActiveFolder, deleteActiveFolder, getDossierByUuid } from '../../redux/foldersReducer/Action';
+import {
+  getFoldersByCompany,
+  getRecruiterById,
+} from '../../redux/recruitersReducer/Action';
+import {
+  setActiveFolder,
+  deleteActiveFolder,
+  getAllFolders,
+} from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
 
@@ -31,6 +38,11 @@ export default function ActiveFolder() {
   const recruitersData = useSelector(
     (store) => store.RecruitersReducer.allRecruiters
   );
+
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
   const foldersFromRecruiterData = useSelector(
     (store) => store.RecruitersReducer.foldersFromRecruiter
   );
@@ -39,16 +51,18 @@ export default function ActiveFolder() {
 
   const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
 
-  const recruiterData = useSelector(
-    (store) => store.RecruitersReducer.recruiter
-  );
-  
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
   const [company, setCompany] = useState([]);
   const [folder, setFolder] = useState([]);
   const [foldersFromRecruiter, setFoldersFromRecruiter] = useState([]);
   const [openCompany, setOpenCompany] = useState(false);
   const [openFolder, setOpenFolder] = useState(false);
   const [state, setState] = useState(null);
+
+  // useEffect(() => {
+  //   dispatch(getAllFolders())
+  // }, [])
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -67,7 +81,7 @@ export default function ActiveFolder() {
   const handleOpenFolder = () => {
     if (foldersFromRecruiter === 'no valor') {
       setFoldersFromRecruiter([]);
-      dispatch(getRecruiterById())
+      dispatch(getRecruiterById());
     } else {
       setFoldersFromRecruiter(foldersFromRecruiterData);
     }
@@ -86,17 +100,23 @@ export default function ActiveFolder() {
 
   const handleChangeFolder = (event) => {
     setFolder(event.target.value);
-    dispatch(getRecruiterById(event.target.value.recruiterId))
+    dispatch(getRecruiterById(event.target.value.recruiterId));
     dispatch(setActiveFolder(event.target.value));
-    dispatch(getDossierByUuid(event.target.value.uuid)); //sera por esto?
   };
 
   const RedirectToFolderPreview = () => {
-    if(activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
+    if (activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
+    else return setState(`/preview/${draftFolder.id}`);
   };
 
   if (state) {
     return <Redirect to={state} />;
+  }
+
+  const handleSendEmail = () => {
+    // activeFolder datos de la carpeta activa
+    // recruiterData datos de la carpeta activa
+    console.log("enviar mail")
   }
 
   return (
@@ -121,7 +141,7 @@ export default function ActiveFolder() {
           style={{ color: 'white' }}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>Draft</em>
           </MenuItem>
           {recruitersData.map((element, index) => (
             <MenuItem key={index} value={element.company}>
@@ -130,7 +150,6 @@ export default function ActiveFolder() {
           ))}
         </Select>
       </FormControl>
-      {/*FOLDER INPUT*/}
       <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Folders</InputLabel>
         <Select
@@ -168,6 +187,14 @@ export default function ActiveFolder() {
       <Button>
         <CreateRecruiterModal />
       </Button>
+      {activeFolder && (
+        <Button
+          className={classes.folderPreview}
+          onClick={handleSendEmail}
+        >
+          Send folder
+        </Button>
+      )}
     </div>
   );
 }

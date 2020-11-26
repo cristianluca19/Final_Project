@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
 import mailCreator from '../../services/emailCreator.service';
@@ -118,9 +118,73 @@ export class foldersController {
   async getDraftFolder(req: Request, res: Response): Promise<void> {
     const draftFolder = await db.Folder.findOrCreate({
       where: { status: 'draft' },
+      include: {
+        model: db.Candidate,
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'country',
+          'cohortId',
+          'profilePicture',
+          'visibility',
+          'status',
+          'miniBio',
+          'linkedin',
+          'github',
+        ],
+        through: { attributes: [] },
+        include: [
+          {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.Cohort,
+            attributes: ['name'],
+          },
+        ],
+      },
     });
+    if (draftFolder[1]) {
+      const draftFolderWithCandidates = await db.Folder.findOrCreate({
+        where: { status: 'draft' },
+        include: {
+          model: db.Candidate,
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+            'country',
+            'cohortId',
+            'profilePicture',
+            'visibility',
+            'status',
+            'miniBio',
+            'linkedin',
+            'github',
+          ],
+          through: { attributes: [] },
+          include: [
+            {
+              model: db.Skill,
+              attributes: ['id', 'name', 'type'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Cohort,
+              attributes: ['name'],
+            },
+          ],
+        },
+      });
+      res.status(200).json(draftFolderWithCandidates[0]);
+      return;
+    }
     res.status(200).json(draftFolder[0]);
-    return;
   }
 
   // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.

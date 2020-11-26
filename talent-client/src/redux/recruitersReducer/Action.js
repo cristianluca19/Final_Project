@@ -26,10 +26,24 @@ export function getRecruiterById(id) {
 
 export function getFoldersByCompany(company) {
   return async (dispatch) => {
-    const recruiter = await axios.get(`${BACKEND_URL}/recruiters/search/company?company=${company}`);
+    const recruiter = await axios.get(
+      `${BACKEND_URL}/recruiters/search/company?company=${company}`
+    );
     dispatch({
       type: actions.GET_FOLDERS_BY_COMPANY,
       payload: recruiter.data,
     });
   };
 }
+
+// export function updateRecruiter(company) {
+//   return async (dispatch) => {
+//     const recruiter = await axios.get(
+//       `${BACKEND_URL}/recruiters/search/company?company=${company}`
+//     );
+//     dispatch({
+//       type: actions.GET_FOLDERS_BY_COMPANY,
+//       payload: recruiter.data,
+//     });
+//   };
+// }

@@ -33,7 +33,7 @@ const useStyle = makeStyles({
   },
 });
 
-function Nav({ location }) {
+function Nav({ location }) {   //todo borrar
   const dispatch = useDispatch();
   const classes = useStyle();
 
