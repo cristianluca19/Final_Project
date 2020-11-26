@@ -72,7 +72,7 @@ function Search() {
 
   const onClickFilter = (e) => {
     e.preventDefault();
-    console.log(statusFilter)
+    console.log(statusFilter);
     dispatch(getFilterCandidates(statusFilter));
     handleClose();
   };

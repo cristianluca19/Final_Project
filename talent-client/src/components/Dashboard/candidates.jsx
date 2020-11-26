@@ -76,11 +76,11 @@ function Candidates() {
   useEffect(() => {
     Object.keys(candidate).length !== 0 && setCandidateData(candidate);
     setCandidates(allCandidates);
-    allCandidates.forEach(item => {
-      if (!(cohorts.includes(item.cohort))) {
-        setCohorts([...cohorts, item.cohort])
-      };
-    })
+    allCandidates.forEach((item) => {
+      if (!cohorts.includes(item.cohort)) {
+        setCohorts([...cohorts, item.cohort]);
+      }
+    });
   }, [allCandidates, candidate, cohorts]);
 
   const columns = [
@@ -167,12 +167,20 @@ function Candidates() {
   };
 
   const handleFilter = (e, property) => {
-    const filtered = allCandidates.filter(item => item[property] === e.target.value)
+    const filtered = allCandidates.filter(
+      (item) => item[property] === e.target.value
+    );
     setCandidates(filtered);
   };
 
   const handleSearch = (e) => {
-    const filtered = allCandidates.filter(item => item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) || item.lastName.toLowerCase().includes(e.target.value.toLowerCase()) || item.email.toLowerCase().includes(e.target.value.toLowerCase()) || item.country.toLowerCase().includes(e.target.value.toLowerCase()));
+    const filtered = allCandidates.filter(
+      (item) =>
+        item.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        item.lastName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        item.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        item.country.toLowerCase().includes(e.target.value.toLowerCase())
+    );
     setCandidates(filtered);
   };
 
@@ -383,27 +391,48 @@ function Candidates() {
               handleFilter(e, 'cohort');
             }}
           >
-            <option value='' disabled selected >Cohort</option>
-            {(cohorts.sort(function (a, b) { return a - b })).map(item => <option value={item} >{item}</option>)};
+            <option value="" disabled selected>
+              Cohort
+            </option>
+            {cohorts
+              .sort(function (a, b) {
+                return a - b;
+              })
+              .map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            ;
           </select>
           <select
             onChange={(e) => {
               handleFilter(e, 'visibility');
             }}
           >
-            <option value='' disabled selected>Visibility</option>
-            {['listed', 'unlisted'].map(item => <option value={item} >{item}</option>)};
+            <option value="" disabled selected>
+              Visibility
+            </option>
+            {['listed', 'unlisted'].map((item) => (
+              <option value={item}>{item}</option>
+            ))}
+            ;
           </select>
           <select
             onChange={(e) => {
               handleFilter(e, 'status');
             }}
           >
-            <option value='' disabled selected>Status</option>
-            {['employed', 'unemployed'].map(item => <option value={item} >{item}</option>)};
+            <option value="" disabled selected>
+              Status
+            </option>
+            {['employed', 'unemployed'].map((item) => (
+              <option value={item}>{item}</option>
+            ))}
+            ;
           </select>
 
-          <button onClick={() => setCandidates(allCandidates)}>View all candidates</button>
+          <button onClick={() => setCandidates(allCandidates)}>
+            View all candidates
+          </button>
         </div>
       </div>
       <TableContainer className={classes.container}>

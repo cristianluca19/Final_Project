@@ -50,12 +50,12 @@ export default function Reducer(state = initialState, action) {
         bulkedCandidates: action.payload,
       };
     case actions.GET_CANDIDATE_FILTER:
-      let aux = { ...state.pageStats } 
+      let aux = { ...state.pageStats };
       return {
         ...state,
-        filterCandidates: !action.payload.length ? [] : action.payload ,
+        filterCandidates: !action.payload.length ? [] : action.payload,
         pageStats: action.data || aux,
-        lastFilteredData: action.filterData
+        lastFilteredData: action.filterData,
       };
     default:
       return state;

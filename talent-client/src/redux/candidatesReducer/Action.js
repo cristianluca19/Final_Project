@@ -7,18 +7,22 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export function getAllCandidates() {
   return async (dispatch) => {
     const candidates = await axios.get(`${BACKEND_URL}/candidates`);
-    const listedCandidates = candidates.data.filter(candidate => candidate.visibility === 'listed') 
+    const listedCandidates = candidates.data.filter(
+      (candidate) => candidate.visibility === 'listed'
+    );
     dispatch({
       type: actions.GET_ALL_CANDIDATES,
       payload: candidates.data,
-      listed: listedCandidates
+      listed: listedCandidates,
     });
   };
 }
 
 export function getAllListedCandidates() {
   return async (dispatch) => {
-    const candidates = await axios.get(`${BACKEND_URL}/candidates?visibility=listed`);
+    const candidates = await axios.get(
+      `${BACKEND_URL}/candidates?visibility=listed`
+    );
     dispatch({
       type: actions.GET_ALL_LISTED_CANDIDATES,
       payload: candidates.data,
@@ -33,11 +37,11 @@ export function getCandidatesPage(currentPage, limit) {
         limit || candidatesPerPage
       }&page=${currentPage - 1 || 0}`
     );
-    const {candidatesInPage, totalPages} = candidates.data
+    const { candidatesInPage, totalPages } = candidates.data;
     dispatch({
       type: actions.GET_CANDIDATES_PAGE,
       payload: candidates.data.candidates.rows,
-      data: {candidatesInPage, totalPages}
+      data: { candidatesInPage, totalPages },
     });
   };
 }
@@ -86,7 +90,7 @@ export const bulkCandidates = (jsonCandidates) => async (dispatch) => {
   });
 };
 
-export function getFilterCandidates(filter,page) {
+export function getFilterCandidates(filter, page) {
   const query_params = Object.keys(filter)
     .filter((key) => filter[key].length)
     .map((key) => key + '=' + filter[key])
@@ -97,16 +101,16 @@ export function getFilterCandidates(filter,page) {
         query_params ? '?' + query_params.replace(/,/g, '%2C') : ''
       }`
     );
-    console.log('esto ', candidates)
-    const {candidatesInPage, currentPage ,totalPages} = candidates.data
+    console.log('esto ', candidates);
+    const { candidatesInPage, currentPage, totalPages } = candidates.data;
     const idCandidates = !candidates.data.candidates
       ? []
-      : candidates.data.candidates
-    console.log('idCandidates ',idCandidates)
+      : candidates.data.candidates;
+    console.log('idCandidates ', idCandidates);
     dispatch({
       type: actions.GET_CANDIDATE_FILTER,
       payload: idCandidates,
-      data: {candidatesInPage, currentPage, totalPages},
+      data: { candidatesInPage, currentPage, totalPages },
       filterData: filter,
     });
   };
