@@ -140,14 +140,15 @@ export class foldersController {
   }
   async postEmail(req: Request, res: Response): Promise<void> {
     const { email, uuid } = await req.body;
+    if (!email && !uuid) {
+      res.sendStatus(400);
+    }
     const folder = await db.Folder.findOne({
       where: {
         uuid: uuid,
       },
     });
-    if (!email && !uuid) {
-      res.sendStatus(404);
-    } else if (!folder && !folder.userId) {
+    if (!folder) {
       res.sendStatus(404);
     } else {
       mailCreator(email, uuid);

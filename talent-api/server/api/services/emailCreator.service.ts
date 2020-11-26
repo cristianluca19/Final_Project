@@ -6,23 +6,22 @@ let sendMail;
 if (
   process.env.MAILGUN_APIKEY &&
   process.env.MAILGUN_DOMAIN &&
-  process.env.LINK
+  process.env.TALENT_URL_ROOT
 ) {
   mailGunConfig = mail({
     apiKey: process.env.MAILGUN_APIKEY,
     domain: process.env.MAILGUN_DOMAIN,
   });
 
-  sendMail = function mailSender(to, uuid) {
-    const mailOptions = {
-      from: 'talenthenry2020@gmail.com',
-      to: to,
-      subject: 'Talent Support',
-      html: mailTemplate(process.env.LINK, uuid),
-    };
-    mailGunConfig.messages().send(mailOptions, (err, data) => {
-      if (err) console.log('Error => ', err);
-    });
+  sendMail = (to, uuid) => {
+    const dossierLink = `${process.env.TALENT_URL_ROOT}/dossier/${uuid}`;
+    mailGunConfig
+      .messages()
+      .send(mailTemplate(to, dossierLink), (err, data) => {
+        if (err) console.log('Error: ', err);
+      });
   };
+} else {
+  console.error('Missing needed env vars for email sending');
 }
 export default sendMail;

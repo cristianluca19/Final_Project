@@ -659,7 +659,7 @@ paths:
               schema:
                 type: object
         204:
-          description: In case of recive any by body
+          description: Error when needed body properties are not received
           content:
             application/json:
               schema:

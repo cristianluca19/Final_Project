@@ -1,5 +1,10 @@
-function recruiterMailTemplate(link, uuid) {
-  return `<!DOCTYPE html>
+import '../../common/env';
+function recruiterMailTemplate(to, dossierLink) {
+  return {
+    from: process.env.MAILGUN_TALENT,
+    to: to,
+    subject: 'Talent Support',
+    html: `<!DOCTYPE html>
       <html lang="en">
       <head>
           <meta charset="UTF-8">
@@ -8,10 +13,11 @@ function recruiterMailTemplate(link, uuid) {
       <body>
           <div>
               <h3>Folder with candidates</h3>
-              <a href=${link}${uuid}> Open folder here </a>
+              <a href=${dossierLink}> Open folder here </a>
               <p>thanks for doing business with us</p>
           </div>
       </body>
-      </html>`;
+      </html>`,
+  };
 }
 export default recruiterMailTemplate;
