@@ -25,14 +25,16 @@ function mailCreator(to, uuid) {
     </body>
     </html>`,
   };
-  mailGun.messages().send(mailOptions, (err, data) => {
-    if (err) console.log('Error => ', err);
-    else {
-      console.log(`
-    Email sent sucsessfully to ${to}!!
-    More details:`);
-      console.log(data);
-    }
-  });
+  if (process.env.NODE_ENV !== 'ci') {
+    mailGun.messages().send(mailOptions, (err, data) => {
+      if (err) console.log('Error => ', err);
+      else {
+        console.log(`
+      Email sent sucsessfully to ${to}!!
+      More details:`);
+        console.log(data);
+      }
+    });
+  }
 }
 export default mailCreator;

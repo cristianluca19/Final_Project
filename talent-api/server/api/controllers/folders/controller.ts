@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
-import mailCreator from '../../../mail/config';
+import mailCreator from '../../services/examples.service';
 
 export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
