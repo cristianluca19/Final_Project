@@ -15,9 +15,12 @@ DB_PASSWORD=
 DB_NAME=
 DB_HOST=
 DB_PORT=
-CLIENT_URL=
 OPENAPI_SPEC=
-
+NODE_ENV=development
+TALENT_URL_ROOT = 
+MAILGUN_DOMAIN =
+MAILGUN_APIKEY = 
+MAILGUN_TALENT =
 ## Quick Start
 
 Get started developing...
