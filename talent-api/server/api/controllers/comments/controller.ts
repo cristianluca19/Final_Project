@@ -5,8 +5,8 @@ export class CommentsController {
   async byFolderId(req: Request, res: Response): Promise<void> {
     const comments = await db.Comment.findAll({
       where: {
-        folderId: req.params.folderId
-      }
+        folderId: req.params.folderId,
+      },
     });
     res.status(200).json(comments);
   }
