@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemText from '@material-ui/core/ListItemText';
+import Swal from 'sweetalert2';
 import {
   getFoldersByCompany,
   getRecruiterById,
@@ -116,7 +117,24 @@ export default function ActiveFolder() {
   }
 
   const handleSendEmail = () => {
-    axios.post(`${BACKEND_URL}/folders/send`, { email: recruiterData.email, uuid: activeFolder.uuid})
+    
+    Swal.fire({
+      title: `Estas a punto de enviar esta carpeta a ${recruiterData.email}`,
+      text: "Estas seguro?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, enviar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.post(`${BACKEND_URL}/folders/send`, { email: recruiterData.email, uuid: activeFolder.uuid})
+        Swal.fire({
+          icon: 'success',
+          text: 'Email enviado',
+        })
+      }
+    })
   }
 
   return (
