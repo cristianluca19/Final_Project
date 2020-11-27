@@ -78,7 +78,7 @@ export function getDossierByUuid(uuid) {
 
 export function removeCandidateFromFolder(idFolder, idCandidate) {
   return async (dispatch) => {
-    const removedCandidate = await axios.delete(
+    await axios.delete(
       `${BACKEND_URL}/candidates/${idFolder}/removeCandidate/${idCandidate}`
     );
     dispatch({

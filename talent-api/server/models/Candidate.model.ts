@@ -67,7 +67,7 @@ export default (sequelize) => {
         allowNull: true,
       },
       score: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(2, 1),
         allowNull: true,
         validate: {
           min: 0,

@@ -39,7 +39,7 @@ function Search() {
   const classes = useStyle();
   const [statusFilter, setStatusFilter] = useState({
     skills: [],
-    cohorts: [],
+    cohortId: [],
     locations: [],
   });
   const [allSkillsData, setAllSkillsData] = useState([]);
@@ -54,8 +54,14 @@ function Search() {
     new Set(candidates.map((dataCandidate) => dataCandidate.country))
   );
   const cohorts = Array.from(
-    new Set(candidates.map((dataCohort) => dataCohort.cohort))
+    new Set(
+      candidates.map((dataCohort) => ({
+        name: dataCohort.cohort.name,
+        id: dataCohort.cohortId,
+      }))
+    )
   );
+
 
   useEffect(() => {
     if (!allSkills.length) {
@@ -74,7 +80,7 @@ function Search() {
     e.preventDefault();
     setStatusFilter({
       skills: [],
-      cohorts: [],
+      cohortId: [],
       locations: [],
     });
     dispatch(getFilterCandidates([]));
@@ -241,17 +247,19 @@ function Search() {
           id="select-id-cohort"
           className={classes.inputSelectData}
           multiple
-          value={statusFilter.cohorts}
-          onChange={(e) => handleChange(e, 'cohorts')}
+          value={statusFilter.cohortId}
+          onChange={(e) => handleChange(e, 'cohortId')}
           input={<Input />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
           {cohorts.length &&
             cohorts.sort().map((cohort) => (
-              <MenuItem key={cohort} value={cohort}>
-                <Checkbox checked={statusFilter.cohorts.indexOf(cohort) > -1} />
-                <ListItemText primary={cohort} />
+              <MenuItem key={cohort.id} value={cohort.id}>
+                <Checkbox
+                  checked={statusFilter.cohortId.indexOf(cohort.id) > -1}
+                />
+                <ListItemText primary={cohort.name} />
               </MenuItem>
             ))}
         </Select>

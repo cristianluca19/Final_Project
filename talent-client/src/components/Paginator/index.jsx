@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Pagination } from '@material-ui/lab';
@@ -10,8 +10,6 @@ const defaultPagesToShow = 10;
 
 function Paginator(props) {
   const classes = useStyles();
-
-  //me pasa el 2 del total de paginas... no del filtrado
 
   const handlePageChange = (event, value, currentPage) => {
     if (value === currentPage) return;

@@ -35,15 +35,16 @@ import {
   InputLabel,
 } from '@material-ui/core';
 
-const DEFAULT_ROWS_PER_PAGE = 30;
+const DEFAULT_ROWS_PER_PAGE = 25;
 
 function Candidates() {
-  let allCandidates = useSelector(
+  const allCandidates = useSelector(
     (store) => store.CandidateReducer.allCandidates
   );
   const candidate = useSelector((store) => store.CandidateReducer.candidate);
+
   const classes = useStyles();
-  const [cohorts, setCohorts] = React.useState([]);
+  // const [cohorts, setCohorts] = React.useState([]);
   const [candidates, setCandidates] = React.useState([]);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -73,15 +74,19 @@ function Candidates() {
     },
   });
 
+  const cohorts = Array.from(
+    new Set(
+      allCandidates.map((dataCohort) => ({
+        name: dataCohort.cohort.name,
+        id: dataCohort.cohortId,
+      }))
+    )
+  );
+
   useEffect(() => {
-    Object.keys(candidate).length !== 0 && setCandidateData(candidate);
+    Object.keys(candidate).length && setCandidateData(candidate);
     setCandidates(allCandidates);
-    allCandidates.forEach((item) => {
-      if (!cohorts.includes(item.cohort)) {
-        setCohorts([...cohorts, item.cohort]);
-      }
-    });
-  }, [allCandidates, candidate, cohorts]);
+  }, [allCandidates, candidate]);
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 10 },
@@ -167,8 +172,11 @@ function Candidates() {
   };
 
   const handleFilter = (e, property) => {
+    let value = Number(e.target.value)
     const filtered = allCandidates.filter(
-      (item) => item[property] === e.target.value
+      (item) => {
+        return item[property] === value
+      }
     );
     setCandidates(filtered);
   };
@@ -319,20 +327,15 @@ function Candidates() {
               onChange={(e) => handleInputCandidate(e)}
             />
             <br />
-            <InputLabel id="visibilityLabel">Score</InputLabel>
-            <Select
-              labelId="Score"
+            <TextField
+              label="Score"
               id="score"
+              inputProps={{min: 0, max: 5, step: 0.1}}
+              type="number"
               value={candidateData.score}
               onChange={(e) => handleSelectCandidate(e, 'score')}
               className={classes.selectOptionsStatus}
-            >
-              <MenuItem value={'5'}>5</MenuItem>
-              <MenuItem value={'4'}>4</MenuItem>
-              <MenuItem value={'3'}>3</MenuItem>
-              <MenuItem value={'2'}>2</MenuItem>
-              <MenuItem value={'1'}>1</MenuItem>
-            </Select>
+            />
             <br />
             <br />
             <TextField
@@ -388,7 +391,7 @@ function Candidates() {
           </Paper>
           <select
             onChange={(e) => {
-              handleFilter(e, 'cohort');
+              handleFilter(e, 'cohortId');
             }}
           >
             <option value="" disabled selected>
@@ -399,7 +402,7 @@ function Candidates() {
                 return a - b;
               })
               .map((item) => (
-                <option value={item}>{item}</option>
+                <option value={item.id}>{item.name}</option>
               ))}
             ;
           </select>

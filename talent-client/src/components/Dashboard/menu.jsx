@@ -15,8 +15,8 @@ function Menu() {
         <Link to="/panel/candidates" className={classes.linkCandidate}>
           <li className={classes.liMenu}>Candidates</li>
         </Link>
-        <Link to="/panel/recruiter" className={classes.linkRecruiter}>
-          <li className={classes.liMenu}>Recruiter</li>
+        <Link to="/panel/folders" className={classes.linkRecruiter}>
+          <li className={classes.liMenu}>Folders</li>
         </Link>
         <Link to="/panel/skills" className={classes.linkSkills}>
           <li className={classes.liMenu}>Skills</li>
