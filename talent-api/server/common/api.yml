@@ -701,29 +701,23 @@ paths:
             application/json:
               schema:
                   type: object
-  /candidates/{candidateId}/delete:
-    delete:
-      tags:
-      - Candidates
-      summary: removes candidate by id.
-      description: candidateId needs to be passed through params.
-      parameters:
-      - in: path
-        name: candidateId
-        required: true
-        schema:
-          type: integer
-          minimum: 1
-      responses:
-        200:
-          description: An empty body is sent with the status code 200 if the removal succeded.
-          content: {}
-  /candidates/addCandidate:
+  /comments/folder/{folderId}/{userId}:
     post:
       tags:
-      - Candidates
-      summary: create a candidate.
-      description: email and cohort needs to be passed through body.      
+      - Comments
+      summary: Create a Comment.
+      description: user and folder Id must be passed through params, content message must be passed through body.     
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: integer 
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -731,36 +725,8 @@ paths:
             schema:
               type: object
               properties:
-                email:
+                content:
                   type: string
-                cohort:
-                  type: string
-      responses:
-        200:
-          description: a JSON object with the folderId and candidateId associated.
-          content: {}
-  /comments/folder/{folderId}/{userId}:
-    post:
-      tags:
-      - Comment
-      summary: Create a Comment.
-      description: user, folder or recruiter could be passed through query.      
-      parameters:
-        - in: path
-          name: folderId
-          required: true
-          schema:
-            type: integer 
-        - in: query
-          name: recruiterId
-          required: false
-          schema:
-            type: integer
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: integer
       responses:
         200:
           description: a JSON object with the created comment.
@@ -771,6 +737,12 @@ paths:
       - Comments
       summary: Fetch a specific comments from a folder
       description: returns a specific comments 
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: integer 
       responses:
         200:
           description: A OBJECT with a comment

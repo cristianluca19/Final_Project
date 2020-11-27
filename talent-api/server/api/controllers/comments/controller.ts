@@ -12,9 +12,8 @@ export class CommentsController {
   }
 
   async add(req: Request, res: Response): Promise<void> {
-    const { content } = req.body;
+    const { content, recruiterId } = req.body;
     const { folderId, userId } = req.params;
-    const { recruiterId } = req.query;
     const response = await db.Comment.create({
       content: content,
       recruiterId: recruiterId,
@@ -25,9 +24,14 @@ export class CommentsController {
   }
 
   async updateById(req: Request, res: Response): Promise<void> {
-    const response = await db.Comment.update(req.body, {
-      where: { id: req.params.commentId },
-    });
+    const { content } = req.body;
+    const id: number = parseInt(req.params.commentId);
+    const response = await db.Comment.update(
+      { content: content },
+      {
+        where: { id },
+      }
+    );
     res.status(200).json(response);
   }
 

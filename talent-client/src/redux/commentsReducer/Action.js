@@ -5,14 +5,23 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export function addNewComment(datas) {
   let URL = `${BACKEND_URL}/comments/folder/${datas.folderId}/${datas.userId}`;
-  if (datas.recruiterId) URL = URL.concat(`?recruiterId=${datas.recruiterId}`);
+  if (datas.recruiterId) {
   return async (dispatch) => {
-    const addComment = await axios.post(URL, { content: datas.content });
+    const addComment = await axios.post(URL, { content: datas.content, recruiterId: datas.recruiterId });
     dispatch({
       type: actions.ADD_NEW_COMMENT,
       payload: addComment.data,
     });
-  };
+    };
+  }else {
+    return async (dispatch) => {
+      const addComment = await axios.post(URL, { content: datas.content });
+      dispatch({
+        type: actions.ADD_NEW_COMMENT,
+        payload: addComment.data,
+      });
+      };
+  }
 }
 
 export function getCommentsByFolderId(folderId) {
