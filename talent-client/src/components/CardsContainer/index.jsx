@@ -16,6 +16,7 @@ import {
   addCandidateToActiveFolder,
   removeCandidateFromActiveFolder,
   getAllFolders,
+  getFolderById
 } from '../../redux/foldersReducer/Action';
 import {
   getCandidatesPage,
@@ -42,6 +43,8 @@ function CardsContainer(props) {
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
+
+  const allFolders = useSelector((store) => store.FolderReducer.allFolders);
 
   const recruiterData = useSelector(
     (store) => store.RecruitersReducer.recruiter
@@ -84,8 +87,8 @@ function CardsContainer(props) {
   }, [newPageSelected, folder, currentPage, activeFolder, draftFolder]);
 
   useEffect(() => {
-    
-  })
+    dispatch(getFolderById(activeFolder && activeFolder.id))
+  }, [allFolders]);
 
   const handleCandidate = async (
     event,
@@ -107,12 +110,8 @@ function CardsContainer(props) {
           setNotify
         );
         activeFolder
-          ? dispatch(
-              addCandidateToActiveFolder(candidate, 'active')
-            )
-          : dispatch(
-              addCandidateToActiveFolder(candidate, 'draft')
-            );
+          ? dispatch(addCandidateToActiveFolder(candidate, 'active'))
+          : dispatch(addCandidateToActiveFolder(candidate, 'draft'));
       } else {
         RemoveCandidateFromFolder(
           candidateId,
@@ -123,9 +122,7 @@ function CardsContainer(props) {
         );
         activeFolder
           ? dispatch(removeCandidateFromActiveFolder(candidate, 'active'))
-          : dispatch(
-            removeCandidateFromActiveFolder(candidate, 'draft')
-            );
+          : dispatch(removeCandidateFromActiveFolder(candidate, 'draft'));
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -224,7 +221,13 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
-const AddCandidateToFolder = (candidateId, folder, hook, setHook, setNotify) => {
+const AddCandidateToFolder = (
+  candidateId,
+  folder,
+  hook,
+  setHook,
+  setNotify
+) => {
   axios
     .post(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${

@@ -11,11 +11,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {
   getFoldersByCompany,
   getRecruiterById,
+  getAllRecruiters,
 } from '../../redux/recruitersReducer/Action';
 import {
   setActiveFolder,
   deleteActiveFolder,
-  getAllFolders,
 } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
@@ -61,8 +61,8 @@ export default function ActiveFolder() {
   const [state, setState] = useState(null);
 
   // useEffect(() => {
-  //   dispatch(getAllFolders())
-  // }, [])
+  //   dispatch(getAllRecruiters())
+  // }, [recruiterData])
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 

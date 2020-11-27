@@ -587,7 +587,7 @@ paths:
         200:
           description: a JSON object with the dossier important details and candidates
           content: {}
-  /folders/getDraftFolder:
+  /folders/folders/draft:
     get:
       tags:
       - Folders

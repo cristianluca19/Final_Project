@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useStyles } from './styles.js';
@@ -7,6 +7,8 @@ import axios from 'axios';
 import { ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
+import { getAllFolders, getDraftFolder, setActiveFolder } from '../../redux/foldersReducer/Action';
+import { getRecruiterById } from '../../redux/recruitersReducer/Action';
 
 export function RecruiterForm({ handleClose }) {
   const recruiterData = useSelector(
@@ -28,6 +30,8 @@ export function RecruiterForm({ handleClose }) {
     siteUrl: recruiterData ? recruiterData.siteUrl : '',
   };
 
+  const dispatch = useDispatch();
+
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(true);
@@ -48,10 +52,32 @@ export function RecruiterForm({ handleClose }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(activeFolder) {
-      editRecruiter(values, setValues, setErrors, notify, setNotify, recruiterData, activeFolder, recruitersData);
+    if (activeFolder) {
+      editRecruiter(
+        values,
+        setValues,
+        setErrors,
+        notify,
+        setNotify,
+        recruiterData,
+        activeFolder,
+        recruitersData,
+        dispatch,
+        getAllFolders,
+        setActiveFolder
+      );
     } else {
-      createRecruiter(values, setValues, setErrors, notify, setNotify, recruiterData, draftFolder);
+      createRecruiter(
+        values,
+        setValues,
+        setErrors,
+        notify,
+        setNotify,
+        recruiterData,
+        draftFolder,
+        dispatch,
+        getAllFolders
+      );
     }
     handleClose();
     return;
@@ -139,7 +165,9 @@ const createRecruiter = (
   notify,
   setNotify,
   handleClose,
-  draftFolder
+  draftFolder,
+  dispatch,
+  getAllFolders
 ) => {
   const initialValues = {
     contactName: '',
@@ -174,6 +202,10 @@ const createRecruiter = (
       );
       return;
     })
+    .then(() => {
+      dispatch(getAllFolders());
+      dispatch(getDraftFolder());
+    })
     .catch((error) => {
       console.log(error);
       setNotify({
@@ -193,7 +225,9 @@ const editRecruiter = (
   setNotify,
   handleClose,
   activeFolder,
-  recruitersData
+  recruitersData,
+  dispatch,
+  setActiveFolder
 ) => {
   const initialValues = {
     contactName: '',
@@ -211,10 +245,16 @@ const editRecruiter = (
         message: 'Recruiter creado con éxito',
         type: 'success',
       });
+      console.log("soy la response", response)
       return response.data;
     })
+    .then(() => {
+      dispatch(getAllFolders());
+    })
+    .then(() => {
+      dispatch(getRecruiterById(activeFolder.recruiterId));
+    })
     .catch((error) => {
-      console.log(error);
       setNotify({
         isOpen: true,
         message: 'Oops... ocurrió un error.',
