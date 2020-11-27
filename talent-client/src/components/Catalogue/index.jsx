@@ -12,7 +12,6 @@ const useStyle = makeStyles({
 });
 
 function Catalogue() {
-
   return (
     <nav>
       <Container maxWidth="lg">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.css';
 import { useStyle, getModalStyle } from './Styles/search.css';
@@ -31,6 +32,7 @@ const MenuProps = {
 };
 
 function Search() {
+  const history = useHistory()
   const candidates = useSelector(
     (store) => store.CandidateReducer.allListedCandidates
   );
@@ -62,7 +64,6 @@ function Search() {
     )
   );
 
-
   useEffect(() => {
     if (!allSkills.length) {
       dispatch(getAllSkills());
@@ -84,6 +85,7 @@ function Search() {
       locations: [],
     });
     dispatch(getFilterCandidates([]));
+    window.location.reload() // TODO: Cambiar por otra cosa que no rompa el paginado. para la demo sirve
     return;
   };
 
@@ -254,14 +256,16 @@ function Search() {
           MenuProps={MenuProps}
         >
           {cohorts.length &&
-            cohorts.sort().map((cohort) => (
-              <MenuItem key={cohort.id} value={cohort.id}>
-                <Checkbox
-                  checked={statusFilter.cohortId.indexOf(cohort.id) > -1}
-                />
-                <ListItemText primary={cohort.name} />
-              </MenuItem>
-            ))}
+            cohorts
+              .sort((a, b) => a.id - b.id)
+              .map((cohort) => (
+                <MenuItem key={cohort.id} value={cohort.id}>
+                  <Checkbox
+                    checked={statusFilter.cohortId.indexOf(cohort.id) > -1}
+                  />
+                  <ListItemText primary={cohort.name} />
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
     </div>
