@@ -19,13 +19,15 @@ tags:
   description: list of user endpoints
 - name: Comments
   description: list of comment endpoints
+- name: Cohorts
+  description: list of cohort endpoints  
 paths:
   /candidates:
     get:
       tags:
       - Candidates
       summary: Fetch all candidates
-      description: returns a list with all candidates and their details
+      description: returns a list with all candidates and their details    
       responses:
         200:
           description: A JSON array of candidate details
@@ -634,6 +636,36 @@ paths:
       responses:
         204:
           description: An empty response with status 204 is sent if deletion succeded.
+  /folders/send:
+    post:
+      tags:
+      - Folders
+      summary: Send email
+      description: Send a link with candidates to recruiter by email
+      requestBody:
+          required: true
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  uuid:
+                    type: string
+      responses:
+        200:
+          description: Send status of response
+          content: 
+            application/json:
+              schema:
+                type: object
+        204:
+          description: Error when needed body properties are not received
+          content:
+            application/json:
+              schema:
+                type: object
   /users:
     get:
       tags:
@@ -781,3 +813,34 @@ paths:
       responses:
         204:
           description: An empty response is sent with a 204 status if deletion succeed.  
+  /cohorts:
+    get:
+      tags:
+      - Cohorts
+      summary: Fetch all cohorts
+      description: returns a list of all cohorts and their details
+      responses:
+        200:
+          description: A JSON array of cohorts details
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /cohorts/{cohortId}/delete:       
+    delete:
+      tags:
+      - Cohort
+      summary: Removes cohort by id.
+      description: It removes a cohort by his id.
+      parameters:
+        - in: path
+          name: cohortId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        200:
+          description: a JSON object with all cohorts less the one that was deleted

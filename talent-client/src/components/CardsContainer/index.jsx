@@ -10,7 +10,10 @@ import axios from 'axios';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getCandidatesPage } from '../../redux/candidatesReducer/Action.js';
+import {
+  getCandidatesPage,
+  getFilterCandidates,
+} from '../../redux/candidatesReducer/Action.js';
 
 function CardsContainer(props) {
   const classes = useStyles();
@@ -26,21 +29,29 @@ function CardsContainer(props) {
     type: '',
   });
 
-  // === FETCH ALL CANDIDATES (SHOULD BE "VISIBLE only...") FROM STORE  ====
+  const lastFilteredData = useSelector(
+    (store) => store.CandidateReducer.lastFilteredData
+  );
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
+  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
+
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
-  const cardsCandidates = !filterDataCandidates.length
-    ? candidates
-    : filterDataCandidates;
-  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
+
+  let cardsCandidates = filterDataCandidates.length
+    ? filterDataCandidates
+    : candidates;
 
   useEffect(() => {
-    dispatch(getCandidatesPage(currentPage));
+    if (filterDataCandidates.length) {
+      dispatch(getFilterCandidates(lastFilteredData, currentPage));
+    } else {
+      dispatch(getCandidatesPage(currentPage));
+    }
   }, [newPageSelected]);
 
   const handleCandidate = (event, candidate, folder, uuid, includes) => {
@@ -123,7 +134,7 @@ function CardsContainer(props) {
         <Grid>
           <Paginator
             maxPages={pageData.totalPages}
-            current={currentPage}
+            current={pageData.currentPage ? pageData.currentPage : currentPage}
             setCurrentPage={setCurrentPage}
             setPager={setNewPageSelected}
             newPage={newPageSelected}

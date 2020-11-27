@@ -32,7 +32,7 @@ const MenuProps = {
 
 function Search() {
   const candidates = useSelector(
-    (store) => store.CandidateReducer.allCandidates
+    (store) => store.CandidateReducer.allListedCandidates
   );
   const allSkills = useSelector((store) => store.SkillsReducer.allSkills);
   const dispatch = useDispatch();
@@ -68,6 +68,17 @@ function Search() {
       ...statusFilter,
       [statusName]: e.target.value,
     });
+  };
+
+  const handleRemoveFilters = (e) => {
+    e.preventDefault();
+    setStatusFilter({
+      skills: [],
+      cohorts: [],
+      locations: [],
+    });
+    dispatch(getFilterCandidates([]));
+    return;
   };
 
   const onClickFilter = (e) => {
@@ -281,10 +292,20 @@ function Search() {
         variant="contained"
         color="secondary"
         className={classes.button}
+        style={{ maxWidth: 200 }}
         startIcon={<SearchIcon />}
         onClick={onClickFilter}
       >
         Search
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        style={{ maxWidth: 40 }}
+        onClick={handleRemoveFilters}
+      >
+        Clear
       </Button>
     </div>
   );

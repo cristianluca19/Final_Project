@@ -2,11 +2,13 @@ import * as actions from './Constants.js';
 
 const initialState = {
   allCandidates: [],
+  allListedCandidates: [],
   candidate: {},
   bulkedCandidates: [],
   filterCandidates: [],
   pagedCandidates: [],
   pageStats: {},
+  lastFilteredData: null,
 };
 
 export default function Reducer(state = initialState, action) {
@@ -21,6 +23,7 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allCandidates: action.payload,
+        allListedCandidates: action.listed,
       };
     case actions.DELETE_CANDIDATE:
       return {
@@ -47,15 +50,17 @@ export default function Reducer(state = initialState, action) {
         bulkedCandidates: action.payload,
       };
     case actions.GET_CANDIDATE_FILTER:
+      let aux = { ...state.pageStats };
       return {
         ...state,
-        filterCandidates: !action.payload.length
-          ? []
-          : state.allCandidates.filter((candidate) =>
-              action.payload.includes(candidate.id)
-            ),
+        filterCandidates: !action.payload.length ? [] : action.payload,
+        pageStats: action.data || aux,
+        lastFilteredData: action.filterData,
       };
     default:
       return state;
   }
 }
+
+// : state.allCandidates.filter((candidate) =>
+// action.payload.includes(candidate.id))
