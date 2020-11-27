@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import CandidateCard from '../CandidateCard';
 import { useSelector } from 'react-redux';
-import Paginator from '../Paginator';
 import { useStyles } from './styles.js';
 
 import { useDispatch } from 'react-redux';
@@ -17,17 +16,7 @@ import {
   Container,
   Grid,
   TextField,
-  TextareaAutosize,
   MenuItem,
-  InputLabel,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
   Button,
   Dialog,
   DialogActions,
