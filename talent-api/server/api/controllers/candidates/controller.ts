@@ -184,7 +184,6 @@ export class CandidatesController {
           offset,
           distinct: true,
         }); // busqueda para asociar todos los skills...
-        console.log('ids', ids);
 
         const totalPages = Math.ceil(candidateResponse.count / limit);
 

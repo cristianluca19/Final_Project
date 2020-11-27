@@ -173,8 +173,8 @@ describe('Filter', () => {
         .get('/api/v1/candidates/filter')
         .query(bodyFilterTwo);
       expect(filterTwo.body.candidates).to.be.an('array').to.have.lengthOf(2);
-      expect(filterTwo.body.candidates[0].firstName).to.equal('Drake');
-      expect(filterTwo.body.candidates[1].firstName).to.equal('Andreanne');
+      expect(filterTwo.body.candidates[1].firstName).to.equal('Drake');
+      expect(filterTwo.body.candidates[0].firstName).to.equal('Andreanne');
 
       const filterThree = await request(Server)
         .get('/api/v1/candidates/filter')
