@@ -12,6 +12,7 @@ const initialState = {
 };
 
 export default function Reducer(state = initialState, action) {
+  console.log('ddddddddddddd: ', action.payload);
   switch (action.type) {
     case actions.GET_CANDIDATES_PAGE:
       return {

@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
-import {
-  Grid,
-  Container,
-  makeStyles,
-  IconButton,
-} from '@material-ui/core';
+import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
