@@ -124,6 +124,7 @@ export class CandidatesController {
     });
     res.status(200).json(candidates);
   }
+
   async filter(req: Request, res: Response): Promise<void> {
     const limit = Number(req.query.limit) || 10;
     const page = Number(req.query.page) || 0;
@@ -151,15 +152,9 @@ export class CandidatesController {
             name: skillsArray,
           },
         },
-        {
-          model: db.Cohort,
-          attributes: ['name'],
-        },
       ],
-      limit,
-      offset,
-      distinct: true,
     };
+
     if (!skillsArray.length) delete query.include[0].where;
     if (!cohortArray.length) delete query.where.cohortId;
     if (!locationArray.length) delete query.where.country;
@@ -167,14 +162,37 @@ export class CandidatesController {
       res.sendStatus(204);
     } else {
       try {
-        const candidatesFiltered = await db.Candidate.findAndCountAll(query);
-        const totalPages = Math.ceil(candidatesFiltered.count / limit);
+        const candidatesFiltered = await db.Candidate.findAll(query); // filtrado total
+        const ids = [];
+        await candidatesFiltered.forEach((candidate) => ids.push(candidate.id)); // filtrado x id del resultado inicial
+        const candidateResponse = await db.Candidate.findAndCountAll({
+          where: {
+            id: ids,
+          },
+          include: [
+            {
+              model: db.Skill,
+              attributes: ['id', 'name', 'type'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Cohort,
+              attributes: ['id', 'name'],
+            },
+          ],
+          limit,
+          offset,
+          distinct: true,
+        }); // busqueda para asociar todos los skills...
+
+        const totalPages = Math.ceil(candidateResponse.count / limit);
+
         res.status(200).json({
-          candidatesInPage: candidatesFiltered.rows.length,
+          candidatesInPage: candidateResponse.rows.length,
           currentPage: page + 1,
           totalPages: totalPages,
-          count: candidatesFiltered.count,
-          candidates: candidatesFiltered.rows,
+          count: candidateResponse.count,
+          candidates: candidateResponse.rows,
         });
       } catch (err) {
         res.sendStatus(400);
@@ -182,6 +200,7 @@ export class CandidatesController {
       }
     }
   }
+
   async searchByProp(req: Request, res: Response): Promise<void> {
     const { search } = req.query;
     try {

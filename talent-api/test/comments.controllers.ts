@@ -86,9 +86,11 @@ describe('Comments', (): void => {
   });
 
   describe('GET specific Comments by Folder Id', (): void => {
-    it('Should return comments for folder when given its folderId', async (): Promise<void> => {
-      const newFolder = await db.Folder.create()
-      const newFolder2 = await db.Folder.create()
+    it('Should return comments for folder when given its folderId', async (): Promise<
+      void
+    > => {
+      const newFolder = await db.Folder.create();
+      const newFolder2 = await db.Folder.create();
       const newComment = await db.Comment.bulkCreate([
         { content: 'new comment 1', folderId: newFolder.id },
         { content: 'new comment 2', folderId: newFolder.id },
