@@ -7,8 +7,8 @@ import axios from 'axios';
 import { ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
-import { getAllFolders, getDraftFolder, setActiveFolder } from '../../redux/foldersReducer/Action';
-import { getRecruiterById } from '../../redux/recruitersReducer/Action';
+import { getAllFolders, getDraftFolder } from '../../redux/foldersReducer/Action';
+import { getRecruiterById, getAllRecruiters } from '../../redux/recruitersReducer/Action';
 
 export function RecruiterForm({ handleClose }) {
   const recruiterData = useSelector(
@@ -24,10 +24,10 @@ export function RecruiterForm({ handleClose }) {
   );
 
   const initialValues = {
-    contactName: recruiterData ? recruiterData.contactName : '',
-    email: recruiterData ? recruiterData.email : '',
-    company: recruiterData ? recruiterData.company : '',
-    siteUrl: recruiterData ? recruiterData.siteUrl : '',
+    contactName: activeFolder ? recruiterData && recruiterData.contactName : '',
+    email: activeFolder ? recruiterData && recruiterData.email : '',
+    company: activeFolder ? recruiterData && recruiterData.company : '',
+    siteUrl: activeFolder ? recruiterData && recruiterData.siteUrl : '',
   };
 
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ export function RecruiterForm({ handleClose }) {
         recruitersData,
         dispatch,
         getAllFolders,
-        setActiveFolder
+        getAllRecruiters,
       );
     } else {
       createRecruiter(
@@ -205,9 +205,9 @@ const createRecruiter = (
     .then(() => {
       dispatch(getAllFolders());
       dispatch(getDraftFolder());
+      dispatch(getAllRecruiters());
     })
     .catch((error) => {
-      console.log(error);
       setNotify({
         isOpen: true,
         message: 'Oops... ocurrió un error.',
@@ -227,7 +227,7 @@ const editRecruiter = (
   activeFolder,
   recruitersData,
   dispatch,
-  setActiveFolder
+  getAllRecruiters
 ) => {
   const initialValues = {
     contactName: '',
@@ -236,7 +236,10 @@ const editRecruiter = (
     siteUrl: '',
   };
   axios
-    .put(`${process.env.REACT_APP_BACKEND_URL}/recruiters/${recruitersData.id}`, hook)
+    .put(
+      `${process.env.REACT_APP_BACKEND_URL}/recruiters/${recruitersData.id}`,
+      hook
+    )
     .then((response) => {
       setHook(initialValues);
       setErrors(true);
@@ -245,14 +248,16 @@ const editRecruiter = (
         message: 'Recruiter creado con éxito',
         type: 'success',
       });
-      console.log("soy la response", response)
       return response.data;
     })
     .then(() => {
-      dispatch(getAllFolders());
+      return dispatch(getAllFolders());
     })
     .then(() => {
-      dispatch(getRecruiterById(activeFolder.recruiterId));
+      return dispatch(getAllRecruiters());
+    })
+    .then(() => {
+      return dispatch(getRecruiterById(activeFolder.recruiterId));
     })
     .catch((error) => {
       setNotify({

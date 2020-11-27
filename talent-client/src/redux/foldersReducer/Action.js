@@ -91,7 +91,7 @@ export function setActiveFolder(idActiveFolder) {
 export function getDraftFolder() {
   return async (dispatch) => {
     const draftFolder = await axios.get(
-      `${BACKEND_URL}/folders/folders/draft`
+      `${BACKEND_URL}/folders/draft`
     );
     dispatch({
       type: actions.GET_DRAFT_FOLDER,

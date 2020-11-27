@@ -97,7 +97,7 @@ export class CandidatesController {
       const reply = await folder.addCandidate(candidate);
       res.status(200).json(reply);
     } catch (error) {
-      res.status(400).json(`error: ${error}`);
+      res.status(400).json({ error });
     }
   }
 

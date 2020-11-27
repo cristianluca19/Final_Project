@@ -12,6 +12,8 @@ export default function SimpleModal() {
     (store) => store.RecruitersReducer.recruiter
   );
 
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -35,9 +37,9 @@ export default function SimpleModal() {
         type="button"
         onClick={handleOpen}
       >
-        {!Object.keys(recruiterData).length
-          ? 'Add Recruiter'
-          : 'Edit Recruiter'}
+        {activeFolder
+          ? 'Edit Recruiter'
+          : 'Add Recruiter'}
       </Button>
       <Modal
         open={open}

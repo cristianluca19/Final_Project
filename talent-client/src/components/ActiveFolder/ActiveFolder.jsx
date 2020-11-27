@@ -61,10 +61,11 @@ export default function ActiveFolder() {
   const [openCompany, setOpenCompany] = useState(false);
   const [openFolder, setOpenFolder] = useState(false);
   const [state, setState] = useState(null);
+  const recruiters = ["Draft"].concat(recruitersData.map(recruiter => recruiter.company))
 
-  // useEffect(() => {
-  //   dispatch(getAllRecruiters())
-  // }, [recruiterData])
+  useEffect(() => {
+    dispatch(getAllRecruiters())
+  }, [recruiterData])
 
   const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
 
@@ -91,10 +92,10 @@ export default function ActiveFolder() {
   };
 
   const handleChangeCompany = (event) => {
-    if (event.target.value === '') {
+    console.log(event.target.value)
+    if (event.target.value === 'Draft') {
       setFoldersFromRecruiter('no valor');
       dispatch(deleteActiveFolder());
-      return;
     }
     setCompany(event.target.value);
     dispatch(getFoldersByCompany(event.target.value));
@@ -140,12 +141,9 @@ export default function ActiveFolder() {
           MenuProps={MenuProps}
           style={{ color: 'white' }}
         >
-          <MenuItem value="">
-            <em>Draft</em>
-          </MenuItem>
-          {recruitersData.map((element, index) => (
-            <MenuItem key={index} value={element.company}>
-              <ListItemText primary={element.company} />
+          {recruiters.map((element, index) => (
+            <MenuItem key={index} value={element}>
+              <ListItemText primary={element} />
             </MenuItem>
           ))}
         </Select>
@@ -163,9 +161,6 @@ export default function ActiveFolder() {
           MenuProps={MenuProps}
           style={{ color: 'white' }}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {foldersFromRecruiter.id
             ? foldersFromRecruiter.folders.map((element, index) => (
                 <MenuItem key={index} value={element}>
@@ -188,10 +183,7 @@ export default function ActiveFolder() {
         <CreateRecruiterModal />
       </Button>
       {activeFolder && (
-        <Button
-          className={classes.folderPreview}
-          onClick={handleSendEmail}
-        >
+        <Button className={classes.folderPreview} onClick={handleSendEmail}>
           Send folder
         </Button>
       )}

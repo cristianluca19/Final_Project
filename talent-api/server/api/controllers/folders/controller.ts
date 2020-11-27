@@ -116,7 +116,7 @@ export class foldersController {
   }
 
   async getDraftFolder(req: Request, res: Response): Promise<void> {
-    const draftFolder = await db.Folder.findOrCreate({
+    const argument = {
       where: { status: 'draft' },
       include: {
         model: db.Candidate,
@@ -147,44 +147,14 @@ export class foldersController {
           },
         ],
       },
-    });
-    if (draftFolder[1]) {
-      const draftFolderWithCandidates = await db.Folder.findOrCreate({
-        where: { status: 'draft' },
-        include: {
-          model: db.Candidate,
-          attributes: [
-            'id',
-            'firstName',
-            'lastName',
-            'email',
-            'country',
-            'cohortId',
-            'profilePicture',
-            'visibility',
-            'status',
-            'miniBio',
-            'linkedin',
-            'github',
-          ],
-          through: { attributes: [] },
-          include: [
-            {
-              model: db.Skill,
-              attributes: ['id', 'name', 'type'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.Cohort,
-              attributes: ['name'],
-            },
-          ],
-        },
-      });
+    };
+    const [draftFolder, justCreated] = await db.Folder.findOrCreate(argument);
+    if (justCreated) {
+      const draftFolderWithCandidates = await db.Folder.findOrCreate(argument);
       res.status(200).json(draftFolderWithCandidates[0]);
       return;
     }
-    res.status(200).json(draftFolder[0]);
+    res.status(200).json(draftFolder);
   }
 
   // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.

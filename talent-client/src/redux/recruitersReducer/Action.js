@@ -6,6 +6,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export function getAllRecruiters() {
   return async (dispatch) => {
     const recruiters = await axios.get(`${BACKEND_URL}/recruiters`);
+    console.log("recruiters", recruiters)
     dispatch({
       type: actions.GET_ALL_RECRUITERS,
       payload: recruiters.data,
