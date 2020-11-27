@@ -201,7 +201,7 @@ function CardsContainer(props) {
         <Grid>
           <Paginator
             maxPages={pageData.totalPages}
-            current={pageData.currentPage ? pageData.currentPage : currentPage}
+            current={pageData.currentPage || currentPage}
             setCurrentPage={setCurrentPage}
             setPager={setNewPageSelected}
             newPage={newPageSelected}

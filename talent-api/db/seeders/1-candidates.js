@@ -33,7 +33,7 @@ function fill() {
       github: faker.internet.url(),
       status: randomStatus,
       visibility: randomVisbilty,
-      score: faker.random.number(5),
+      score: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
       comment: randomComment,
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),

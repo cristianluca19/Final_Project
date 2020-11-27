@@ -6,7 +6,6 @@ import {
   Container,
   makeStyles,
   IconButton,
-  Box,
 } from '@material-ui/core';
 import FolderIcon from '@material-ui/icons/Folder';
 import AcountCircle from '@material-ui/icons/AccountCircle';
@@ -56,6 +55,7 @@ function Nav({ location }) {
     return <Redirect to={path} />;
   }
 
+
   return (
     <nav>
       <Container maxWidth="lg">
@@ -85,14 +85,14 @@ function Nav({ location }) {
                 >
                   <AcountCircle />
                 </IconButton>
-                <IconButton
+                {/* <IconButton
                   className={classes.icons}
                   label="Folder"
                   value="folder"
                   onClick={HandleRedirectToFolders}
                 >
                   <FolderIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   className={classes.icons}
                   label="Setting"
