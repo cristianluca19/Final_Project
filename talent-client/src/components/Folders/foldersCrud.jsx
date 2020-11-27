@@ -66,6 +66,9 @@ function FoldersCrud() {
     { id: 'delete', label: '', minWidth: 50 },
   ];
   const rows = [];
+  const EDIT_FOLDER_SELECTOR_OR_RECRUITER = 'edit';
+  const STATUS_CREATED = 'created';
+  const STATUS_DRAFT = 'draft'; 
 
   const findRecruiter = (recruiterId, searchFor) => {
     const recruiter =
@@ -290,8 +293,8 @@ function FoldersCrud() {
                 {value}
               </Link>
             )}
-            {column.id === 'edit' &&
-            (row.status === 'created' || row.status === 'draft') ? (
+            {column.id === EDIT_FOLDER_SELECTOR_OR_RECRUITER &&
+            (row.status === STATUS_CREATED || row.status === STATUS_DRAFT) ? (
               <EditIcon
                 onClick={() => {
                   handleClickOpen(row.id, UPDATE_CLICK_ACTION);

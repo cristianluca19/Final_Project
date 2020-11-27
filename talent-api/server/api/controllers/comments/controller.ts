@@ -37,8 +37,8 @@ export class CommentsController {
 
   async delete(req: Request, res: Response): Promise<void> {
     const id: number = parseInt(req.params.commentId);
-    await db.Comment.destroy({ where: { id } });
-    res.sendStatus(204);
+    const response = await db.Comment.destroy({ where: { id } });
+    res.status(204).json(response);
   }
 }
 

@@ -3,26 +3,18 @@ import * as actions from './Constants.js';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-export function addNewComment(datas) {
-  let URL = `${BACKEND_URL}/comments/folder/${datas.folderId}/${datas.userId}`;
-  if (datas.recruiterId) {
+export function addNewComment(newComment) {
+  let URL = `${BACKEND_URL}/comments/folder/${newComment.folderId}/${newComment.userId}`;
+
   return async (dispatch) => {
-    const addComment = await axios.post(URL, { content: datas.content, recruiterId: datas.recruiterId });
+    const addComment = await axios.post(URL, { content: newComment.content, recruiterId: newComment.recruiterId || null});
     dispatch({
       type: actions.ADD_NEW_COMMENT,
       payload: addComment.data,
     });
     };
-  }else {
-    return async (dispatch) => {
-      const addComment = await axios.post(URL, { content: datas.content });
-      dispatch({
-        type: actions.ADD_NEW_COMMENT,
-        payload: addComment.data,
-      });
-      };
   }
-}
+
 
 export function getCommentsByFolderId(folderId) {
   return async (dispatch) => {
@@ -36,24 +28,25 @@ export function getCommentsByFolderId(folderId) {
   };
 }
 
-export function editComment(datas) {
+export function editComment(editComment) {
   return async (dispatch) => {
-    await axios.put(`${BACKEND_URL}/comments/${datas.commentId}`, {
-      content: datas.content,
+    await axios.put(`${BACKEND_URL}/comments/${editComment.commentId}`, {
+      content: editComment.content,
     });
     dispatch({
       type: actions.EDIT_COMMENT,
-      payload: datas,
+      payload: editComment,
     });
+    
   };
 }
 
-export function deleteComment(datas) {
+export function deleteComment(deleteCommentId) {
   return async (dispatch) => {
-    await axios.delete(`${BACKEND_URL}/comments/${datas}`);
+    await axios.delete(`${BACKEND_URL}/comments/${deleteCommentId}`);
     dispatch({
       type: actions.DELETE_COMMENT,
-      payload: datas,
+      payload: deleteCommentId,
     });
   };
 }
