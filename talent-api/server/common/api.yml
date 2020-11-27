@@ -17,6 +17,8 @@ tags:
   description: list of folder endpoints
 - name: Users
   description: list of user endpoints
+- name: Comments
+  description: list of comment endpoints
 - name: Cohorts
   description: list of cohort endpoints  
 paths:
@@ -731,6 +733,86 @@ paths:
             application/json:
               schema:
                   type: object
+  /comments/folder/{folderId}/{userId}:
+    post:
+      tags:
+      - Comments
+      summary: Create a Comment.
+      description: user and folder Id must be passed through params, content message must be passed through body.     
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: integer 
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        200:
+          description: a JSON object with the created comment.
+          content: {}
+  /comments/folder/{folderId}:        
+    get:
+      tags:
+      - Comments
+      summary: Fetch a specific comments from a folder
+      description: returns a specific comments 
+      parameters:
+        - in: path
+          name: folderId
+          required: true
+          schema:
+            type: integer 
+      responses:
+        200:
+          description: A OBJECT with a comment
+          content: 
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: object                
+  /comments/{commentId}:        
+    put:
+      tags:
+      - Comments
+      summary: Modify an specific comment
+      description: A commentId must be passed through params.
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: An empty response is sent with a 200 status if update succeded.
+    delete:
+      tags:
+      - Comments
+      summary: Delete an specific comment
+      description: A commentId must be passed through params.
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: An empty response is sent with a 204 status if deletion succeed.  
   /cohorts:
     get:
       tags:
