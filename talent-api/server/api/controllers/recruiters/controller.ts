@@ -12,6 +12,19 @@ export class RecruitersController {
     res.status(200).json(recruiter);
   }
 
+  async byCompany(req: Request, res: Response): Promise<void> {
+    try {
+      const { company } = req.query;
+      const recruiter = await db.Recruiter.findOne({
+        where: { company: company },
+        include: { model: db.Folder },
+      });
+      res.status(200).json(recruiter);
+    } catch (error) {
+      res.status(404).json(`error: ${error}`);
+    }
+  }
+
   async add(req: Request, res: Response): Promise<void> {
     const newRecruiter = await db.Recruiter.create(req.body);
     res.status(201).json(newRecruiter);

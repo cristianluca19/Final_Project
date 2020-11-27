@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import db from '../../../models';
 import uuid from 'uuidv4';
 import mailCreator from '../../services/emailCreator.service';
@@ -123,6 +123,49 @@ export class foldersController {
     return;
   }
 
+  async getDraftFolder(req: Request, res: Response): Promise<void> {
+    //TODO find draft folder where status 'draft' and idUser: req.params
+    const argument = {
+      where: { status: 'draft' },
+      include: {
+        model: db.Candidate,
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'country',
+          'cohortId',
+          'profilePicture',
+          'visibility',
+          'status',
+          'miniBio',
+          'linkedin',
+          'github',
+        ],
+        through: { attributes: [] },
+        include: [
+          {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.Cohort,
+            attributes: ['name'],
+          },
+        ],
+      },
+    };
+    const [draftFolder, justCreated] = await db.Folder.findOrCreate(argument);
+    if (justCreated) {
+      const draftFolderWithCandidates = await db.Folder.findOrCreate(argument);
+      res.status(200).json(draftFolderWithCandidates[0]);
+      return;
+    }
+    res.status(200).json(draftFolder);
+  }
+
   // this controller receives association data through query params. No need to pass all the fields, just the ones necesary to update.
   async updateById(req: Request, res: Response): Promise<void> {
     const { recruiterId, userId } = req.query; // add associations
@@ -151,15 +194,16 @@ export class foldersController {
     if (!email && !uuid) {
       res.sendStatus(400);
     }
-    const folder = await db.Folder.findOne({
+    const folderUpdated = await db.Folder.findOne({
       where: {
         uuid: uuid,
       },
     });
-    if (!folder) {
+    if (!folderUpdated) {
       res.sendStatus(404);
     } else {
       mailCreator(email, uuid);
+      await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
       res.sendStatus(200);
     }
   }

@@ -31,6 +31,7 @@ function CandidateCard(props) {
     folder,
     handleCandidate,
     location,
+    dispatch,
   } = props;
   const tech =
     candidate.skills &&
@@ -120,7 +121,9 @@ function CandidateCard(props) {
                           candidate.id,
                           folder,
                           uuid,
-                          includes
+                          includes,
+                          candidate,
+                          dispatch
                         )
                       : handleContactCandidate(event);
                   }}

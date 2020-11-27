@@ -4,6 +4,8 @@ const initialState = {
   dossier: [],
   newFolder: [],
   allFolders: [],
+  activeFolder: null,
+  draftFolder: null,
   folderById: [],
 };
 
@@ -23,6 +25,21 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allFolders: action.payload,
+      };
+    case actions.SET_ACTIVE_FOLDER:
+      return {
+        ...state,
+        activeFolder: action.payload,
+      };
+    case actions.GET_DRAFT_FOLDER:
+      return {
+        ...state,
+        draftFolder: action.payload,
+      };
+    case actions.DELETE_ACTIVE_FOLDER:
+      return {
+        ...state,
+        activeFolder: null,
       };
     case actions.DELETE_FOLDER:
       return {
@@ -56,7 +73,52 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         newFolder: action.payload,
+        activeFolder: action.payload,
       };
+    case actions.ADD_CANDIDATE_TO_ACTIVE_FOLDER:
+      if (action.payload.folderStatus === 'active') {
+        return {
+          ...state,
+          activeFolder: {
+            ...state.activeFolder,
+            candidates: state.activeFolder.candidates.concat(
+              action.payload.candidate
+            ),
+          },
+        };
+      } else {
+        return {
+          ...state,
+          draftFolder: {
+            ...state.draftFolder,
+            candidates: state.draftFolder.candidates.concat(
+              action.payload.candidate
+            ),
+          },
+        };
+      }
+    case actions.REMOVE_CANDIDATE_FROM_ACTIVE_FOLDER:
+      if (action.payload.folderStatus === 'active') {
+        return {
+          ...state,
+          activeFolder: {
+            ...state.activeFolder,
+            candidates: state.activeFolder.candidates.filter(
+              (element) => element.id !== action.payload.candidate.id
+            ),
+          },
+        };
+      } else {
+        return {
+          ...state,
+          draftFolder: {
+            ...state.draftFolder,
+            candidates: state.draftFolder.candidates.filter(
+              (element) => element.id !== action.payload.candidate.id
+            ),
+          },
+        };
+      }
     default:
       return state;
   }

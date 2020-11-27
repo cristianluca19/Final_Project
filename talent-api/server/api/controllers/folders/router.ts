@@ -5,6 +5,7 @@ export default express
   .Router()
   .get('/', folderController.all)
   .post('/', folderController.postFolder)
+  .get('/draft', folderController.getDraftFolder)
   .get('/dossier/:uuid', folderController.byUuid)
   .get('/:folderId', folderController.byId)
   .put('/:folderId', folderController.updateById)

@@ -90,10 +90,15 @@ export class CandidatesController {
   }
 
   async addToFolder(req: Request, res: Response): Promise<void> {
-    const candidate = await db.Candidate.findByPk(req.params.candidateId);
-    const folder = await db.Folder.findByPk(req.params.folderId);
-    const reply = await folder.addCandidate(candidate);
-    res.status(200).json(reply);
+    const { candidateId, folderId } = req.params;
+    try {
+      const candidate = await db.Candidate.findByPk(candidateId);
+      const folder = await db.Folder.findByPk(folderId);
+      const reply = await folder.addCandidate(candidate);
+      res.status(200).json(reply);
+    } catch (error) {
+      res.status(400).json({ error });
+    }
   }
 
   async deleteFromFolder(req: Request, res: Response): Promise<void> {

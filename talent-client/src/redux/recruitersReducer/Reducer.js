@@ -2,6 +2,8 @@ import * as actions from './Constants.js';
 
 const initialState = {
   allRecruiters: [],
+  foldersFromRecruiter: {},
+  recruiter: {},
 };
 
 export default function Reducer(state = initialState, action) {
@@ -10,6 +12,16 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         allRecruiters: action.payload,
+      };
+    case actions.GET_RECRUITER:
+      return {
+        ...state,
+        recruiter: action.payload,
+      };
+    case actions.GET_FOLDERS_BY_COMPANY:
+      return {
+        ...state,
+        foldersFromRecruiter: action.payload,
       };
     default:
       return state;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
 import { Grid, Container, makeStyles, IconButton } from '@material-ui/core';
@@ -9,6 +9,7 @@ import Menu from './menu.jsx';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
+import { Redirect } from 'react-router-dom';
 
 const useStyle = makeStyles({
   logo: {
@@ -28,27 +29,16 @@ const useStyle = makeStyles({
 });
 
 function Nav({ location }) {
-  const dispatch = useDispatch();
   const classes = useStyle();
-
-  const HandleAddFolder = async (event) => {
-    try {
-      const nFolder = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/folders`
-      );
-      dispatch(newFolder(nFolder.data));
-      return window.alert('Carpeta creada con éxito');
-    } catch (error) {
-      return window.alert(error.message);
-    }
-  };
 
   return (
     <nav>
       <Container maxWidth="lg">
         <Grid container spacing={1}>
           <Grid container item xs={3} sm={3} spacing={3}>
-            <img className={classes.logo} alt="Henry Logo" src={logo} />
+            <Link to="/">
+              <img className={classes.logo} alt="Henry Logo" src={logo} />
+            </Link>
           </Grid>
           {location !== '/dossier/' && (
             <Grid container item xs={9}>
@@ -74,7 +64,7 @@ function Nav({ location }) {
                   className={classes.icons}
                   label="Folder"
                   value="folder"
-                  onClick={HandleAddFolder}
+                  onClick={HandleRedirectToFolders}
                 >
                   <FolderIcon />
                 </IconButton> */}

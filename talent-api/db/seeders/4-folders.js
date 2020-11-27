@@ -3,7 +3,7 @@ const faker = require('faker');
 const uuid = require('uuidv4');
 function fill() {
   const folders = [];
-  const statuses = ['draft', 'sent', 'created'];
+  const statuses = ['created', 'sent'];
   let id = 1;
   for (let folder = 14; folder >= 1; folder--) {
     folders.push({

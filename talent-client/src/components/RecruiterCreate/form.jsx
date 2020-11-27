@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useStyles } from './styles.js';
@@ -6,15 +7,31 @@ import axios from 'axios';
 import { ThemeProvider } from '@material-ui/core';
 import { henryTheme } from '../../henryMuiTheme.js';
 import Notification from './notification';
+import { getAllFolders, getDraftFolder } from '../../redux/foldersReducer/Action';
+import { getRecruiterById, getAllRecruiters } from '../../redux/recruitersReducer/Action';
 
-const initialValues = {
-  contactName: '',
-  email: '',
-  company: '',
-  siteUrl: '',
-};
+export function RecruiterForm({ handleClose }) {
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
 
-export function RecruiterForm() {
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
+  const recruitersData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
+  const initialValues = {
+    contactName: activeFolder ? recruiterData && recruiterData.contactName : '',
+    email: activeFolder ? recruiterData && recruiterData.email : '',
+    company: activeFolder ? recruiterData && recruiterData.company : '',
+    siteUrl: activeFolder ? recruiterData && recruiterData.siteUrl : '',
+  };
+
+  const dispatch = useDispatch();
+
   // ====== HOOKS ====== //
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(true);
@@ -35,7 +52,34 @@ export function RecruiterForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createRecruiter(values, setValues, setErrors, notify, setNotify);
+    if (activeFolder) {
+      editRecruiter(
+        values,
+        setValues,
+        setErrors,
+        notify,
+        setNotify,
+        recruiterData,
+        activeFolder,
+        recruitersData,
+        dispatch,
+        getAllFolders,
+        getAllRecruiters,
+      );
+    } else {
+      createRecruiter(
+        values,
+        setValues,
+        setErrors,
+        notify,
+        setNotify,
+        recruiterData,
+        draftFolder,
+        dispatch,
+        getAllFolders
+      );
+    }
+    handleClose();
     return;
   };
 
@@ -114,7 +158,23 @@ export function RecruiterForm() {
 
 // ====== HELPER FUNCTIONS ====== //
 
-const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
+const createRecruiter = (
+  hook,
+  setHook,
+  setErrors,
+  notify,
+  setNotify,
+  handleClose,
+  draftFolder,
+  dispatch,
+  getAllFolders
+) => {
+  const initialValues = {
+    contactName: '',
+    email: '',
+    company: '',
+    siteUrl: '',
+  };
   axios
     .post(`${process.env.REACT_APP_BACKEND_URL}/recruiters`, hook)
     .then((response) => {
@@ -128,16 +188,74 @@ const createRecruiter = (hook, setHook, setErrors, notify, setNotify) => {
       return response.data;
     })
     .then((response) => {
-      console.log(response);
       axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/folders/${localStorage.getItem(
-          'activeFolderId'
-        )}?recruiterId=${response.id}`
+        `${process.env.REACT_APP_BACKEND_URL}/folders/${draftFolder.id}?recruiterId=${response.id}`
       );
       return;
     })
+    .then(() => {
+      let body = {
+        status: 'created'
+      }
+      axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/folders/status/${draftFolder.id}`, body
+      );
+      return;
+    })
+    .then(() => {
+      dispatch(getAllFolders());
+      dispatch(getDraftFolder());
+      dispatch(getAllRecruiters());
+    })
     .catch((error) => {
-      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: 'Oops... ocurrió un error.',
+        type: 'error',
+      });
+      return;
+    });
+};
+
+const editRecruiter = (
+  hook,
+  setHook,
+  setErrors,
+  notify,
+  setNotify,
+  handleClose,
+  activeFolder,
+  recruitersData,
+  dispatch,
+  getAllRecruiters
+) => {
+  const initialValues = {
+    contactName: '',
+    email: '',
+    company: '',
+    siteUrl: '',
+  };
+  axios
+    .put(
+      `${process.env.REACT_APP_BACKEND_URL}/recruiters/${recruitersData.id}`,
+      hook
+    )
+    .then((response) => {
+      setHook(initialValues);
+      setErrors(true);
+      setNotify({
+        isOpen: true,
+        message: 'Recruiter creado con éxito',
+        type: 'success',
+      });
+      return response.data;
+    })
+    .then(() => {
+      dispatch(getAllFolders());
+      dispatch(getAllRecruiters());
+      dispatch(getRecruiterById(activeFolder.recruiterId));
+    })
+    .catch((error) => {
       setNotify({
         isOpen: true,
         message: 'Oops... ocurrió un error.',

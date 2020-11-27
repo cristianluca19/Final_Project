@@ -7,9 +7,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import Paginator from '../Paginator';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ActiveFolder from '../ActiveFolder/ActiveFolder';
 import Notification from '../RecruiterCreate/notification';
 import Swal from 'sweetalert2';
+import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+  addCandidateToActiveFolder,
+  removeCandidateFromActiveFolder,
+  getAllFolders,
+  getFolderById
+} from '../../redux/foldersReducer/Action';
 import {
   getCandidatesPage,
   getFilterCandidates,
@@ -31,19 +39,44 @@ function CardsContainer(props) {
   const lastFilteredData = useSelector(
     (store) => store.CandidateReducer.lastFilteredData
   );
-  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
-  const { folder } = useSelector((store) => store.FolderReducer.newFolder);
 
   const candidates = useSelector(
     (store) => store.CandidateReducer.pagedCandidates
   );
+
+  const allFolders = useSelector((store) => store.FolderReducer.allFolders);
+
+  const recruiterData = useSelector(
+    (store) => store.RecruitersReducer.recruiter
+  );
+
+  const recruiterDataFolderReducer = useSelector(
+    (store) => store.FolderReducer.dossier.recruiter
+  );
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  let folder = useSelector((store) => store.FolderReducer.activeFolder);
+  if (!folder) {
+    folder = draftFolder;
+  }
+
+  const DATE_FORMAT = 'YYYY/MM/DD - HH:mm:ss';
+
+  const formatedDateFolder =
+    folder && moment(folder.createdAt).format(DATE_FORMAT);
+
   const filterDataCandidates = useSelector(
     (store) => store.CandidateReducer.filterCandidates
   );
 
-  let cardsCandidates = filterDataCandidates.length
-    ? filterDataCandidates
-    : candidates;
+  const cardsCandidates = !filterDataCandidates.length
+    ? candidates
+    : filterDataCandidates;
+
+  const pageData = useSelector((store) => store.CandidateReducer.pageStats);
 
   useEffect(() => {
     if (filterDataCandidates.length) {
@@ -51,27 +84,45 @@ function CardsContainer(props) {
     } else {
       dispatch(getCandidatesPage(currentPage));
     }
-  }, [newPageSelected]);
+  }, [newPageSelected, folder, currentPage, activeFolder, draftFolder]);
 
-  const handleCandidate = (event, candidate, folder, uuid, includes) => {
+  useEffect(() => {
+    dispatch(getFolderById(activeFolder && activeFolder.id))
+  }, [allFolders]);
+
+  const handleCandidate = async (
+    event,
+    candidateId,
+    folder,
+    uuid,
+    includes,
+    candidate,
+    dispatch
+  ) => {
     event.preventDefault();
     if (!uuid) {
       if (!includes) {
         AddCandidateToFolder(
-          candidate,
+          candidateId,
           folder,
           selectedCandidates,
           setSelectedCandidates,
           setNotify
         );
+        activeFolder
+          ? dispatch(addCandidateToActiveFolder(candidate, 'active'))
+          : dispatch(addCandidateToActiveFolder(candidate, 'draft'));
       } else {
         RemoveCandidateFromFolder(
-          candidate,
+          candidateId,
           folder,
           selectedCandidates,
           setSelectedCandidates,
           setNotify
         );
+        activeFolder
+          ? dispatch(removeCandidateFromActiveFolder(candidate, 'active'))
+          : dispatch(removeCandidateFromActiveFolder(candidate, 'draft'));
       }
     } else {
       // TODO: Add functionality to contact candidate (mailto:)
@@ -79,9 +130,17 @@ function CardsContainer(props) {
     }
   };
 
-  const includesCandidate = (id) => {
-    return selectedCandidates.includes(id);
+  const candidatesInFolder = (activeFolder, candidateFromCatalogue) => {
+    const arrayCandidatesIds =
+      activeFolder &&
+      activeFolder.candidates &&
+      activeFolder.candidates.map((candidate) => candidate.id);
+    return (
+      arrayCandidatesIds &&
+      arrayCandidatesIds.includes(candidateFromCatalogue.id)
+    );
   };
+
   if (!candidates.length) {
     return (
       <ThemeProvider theme={henryTheme}>
@@ -96,15 +155,16 @@ function CardsContainer(props) {
 
   return (
     <Container className={classes.container} maxWidth="xl">
-      {folder && (
-        <ThemeProvider theme={henryTheme}>
-          <Typography color="primary">
-            {`Carpeta N°: ${folder.id} - ${
-              folder.company ? `${folder.contactName} - ${folder.company}` : ' '
-            }`}
-          </Typography>
-        </ThemeProvider>
-      )}
+      <div>
+        <ActiveFolder />
+      </div>
+      <ThemeProvider theme={henryTheme}>
+        <Typography color="primary" style={{ color: 'yellow' }}>
+          {activeFolder
+            ? `Carpeta N°: ${folder.id} - ${recruiterData.contactName} - ${recruiterData.company} - ${formatedDateFolder}`
+            : `Carpeta N°: ${draftFolder && draftFolder.id} - Draft`}
+        </Typography>
+      </ThemeProvider>
       <Grid
         className={classes.paddingCandidates}
         container
@@ -121,9 +181,17 @@ function CardsContainer(props) {
                   <CandidateCard
                     candidate={candidate}
                     handleCandidate={handleCandidate}
-                    includes={includesCandidate(candidate.id)}
+                    includes={
+                      activeFolder
+                        ? candidatesInFolder(activeFolder, candidate)
+                        : candidatesInFolder(
+                            draftFolder,
+                            candidate && candidate
+                          )
+                    }
                     folder={folder}
                     location={props.location}
+                    dispatch={dispatch}
                   />
                 </div>
               )
@@ -153,20 +221,25 @@ CardsContainer.defaultProps = {
   users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 };
 
-const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
+const AddCandidateToFolder = (
+  candidateId,
+  folder,
+  hook,
+  setHook,
+  setNotify
+) => {
   axios
     .post(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
-      }/addCandidate/${candidate}`
+        folder && folder.id
+      }/addCandidate/${candidateId}`
     )
     .then((response) => {
-      setHook([...hook, candidate]);
+      setHook([...hook, candidateId]);
       AlertCandidate.fire({
         icon: 'success',
         title: 'Candidato agregado...',
       });
-      return;
     })
     .catch((error) => {
       setNotify({
@@ -179,7 +252,7 @@ const AddCandidateToFolder = (candidate, folder, hook, setHook, setNotify) => {
 };
 
 const RemoveCandidateFromFolder = (
-  candidate,
+  candidateId,
   folder,
   hook,
   setHook,
@@ -188,13 +261,14 @@ const RemoveCandidateFromFolder = (
   axios
     .delete(
       `${process.env.REACT_APP_BACKEND_URL}/candidates/${
-        folder ? folder.id : 1
-      }/removeCandidate/${candidate}`
+        folder && folder.id
+      }/removeCandidate/${candidateId}`
     )
     .then((response) => {
       let newSelectedCandidates = hook.filter(
-        (eachCandidate) => eachCandidate !== candidate
+        (eachCandidate) => eachCandidate !== candidateId
       );
+
       setHook(newSelectedCandidates);
       AlertCandidate.fire({
         icon: 'error',

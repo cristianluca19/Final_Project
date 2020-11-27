@@ -76,6 +76,38 @@ export function getDossierByUuid(uuid) {
   };
 }
 
+export function setActiveFolder(idActiveFolder) {
+  return async (dispatch) => {
+    const folder = await axios.get(
+      `${BACKEND_URL}/folders/${idActiveFolder.id}`
+    );
+    dispatch({
+      type: actions.SET_ACTIVE_FOLDER,
+      payload: folder.data,
+    });
+  };
+}
+
+export function getDraftFolder() {
+  return async (dispatch) => {
+    const draftFolder = await axios.get(
+      `${BACKEND_URL}/folders/draft`
+    );
+    dispatch({
+      type: actions.GET_DRAFT_FOLDER,
+      payload: draftFolder.data,
+    });
+  };
+}
+
+export function deleteActiveFolder() {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.DELETE_ACTIVE_FOLDER,
+    });
+  };
+}
+
 export function removeCandidateFromFolder(idFolder, idCandidate) {
   return async (dispatch) => {
     await axios.delete(
@@ -84,6 +116,24 @@ export function removeCandidateFromFolder(idFolder, idCandidate) {
     dispatch({
       type: actions.REMOVE_CANDIDATE_FROM_FOLDER,
       payload: { idFolder: idFolder, idCandidate: idCandidate },
+    });
+  };
+}
+
+export function addCandidateToActiveFolder(candidate, folderStatus) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.ADD_CANDIDATE_TO_ACTIVE_FOLDER,
+      payload: { candidate: candidate, folderStatus: folderStatus },
+    });
+  };
+}
+
+export function removeCandidateFromActiveFolder(candidate, folderStatus) {
+  return async (dispatch) => {
+    dispatch({
+      type: actions.REMOVE_CANDIDATE_FROM_ACTIVE_FOLDER,
+      payload: { candidate: candidate, folderStatus: folderStatus },
     });
   };
 }

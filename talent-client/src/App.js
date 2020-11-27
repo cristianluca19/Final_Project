@@ -16,7 +16,9 @@ import { getAllFolders } from './redux/foldersReducer/Action';
 import { getAllRecruiters } from './redux/recruitersReducer/Action';
 import { getAllUsers } from './redux/usersReducer/Action';
 import { getAllSkills } from './redux/skillsReducer/Action';
+import { getDraftFolder } from './redux/foldersReducer/Action';
 import './App.css';
+import PreviewFolderActive from './components/PreviewFolder/PreviewFolder';
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +31,8 @@ function App() {
     dispatch(getAllRecruiters());
     dispatch(getAllUsers());
     dispatch(getAllSkills());
+    dispatch(getAllFolders());
+    dispatch(getDraftFolder());
   });
 
   return (
@@ -54,6 +58,11 @@ function App() {
           )}
         />
       </Switch>
+      <Route exact path="/preview/:id">
+        <PreviewFolderActive render={({ match }) => match.params.id} />
+      </Route>
+      <Route path="/folder/:id" render={() => <Folder />} />
+      <Route path="/folders" render={() => <FoldersCrud />} />
       <Route exact path="/" render={() => <ContentHome />} />
       <Route path="/folder/:id" render={() => <Folder />} />
       <Route
