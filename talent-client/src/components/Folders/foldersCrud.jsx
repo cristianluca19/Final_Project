@@ -5,7 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
-import { deleteFolder, updateFolder } from '../../redux/foldersReducer/Action';
+import { deleteFolder, updateFolder, getAllFolders } from '../../redux/foldersReducer/Action';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import {
@@ -82,6 +82,10 @@ function FoldersCrud() {
     return user && user[searchFor];
   };
 
+  const activeFolder = useSelector((store) => store.FolderReducer.activeFolder);
+
+  const draftFolder = useSelector((store) => store.FolderReducer.draftFolder);
+
   if (folders) {
     folders
       .sort((a, b) => a.id - b.id)
@@ -109,6 +113,10 @@ function FoldersCrud() {
   }
 
   useEffect(() => {}, [folders]);
+
+  useEffect(() => {
+    getAllFolders();
+  }, [activeFolder, draftFolder]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

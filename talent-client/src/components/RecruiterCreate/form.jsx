@@ -251,13 +251,9 @@ const editRecruiter = (
       return response.data;
     })
     .then(() => {
-      return dispatch(getAllFolders());
-    })
-    .then(() => {
-      return dispatch(getAllRecruiters());
-    })
-    .then(() => {
-      return dispatch(getRecruiterById(activeFolder.recruiterId));
+      dispatch(getAllFolders());
+      dispatch(getAllRecruiters());
+      dispatch(getRecruiterById(activeFolder.recruiterId));
     })
     .catch((error) => {
       setNotify({

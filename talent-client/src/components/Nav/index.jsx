@@ -31,25 +31,6 @@ const useStyle = makeStyles({
 function Nav({ location }) {
   const classes = useStyle();
 
-  // const [path, setPath] = useState() //TODO por si acaso
-
-  // const HandleRedirectToFolders = async (event) => {
-  //   setPath(`/folders`); //chequear esto
-  //   // try {
-  //   //   const nFolder = await axios.post(
-  //   //     `${process.env.REACT_APP_BACKEND_URL}/folders`
-  //   //   );
-  //   //   dispatch(newFolder(nFolder.data));
-  //   //   return window.alert('Carpeta creada con éxito');
-  //   // } catch (error) {
-  //   //   return window.alert(error.message);
-  //   // }
-  // };
-
-  // if (path) {
-  //   return <Redirect to={path} />;
-  // }
-
   return (
     <nav>
       <Container maxWidth="lg">

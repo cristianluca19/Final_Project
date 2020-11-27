@@ -17,6 +17,7 @@ import {
 import {
   setActiveFolder,
   deleteActiveFolder,
+  getAllFolders,
 } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
@@ -61,7 +62,7 @@ export default function ActiveFolder() {
   const [foldersFromRecruiter, setFoldersFromRecruiter] = useState([]);
   const [openCompany, setOpenCompany] = useState(false);
   const [openFolder, setOpenFolder] = useState(false);
-  const [state, setState] = useState(null);
+  const [path, setPath] = useState(null);
   const recruiters = ["Draft"].concat(recruitersData.map(recruiter => recruiter.company))
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function ActiveFolder() {
   };
 
   const handleOpenFolder = () => {
-    if (foldersFromRecruiter === 'no valor') {
+    if (foldersFromRecruiter === 'undefined') {
       setFoldersFromRecruiter([]);
       dispatch(getRecruiterById());
     } else {
@@ -93,9 +94,8 @@ export default function ActiveFolder() {
   };
 
   const handleChangeCompany = (event) => {
-    console.log(event.target.value)
     if (event.target.value === 'Draft') {
-      setFoldersFromRecruiter('no valor');
+      setFoldersFromRecruiter('undefined');
       dispatch(deleteActiveFolder());
     }
     setCompany(event.target.value);
@@ -109,22 +109,15 @@ export default function ActiveFolder() {
   };
 
   const RedirectToFolderPreview = () => {
-    if (activeFolder !== null) return setState(`/preview/${activeFolder.id}`);
-    else return setState(`/preview/${draftFolder.id}`);
+    if (activeFolder !== null) return setPath(`/preview/${activeFolder.id}`);
+    else return setPath(`/preview/${draftFolder.id}`);
   };
 
-  if (state) {
-    return <Redirect to={state} />;
+  if (path) {
+    return <Redirect to={path} />;
   }
 
   const handleSendEmail = () => {
-    let body = {
-      status: 'sent',
-    };
-    axios.put(
-      `${process.env.REACT_APP_BACKEND_URL}/folders/status/${activeFolder.id}`,
-      body
-    );
     Swal.fire({
       title: `Estas a punto de enviar esta carpeta a ${recruiterData.email}`,
       text: 'Estas seguro?',
@@ -143,6 +136,7 @@ export default function ActiveFolder() {
           icon: 'success',
           text: 'Email enviado',
         });
+        dispatch(getAllFolders());
       }
     });
   };
@@ -188,7 +182,7 @@ export default function ActiveFolder() {
           MenuProps={MenuProps}
           style={{ color: 'white' }}
         >
-          {foldersFromRecruiter.id
+          {foldersFromRecruiter && foldersFromRecruiter.id
             ? foldersFromRecruiter.folders.map((element, index) => (
                 <MenuItem key={index} value={element}>
                   <ListItemText

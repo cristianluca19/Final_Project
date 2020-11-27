@@ -124,6 +124,7 @@ export class foldersController {
   }
 
   async getDraftFolder(req: Request, res: Response): Promise<void> {
+    //TODO find draft folder where status 'draft' and idUser: req.params
     const argument = {
       where: { status: 'draft' },
       include: {
@@ -193,12 +194,13 @@ export class foldersController {
     if (!email && !uuid) {
       res.sendStatus(400);
     }
-    const folder = await db.Folder.findOne({
+    await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
+    const folderUpdated = await db.Folder.findOne({
       where: {
         uuid: uuid,
       },
     });
-    if (!folder) {
+    if (!folderUpdated) {
       res.sendStatus(404);
     } else {
       mailCreator(email, uuid);

@@ -20,7 +20,6 @@ function CsvToJson() {
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     }).then((res) => {
       setCsvTransformedToJson(res.data);
-      console.log(res.data);
     });
   };
 

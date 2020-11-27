@@ -76,7 +76,7 @@ export default function Reducer(state = initialState, action) {
         activeFolder: action.payload,
       };
     case actions.ADD_CANDIDATE_TO_ACTIVE_FOLDER:
-      if (action.payload.string === 'active') {
+      if (action.payload.folderStatus === 'active') {
         return {
           ...state,
           activeFolder: {
@@ -98,7 +98,7 @@ export default function Reducer(state = initialState, action) {
         };
       }
     case actions.REMOVE_CANDIDATE_FROM_ACTIVE_FOLDER:
-      if (action.payload.string === 'active') {
+      if (action.payload.folderStatus === 'active') {
         return {
           ...state,
           activeFolder: {

@@ -475,7 +475,7 @@ paths:
     get:
       tags:
       - Recruiters
-      summary: Fetch a recruiter by email.
+      summary: Fetch a recruiter by company.
       description: Returns the list of folders that belongs to the recruiter.
       parameters: 
         - in: query
