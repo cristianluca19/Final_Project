@@ -202,8 +202,8 @@ export class foldersController {
     if (!folderUpdated) {
       res.sendStatus(404);
     } else {
-      await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
       mailCreator(email, uuid);
+      await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
       res.sendStatus(200);
     }
   }
