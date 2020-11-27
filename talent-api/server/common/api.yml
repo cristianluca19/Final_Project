@@ -634,6 +634,36 @@ paths:
       responses:
         204:
           description: An empty response with status 204 is sent if deletion succeded.
+  /folders/send:
+    post:
+      tags:
+      - Folders
+      summary: Send email
+      description: Send a link with candidates to recruiter by email
+      requestBody:
+          required: true
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  uuid:
+                    type: string
+      responses:
+        200:
+          description: Send status of response
+          content: 
+            application/json:
+              schema:
+                type: object
+        204:
+          description: Error when needed body properties are not received
+          content:
+            application/json:
+              schema:
+                type: object
   /users:
     get:
       tags:
