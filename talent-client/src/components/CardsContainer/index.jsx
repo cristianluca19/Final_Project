@@ -15,10 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   addCandidateToActiveFolder,
   removeCandidateFromActiveFolder,
-<<<<<<< HEAD
-=======
   getAllFolders,
->>>>>>> 45ef96ca9d3a9cfa17908789db493ec6093724a6
 } from '../../redux/foldersReducer/Action';
 import {
   getCandidatesPage,

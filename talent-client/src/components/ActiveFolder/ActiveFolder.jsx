@@ -19,6 +19,8 @@ import {
 } from '../../redux/foldersReducer/Action';
 import { Button } from '@material-ui/core';
 import CreateRecruiterModal from '../RecruiterCreate/Modal';
+import axios from 'axios';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -114,9 +116,7 @@ export default function ActiveFolder() {
   }
 
   const handleSendEmail = () => {
-    // activeFolder datos de la carpeta activa
-    // recruiterData datos de la carpeta activa
-    console.log("enviar mail")
+    axios.post(`${BACKEND_URL}/folders/send`, { email: recruiterData.email, uuid: activeFolder.uuid})
   }
 
   return (
