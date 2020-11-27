@@ -7,14 +7,16 @@ export function addNewComment(newComment) {
   let URL = `${BACKEND_URL}/comments/folder/${newComment.folderId}/${newComment.userId}`;
 
   return async (dispatch) => {
-    const addComment = await axios.post(URL, { content: newComment.content, recruiterId: newComment.recruiterId || null});
+    const addComment = await axios.post(URL, {
+      content: newComment.content,
+      recruiterId: newComment.recruiterId || null,
+    });
     dispatch({
       type: actions.ADD_NEW_COMMENT,
       payload: addComment.data,
     });
-    };
-  }
-
+  };
+}
 
 export function getCommentsByFolderId(folderId) {
   return async (dispatch) => {
@@ -37,7 +39,6 @@ export function editComment(editComment) {
       type: actions.EDIT_COMMENT,
       payload: editComment,
     });
-    
   };
 }
 

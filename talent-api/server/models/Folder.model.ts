@@ -11,6 +11,7 @@ export default (sequelize) => {
       });
       this.belongsTo(models.Recruiter);
       this.belongsTo(models.User);
+      this.hasMany(models.Comment);
     }
   }
 

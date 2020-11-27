@@ -68,7 +68,7 @@ function FoldersCrud() {
   const rows = [];
   const EDIT_FOLDER_SELECTOR_OR_RECRUITER = 'edit';
   const STATUS_CREATED = 'created';
-  const STATUS_DRAFT = 'draft'; 
+  const STATUS_DRAFT = 'draft';
 
   const findRecruiter = (recruiterId, searchFor) => {
     const recruiter =

@@ -5,9 +5,7 @@ import Paginator from '../Paginator';
 import { useStyles } from './styles.js';
 
 import { useDispatch } from 'react-redux';
-import {
-  removeCandidateFromFolder,
-} from '../../redux/foldersReducer/Action';
+import { removeCandidateFromFolder } from '../../redux/foldersReducer/Action';
 import {
   addNewComment,
   editComment,
@@ -44,8 +42,6 @@ import {
 import Comments from '../Comments/index';
 
 function Folder(props) {
-  
-
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openAddComment, setOpenAddComment] = React.useState(false);
   const [openEditComment, setOpenEditComment] = React.useState(false);
@@ -62,7 +58,7 @@ function Folder(props) {
     (store) => store.CommentsReducer.allCommentsByFolderId
   );
   const path = window.location.pathname.split('/folder/');
-  let findFolder = folders.find((folder) => folder.uuid === path[1]) || {}
+  let findFolder = folders.find((folder) => folder.uuid === path[1]) || {};
   const REMOVE_CANDIDATE_FROM_FOLDER = 'delete';
   const ADD_COMMENT_CLICK_ACTION = 'addComment';
   const EDIT_COMMENT_CLICK_ACTION = 'editComment';
@@ -76,7 +72,7 @@ function Folder(props) {
       recruiterId: findFolder.recruiter.id,
       recruiter: findFolder.recruiter.contactName,
       company: findFolder.recruiter.company,
-      email:  findFolder.recruiter.email,
+      email: findFolder.recruiter.email,
       idFolder: findFolder.id,
     };
   }
@@ -92,25 +88,23 @@ function Folder(props) {
     (comment) => comment.recruiterId !== folderObject.recruiterId
   );
 
-  selectorComments.sort((a, b) => a.id - b.id)
-  
+  selectorComments.sort((a, b) => a.id - b.id);
+
   const createRows = (selectorComents, commentForRecruiter) => {
     return { selectorComents, commentForRecruiter };
   };
 
   const rows = [createRows(selectorComments, recruiterComment)];
 
-  
   const onClickRemoveCandidate = (e) => {
-        e.preventDefault();
-        dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
-        handleClose(REMOVE_CANDIDATE_FROM_FOLDER);
-  }
+    e.preventDefault();
+    dispatch(removeCandidateFromFolder(folderObject.idFolder, idCandidate));
+    handleClose(REMOVE_CANDIDATE_FROM_FOLDER);
+  };
   const onClickDeleteComment = (e) => {
     e.preventDefault();
     dispatch(deleteComment(idComment));
     handleClose(DELETE_COMMENT_CLICK_ACTION);
-    
   };
 
   const handleClickOpen = (id, action) => {
@@ -121,11 +115,11 @@ function Folder(props) {
     if (action === ADD_COMMENT_CLICK_ACTION) {
       setOpenAddComment(true);
     }
-    if (action === EDIT_COMMENT_CLICK_ACTION){
+    if (action === EDIT_COMMENT_CLICK_ACTION) {
       setIdComment(id);
       setOpenEditComment(true);
     }
-    if (action === DELETE_COMMENT_CLICK_ACTION){
+    if (action === DELETE_COMMENT_CLICK_ACTION) {
       setIdComment(id);
       setOpenDeleteComment(true);
     }
@@ -143,29 +137,28 @@ function Folder(props) {
     const selectorId = 1; //TODO: este es el ID del usuario autenticado que escribio el comentario por el momento se hardcodea
     const datas = {};
 
-    if(action === ADD_COMMENT_CLICK_ACTION){
-        if (selectValue === 'selector') datas.userId = selectorId;
-        if (selectValue === 'recruiter') {
-          datas.userId = selectorId;
-          datas.recruiterId = folderObject.recruiterId;
-        }
-        datas.folderId = findFolder.id;
-        datas.content = inputTextField;
+    if (action === ADD_COMMENT_CLICK_ACTION) {
+      if (selectValue === 'selector') datas.userId = selectorId;
+      if (selectValue === 'recruiter') {
+        datas.userId = selectorId;
+        datas.recruiterId = folderObject.recruiterId;
+      }
+      datas.folderId = findFolder.id;
+      datas.content = inputTextField;
 
-        dispatch(addNewComment(datas));
-        setSelectValue('selector');
-        setInputTextField('');
-        handleClose(ADD_COMMENT_CLICK_ACTION);
-  }
-
-    if(action === EDIT_COMMENT_CLICK_ACTION){
-        datas.commentId = idComment;
-        datas.content = inputTextField;
-        dispatch(editComment(datas));
-        handleClose(EDIT_COMMENT_CLICK_ACTION);
-        setInputTextField('');
+      dispatch(addNewComment(datas));
+      setSelectValue('selector');
+      setInputTextField('');
+      handleClose(ADD_COMMENT_CLICK_ACTION);
     }
 
+    if (action === EDIT_COMMENT_CLICK_ACTION) {
+      datas.commentId = idComment;
+      datas.content = inputTextField;
+      dispatch(editComment(datas));
+      handleClose(EDIT_COMMENT_CLICK_ACTION);
+      setInputTextField('');
+    }
   };
 
   const RemoveCandidateModal = () => (
@@ -250,13 +243,15 @@ function Folder(props) {
               <FormControl className={classes.formControl}>
                 <Select
                   name="selectorOrRecruiter"
-                  defaultValue='selector'
+                  defaultValue="selector"
                   onChange={(e) => {
                     setSelectValue(e.target.value);
                   }}
                 >
                   <MenuItem value="selector"> Selector </MenuItem>
-                  {!recruiterComment && <MenuItem value="recruiter"> Reclutador </MenuItem>}
+                  {!recruiterComment && (
+                    <MenuItem value="recruiter"> Reclutador </MenuItem>
+                  )}
                 </Select>
               </FormControl>
             </div>
@@ -265,7 +260,12 @@ function Folder(props) {
                 {' '}
                 Cancelar{' '}
               </Button>
-              <Button onClick={(e) => handleSaveComment(e, ADD_COMMENT_CLICK_ACTION)}> Guardar </Button>
+              <Button
+                onClick={(e) => handleSaveComment(e, ADD_COMMENT_CLICK_ACTION)}
+              >
+                {' '}
+                Guardar{' '}
+              </Button>
             </div>
           </form>
         </div>
@@ -318,7 +318,12 @@ function Folder(props) {
                 {' '}
                 Cancelar{' '}
               </Button>
-              <Button onClick={(e) => handleSaveComment(e, EDIT_COMMENT_CLICK_ACTION)}> Guardar </Button>
+              <Button
+                onClick={(e) => handleSaveComment(e, EDIT_COMMENT_CLICK_ACTION)}
+              >
+                {' '}
+                Guardar{' '}
+              </Button>
             </div>
           </form>
         </div>
@@ -382,13 +387,16 @@ function Folder(props) {
                 index < DEFAULT_ROWS_PER_PAGE &&
                 candidate.visibility === 'listed' && (
                   <div key={index} className={classes.CandidateCard}>
-                    <CandidateCard candidate={candidate} /> 
+                    <CandidateCard candidate={candidate} />
                     {findFolder && findFolder.status === 'sent' ? (
                       <div> </div>
                     ) : (
                       <Button
                         onClick={() => {
-                          handleClickOpen(candidate.id, REMOVE_CANDIDATE_FROM_FOLDER);
+                          handleClickOpen(
+                            candidate.id,
+                            REMOVE_CANDIDATE_FROM_FOLDER
+                          );
                         }}
                       >
                         {' '}
@@ -399,15 +407,19 @@ function Folder(props) {
                 )
             )}
         </Grid>
-            <Comments rows={rows} handleClickOpen={handleClickOpen} />
+        <Comments rows={rows} handleClickOpen={handleClickOpen} />
         <Grid>
           {' '}
-          {findFolder && findFolder.status === 'sent' ? <div> </div> :
-          <Button onClick={() => handleClickOpen(0, ADD_COMMENT_CLICK_ACTION)}>
-            {' '}
-            Agregar comentario{' '}
-          </Button>
-          }
+          {findFolder && findFolder.status === 'sent' ? (
+            <div> </div>
+          ) : (
+            <Button
+              onClick={() => handleClickOpen(0, ADD_COMMENT_CLICK_ACTION)}
+            >
+              {' '}
+              Agregar comentario{' '}
+            </Button>
+          )}
         </Grid>
       </Container>
       {addCommentModal()}

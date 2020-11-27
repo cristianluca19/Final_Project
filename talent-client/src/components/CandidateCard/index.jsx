@@ -41,7 +41,6 @@ function CandidateCard(props) {
       skill.type === 'soft' ? skill.type : null
     );
 
-
   const labelsMaxLimit = 10;
 
   const classes = useStyles();
