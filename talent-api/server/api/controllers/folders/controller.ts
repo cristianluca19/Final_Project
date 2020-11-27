@@ -194,7 +194,6 @@ export class foldersController {
     if (!email && !uuid) {
       res.sendStatus(400);
     }
-    await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
     const folderUpdated = await db.Folder.findOne({
       where: {
         uuid: uuid,
@@ -203,6 +202,7 @@ export class foldersController {
     if (!folderUpdated) {
       res.sendStatus(404);
     } else {
+      await db.Folder.update({ status: 'sent' }, { where: { uuid: uuid } });
       mailCreator(email, uuid);
       res.sendStatus(200);
     }
