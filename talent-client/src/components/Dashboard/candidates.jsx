@@ -390,20 +390,15 @@ function Candidates() {
               onChange={(e) => handleInputCandidate(e)}
             />
             <br />
-            <InputLabel id="scoreLabel">Score</InputLabel>
-            <Select
-              labelId="Score"
+            <TextField
+              label="Score"
               id="score"
+              inputProps={{min: 0, max: 5, step: 0.1}}
+              type="number"
               value={candidateData.score}
               onChange={(e) => handleSelectCandidate(e, 'score')}
               className={classes.selectOptionsStatus}
-            >
-              <MenuItem value={'5'}>5</MenuItem>
-              <MenuItem value={'4'}>4</MenuItem>
-              <MenuItem value={'3'}>3</MenuItem>
-              <MenuItem value={'2'}>2</MenuItem>
-              <MenuItem value={'1'}>1</MenuItem>
-            </Select>
+            />
             <br />
             <br />
             <TextField
