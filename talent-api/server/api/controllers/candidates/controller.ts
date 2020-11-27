@@ -189,7 +189,7 @@ export class CandidatesController {
 
         res.status(200).json({
           candidatesInPage: candidateResponse.rows.length,
-          curentPage: page + 1,
+          currentPage: page + 1,
           totalPages: totalPages,
           count: candidateResponse.count,
           candidates: candidateResponse.rows,
