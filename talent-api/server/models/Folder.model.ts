@@ -11,6 +11,7 @@ export default (sequelize) => {
       });
       this.belongsTo(models.Recruiter);
       this.belongsTo(models.User);
+      this.hasMany(models.Comment);
     }
   }
 
@@ -28,6 +29,10 @@ export default (sequelize) => {
         type: DataTypes.ENUM,
         values: Object.values(FOLDER_STATUS),
         defaultValue: FOLDER_STATUS.Draft,
+      },
+      sentAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
     },
     {

@@ -43,10 +43,13 @@ function App() {
           path="/panel/candidates"
           render={() => <Dashboard componentToRender={'candidates'} />}
         />
-        <Route path="/panel/candidates" render={() => <Dashboard />} />
         <Route
           path="/panel/skills"
           render={() => <Dashboard componentToRender={'skills'} />}
+        />
+        <Route
+          path="/panel/folders"
+          render={() => <Dashboard componentToRender={'folders'} />}
         />
         <Route
           path="/"
@@ -61,6 +64,7 @@ function App() {
       <Route path="/folder/:id" render={() => <Folder />} />
       <Route path="/folders" render={() => <FoldersCrud />} />
       <Route exact path="/" render={() => <ContentHome />} />
+      <Route path="/folder/:id" render={() => <Folder />} />
       <Route
         exact
         path="/"

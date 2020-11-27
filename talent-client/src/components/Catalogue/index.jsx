@@ -12,7 +12,6 @@ const useStyle = makeStyles({
 });
 
 function Catalogue() {
-  const classes = useStyle();
 
   return (
     <nav>

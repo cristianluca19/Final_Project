@@ -7,14 +7,22 @@ export class foldersController {
   async all(req: Request, res: Response): Promise<void> {
     const folders = await db.Folder.findAll({
       include: [
+        { model: db.User },
+        { model: db.Recruiter },
         {
-          model: db.User,
-        },
-        {
-          model: db.Recruiter,
+          model: db.Candidate,
+          include: {
+            model: db.Cohort,
+            attributes: ['name'],
+          },
         },
         {
           model: db.Candidate,
+          include: {
+            model: db.Skill,
+            attributes: ['id', 'name', 'type'],
+            through: { attributes: [] },
+          },
         },
       ],
     });
