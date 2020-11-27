@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import logo from '../../images/logo.png';
 import {
@@ -15,6 +15,7 @@ import Menu from './menu.jsx';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { newFolder } from '../../redux/foldersReducer/Action.js';
+import { Redirect } from 'react-router-dom';
 
 const useStyle = makeStyles({
   logo: {
@@ -33,22 +34,27 @@ const useStyle = makeStyles({
   },
 });
 
-function Nav({ location }) {   //todo borrar
-  const dispatch = useDispatch();
+function Nav({ location }) {
   const classes = useStyle();
 
-  const HandleAddFolder = async (event) => {
-    try {
-      const nFolder = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/folders`
-      );
-      dispatch(newFolder(nFolder.data));
-      return window.alert('Carpeta creada con éxito');
-    } catch (error) {
-      return window.alert(error.message);
-    }
+  const [path, setPath] = useState()
+
+  const HandleRedirectToFolders = async (event) => {
+    setPath(`/folders`); //chequear esto
+    // try {
+    //   const nFolder = await axios.post(
+    //     `${process.env.REACT_APP_BACKEND_URL}/folders`
+    //   );
+    //   dispatch(newFolder(nFolder.data));
+    //   return window.alert('Carpeta creada con éxito');
+    // } catch (error) {
+    //   return window.alert(error.message);
+    // }
   };
-  console.log(location);
+
+  if (path) {
+    return <Redirect to={path} />;
+  }
 
   return (
     <nav>
@@ -83,7 +89,7 @@ function Nav({ location }) {   //todo borrar
                   className={classes.icons}
                   label="Folder"
                   value="folder"
-                  onClick={HandleAddFolder}
+                  onClick={HandleRedirectToFolders}
                 >
                   <FolderIcon />
                 </IconButton>

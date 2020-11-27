@@ -118,25 +118,34 @@ export default function ActiveFolder() {
   }
 
   const handleSendEmail = () => {
-    
+    let body = {
+      status: 'sent',
+    };
+    axios.put(
+      `${process.env.REACT_APP_BACKEND_URL}/folders/status/${activeFolder.id}`,
+      body
+    );
     Swal.fire({
       title: `Estas a punto de enviar esta carpeta a ${recruiterData.email}`,
-      text: "Estas seguro?",
+      text: 'Estas seguro?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, enviar'
+      confirmButtonText: 'Si, enviar',
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post(`${BACKEND_URL}/folders/send`, { email: recruiterData.email, uuid: activeFolder.uuid})
+        axios.post(`${BACKEND_URL}/folders/send`, {
+          email: recruiterData.email,
+          uuid: activeFolder.uuid,
+        });
         Swal.fire({
           icon: 'success',
           text: 'Email enviado',
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     <div>
