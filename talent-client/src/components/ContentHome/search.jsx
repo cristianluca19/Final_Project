@@ -32,7 +32,7 @@ const MenuProps = {
 };
 
 function Search() {
-  const history = useHistory()
+  const history = useHistory();
   const candidates = useSelector(
     (store) => store.CandidateReducer.allListedCandidates
   );
@@ -85,7 +85,7 @@ function Search() {
       locations: [],
     });
     dispatch(getFilterCandidates([]));
-    window.location.reload() // TODO: Cambiar por otra cosa que no rompa el paginado. para la demo sirve
+    window.location.reload(); // TODO: Cambiar por otra cosa que no rompa el paginado. para la demo sirve
     return;
   };
 

@@ -82,6 +82,7 @@ function Nav({ location }) {
                   className={classes.icons}
                   label="Setting"
                   value="folder"
+                  style={{ marginTop: 5 }}
                 >
                   <Link to="/panel" className={classes.link}>
                     <Settings />

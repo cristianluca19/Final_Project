@@ -34,7 +34,7 @@ function Menu() {
     <Grid container item xs={12} spacing={3}>
       <ThemeProvider theme={henryTheme}>
         <ul className={classes.ulList}>
-          <NavLink to="/" className={classes.link}>
+          {/* <NavLink to="/" className={classes.link}>
             <li className={classes.liList}>Home</li>
           </NavLink>
           <NavLink to="/" className={classes.link}>
@@ -48,7 +48,7 @@ function Menu() {
           </NavLink>
           <NavLink to="/contact" className={classes.link}>
             <li className={classes.liList}>Contact</li>
-          </NavLink>
+          </NavLink> */}
         </ul>
       </ThemeProvider>
     </Grid>

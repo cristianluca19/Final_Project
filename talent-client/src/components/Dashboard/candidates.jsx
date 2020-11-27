@@ -393,7 +393,7 @@ function Candidates() {
             <TextField
               label="Score"
               id="score"
-              inputProps={{min: 0, max: 5, step: 0.1}}
+              inputProps={{ min: 0, max: 5, step: 0.1 }}
               type="number"
               value={candidateData.score}
               onChange={(e) => handleSelectCandidate(e, 'score')}
