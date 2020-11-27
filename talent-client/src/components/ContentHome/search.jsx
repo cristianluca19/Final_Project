@@ -62,7 +62,6 @@ function Search() {
     )
   );
 
-
   useEffect(() => {
     if (!allSkills.length) {
       dispatch(getAllSkills());
@@ -254,14 +253,16 @@ function Search() {
           MenuProps={MenuProps}
         >
           {cohorts.length &&
-            cohorts.sort().map((cohort) => (
-              <MenuItem key={cohort.id} value={cohort.id}>
-                <Checkbox
-                  checked={statusFilter.cohortId.indexOf(cohort.id) > -1}
-                />
-                <ListItemText primary={cohort.name} />
-              </MenuItem>
-            ))}
+            cohorts
+              .sort((a, b) => a.id - b.id)
+              .map((cohort) => (
+                <MenuItem key={cohort.id} value={cohort.id}>
+                  <Checkbox
+                    checked={statusFilter.cohortId.indexOf(cohort.id) > -1}
+                  />
+                  <ListItemText primary={cohort.name} />
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
     </div>

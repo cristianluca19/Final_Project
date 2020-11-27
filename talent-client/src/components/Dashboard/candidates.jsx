@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './Styles/candidates.css.js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 import InputBase from '@material-ui/core/InputBase';
 import {
   deleteCandidate,
   getCandidateById,
   updateCandidate,
+  bulkCandidates,
+  getAllCandidates,
 } from '../../redux/candidatesReducer/Action.js';
-import SaveIcon from '@material-ui/icons/Save';
 import {
   Paper,
   Table,
@@ -34,6 +36,8 @@ import {
   MenuItem,
   InputLabel,
 } from '@material-ui/core';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 
@@ -45,14 +49,16 @@ function Candidates() {
 
   const classes = useStyles();
   // const [cohorts, setCohorts] = React.useState([]);
-  const [candidates, setCandidates] = React.useState([]);
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [openUpdate, setOpenUpdate] = React.useState(false);
-  const [idCandidate, setIdCandidate] = React.useState(0);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
+  const [csvTransformedToJson, setCsvTransformedToJson] = useState();
+  const [candidates, setCandidates] = useState([]);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [openCsv, setOpenCsv] = useState(false);
+  const [idCandidate, setIdCandidate] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const dispatch = useDispatch();
-  const [candidateData, setCandidateData] = React.useState({
+  const [candidateData, setCandidateData] = useState({
     firstName: 'Daniel',
     lastName: 'Stadler',
     country: 'Sarasota, TX, USA',
@@ -86,11 +92,6 @@ function Candidates() {
   useEffect(() => {
     Object.keys(candidate).length && setCandidateData(candidate);
     setCandidates(allCandidates);
-    // allCandidates.forEach((item) => {
-    //   if (!cohorts.includes(item.cohort)) {
-    //     setCohorts([...cohorts, item.cohortId]);
-    //   }
-    // });
   }, [allCandidates, candidate]);
 
   const columns = [
@@ -103,6 +104,14 @@ function Candidates() {
     { id: 'visibility', label: 'VISIBILITY', minWidth: 90 },
     { id: 'status', label: 'STATUS', minWidth: 90 },
     { id: 'iconUpdateDelete', label: '', minWidth: 60 },
+  ];
+
+  const columnsCsv = [
+    { id: 'firstName', label: 'FIRST NAME', minWidth: 210 },
+    { id: 'lastName', label: 'LAST NAME', minWidth: 260 },
+    { id: 'country', label: 'COUNTRY', minWidth: 280 },
+    { id: 'email', label: 'EMAIL', minWidth: 180 },
+    { id: 'cohortId', label: 'COHORTE', minWidth: 30, align: 'center' },
   ];
 
   const rows = [];
@@ -126,6 +135,55 @@ function Candidates() {
         });
       });
   }
+
+  const rowsCsv = [];
+  if (csvTransformedToJson) {
+    csvTransformedToJson
+      .sort((a, b) => a.id - b.id)
+      .map((csvData) => {
+        return rowsCsv.push({
+          firstName: csvData.firstName,
+          lastName: csvData.lastName,
+          country: csvData.country,
+          email: csvData.email,
+          cohortId: csvData.cohortId,
+        });
+      });
+  }
+
+  const handleCsvToJson = (e) => {
+    e.preventDefault();
+    setOpenCsv(true);
+    let csvFile = e.target.files[0];
+    let formData = new FormData();
+    formData.append('file', csvFile);
+    axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND_URL}/candidates/csv`,
+      data: formData,
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
+    }).then((res) => {
+      setCsvTransformedToJson(res.data);
+    });
+  };
+
+  const handleBulkCandidates = () => {
+    dispatch(bulkCandidates(csvTransformedToJson))
+      .then(() => {
+        setOpenCsv(false);
+        Swal.fire('Muy bien!', 'Candidatos creados correctamente!', 'success');
+        dispatch(getAllCandidates());
+      })
+      .catch(() => {
+        setOpenCsv(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error...',
+          text:
+            'Verifique que los datos no esten cargados anteriormente! e.g. name@email repetido',
+        });
+      });
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -153,7 +211,9 @@ function Candidates() {
   };
 
   const handleClose = (action) => {
-    action === 'update' ? setOpenUpdate(false) : setOpenDelete(false);
+    action === 'update' && setOpenUpdate(false);
+    action === 'delete' && setOpenDelete(false);
+    action === 'csv' && setOpenCsv(false);
   };
 
   const handleInputCandidate = (e) => {
@@ -177,12 +237,10 @@ function Candidates() {
   };
 
   const handleFilter = (e, property) => {
-    let value = Number(e.target.value)
-    const filtered = allCandidates.filter(
-      (item) => {
-        return item[property] === value
-      }
-    );
+    let value = Number(e.target.value);
+    const filtered = allCandidates.filter((item) => {
+      return item[property] === value;
+    });
     setCandidates(filtered);
   };
 
@@ -386,14 +444,127 @@ function Candidates() {
     </Modal>
   );
 
+  const modalCsvCandidate = () => (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      className={classes.modal}
+      open={openCsv}
+      onClose={() => handleClose('csv')}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={openCsv}>
+        <div className={classes.paper}>
+          <h1 className={classes.titleCsvCandidates}>CSV Candidates</h1>
+          <TableContainer
+            className={classes.container}
+            style={{ marginTop: 60 }}
+          >
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columnsCsv.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rowsCsv
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.id}
+                      >
+                        {columnsCsv.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                              {column.id === 'iconUpdateDelete' && (
+                                <ul className={classes.ulEditCandidate}>
+                                  <li className={classes.liEditCandidate}>
+                                    <EditIcon
+                                      onClick={() =>
+                                        handleClickOpen(row.id, 'update')
+                                      }
+                                    />
+                                  </li>
+                                  <li className={classes.liEditCandidate}>
+                                    <DeleteIcon
+                                      onClick={() =>
+                                        handleClickOpen(row.id, 'delete')
+                                      }
+                                    />
+                                  </li>
+                                </ul>
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+          <div className={classes.containerButtonCsv}>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.addCandidates}
+              startIcon={<SaveIcon />}
+              onClick={handleBulkCandidates}
+            >
+              Add Candidates
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.addCandidates}
+              startIcon={<SaveIcon />}
+              onClick={() => handleClose('csv')}
+            >
+              Cancelar
+            </Button>
+          </div>
+        </div>
+      </Fade>
+    </Modal>
+  );
+
   return (
     <Paper className={classes.root}>
+      <h1 className={classes.text}>CANDIDATOS</h1>
       <div className={classes.filterContainer}>
-        <h1 className={classes.text}>CANDIDATOS</h1>
         <div className={classes.filter}>
           <Paper component="form" className={classes.search}>
             <InputBase
-              className={classes.input}
+              className={classes.inputSearch}
               placeholder="Name, country or email..."
               inputProps={{ 'aria-label': 'search google maps' }}
               onChange={handleSearch}
@@ -408,9 +579,7 @@ function Candidates() {
               Cohort
             </option>
             {cohorts
-              .sort(function (a, b) {
-                return a - b;
-              })
+              .sort((a, b) => a.id - b.id)
               .map((item) => (
                 <option value={item.id}>{item.name}</option>
               ))}
@@ -447,13 +616,26 @@ function Candidates() {
             View all candidates
           </button>
         </div>
+        <div className={classes.csvToJson}>
+          <h3 className={classes.titleCsv}>Cargar CSV</h3>
+          <input
+            className="form-control"
+            name="file"
+            type="file"
+            id="input"
+            accept=".csv"
+            onChange={handleCsvToJson}
+          ></input>
+        </div>
       </div>
+
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
+                  className={classes.tableHeadBlack}
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
@@ -514,6 +696,7 @@ function Candidates() {
       />
       {dialogDeleteCandidate()}
       {modalUpdateCandidate()}
+      {modalCsvCandidate()}
     </Paper>
   );
 }

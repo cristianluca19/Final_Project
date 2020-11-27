@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core';
 export const useStyle = makeStyles({
   dashboardSidebar: {
     background: 'linear-gradient(135deg, #282c34 0%,#10151d 100%) !important',
-    height: 'calc(100vh - 0px)',
+    height: 'calc(101vh - 0px)',
     float: 'left',
     width: '100%',
   },
