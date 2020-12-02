@@ -11,10 +11,11 @@
 
 ## Contributing
 
-Dev Leader
+-Dev Leader
 
 @MartinCura
-Dev Team
+
+-Dev Team
 
 @cristianluca19
 
